@@ -1,0 +1,85 @@
+;;; evil.el -*- lexical-binding: t; -*-
+;;
+;;
+;;; Commentary:
+;;
+;;  the evil stuff
+;;
+;;; Code:
+
+
+;; 😈
+(require 'evil)
+(evil-mode 1)
+
+;;; ;; set leader key in all states
+;;; (evil-set-leader nil (kbd "C-SPC"))
+;;;
+;;; ;; set leader key in normal state
+;;; (evil-set-leader 'normal (kbd "SPC"))
+;;;
+;;; ;; set local leader
+;;; (evil-set-leader 'normal "," t)
+;;;
+;;; (defvar my-leader-map (make-sparse-keymap)
+;;;   "Keymap for \"leader key\" shortcuts.")
+;;;
+;;; ;; binding "," to the keymap
+;;; (define-key evil-normal-state-map "," my-leader-map)
+;;;
+;;; ;; binding ",b"
+;;; (define-key my-leader-map "b" 'list-buffers)
+;;;
+;;; ;; change the "leader" key to space
+;;; (define-key evil-normal-state-map "," 'evil-repeat-find-char-reverse)
+;;; (define-key evil-normal-state-map (kbd "SPC") my-leader-map)
+
+;; general.el can automate the process of prefix map/command creation
+;; (general-nmap
+;;   :prefix "SPC"
+;;   :prefix-map 'my-leader-map
+;;   "," 'list-buffers)
+
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+
+  :config
+  (evil-mode 1)
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  ;; not sure why he's doing this, testing:
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (setq evil-want-C-i-jump nil)
+  (setq evil-search-wrap nil)
+
+  ;(evil-set-initial-state 'messages-buffer-mode 'normal)
+  ;(evil-set-initial-state 'dashboard-mode 'normal)
+  )
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :custom
+  (evil-collection-setup-minibuffer t)
+  (evil-collection-calendar-want-org-bindings t)
+  (evil-collection-outline-bind-tab-p t)
+  :init (evil-collection-init))
+
+(use-package evil-escape
+  :config
+  (setq evil-escape-delay 0.3
+        evil-escape-key-sequence "jj"
+        ;; evil-cross-lines t
+        )
+  :init (evil-escape-mode 1))
+
+(setq evil-search-wrap nil)
+(setq evil-snipe-scope 'whole-visible)
+
+
+(provide 'evil)
+;;; evil.el ends here
