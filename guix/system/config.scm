@@ -1,6 +1,8 @@
 (use-modules (gnu)
              (gnu packages)
              (gnu packages shells)
+             (gnu packages bash)
+             ;(gnu packages zsh)
              (gnu packages networking)
              (gnu packages xdisorg)
              (gnu system setuid)
@@ -81,7 +83,7 @@
                   (comment "wonko")
                   (group "users")
                   (home-directory "/home/wonko")
-                  (shell (file-append zsh "/bin/zsh"))
+                  (shell (file-append bash "/bin/bash"))
                   (supplementary-groups
                    '("lp" "docker" "wheel" "netdev" "audio" "video")))
                 (user-account

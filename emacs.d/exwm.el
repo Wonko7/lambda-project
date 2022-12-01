@@ -23,5 +23,7 @@
 (require 'exwm-config)
 (exwm-config-default)
 
+(load "~/.emacs.d/init.el") ;; I guess?
+
 (provide 'exwm)
 ;;; exwm.el ends here
