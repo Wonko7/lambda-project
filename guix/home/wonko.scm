@@ -5,6 +5,7 @@
              (gnu packages admin)
              (gnu packages emacs)
              (gnu packages emacs-xyz)
+             (gnu packages version-control)
              (guix gexp))
 
 ;; TODO: native compilation
@@ -76,11 +77,7 @@
             emacs-magit
             emacs-magit-annex
             emacs-emojify
-            ;; also tramp
-            ;; oh dog:
-            ;; "emacs-company"
-            ;; avy, ivy, embark..
-            ;;
+
             ;; code but transverse:
             emacs-rainbow-delimiters
             emacs-rainbow-identifiers
@@ -90,8 +87,8 @@
             emacs-orderless
             ;;"emacs-consult-org-roam"
             ;;"emacs-consult-lsp"
-            ;;"emacs-consult-yasnippet"
             ;;"emacs-consult-dir" ;; meh
+            ;;"emacs-consult-yasnippet"
             emacs-consult
             emacs-embark
             emacs-vertico
@@ -106,7 +103,9 @@
             emacs-exwm
             emacs-lemon
 
-            ;; new compared to emacs.scm:
+            ;;
+            ;synergy ;; ?
+            git
             ))
 
  (services
@@ -120,17 +119,38 @@
    ;;                   (".emacs.d/evil.el" ,(local-file "../../emacs.d/evil.el"))
    ;;                   ;; (".gitconfig" ,(local-file "gitconfig"))
    ;;                   ))
-   (simple-service 'config-files
+   ;; (service home-bash-service-type
+   ;;          (home-bash-configuration
+   ;;           (guix-defaults? #t)
+   ;;           (bash-profile (list (plain-file "bash-profile"
+   ;;                                           "export HISTFILE=$XDG_CACHE_HOME/.bash_history")))))
+
+   (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
                           `(,(string-append ".emacs.d/" file)
                             ,(local-file (string-append "emacs.d/" file))))
                         '("completion.el"
                           "evil.el"
-                          "exwm.el"
+                          ;"exwm.el"
                           "fancy.el"
                           "init.el"
                           "lisp-config.el"
                           "maps.el"
                           "org-conf.el")))
+   (simple-service 'config-files
+                   home-files-service-type
+                   ;; exwm config is outside of .emacs.d:
+                   `( (,(string-append ".exwm") ,(local-file "../../emacs.d/exwm.el")) ;; why do I need ../../ here but not 10 lines ago?
+                      (".xinitrc" ,(plain-file "tmp-xinitrc" "exec emacs")))
+                   ;; git, etc:
+                   )
+   (simple-service 'guix-config-files
+                   home-files-service-type
+                   (map (lambda (file)
+                          `(,(string-append ".config/guix/" file)
+                            ,(local-file (string-append "guix/config/" file))))
+                        '("shell-authorized-directories"
+                          "channels.scm"
+                          )))
    )))
