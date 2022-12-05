@@ -2,10 +2,22 @@
              (gnu home services)
              (gnu home services shells)
              (gnu services)
-             (gnu packages admin)
+             ;; fonts
+             (gnu packages fonts)
+             (gnu packages fontutils)
+             (gnu packages unicode)
+             ;; emacs
              (gnu packages emacs)
              (gnu packages emacs-xyz)
+             (gnu packages aspell)
+             (gnu packages libreoffice)
+             ;; tools
+             (gnu packages admin)
+             (gnu packages xorg) ; xinit
              (gnu packages version-control)
+             (gnu packages synergy)
+             (gnu packages tmux)
+             ;; guix
              (guix gexp))
 
 ;; TODO: native compilation
@@ -78,7 +90,7 @@
             emacs-magit-annex
             emacs-emojify
 
-            ;; code but transverse:
+            ;; code:
             emacs-rainbow-delimiters
             emacs-rainbow-identifiers
             emacs-lsp-mode
@@ -94,37 +106,50 @@
             emacs-vertico
             emacs-which-key
 
+            ;; spelling
+            hunspell
+            hunspell-dict-fr-toutes-variantes
+            hunspell-dict-en-us
+            hunspell-dict-en-gb
+            hunspell-dict-en-gb-ize
+
             ;; simple gui
             emacs-doom-modeline
             emacs-doom-themes
             emacs-all-the-icons
             emacs-all-the-icons-completion
             emacs-all-the-icons-dired
+            ;; exwm
             emacs-exwm
             emacs-lemon
+            ;; x stuff
+            emacs-desktop-environment
+            xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
 
-            ;;
-            ;synergy ;; ?
+            ;; fonts
+            font-jetbrains-mono
+            font-google-noto
+            font-iosevka
+            font-inconsolata
+            font-hack
+            font-openmoji
+            unicode-emoji
+            font-gnu-unifont
+            font-adobe75dpi
+
+            ;; other lightweight stuff I'm gonna need:
+            synergy
             git
+            tmux
             ))
 
  (services
   (list
-   ;; (simple-service 'config-files
-   ;;                 home-files-service-type
-   ;;                 `(("run" ,(local-file "run"))
-   ;;                   ("README.txt" ,(local-file "README.txt"))
-   ;;                                       ;; (".config/guix/channels.scm" ,(local-file "config/guix/channels.scm")
-   ;;                   (".emacs.d/init.el" ,(local-file "../../emacs.d/init.el"))
-   ;;                   (".emacs.d/evil.el" ,(local-file "../../emacs.d/evil.el"))
-   ;;                   ;; (".gitconfig" ,(local-file "gitconfig"))
-   ;;                   ))
-   ;; (service home-bash-service-type
-   ;;          (home-bash-configuration
-   ;;           (guix-defaults? #t)
-   ;;           (bash-profile (list (plain-file "bash-profile"
-   ;;                                           "export HISTFILE=$XDG_CACHE_HOME/.bash_history")))))
-
+   (service home-bash-service-type
+            (home-bash-configuration
+             (guix-defaults? #t)
+             (bash-profile (list (plain-file "bash-profile"
+                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history")))))
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
@@ -132,7 +157,6 @@
                             ,(local-file (string-append "emacs.d/" file))))
                         '("completion.el"
                           "evil.el"
-                          ;"exwm.el"
                           "fancy.el"
                           "init.el"
                           "lisp-config.el"
@@ -141,8 +165,23 @@
    (simple-service 'config-files
                    home-files-service-type
                    ;; exwm config is outside of .emacs.d:
-                   `( (,(string-append ".exwm") ,(local-file "../../emacs.d/exwm.el")) ;; why do I need ../../ here but not 10 lines ago?
-                      (".xinitrc" ,(plain-file "tmp-xinitrc" "exec emacs")))
+                   `( (".exwm" ,(local-file "../../emacs.d/exwm.el")) ;; why do I need ../../ here but not 10 lines ago?
+                      (".xinitrc" ,(local-file "../../misc/xinitrc"))
+                      (".xsession" ,(program-file ;; slim/gdm will exec this:
+                                     "xsession"
+                                     #~(system
+                                        (format #f "~a +SI:localuser:$USER\n\
+                                                    ~a b 0 0 0\n\
+                                                    ~a r rate 400 30\n\
+                                                    ~a -cursor_name left_ptr\n\
+                                                    ~a -fv\n\
+                                                    exec ~a\n"
+                                                #$(file-append xhost "/bin/xhost")
+                                                #$(file-append xset "/bin/xset")
+                                                #$(file-append xset "/bin/xset")
+                                                #$(file-append xsetroot "/bin/xsetroot")
+                                                #$(file-append fontconfig "/bin/fc-cache")
+                                                #$(file-append emacs-exwm "/bin/exwm"))))))
                    ;; git, etc:
                    )
    (simple-service 'guix-config-files
@@ -151,6 +190,5 @@
                           `(,(string-append ".config/guix/" file)
                             ,(local-file (string-append "guix/config/" file))))
                         '("shell-authorized-directories"
-                          "channels.scm"
-                          )))
-   )))
+                          "channels.scm" ;; redundant
+                          ))))))

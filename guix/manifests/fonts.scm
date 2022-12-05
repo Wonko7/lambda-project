@@ -3,7 +3,6 @@
    "font-jetbrains-mono"
    "font-google-noto"
    "font-iosevka"
-   "font-iosevka"
    "font-inconsolata"
    "font-hack"
    "font-openmoji"

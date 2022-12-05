@@ -1,4 +1,4 @@
-(setq emacs-home-config-root "~/conf/emacs-next/")
+(setq emacs-home-config-root "~/.emacs.d/")
 (setq evil-want-keybinding nil) ;; sigh
 
 ;; UI

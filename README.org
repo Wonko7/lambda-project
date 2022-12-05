@@ -3,5 +3,4 @@
 sudo cp -r guix/system/ /etc/guix-os
 sudo -i HOST=`hostname` /home/wjc/.config/guix/current/bin/guix system reconfigure /etc/guix-os/config.scm
 guix home reconfigure guix/home/wonko.scm
-guix home reconfigure guix/home/wonko.scm
 #+end_src

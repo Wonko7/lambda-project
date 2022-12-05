@@ -1,5 +1,7 @@
 (use-modules (gnu)
              (gnu packages)
+             (gnu packages emacs)
+             (gnu packages emacs-xyz)
              (gnu packages shells)
              (gnu packages bash)
              ;(gnu packages zsh)
@@ -36,6 +38,26 @@
 
 (use-service-modules desktop networking ssh xorg docker)
 
+
+(define %channels #~(cons*
+                     (channel
+                      (name 'nonguix)
+                      (url "https://gitlab.com/nonguix/nonguix")
+                      (introduction
+                       (make-channel-introduction
+                        "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+                        (openpgp-fingerprint
+                         "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
+                     (channel
+                      (name 'w7)
+                      (url "https://gitlab.com/wonko7/w7-guix-channel")
+                      (introduction
+                       (make-channel-introduction
+                        "e6afee0a2c3e941e186b2a9035c0217e5e94e9d5"
+                        (openpgp-fingerprint
+                         "FF23 0627 4DFE CF36 3AD8  677C 613C 8B66 6DBE 0AEB"))))
+                     %default-channels))
+
 (define hostname (getenv "HOST"))
 
 (define host
@@ -71,65 +93,81 @@
   (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps")))
   (host-name (keyword->string host))
   (users (cons* (user-account
-                  (name "wjc")
-                  (comment "Wjc")
-                  (group "users")
-                  (home-directory "/home/wjc")
-                  (shell (file-append zsh "/bin/zsh"))
-                  (supplementary-groups
-                   '("lp" "docker" "wheel" "netdev" "audio" "video")))
+                 (name "wjc")
+                 (comment "Wjc")
+                 (group "users")
+                 (home-directory "/home/wjc")
+                 (shell (file-append zsh "/bin/zsh"))
+                 (supplementary-groups
+                  '("lp" "docker" "wheel" "netdev" "audio" "video")))
                 (user-account
-                  (name "wonko")
-                  (comment "wonko")
-                  (group "users")
-                  (home-directory "/home/wonko")
-                  (shell (file-append bash "/bin/bash"))
-                  (supplementary-groups
-                   '("lp" "docker" "wheel" "netdev" "audio" "video")))
+                 (name "wonko")
+                 (comment "wonko")
+                 (group "users")
+                 (home-directory "/home/wonko")
+                 (shell (file-append bash "/bin/bash"))
+                 (supplementary-groups
+                  '("lp" "docker" "wheel" "netdev" "audio" "video")))
                 (user-account
-                  (name "tina")
-                  (comment "Tina")
-                  (group "users")
-                  (home-directory "/home/tina")
-                  (shell (file-append zsh "/bin/zsh"))
-                  (supplementary-groups
-                    '("netdev" "audio" "video")))
+                 (name "tina")
+                 (comment "Tina")
+                 (group "users")
+                 (home-directory "/home/tina")
+                 (shell (file-append bash "/bin/bash"))
+                 (supplementary-groups
+                  '("netdev" "audio" "video")))
                 %base-user-accounts))
   (packages
    (append
     (map specification->package '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw"
-                                  "skim" "ripgrep" "git" "rsync" "zsh")) ;; TODO remove skim & rg once full emacs OS is operational.
+                                  "emacs" "emacs-exwm" "emacs-desktop-environment"
+                                  "git" "rsync")) ;; TODO remove skim & rg once full emacs OS is operational.
     %base-packages))
   (services
-   (cons* (service xfce-desktop-service-type)
-          (service openssh-service-type)
-          (service tor-service-type)
-          (service docker-service-type)
-          (service guix-publish-service-type
-                   (guix-publish-configuration
-                    (host "0.0.0.0")
-                    (port 1691)
-                    (advertise? #t)))
-          (bluetooth-service #:auto-enable? #t)
-          (modify-services %desktop-services
-                           (guix-service-type config =>
-                                              (guix-configuration
-                                                         (inherit config)
-                                                         (substitute-urls
-                                                          (append (list "https://substitutes.nonguix.org")
-                                                                  %default-substitute-urls))
-                                                         (authorized-keys
-                                                          (append (list (local-file "./data/substitutes/nonguix.pub"))
-                                                                  %default-authorized-guix-keys))))
-                           (gdm-service-type config =>
-                                             (gdm-configuration (inherit config)
-                                                                (xorg-configuration (xorg-configuration
-                                                                                     (keyboard-layout keyboard-layout)))
-                                                                (auto-login? #t)
-                                                                (default-user "wjc"))))))
+   (cons*
+    (service openssh-service-type)
+    (service tor-service-type)
+    (service docker-service-type)
+    (service guix-publish-service-type
+             (guix-publish-configuration
+              (host "0.0.0.0")
+              (port 1691)
+              (advertise? #t)))
+    (bluetooth-service #:auto-enable? #t)
+    (service slim-service-type (slim-configuration
+                                (display ":0")
+                                (vt "vt7")
+                                (auto-login? #t)
+                                (default-user "wonko")
+                                (xorg-configuration (xorg-configuration
+                                                     (keyboard-layout keyboard-layout)))))
+    (service slim-service-type (slim-configuration
+                                (display ":1")
+                                (vt "vt8")
+                                (auto-login? #t)
+                                (default-user "wjc")
+                                (xorg-configuration (xorg-configuration
+                                                     (keyboard-layout keyboard-layout)))))
+
+    (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
+
+    (modify-services %desktop-services
+                     (delete gdm-service-type)
+                     (guix-service-type config =>
+                                        (guix-configuration
+                                         (inherit config)
+                                         (substitute-urls
+                                          (append (list "https://substitutes.nonguix.org")
+                                                  %default-substitute-urls))
+                                         (authorized-keys
+                                          (append (list (local-file "./data/substitutes/nonguix.pub"))
+                                                  %default-authorized-guix-keys)))))))
 
   (setuid-programs
    (cons*
+    ;; time to checkout suckless's lock.
+    ;; emacs: dumpcap?
+    (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl) "/bin/brightnessctl")))
     (setuid-program (program (file-append wireshark "/bin/dumpcap")))
     (setuid-program (program (file-append xscreensaver "/bin/xscreensaver")))
     %setuid-programs))
@@ -156,7 +194,7 @@
           (file-system
            (mount-point "/home")
            (device "/dev/mapper/vault")
-           (options "subvol=_live/@guix-home") ;; gentoo-home for ygg.
+           (options "subvol=_live/@guix-home")
            (type "btrfs")
            (dependencies mapped-devices))
           (file-system
@@ -183,7 +221,6 @@
            (options "subvol=_live/@junkyard")
            (type "btrfs")
            (dependencies mapped-devices))
-          ;; tested on yggdrasill only:
           (file-system
            (mount-point "/boot")
            (device (uuid (nassq machine-config `(,host #:uuids #:efi)) 'fat32))

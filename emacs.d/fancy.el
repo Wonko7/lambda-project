@@ -48,7 +48,7 @@
 ;;;                     :weight 'light)
 ;;; ;;dw
 
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 250)
+(set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
 (setq use-default-font-for-symbols t)
 (set-fontset-font t 'symbol "NotoEmoji Nerd Font Mono" nil 'append)
 
