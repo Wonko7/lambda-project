@@ -20,11 +20,12 @@
              ;; guix
              (guix gexp))
 
-;; TODO: native compilation
+
+(define conf-root-dir (dirname (dirname (dirname (current-filename))))) ;; threading macro plz?
 
 (home-environment
  (packages (list
-            emacs
+            emacs ;; TODO: native compilation
             ;; emacs-next
             ;; basic (bitches):
             emacs-general
@@ -154,7 +155,7 @@
                    home-files-service-type
                    (map (lambda (file)
                           `(,(string-append ".emacs.d/" file)
-                            ,(local-file (string-append "emacs.d/" file))))
+                            ,(local-file (string-append conf-root-dir "/emacs.d/" file))))
                         '("completion.el"
                           "evil.el"
                           "fancy.el"
@@ -165,30 +166,30 @@
    (simple-service 'config-files
                    home-files-service-type
                    ;; exwm config is outside of .emacs.d:
-                   `( (".exwm" ,(local-file "../../emacs.d/exwm.el")) ;; why do I need ../../ here but not 10 lines ago?
-                      (".xinitrc" ,(local-file "../../misc/xinitrc"))
-                      (".xsession" ,(program-file ;; slim/gdm will exec this:
-                                     "xsession"
-                                     #~(system
-                                        (format #f "~a +SI:localuser:$USER\n\
+                   `((".exwm" ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
+                     (".xinitrc" ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
+                     (".xsession" ,(program-file ;; slim/gdm will exec this:
+                                    "xsession"
+                                    #~(system
+                                       (format #f "~a +SI:localuser:$USER\n\
                                                     ~a b 0 0 0\n\
                                                     ~a r rate 400 30\n\
                                                     ~a -cursor_name left_ptr\n\
                                                     ~a -fv\n\
                                                     exec ~a\n"
-                                                #$(file-append xhost "/bin/xhost")
-                                                #$(file-append xset "/bin/xset")
-                                                #$(file-append xset "/bin/xset")
-                                                #$(file-append xsetroot "/bin/xsetroot")
-                                                #$(file-append fontconfig "/bin/fc-cache")
-                                                #$(file-append emacs-exwm "/bin/exwm"))))))
+                                               #$(file-append xhost "/bin/xhost")
+                                               #$(file-append xset "/bin/xset")
+                                               #$(file-append xset "/bin/xset")
+                                               #$(file-append xsetroot "/bin/xsetroot")
+                                               #$(file-append fontconfig "/bin/fc-cache")
+                                               #$(file-append emacs-exwm "/bin/exwm"))))))
                    ;; git, etc:
                    )
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)
                           `(,(string-append ".config/guix/" file)
-                            ,(local-file (string-append "guix/config/" file))))
+                            ,(local-file (string-append conf-root-dir "/guix/config/" file))))
                         '("shell-authorized-directories"
-                          "channels.scm" ;; redundant
+                          "channels.scm" ;; FIXME redundant
                           ))))))
