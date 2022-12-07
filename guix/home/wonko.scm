@@ -17,6 +17,7 @@
              (gnu packages version-control)
              (gnu packages synergy)
              (gnu packages tmux)
+             (gnu packages ssh)
              ;; guix
              (guix gexp))
 
@@ -74,6 +75,8 @@
             emacs-elfeed-org
             emacs-circe
             emacs-pass
+            emacs-magit
+            emacs-magit-annex
 
             ;; guile/scheme <3
             emacs-geiser
@@ -87,8 +90,6 @@
             ;; transverse:
             emacs-ibuffer-projectile
             emacs-projectile
-            emacs-magit
-            emacs-magit-annex
             emacs-emojify
 
             ;; code:
@@ -134,7 +135,9 @@
             font-goog-noto-emoji
 
             ;; other lightweight stuff I'm gonna need:
+	    ;; gpg!
             synergy
+	    openssh
             git
             tmux))
 
@@ -161,25 +164,31 @@
                    home-files-service-type
                    ;; exwm config is outside of .emacs.d:
                    `((".exwm" ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
-                     (".xinitrc" ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
                      (".xsession" ,(program-file ;; slim/gdm will exec this:
                                     "xsession"
                                     #~(system
-                                       (format #f "~a +SI:localuser:$USER; ~a b 0 0 0\n\
+                                       (format #f "~a +SI:localuser:$USER;
+                                                   ~a b 0 0 0\n\
                                                    ~a r rate 400 30\n\
                                                    ~a -cursor_name left_ptr\n\
-                                                   ~a -fv\n\
+                                                   ~a dvorak\n\
+                                                   ~a ~a\n\
+                                                   ~a ~a\n\
                                                    exec ~a\n"
                                                #$(file-append xhost "/bin/xhost")
                                                #$(file-append xset "/bin/xset")
                                                #$(file-append xset "/bin/xset")
                                                #$(file-append xsetroot "/bin/xsetroot")
-                                               #$(file-append fontconfig "/bin/fc-cache")
+					       ;; add-text-to-store maybe?
+                                               #$(file-append setxkbmap "/bin/setxkbmap")
+                                               #$(file-append xmodmap "/bin/xmodmap") "~/.local/fixme/common.xmodmap"
+                                               #$(file-append xmodmap "/bin/xmodmap") "~/.local/fixme/yggdrasill.xmodmap"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
 		     ;; git, etc:
 		     (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
 		     ;; when do I exec setxkbmap then ?
-		     ;; (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig")))
+		     (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
+		     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))
 		     ))
    (simple-service 'guix-config-files
                    home-files-service-type

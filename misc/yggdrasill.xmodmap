@@ -1,0 +1,16 @@
+clear   lock
+keycode 66      = Control_L
+add     control = Control_L
+
+keycode 133     = Mode_switch
+keycode 105     = Mode_switch
+
+keycode 108     = Super_R
+keycode 64      = Super_L
+
+! insert :
+keycode 107     = Multi_key
+
+! mod4 is xmonad:
+remove mod1     = Alt_L Alt_R
+add mod4        = Alt_L Alt_R

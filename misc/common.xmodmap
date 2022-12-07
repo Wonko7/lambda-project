@@ -1,0 +1,33 @@
+! right:
+keysym	1		= 1		exclam		acircumflex	Acircumflex
+keysym	2		= 2		at		ediaeresis	Ediaeresis
+keysym	3		= 3		numbersign	ecircumflex	Ecircumflex
+keysym	4		= 4		dollar		ugrave		Ugrave
+keysym	5		= 5		percent		icircumflex	Icircumflex
+
+keysym	apostrophe	= apostrophe	quotedbl	asciicircum
+keysym	comma		= comma		less		minus
+keysym  period		= period	greater         egrave		Egrave
+keysym	p		= p		P		equal
+keysym	y		= y		Y		braceleft
+
+keysym	a		= a		A		agrave		Agrave
+keysym	o		= o		O		ocircumflex	Ocircumflex
+keysym	e		= e		E		eacute		Eacute
+keysym	u		= u		U		ampersand
+keysym	i		= i		I		bar
+
+keysym  semicolon	= semicolon	colon		plus
+keysym	q		= q		Q		underscore
+keysym	j		= j		J		parenleft
+keysym	k		= k		K		parenright
+keysym	x		= x		X		braceright
+
+! left:
+keysym	c		= c		C		ccedilla	Ccedilla
+keysym	h		= h		H		parenleft
+keysym	t		= t		T		parenright
+keysym	m		= m		M		bracketleft
+keysym	w		= w		W		bracketright
+keysym	f		= f		F		slash
+keysym	d		= d		D		backslash
