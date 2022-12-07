@@ -28,34 +28,12 @@
   :hook
   (after-init . global-emojify-mode))
 
-;;; ;; fonts to test:
-;;; (set-face-attribute 'default nil
-;;;                     :font "JetBrains Mono"
-;;;                     :weight 'light
-;;;                     :height (dw/system-settings-get 'emacs/default-face-size))
-;;;
-;;; ;; Set the fixed pitch face
-;;; (set-face-attribute 'fixed-pitch nil
-;;;                     :font "JetBrains Mono"
-;;;                     :weight 'light
-;;;                     :height (dw/system-settings-get 'emacs/fixed-face-size))
-;;;
-;;; ;; Set the variable pitch face
-;;; (set-face-attribute 'variable-pitch nil
-;;;                     ;; :font "Cantarell"
-;;;                     :font "Iosevka Aile"
-;;;                     :height (dw/system-settings-get 'emacs/variable-face-size)
-;;;                     :weight 'light)
-;;; ;;dw
-
-(set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
+(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 250)
 (setq use-default-font-for-symbols t)
-(set-fontset-font t 'symbol "NotoEmoji Nerd Font Mono" nil 'append)
+(set-fontset-font t 'symbol "Symbols Nerd Font Mono" nil 'append)
 
-;; (use-package unicode-fonts
-;;   :ensure t
-;;   :config
-;;   (unicode-fonts-setup))
+;; test:
+;; 🐫 📀 📐 ⛰ 
 
 ;; theme
 (use-package doom-themes

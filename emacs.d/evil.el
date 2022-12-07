@@ -73,6 +73,7 @@
   :config
   (setq evil-escape-delay 0.3
         evil-escape-key-sequence "jj"
+        evil-escape-excluded-states '(normal visual multiedit emacs motion)
         ;; evil-cross-lines t
         )
   :init (evil-escape-mode 1))

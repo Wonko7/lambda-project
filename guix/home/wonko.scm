@@ -3,7 +3,7 @@
              (gnu home services shells)
              (gnu services)
              ;; fonts
-             (gnu packages fonts)
+	     (w7 packages fonts)
              (gnu packages fontutils)
              (gnu packages unicode)
              ;; emacs
@@ -13,13 +13,12 @@
              (gnu packages libreoffice)
              ;; tools
              (gnu packages admin)
-             (gnu packages xorg) ; xinit
+             (gnu packages xorg)	; xinit
              (gnu packages version-control)
              (gnu packages synergy)
              (gnu packages tmux)
              ;; guix
              (guix gexp))
-
 
 (define conf-root-dir (dirname (dirname (dirname (current-filename))))) ;; threading macro plz?
 
@@ -44,7 +43,7 @@
             ;;"emacs-org-beautify-theme"
             ;;"org-superstar-mode"
             emacs-org-modern
-            emacs-org-ql
+            ;; FIXME emacs-org-ql 
             ;; emacs-org-auto-expand
             ;; emacs-org-appear
             ;; emacs-orgit (link to magit)
@@ -128,21 +127,15 @@
             xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
 
             ;; fonts
-            font-jetbrains-mono
-            font-google-noto
-            font-iosevka
-            font-inconsolata
-            font-hack
-            font-openmoji
-            unicode-emoji
-            font-gnu-unifont
-            font-adobe75dpi
+            font-nerd-jetbrains
+            font-nerd-noto
+            font-nerd-symbols
+            font-goog-noto-emoji
 
             ;; other lightweight stuff I'm gonna need:
             synergy
             git
-            tmux
-            ))
+            tmux))
 
  (services
   (list
