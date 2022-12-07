@@ -32,8 +32,10 @@
     :global-prefix "C-SPC"))
 
 (w/leader-keys
- ":" 'execute-extended-command
- "<SPC>" 'ibuffer
+ :desc "exec stuff" ":" 'execute-extended-command
+ :desc "buffers" "<SPC>" 'consult-buffer
+ :desc "grep" "/" 'consult-grep
+ :desc "proj buffers" "'" 'consult-project-buffer
  ;; "'" 'counsel-projectile-find-file
  ;; embark
  "e" 'embark-act
@@ -74,7 +76,12 @@
  ;; insert stuff
  :desc "Emoji"        "ie" 'emojify-insert-emoji
  :desc "date (now)"   "in" 'my/insert-inactive-timestamp
- )
+
+ ;; file stuff, dired, ibuffer
+ :desc "file recent" "fr" 'consult-recent-file
+
+ ;;
+ :desc "filter line"  "ss" 'consult-line)
 
 
 

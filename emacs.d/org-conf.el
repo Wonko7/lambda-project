@@ -63,6 +63,7 @@
   (setq
    org-directory "/data/org/"
    org-startup-indented t
+   ;; FIXME fix this with guix magic:
    org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
    org-extend-today-until 3
    org-startup-folded 'content
@@ -454,4 +455,4 @@
 ;(org-indent-mode t)
 ;(global-org-modern-mode)
 
-(provide 'lisp-config)
+(provide 'org-conf)
