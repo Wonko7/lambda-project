@@ -78,6 +78,7 @@
             ;; guile/scheme <3
             emacs-geiser
             emacs-geiser-guile
+	    emacs-guix
 
             ;; spell
             emacs-flyspell-correct
@@ -97,11 +98,11 @@
 
             ;; completion framework
             emacs-orderless
-            ;;"emacs-consult-org-roam"
-            ;;"emacs-consult-lsp"
-            ;;"emacs-consult-dir" ;; meh
-            ;;"emacs-consult-yasnippet"
             emacs-consult
+            emacs-consult-org-roam
+	    emacs-consult-dir
+	    emacs-consult-lsp
+	    ;emacs-consult-yasnippet
             emacs-embark
             emacs-vertico
             emacs-which-key
@@ -164,20 +165,22 @@
                      (".xsession" ,(program-file ;; slim/gdm will exec this:
                                     "xsession"
                                     #~(system
-                                       (format #f "~a +SI:localuser:$USER\n\
-                                                    ~a b 0 0 0\n\
-                                                    ~a r rate 400 30\n\
-                                                    ~a -cursor_name left_ptr\n\
-                                                    ~a -fv\n\
-                                                    exec ~a\n"
+                                       (format #f "~a +SI:localuser:$USER; ~a b 0 0 0\n\
+                                                   ~a r rate 400 30\n\
+                                                   ~a -cursor_name left_ptr\n\
+                                                   ~a -fv\n\
+                                                   exec ~a\n"
                                                #$(file-append xhost "/bin/xhost")
                                                #$(file-append xset "/bin/xset")
                                                #$(file-append xset "/bin/xset")
                                                #$(file-append xsetroot "/bin/xsetroot")
                                                #$(file-append fontconfig "/bin/fc-cache")
-                                               #$(file-append emacs-exwm "/bin/exwm"))))))
-                   ;; git, etc:
-                   )
+                                               #$(file-append emacs-exwm "/bin/exwm")))))
+		     ;; git, etc:
+		     (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
+		     ;; when do I exec setxkbmap then ?
+		     ;; (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig")))
+		     ))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)

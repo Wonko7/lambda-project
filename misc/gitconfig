@@ -1,0 +1,92 @@
+# vi: ft=gitconfig
+
+[user]
+  name        = William
+  email       = william@underage.wang
+  signingkey  = william@underage.wang
+
+[color]
+  ui = auto
+
+[alias]
+  st   = status -s
+  c    = commit
+  ci   = commit -a
+  ca   = commit -a
+  cm   = commit -m
+  cim  = commit -a -m
+  cam  = commit -a -m
+  aip  = add -ip
+  b    = branch
+  ba   = branch -a
+  co   = checkout
+  cob  = checkout -b
+  d    = diff
+  dw   = diff --word-diff -w
+  dr   = diff --raw
+  ds   = diff --stat
+  l    = log --graph --decorate=short
+  lp   = log --graph -p --decorate=short
+  lw   = log --graph -p --word-diff -w --decorate=short
+  ls   = log --graph --stat --decorate=short
+  lr   = log --graph --raw --decorate=short
+  lo   = log --graph --pretty=oneline --decorate=short
+  f    = fetch
+  ph   = push
+  psh  = push
+  pl   = pull
+  pll  = pull
+  r    = remote
+  rs   = remote show
+  ra   = remote add
+  s    = submodule
+  ss   = submodule summary
+  si   = submodule update -j 10 --init --recursive
+  su   = submodule update --recursive
+  suco = submodule update --checkout
+  surb = submodule update --rebase
+  sum  = submodule update --merge
+  lsf  = ls-files
+  m    = merge
+  cl   = clean -fdx
+  t    = tag
+  ui   = update-index
+
+# vim merge!
+[merge]
+  tool   = vimdiff
+[mergetool]
+  prompt = true
+[mergetool "vimdiff"]
+  cmd    = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+# enable gpg by default:
+## FIXME:
+## [commit]
+##   gpgsign = true
+## [tag]
+##   gpgSign = true
+# see push.gpgSign
+
+# submodule stuff:
+[status]
+  submodulesummary = 1
+[pager]
+  submodule = false
+  branch    = false
+[push]
+  recurseSubmodules = on-demand
+  followTags        = true
+
+[fetch]
+  recurseSubmodules = on-demand
+
+# misc:
+[rerere]
+  enabled = 1
+[diff]
+  renamelimit = 5000
+[grep]
+  patternType = perl
+[pull] # merge:
+  rebase = false
