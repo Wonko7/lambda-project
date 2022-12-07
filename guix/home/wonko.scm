@@ -154,6 +154,7 @@
                           `(,(string-append ".emacs.d/" file)
                             ,(local-file (string-append conf-root-dir "/emacs.d/" file))))
                         '("completion.el"
+                          "dev.el"
                           "evil.el"
                           "fancy.el"
                           "init.el"
