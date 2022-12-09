@@ -11,13 +11,26 @@
              (gnu packages emacs-xyz)
              (gnu packages aspell)
              (gnu packages libreoffice)
-             ;; tools
+	     (gnu packages ocaml)
+	     ;; tools
              (gnu packages admin)
              (gnu packages xorg)	; xinit
              (gnu packages version-control)
              (gnu packages synergy)
              (gnu packages tmux)
              (gnu packages ssh)
+	     (gnu packages databases) ; recutils
+             ;; dev
+             (gnu packages haskell-apps)
+             (gnu packages compression)
+             (gnu packages commencement) ; gcc
+             (gnu packages pkg-config)
+             (gnu packages base)
+             (gnu packages gdb)
+             (gnu packages m4)
+             (gnu packages maths)
+	     ;; mini web
+	     (gnu packages web-browsers)
              ;; guix
              (guix gexp))
 
@@ -77,6 +90,7 @@
             emacs-pass
             emacs-magit
             emacs-magit-annex
+	    nyxt
 
             ;; guile/scheme <3
             emacs-geiser
@@ -92,10 +106,15 @@
             emacs-projectile
             emacs-emojify
 
-            ;; code:
+            ;; code: ()
             emacs-rainbow-delimiters
             emacs-rainbow-identifiers
             emacs-lsp-mode
+            ;; ocaml
+	    emacs-tuareg
+	    ;ocaml
+	    opam
+            mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
 
             ;; completion framework
             emacs-orderless
@@ -136,6 +155,7 @@
 
             ;; other lightweight stuff I'm gonna need:
 	    ;; gpg!
+	    recutils
             synergy
 	    openssh
             git
@@ -147,7 +167,10 @@
             (home-bash-configuration
              (guix-defaults? #t)
              (bash-profile (list (plain-file "bash-profile"
-                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history")))))
+                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history\n\
+export PAGER=\"\"
+export PATH=\"./_opam/bin:$PATH\"
+test -r /home/wonko/.opam/opam-init/init.sh && . /home/wonko/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ")))))
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
@@ -168,29 +191,21 @@
                      (".xsession" ,(program-file ;; slim/gdm will exec this:
                                     "xsession"
                                     #~(system
-                                       (format #f "~a +SI:localuser:$USER;
-                                                   ~a b 0 0 0\n\
-                                                   ~a r rate 400 30\n\
-                                                   ~a -cursor_name left_ptr\n\
-                                                   ~a dvorak\n\
-                                                   ~a ~a\n\
-                                                   ~a ~a\n\
-                                                   exec ~a\n"
-                                               #$(file-append xhost "/bin/xhost")
-                                               #$(file-append xset "/bin/xset")
-                                               #$(file-append xset "/bin/xset")
-                                               #$(file-append xsetroot "/bin/xsetroot")
-					       ;; add-text-to-store maybe?
-                                               #$(file-append setxkbmap "/bin/setxkbmap")
-                                               #$(file-append xmodmap "/bin/xmodmap") "~/.local/fixme/common.xmodmap"
-                                               #$(file-append xmodmap "/bin/xmodmap") "~/.local/fixme/yggdrasill.xmodmap"
+                                       (format #f "source ~~/.bash_profile; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
+                                               #$(file-append xset "/bin/xset")             "b 0 0 0"
+                                               #$(file-append xset "/bin/xset")             "r rate 400 30"
+                                               #$(file-append xsetroot "/bin/xsetroot")     "-cursor_name left_ptr"
+                                               #$(file-append setxkbmap "/bin/setxkbmap")   "dvorak"
+                                               #$(file-append xmodmap "/bin/xmodmap")       "~/.local/fixme/common.xmodmap"
+                                               #$(file-append xmodmap "/bin/xmodmap")       "~/.local/fixme/yggdrasill.xmodmap"
+                                               #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Click Method Enabled' 0 1"
+                                               #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Accel Speed' 1.0"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
 		     ;; git, etc:
 		     (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
 		     ;; when do I exec setxkbmap then ?
 		     (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
-		     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))
-		     ))
+		     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)
