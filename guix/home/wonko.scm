@@ -170,7 +170,11 @@
                                              "export HISTFILE=$XDG_CACHE_HOME/.bash_history\n\
 export PAGER=\"\"
 export PATH=\"./_opam/bin:$PATH\"
-test -r /home/wonko/.opam/opam-init/init.sh && . /home/wonko/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ")))))
+export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
+export C_INCLUDE_PATH=\"$C_INCLUDE_PATH:~/.guix-profile/include\"
+export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:~/.guix-profile/lib\"
+export PATH=\"~/local/bin:$PATH\"
+test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ")))))
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
