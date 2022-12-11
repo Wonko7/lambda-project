@@ -52,17 +52,15 @@
 ;;       "K"   #'tuareg-kill-ocaml
 ;;       "a"   #'ff-get-other-file)
 
-(general-define-key
- ;; NOTE: keymaps specified with :keymaps must be quoted
- ;:prefix "RET"
- :keymaps 'tuareg-mode-map
- "RET ge"  'merlin-error-next
- "RET o"   'merlin-pop-stack
- "RET RET" 'tuareg-eval-phrase
- "RET b"   'tuareg-eval-buffer
- "RET TAB" 'tuareg-complete
- "RET K"   'tuareg-kill-ocaml
- "RET a"   'ff-get-other-file ;; find-file.el
+(general-evil-define-key '(normal) tuareg-mode-map
+ :prefix "RET"
+ "ge"  'merlin-error-next
+ "o"   'merlin-pop-stack
+ "RET" 'tuareg-eval-phrase
+ "b"   'tuareg-eval-buffer
+ "TAB" 'tuareg-complete
+ "K"   'tuareg-kill-ocaml
+ "a"   'ff-get-other-file ;; find-file.el
       ;; :nvm  "gd" #'+lookup/definition
  )
 

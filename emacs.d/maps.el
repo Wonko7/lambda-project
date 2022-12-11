@@ -71,6 +71,8 @@
 
   ;; magit
   "gg" 'magit-status
+  "gj" '(git-gutter:next-hunk :properties (:repeat t :jump t))
+  "gk" '(git-gutter:previous-hunk :repeat t :jump t)
   ;; roam
   ;; insert stuff
   :desc "Emoji"        "ie" 'emojify-insert-emoji
@@ -82,6 +84,8 @@
   ;;
   :desc "filter line"  "ss" 'consult-line)
 
-
+(general-evil-define-key '(normal input visual) comint-mode-map
+ ;; NOTE: keymaps specified with :keymaps must be quoted
+ "C-r"  'consult-history)
 
 (provide 'maps)
