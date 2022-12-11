@@ -40,44 +40,32 @@
 ;;   :prefix-map 'my-leader-map
 ;;   "," 'list-buffers)
 
+(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+(setq evil-want-keybinding nil)
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
 
-  :config
-  (evil-mode 1)
-  ;; Use visual line motions even outside of visual-line-mode buffers
-  ;; not sure why he's doing this, testing:
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  (setq evil-want-C-i-jump nil)
-  (setq evil-search-wrap nil)
+(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+(setq evil-want-keybinding t)
+(require 'evil)
+(when (require 'evil-collection nil t)
+  (evil-collection-init))
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+(setq evil-want-C-i-jump nil)
+(setq evil-search-wrap nil)
 
-  ;(evil-set-initial-state 'messages-buffer-mode 'normal)
-  ;(evil-set-initial-state 'dashboard-mode 'normal)
-  )
+(setq evil-collection-setup-minibuffer t)
+(setq evil-collection-calendar-want-org-bindings t)
+(setq evil-collection-outline-bind-tab-p t)
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :custom
-  (evil-collection-setup-minibuffer t)
-  (evil-collection-calendar-want-org-bindings t)
-  (evil-collection-outline-bind-tab-p t)
-  :init (evil-collection-init))
 
-(use-package evil-escape
-  :config
-  (setq evil-escape-delay 0.3
-        evil-escape-key-sequence "jj"
-        evil-escape-excluded-states '(normal visual multiedit emacs motion)
-        ;; evil-cross-lines t
-        )
-  :init (evil-escape-mode 1))
-
+(require 'evil-escape)
+(evil-escape-mode 1)
+(setq evil-escape-delay 0.3
+      evil-escape-key-sequence "jj"
+      evil-escape-excluded-states '(normal visual multiedit emacs motion)
+      ;; evil-cross-lines t
+      )
 (setq evil-search-wrap nil)
 (setq evil-snipe-scope 'whole-visible)
 

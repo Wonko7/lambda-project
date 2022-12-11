@@ -1,5 +1,3 @@
-(require 'doom-themes)
-
 ;; UI stuff
 
 (setq inhibit-startup-message t)
@@ -16,17 +14,17 @@
 (global-linum-mode)
 
 ;; icons
-(use-package all-the-icons
-  :if (display-graphic-p))
+(when (display-graphic-p)
+  (require 'all-the-icons))
 
-(use-package emojify
-  :config
-  (setq emojify-styles (list 'unicode))
-  (emojify-set-emoji-styles emojify-styles)
-  (setq emojify-display-style 'unicode)
-  (setq emojify-emoji-styles '(unicode))
-  :hook
-  (after-init . global-emojify-mode))
+
+(with-eval-after-load 'emojify
+  (progn
+    (add-hook 'after-init-hook #'global-emojify-mode)
+    (setq emojify-styles (list 'unicode))
+    (emojify-set-emoji-styles emojify-styles)
+    (setq emojify-display-style 'unicode)
+    (setq emojify-emoji-styles '(unicode))))
 
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 250)
 (setq use-default-font-for-symbols t)
@@ -36,28 +34,25 @@
 ;; 🐫 📀 📐 ⛰ 
 
 ;; theme
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;(load-theme 'doom-city-lights t)
-  (load-theme 'doom-laserwave t)
+(require 'doom-themes)
+;; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+      doom-themes-enable-italic t) ; if nil, italics is universally disabled
+                                        ;(load-theme 'doom-city-lights t)
+(load-theme 'doom-laserwave t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;; (doom-themes-neotree-config)
-  ;; or for treemacs users
-  ;; (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;; Enable flashing mode-line on errors
+(doom-themes-visual-bell-config)
+;; Enable custom neotree theme (all-the-icons must be installed!)
+;; (doom-themes-neotree-config)
+;; or for treemacs users
+;; (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+(doom-themes-treemacs-config)
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config)
 
-(use-package doom-modeline
-  :ensure t
-  :config (setq doom-modeline-height 20)
-  :init (doom-modeline-mode 1))
+(require 'doom-modeline)
+(setq doom-modeline-height 20)
+(doom-modeline-mode 1)
 
 (provide 'fancy)

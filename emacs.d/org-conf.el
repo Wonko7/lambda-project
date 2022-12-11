@@ -3,107 +3,201 @@
 
 
 (setq org-directory "/data/org/")
+(setq org-roam-directory (concat org-directory "here-be-dragons/"))
+(setq org-agenda-files (cons org-directory (mapcar
+                                            (lambda (d)
+                                              (concat org-directory d))
+                                            '("wip/" "work/"
+                                              "here-be-dragons/" ;?
+                                        ;"here-be-dragons/daily/"
+                                              ))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org
+
+(require 'org)
+(setq org-directory "/data/org/"
+      org-startup-indented t
+      ;; FIXME fix this with guix magic:
+      org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
+      org-extend-today-until 3
+      org-startup-folded 'content
+      org-todo-keywords
+      '((sequence
+         "NEXT(n/!)"                ; A task that recuring
+         "TODO(t)"                  ; A task that needs doing & is ready to do
+         "PROJ(p)"                  ; A project, which usually contains other tasks
+         "GOGO(g/!)"                ; A task that is in progress
+         "WAIT(w/!)"                ; Something external is holding up this task
+         "HOLD(h/!)"                ; This task is paused/on hold because of me
+         "ADD(a)"                   ; feature
+         "FIX(f)"                   ; feature
+         "BUG(b)"                   ; feature
+         "|"
+         "DONE(d/!)"       ; Task successfully completed
+         "KILL(k)")        ; Task was cancelled, aborted or is no longer applicable
+        (sequence
+         "[ ](T)"                          ; A task that needs doing
+         "[-](G)"                          ; Task is in progress
+         "[?](W)"                          ; Task is being held up or paused
+         "|"
+         "[X](D)"))                        ; Task was completed
+      org-todo-keyword-faces
+      '(("[-]"  . +org-todo-active)
+        ("NEXT" . +org-todo-active)
+        ("GOGO" . +org-todo-active)
+        ("[?]"  . +org-todo-onhold)
+        ("WAIT" . +org-todo-onhold)
+        ("HOLD" . +org-todo-onhold)
+        ("PROJ" . +org-todo-project))
+                                        ;(org-confirm-babel-evaluate nil)
+                                        ;(org-special-ctrl-a/e t)
+                                        ;(org-hide-emphasis-markers t)
+                                        ;(org-pretty-entities t)
+      ;; agenda/cal dates:
+      org-agenda-start-on-weekday 1
+      calendar-week-start-day 1
+      org-log-into-drawer t
+      org-auto-align-tags t
+      org-tags-column 72
+      org-edit-timestamp-down-means-later t
+      cfw:org-agenda-schedule-args '(:timestamp)
+      )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed
 
-(use-package elfeed
-  ;(setq elfeed-search-filter "@2-weeks-ago +unread")
-  :config
-  (setq elfeed-search-filter "+unread +tf"))
+(require 'elfeed)
+(setq elfeed-search-filter "+unread +tf")
 
 (setq rmh-elfeed-org-files (list (concat org-directory "notes/rss/root.org")))
 ;; (map! :map elfeed-search-mode-map
 ;;       :nvm "ret" #'elfeed-search-show-entry)
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
 
-(use-package org-roam
-  :config
-  (setq org-roam-directory (concat org-directory "here-be-dragons/")))
+(require 'org-roam)
                                         ; org-roam-setup ?
+                                        ;(require 'org-roam)
+
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+(org-roam-db-autosync-mode)
+(require 'org-roam-protocol)
+(setq org-roam-directory (concat org-directory "here-be-dragons/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; super agenda
 
-(use-package org-super-agenda
-  :after org-agenda
-  :init
-  (setq org-agenda-compact-blocks t
-        ;org-agenda-start-with-follow-mode t
-        org-super-agenda-header-separator "\n")
-  :config
-  (org-super-agenda-mode)
-  (setq org-agenda-files (cons org-directory (mapcar
+(require 'org-agenda)
+(setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
+        org-agenda-prefix-format (quote
+                                  ((agenda . "%-21c%?-12t% s")
+                                   (timeline . "% s")
+                                   (todo . "%-21c")
+                                   (tags . "%-12c")
+                                   (search . "%-12c")))
+        org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
+        org-agenda-scheduled-leaders (quote ("" "S%3d: "))
+        ;; fixes fucky binding on jk on an agenda header:
+        ;; https://github.com/alphapapa/org-super-agenda/issues/50
+        org-super-agenda-header-map (make-sparse-keymap)
+
+        ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
+        ;;       org-agenda-skip-scheduled-if-done t
+        ;;       org-agenda-skip-deadline-if-done t
+        ;;       org-agenda-include-deadlines t
+        ;;       org-agenda-block-separator nil
+        ;;       org-agenda-compact-blocks t
+        ;;       org-agenda-start-with-log-mode t)
+        ;;
+
+        ;;       org-agenda-start-with-log-mode t)
+        org-agenda-start-with-log-mode t
+        org-habit-show-habits nil
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done t
+        org-agenda-include-deadlines t
+
+        org-agenda-custom-commands '(("c" "Simple agenda view"
+                                      ((agenda "")
+                                       (alltodo "" )))
+                                     ("z" "Super zaen view"
+                                      ((agenda "" )
+                                       (alltodo "=" ((org-agenda-overriding-header "")
+                                                     (org-super-agenda-groups
+                                                      '((:name "ssdd: daily edition"
+                                                               :tag ("ssdd")
+                                                               :order 10)
+                                                        (:name "ssdd: yolo"
+                                                               :tag ("tt" "lol" "yolo")
+                                                               :order 20)
+                                                        (:name "BS"
+                                                               :tag ("bs" "fm" "fuckme")
+                                                               :order 30)
+                                                        (:name "fun maximization"
+                                                               :tag ("fun")
+                                                               :order 40)
+                                                        (:name "WWSCD"
+                                                               :tag ("wwscd")
+                                                               :order 50)
+                                                        (:name "wtf: focus"
+                                                               :and (:tag "wtf" :tag "focus")
+                                                               :order 51)
+                                                        (:name "wtf"
+                                                               :tag ("wtf")
+                                                               :order 52)
+                                                        (:name "innerspace"
+                                                               :tag ("is" "h" "habit" "focus")
+                                                               :order 60)
+                                                        (:name "review"
+                                                               :tag ("review" "r")
+                                                               :order 70)
+                                                        (:name "next steps"
+                                                               :tag "next"
+                                                               :order 80)
+                                                        (:name "Projects"
+                                                               :todo "PROJ"
+                                                               :order 90)
+                                                        (:name "don't be a cunt"
+                                                               :tag "dbac"
+                                                               :order 100)
+                                                        ;; (:name "repeat after me"
+                                                        ;;  :order 9
+                                                        ;;  :habit t
+                                                        ;;  )
+                                                        (:name ".*"
+                                                               :order 999
+                                                               :anything t)
+                                                        ))))))))
+(setq org-agenda-compact-blocks t
+      ;;org-agenda-start-with-follow-mode t
+      org-super-agenda-header-separator "\n")
+
+(require 'org-super-agenda)
+(org-super-agenda-mode)
+(setq org-agenda-files (cons org-directory (mapcar
                                             (lambda (d)
                                               (concat org-directory d))
                                             '("wip/" "work/"
                                               "here-be-dragons/" ;?
-                                              ;"here-be-dragons/daily/"
-                                              )))))
+                                        ;"here-be-dragons/daily/"
+                                              ))))
 
-(use-package org-habit
-  :config
-  (setq org-habit-graph-column 60))
+(require 'org-habit)
+(setq org-habit-graph-column 60)
 
-(use-package org-crypt
-  :config
-  (setq
-   epa-file-encrypt-to '("william@underage.wang")
-   org-tags-exclude-from-inheritance (quote ("crypt"))
-   org-crypt-disable-auto-save "encrypt"
-   org-crypt-key "william@underage.wang")
-  (org-crypt-use-before-save-magic))
+(require 'org-crypt)
+(setq
+ epa-file-encrypt-to '("william@underage.wang")
+ org-tags-exclude-from-inheritance (quote ("crypt"))
+ org-crypt-disable-auto-save "encrypt"
+ org-crypt-key "william@underage.wang")
+(org-crypt-use-before-save-magic)
 
-(use-package org
-  :defer t
-  :config
-  (setq
-   org-directory "/data/org/"
-   org-startup-indented t
-   ;; FIXME fix this with guix magic:
-   org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
-   org-extend-today-until 3
-   org-startup-folded 'content
-   org-todo-keywords
-   '((sequence
-      "NEXT(n/!)"                ; A task that recuring
-      "TODO(t)"                  ; A task that needs doing & is ready to do
-      "PROJ(p)"                  ; A project, which usually contains other tasks
-      "GOGO(g/!)"                ; A task that is in progress
-      "WAIT(w/!)"                ; Something external is holding up this task
-      "HOLD(h/!)"                ; This task is paused/on hold because of me
-      "ADD(a)"                   ; feature
-      "FIX(f)"                   ; feature
-      "BUG(b)"                   ; feature
-      "|"
-      "DONE(d/!)"       ; Task successfully completed
-      "KILL(k)")        ; Task was cancelled, aborted or is no longer applicable
-     (sequence
-      "[ ](T)"                          ; A task that needs doing
-      "[-](G)"                          ; Task is in progress
-      "[?](W)"                          ; Task is being held up or paused
-      "|"
-      "[X](D)"))                        ; Task was completed
-   org-todo-keyword-faces
-   '(("[-]"  . +org-todo-active)
-     ("NEXT" . +org-todo-active)
-     ("GOGO" . +org-todo-active)
-     ("[?]"  . +org-todo-onhold)
-     ("WAIT" . +org-todo-onhold)
-     ("HOLD" . +org-todo-onhold)
-     ("PROJ" . +org-todo-project))
-   ;; agenda/cal dates:
-   org-agenda-start-on-weekday 1
-   calendar-week-start-day 1
-   org-log-into-drawer t
-   org-auto-align-tags t
-   org-tags-column 72
-   org-edit-timestamp-down-means-later t
-   cfw:org-agenda-schedule-args '(:timestamp)
-   ))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; capture
@@ -302,93 +396,10 @@
           ;;  :jump-to-captured t)
           )))
 
-(use-package org-capture
-  :config
-  (fuck-me/init-capture))
+(require 'org-capture)
 
-(use-package org-agenda
-  :config
-  (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
-        org-agenda-prefix-format (quote
-                                  ((agenda . "%-21c%?-12t% s")
-                                   (timeline . "% s")
-                                   (todo . "%-21c")
-                                   (tags . "%-12c")
-                                   (search . "%-12c")))
-        org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
-        org-agenda-scheduled-leaders (quote ("" "S%3d: "))
-        ;; fixes fucky binding on jk on an agenda header:
-        ;; https://github.com/alphapapa/org-super-agenda/issues/50
-        org-super-agenda-header-map (make-sparse-keymap)
 
-        ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
-        ;;       org-agenda-skip-scheduled-if-done t
-        ;;       org-agenda-skip-deadline-if-done t
-        ;;       org-agenda-include-deadlines t
-        ;;       org-agenda-block-separator nil
-        ;;       org-agenda-compact-blocks t
-        ;;       org-agenda-start-with-log-mode t)
-        ;;
-
-        ;;       org-agenda-start-with-log-mode t)
-        org-agenda-start-with-log-mode t
-        org-habit-show-habits nil
-        org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-agenda-include-deadlines t
-
-        org-agenda-custom-commands '(("c" "Simple agenda view"
-                                      ((agenda "")
-                                       (alltodo "" )))
-                                     ("z" "Super zaen view"
-                                      ((agenda "" )
-                                       (alltodo "=" ((org-agenda-overriding-header "")
-                                                     (org-super-agenda-groups
-                                                      '((:name "ssdd: daily edition"
-                                                         :tag ("ssdd")
-                                                         :order 10)
-                                                        (:name "ssdd: yolo"
-                                                         :tag ("tt" "lol" "yolo")
-                                                         :order 20)
-                                                        (:name "BS"
-                                                         :tag ("bs" "fm" "fuckme")
-                                                         :order 30)
-                                                        (:name "fun maximization"
-                                                         :tag ("fun")
-                                                         :order 40)
-                                                        (:name "WWSCD"
-                                                         :tag ("wwscd")
-                                                         :order 50)
-                                                        (:name "wtf: focus"
-                                                         :and (:tag "wtf" :tag "focus")
-                                                         :order 51)
-                                                        (:name "wtf"
-                                                         :tag ("wtf")
-                                                         :order 52)
-                                                        (:name "innerspace"
-                                                         :tag ("is" "h" "habit" "focus")
-                                                         :order 60)
-                                                        (:name "review"
-                                                         :tag ("review" "r")
-                                                         :order 70)
-                                                        (:name "next steps"
-                                                         :tag "next"
-                                                         :order 80)
-                                                        (:name "Projects"
-                                                         :todo "PROJ"
-                                                         :order 90)
-                                                        (:name "don't be a cunt"
-                                                         :tag "dbac"
-                                                         :order 100)
-                                                        ;; (:name "repeat after me"
-                                                        ;;  :order 9
-                                                        ;;  :habit t
-                                                        ;;  )
-                                                        (:name ".*"
-                                                         :order 999
-                                                         :anything t)
-                                                        )))))))))
-;(setq cfw:org-agenda-schedule-args '(:timestamp))
+                                        ;(setq cfw:org-agenda-schedule-args '(:timestamp))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-modern theme
 ;; minimal ui
@@ -428,16 +439,6 @@
  org-agenda-current-time-string
  "⭠ now ─────────────────────────────────────────────────")
 
-(use-package org
-  :defer t
-  :custom
-  (org-startup-indented t)
-  ;(org-confirm-babel-evaluate nil)
-  ;(org-special-ctrl-a/e t)
-  ;(org-hide-emphasis-markers t)
-  ;(org-pretty-entities t)
-  )
-
 
 (setq org-modern-star nil
       org-modern-block-name nil
@@ -445,14 +446,12 @@
       org-modern-keyword nil
       org-modern-hide-stars " ")
 
-(use-package org-modern
-  :init
-  (add-hook 'org-mode-hook #'org-modern-mode))
-
+(require 'org-modern)
+(add-hook 'org-mode-hook #'org-modern-mode)
 ;; check org-modern-checkbox
 
-;(setq org-modern)
-;(org-indent-mode t)
-;(global-org-modern-mode)
+                                        ;(setq org-modern)
+                                        ;(org-indent-mode t)
+                                        ;(global-org-modern-mode)
 
 (provide 'org-conf)

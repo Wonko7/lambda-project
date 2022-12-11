@@ -8,11 +8,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emacs general config:
 
-(use-package savehist
-  :init
+(with-eval-after-load 'savehist
   (savehist-mode))
 
-(recentf-mode)
+(with-eval-after-load 'recentf
+  (recentf-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spell
@@ -26,16 +27,15 @@
                                        ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
                                        nil utf-8)))
 
-(use-package flyspell
-  :init
+(with-eval-after-load 'flyspell
   (add-hook 'org-mode-hook
             (lambda () (flyspell-mode 1))))
 
 (global-visual-line-mode)
 
 
-(use-package projectile)
-(use-package magit)
+(require 'projectile)
+(require 'magit)
 
 ;; this should be in my load-path, should it not?
 (load (concat emacs-home-config-root "completion.el"))

@@ -2,6 +2,9 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ;; ocaml + sane defaults
+(require 'tuareg)
+
+;; (use-package tuareg :ensure t)
 
 (setq-default fill-column 80
               indent-tabs-mode nil

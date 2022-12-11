@@ -40,9 +40,8 @@
  (packages (list
             emacs ;; TODO: native compilation
             ;; emacs-next
-            ;; basic (bitches):
+            ;; basic (bitches) stuff:
             emacs-general
-            emacs-use-package
             emacs-emacsql-sqlite3
 
             ;; org
@@ -57,7 +56,7 @@
             ;;"emacs-org-beautify-theme"
             ;;"org-superstar-mode"
             emacs-org-modern
-            ;; FIXME emacs-org-ql 
+            ;; FIXME emacs-org-ql
             ;; emacs-org-auto-expand
             ;; emacs-org-appear
             ;; emacs-orgit (link to magit)
