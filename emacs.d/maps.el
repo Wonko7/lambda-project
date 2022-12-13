@@ -101,5 +101,43 @@
   "i" (lambda() (interactive) (evil-goto-line) (evil-append-line 1))
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lisps
+
+(general-evil-define-key '(normal visual) evil-cleverparens-mode-map
+  "{" #'evil-backward-paragraph
+  "}" #'evil-forward-paragraph
+  ")" #'evil-cp-next-closing
+  "(" #'sp-backward-up-sexp
+  "é" #'evil-cp-previous-opening ; FIXME put this in global map?
+  "&" #'evil-cp-next-opening
+  "M-r" #'paredit-raise-sexp
+  "M-t"  #'sp-transpose-sexp
+  "M-T"  (lambda() (interactive) (sp-transpose-sexp -1))
+  "M-g p" #'evil-cp-wrap-next-round
+  "M-g P" #'evil-cp-wrap-previous-round
+  "M-g c" #'evil-cp-wrap-next-curly
+  "M-g C" #'evil-cp-wrap-previous-curly
+  "M-g s" #'evil-cp-wrap-next-square
+  "M-g S" #'evil-cp-wrap-previous-square
+  )
+
+(general-evil-define-key '(normal) evil-cleverparens-mode-map
+  :prefix "RET"
+  "r"   #'paredit-raise-sexp
+  "R"   #'evil-cp-raise-form
+  ">"   #'sp-transpose-sexp
+  "<"   (lambda() (interactive) (sp-transpose-sexp -1))
+  "t"   #'sp-transpose-sexp
+  "T"   (lambda() (interactive) (sp-transpose-sexp -1))
+  "M-T" (lambda() (interactive) (sp-transpose-sexp -1))
+  "gp" #'evil-cp-wrap-next-round
+  "gP" #'evil-cp-wrap-previous-round
+  "gc" #'evil-cp-wrap-next-curly
+  "gC" #'evil-cp-wrap-previous-curly
+  "gs" #'evil-cp-wrap-next-square
+  "gS" #'evil-cp-wrap-previous-square
+  "RET" #'eval-defun
+  )
 
 (provide 'maps)

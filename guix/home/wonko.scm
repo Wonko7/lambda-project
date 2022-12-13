@@ -117,11 +117,10 @@
             emacs-rainbow-delimiters
             emacs-rainbow-identifiers
             emacs-lsp-mode
+            emacs-eval-sexp-fu-el
             ;; ocaml
             emacs-tuareg
-                                        ;ocaml
-            opam
-            mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
+            opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
 
             ;; completion framework
             emacs-orderless
