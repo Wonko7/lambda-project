@@ -29,8 +29,10 @@
              (gnu packages gdb)
              (gnu packages m4)
              (gnu packages maths)
-	     ;; mini web
-	     (gnu packages web-browsers)
+             ;; doc
+             (gnu packages man)
+             ;; mini web
+             (gnu packages web-browsers)
              ;; guix
              (guix gexp))
 
@@ -89,12 +91,17 @@
             emacs-pass
             emacs-magit
             emacs-magit-annex
-	    nyxt
+            emacs-dirvish
+            emacs-eshell-up
+            emacs-dired-du
+            emacs-diredfl
+            emacs-dired-rsync
+            emacs-all-the-icons-dired
 
             ;; guile/scheme <3
             emacs-geiser
             emacs-geiser-guile
-	    emacs-guix
+            emacs-guix
 
             ;; spell
             emacs-flyspell-correct
@@ -110,20 +117,21 @@
             emacs-rainbow-identifiers
             emacs-lsp-mode
             ;; ocaml
-	    emacs-tuareg
-	    ;ocaml
-	    opam
+            emacs-tuareg
+                                        ;ocaml
+            opam
             mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
 
             ;; completion framework
             emacs-orderless
             emacs-consult
             emacs-consult-org-roam
-	    emacs-consult-dir
-	    emacs-consult-lsp
-	    ;emacs-consult-yasnippet
+            emacs-consult-dir
+            emacs-consult-lsp
+                                        ;emacs-consult-yasnippet
             emacs-embark
             emacs-vertico
+            emacs-vertico-posframe
             emacs-which-key
 
             ;; spelling
@@ -153,12 +161,14 @@
             font-goog-noto-emoji
 
             ;; other lightweight stuff I'm gonna need:
-	    ;; gpg!
-	    recutils
+            ;; gpg!
+            recutils
             synergy
-	    openssh
+            openssh
             git
-            tmux))
+            tmux
+            man-db ;; check this
+            ))
 
  (services
   (list
@@ -166,7 +176,8 @@
             (home-bash-configuration
              (guix-defaults? #t)
              (bash-profile (list (plain-file "bash-profile"
-                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history\n\
+                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history
+. ~/.guix-extra-profiles/web/etc/profile
 export PAGER=\"\"
 export PATH=\"./_opam/bin:$PATH\"
 export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
@@ -204,11 +215,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Click Method Enabled' 0 1"
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Accel Speed' 1.0"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
-		     ;; git, etc:
-		     (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
-		     ;; when do I exec setxkbmap then ?
-		     (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
-		     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))))
+                     ;; git, etc:
+                     (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
+                     ;; when do I exec setxkbmap then ?
+                     (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
+                     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)

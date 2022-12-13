@@ -37,6 +37,13 @@
   :desc "proj buffers" "'" 'consult-project-buffer
   ;; "'" 'counsel-projectile-find-file
   ;; embark
+  ;; apps
+  "ab" 'ibuffer
+  "ad" 'dired
+  "as" 'shell
+  "ap" 'proced
+  "aee" 'elfeed
+  "aes" 'elfeed-update
   "e" 'embark-act
   ;; org
   "oa" 'org-agenda
@@ -86,6 +93,7 @@
 
 (general-evil-define-key '(normal input visual) comint-mode-map
  ;; NOTE: keymaps specified with :keymaps must be quoted
- "C-r"  'consult-history)
+  "C-r"  'consult-history
+  "RET" 'comint-send-input)
 
 (provide 'maps)

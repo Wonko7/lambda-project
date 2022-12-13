@@ -1,15 +1,16 @@
 (specifications->manifest
  '(
+   "nyxt"
    "firefox"
-   "ungoogled-chromium"
+   ;;"ungoogled-chromium"
    "speedtest-cli"
-   "mutt"
+   ;;"mutt"
    "netcat-openbsd"
    "nmap"
-   "wireshark"
-   "nftables"
-   "weechat"
+   ;;"wireshark"
+   ;; "nftables"
+   ;;"weechat"
    "onionshare"
-   ;; build man db:
+   ;; build man
    "man-db"
    ))
