@@ -51,6 +51,18 @@
 ;; todo
 ;; which key
 
+;; posframe
+
+(require 'vertico-posframe)
+(setq vertico-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))
+(setq vertico-posframe-border-width 3)
+
+(vertico-posframe-mode)
+
+
+(setq posframe-mouse-banish-function #'posframe-mouse-banish-simple)
 
 (provide 'completion)
 ;;; completion.el ends here
