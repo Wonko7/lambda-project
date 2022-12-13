@@ -82,7 +82,7 @@
 (require 'org-roam)
                                         ; org-roam-setup ?
                                         ;(require 'org-roam)
-
+(setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
 (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 (org-roam-db-autosync-mode)
 (require 'org-roam-protocol)
