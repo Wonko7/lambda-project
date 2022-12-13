@@ -176,7 +176,8 @@
              (guix-defaults? #t)
              (bash-profile (list (plain-file "bash-profile"
                                              "export HISTFILE=$XDG_CACHE_HOME/.bash_history
-. ~/.guix-extra-profiles/web/etc/profile
+export GUIX_PROFILE=~/.guix-extra-profiles/web
+. $GUIX_PROFILE/etc/profile
 export PAGER=\"\"
 export PATH=\"./_opam/bin:$PATH\"
 export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
