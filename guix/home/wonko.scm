@@ -218,7 +218,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                      (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
                      ;; when do I exec setxkbmap then ?
                      (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
-                     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))))
+                     (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))
+                     (".config/Synergy/Synergy.conf" ,(local-file (string-append conf-root-dir  "/misc/Synergy.conf")))))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)
