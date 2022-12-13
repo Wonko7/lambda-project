@@ -91,9 +91,15 @@
   ;;
   :desc "filter line"  "ss" 'consult-line)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; shell
+
 (general-evil-define-key '(normal input visual) comint-mode-map
  ;; NOTE: keymaps specified with :keymaps must be quoted
   "C-r"  'consult-history
-  "RET" 'comint-send-input)
+  "RET" 'comint-send-input
+  "i" (lambda() (interactive) (evil-goto-line) (evil-append-line 1))
+  )
+
 
 (provide 'maps)

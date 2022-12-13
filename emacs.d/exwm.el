@@ -21,10 +21,8 @@
 
 (require 'exwm)
 (require 'exwm-config)
-;; (exwm-config-default)
 
-
-(setq exwm-workspace-number 9)
+(setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
       '(?\C-x
         ?\C-u

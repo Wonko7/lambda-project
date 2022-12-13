@@ -53,10 +53,9 @@
       eshell-hist-ignoredups t
       eshell-scroll-to-bottom-on-input t)
 
-;; (require 'dirvish)
-;;
 (require 'diredfl)
 (require 'all-the-icons-dired) ;; and after that try all icons init
+(require 'dired-toggle-sudo)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (add-hook 'dired-mode-hook 'diredfl-mode)
 

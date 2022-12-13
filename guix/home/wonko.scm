@@ -97,6 +97,7 @@
             emacs-diredfl
             emacs-dired-rsync
             emacs-all-the-icons-dired
+            emacs-dired-toggle-sudo
 
             ;; guile/scheme <3
             emacs-geiser
@@ -128,7 +129,7 @@
             emacs-consult-org-roam
             emacs-consult-dir
             emacs-consult-lsp
-                                        ;emacs-consult-yasnippet
+            ;;emacs-consult-yasnippet
             emacs-embark
             emacs-vertico
             emacs-vertico-posframe
@@ -146,7 +147,6 @@
             emacs-doom-themes
             emacs-all-the-icons
             emacs-all-the-icons-completion
-            emacs-all-the-icons-dired
             ;; exwm
             emacs-exwm
             emacs-lemon
