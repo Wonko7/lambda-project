@@ -54,6 +54,8 @@
         ([?\s-k] . windmove-up)
         ([?\s-j] . windmove-down)
 
+        ([?\s-C] . kill-buffer)
+
         ;; Launch applications via shell command
         ([?\s-&] . (lambda (command)
                      (interactive (list (read-shell-command "$ ")))
