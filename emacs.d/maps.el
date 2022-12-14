@@ -47,6 +47,10 @@
   "e" 'embark-act
   ;; org
   "oa" 'org-agenda
+  ;; buffers
+  "br" 'rename-buffer
+  "bk" 'kill-buffer
+  "bn" 'evil-buffer-new
   ;; roam
   "rD" 'org-roam-demote-entire-buffer
   "rf" 'org-roam-node-find
@@ -77,6 +81,7 @@
   :desc "Find directory"     "rd-" 'org-roam-dailies-find-directory
 
   ;; magit
+  "g." 'magit-dispatch
   "gg" 'magit-status
   "gj" '(git-gutter:next-hunk :properties (:repeat t :jump t))
   "gk" '(git-gutter:previous-hunk :repeat t :jump t)
@@ -98,7 +103,7 @@
  ;; NOTE: keymaps specified with :keymaps must be quoted
   "C-r"  'consult-history
   "RET" 'comint-send-input
-  "i" (lambda() (interactive) (evil-goto-line) (evil-append-line 1))
+  "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
