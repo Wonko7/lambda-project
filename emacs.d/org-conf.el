@@ -434,18 +434,6 @@
  )
 
 
-;; (setq org-modern-star nil
-;;       org-modern-block-name nil
-;;       org-modern-block-fringe nil
-;;       org-modern-keyword t
-;;       org-modern
-;;       org-modern-hide-stars " ")
-
-;; (require 'org-modern)
-;; (add-hook 'org-mode-hook #'org-modern-mode)
-;; check org-modern-checkbox
-;;(setq org-modern)
 (org-indent-mode t)
-;;(global-org-modern-mode)
 
 (provide 'org-conf)

@@ -26,12 +26,22 @@
     (setq emojify-display-style 'unicode)
     (setq emojify-emoji-styles '(unicode))))
 
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Mono" :height 250)
-(setq use-default-font-for-symbols t)
+(set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
+;;(setq use-default-font-for-symbols t)
 (set-fontset-font t 'symbol "Symbols Nerd Font Mono" nil 'append)
 
+;; lol fuck me.
+;; (defun my-emoji-fonts ()
+;;   (set-fontset-font t 'unicode (face-attribute 'default :family))
+;;   (set-fontset-font t '(#x2300 . #x27e7) "Twemoji")
+;;   (set-fontset-font t '(#x2300 . #x27e7) "Noto Color Emoji" nil 'append)
+;;   (set-fontset-font t '(#x27F0 . #x1FAFF) "Twemoji")
+;;   (set-fontset-font t '(#x27F0 . #x1FAFF) "Noto Color Emoji" nil 'append)
+;;   (set-fontset-font t 'unicode "Symbola" nil 'append))
+
+(set-fontset-font t '(#x2300 . #x1FAFF) "Noto Color Emoji")
 ;; test:
-;; 🐫 📀 📐 ⛰ 
+;; ☮ 🐫 📀 📐 ⛰
 
 ;; theme
 (require 'doom-themes)

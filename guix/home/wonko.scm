@@ -4,6 +4,7 @@
              (gnu services)
              ;; fonts
 	     (w7 packages fonts)
+	     (gnu packages fonts)
              (gnu packages fontutils)
              (gnu packages unicode)
              ;; emacs
@@ -154,7 +155,8 @@
             xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
 
             ;; fonts
-            font-nerd-jetbrains
+            ;; font-nerd-jetbrains
+            font-jetbrains-mono
             font-nerd-noto
             font-nerd-symbols
             font-goog-noto-emoji
