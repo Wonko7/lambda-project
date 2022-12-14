@@ -184,7 +184,9 @@ export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
 export C_INCLUDE_PATH=\"$C_INCLUDE_PATH:~/.guix-profile/include\"
 export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:~/.guix-profile/lib\"
 export PATH=\"~/local/bin:$PATH\"
-test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ")))))
+test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+export GDK_SCALE=2
+export GDK_DPI_SCALE=1")))))
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
