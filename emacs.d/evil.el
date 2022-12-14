@@ -69,6 +69,8 @@
 (setq evil-search-wrap nil)
 (setq evil-snipe-scope 'whole-visible)
 
+(require 'evil-surround)
+(global-evil-surround-mode)
 
 (provide 'evil)
 ;;; evil.el ends here
