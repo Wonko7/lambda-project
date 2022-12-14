@@ -200,6 +200,7 @@ export GDK_DPI_SCALE=1")))))
                           "init.el"
                           "lisp-config.el"
                           "maps.el"
+                          "misc.el"
                           "org-conf.el")))
    (simple-service 'config-files
                    home-files-service-type

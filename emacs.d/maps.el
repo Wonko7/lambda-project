@@ -99,13 +99,20 @@
   ;; roam
   ;; insert stuff
   :desc "Emoji"        "ie" 'emojify-insert-emoji
+  :desc "date (now)"   "id" 'my/insert-inactive-timestamp
   :desc "date (now)"   "in" 'my/insert-inactive-timestamp
+  ;; rm stuff
+  :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace
 
   ;; file stuff, dired, ibuffer
   :desc "file recent" "fr" 'consult-recent-file
 
   ;;
   :desc "filter line"  "ss" 'consult-line)
+
+;; (general-evil-define-key '(normal) normal-mode-map
+;;   ;; rm stuff
+;;   :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell

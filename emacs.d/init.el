@@ -37,12 +37,12 @@
 
 (require 'magit)
 
-;; this should be in my load-path, should it not?
+(load (concat emacs-home-config-root "misc.el"))
 (load (concat emacs-home-config-root "completion.el"))
 (load (concat emacs-home-config-root "org-conf.el"))
 (load (concat emacs-home-config-root "lisp-config.el"))
-(load (concat emacs-home-config-root "maps.el"))
 (load (concat emacs-home-config-root "doom.el"))
+(load (concat emacs-home-config-root "maps.el"))
 (load (concat emacs-home-config-root "dev.el"))
 ;; (load (concat emacs-home-config-root "exwm.el"))
 
