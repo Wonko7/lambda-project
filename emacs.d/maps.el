@@ -34,7 +34,7 @@
   :desc "exec stuff" ":" 'execute-extended-command
   :desc "buffers" "<SPC>" 'consult-buffer
   :desc "grep" "/" 'consult-grep
-  :desc "proj buffers" "'" 'consult-project-buffer
+  :desc "proj buffers" "'" 'projectile-find-file
   ;; "'" 'counsel-projectile-find-file
   ;; embark
   ;; apps
@@ -79,6 +79,17 @@
   :desc "Goto yesterday"     "rdy" 'org-roam-dailies-goto-yesterday
   :desc "Capture yesterday"  "rdY" 'org-roam-dailies-capture-yesterday
   :desc "Find directory"     "rd-" 'org-roam-dailies-find-directory
+
+  ;; projectile
+  "p'" 'projectile-find-file
+  "p`" 'projectile-find-file-dwim
+  "pp" 'projectile-switch-project
+  "pD" 'projectile-discover-projects-in-search-path 
+  "pK" 'projectile-kill-buffers
+  "pS" 'projectile-save-project-buffers
+  "ps" 'projectile-run-shell
+  "pb" 'projectile-ibuffer
+  "pd" 'projectile-dired
 
   ;; magit
   "g." 'magit-dispatch

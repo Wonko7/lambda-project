@@ -33,8 +33,9 @@
 
 (global-visual-line-mode)
 
-
 (require 'projectile)
+(setq projectile-project-search-path '(( "/code" . 1) ( "/work" . 1) ("/data" . 1)))
+
 (require 'magit)
 
 ;; this should be in my load-path, should it not?
