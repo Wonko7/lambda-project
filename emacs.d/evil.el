@@ -72,5 +72,9 @@
 (require 'evil-surround)
 (global-evil-surround-mode)
 
+(require 'evil-exchange)
+(setq evil-exchange-key (kbd "zx")) ;; gx or zx?
+(evil-exchange-install)
+
 (provide 'evil)
 ;;; evil.el ends here
