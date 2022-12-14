@@ -159,7 +159,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
+
 (general-evil-define-key '(insert) org-mode-map
-  "C-i" 'org-roam-node-insert)
+  "TAB"   'org-cycle
+  "C-i"   'org-roam-node-insert
+  "S-TAB" 'org-shiftab)
+
+(general-evil-define-key '(normal) org-mode-map
+  "C-RET"           '+org/insert-item-below
+  "C-S-RET"         '+org/insert-item-above
+  "RET"             '+org/dwim-at-point)
+
+;; S-TAB           org-shifttab
+;; S-RET           +org/shift-return
+;; C-RET           +org/insert-item-below
+;; C-S-RET           +org/insert-item-above
+;; 
+;; <motion-state> RET RET          +org/dwim-at-point
 
 (provide 'maps)

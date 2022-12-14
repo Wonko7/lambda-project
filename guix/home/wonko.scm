@@ -194,6 +194,7 @@ export GDK_DPI_SCALE=1")))))
                             ,(local-file (string-append conf-root-dir "/emacs.d/" file))))
                         '("completion.el"
                           "dev.el"
+                          "doom.el"
                           "evil.el"
                           "fancy.el"
                           "init.el"
