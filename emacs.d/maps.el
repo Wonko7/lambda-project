@@ -156,4 +156,10 @@
   "RET" #'eval-defun
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org
+
+(general-evil-define-key '(insert) org-mode-map
+  "C-i" 'org-roam-node-insert)
+
 (provide 'maps)

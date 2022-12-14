@@ -8,12 +8,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emacs general config:
 
-(with-eval-after-load 'savehist
-  (savehist-mode))
+(require 'savehist)
+(savehist-mode)
 
-(with-eval-after-load 'recentf
-  (recentf-mode))
-
+(require 'recentf)
+(recentf-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spell

@@ -76,5 +76,11 @@
 (setq evil-exchange-key (kbd "zx")) ;; gx or zx?
 (evil-exchange-install)
 
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
+
 (provide 'evil)
 ;;; evil.el ends here
