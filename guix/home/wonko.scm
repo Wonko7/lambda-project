@@ -30,10 +30,11 @@
              (gnu packages gdb)
              (gnu packages m4)
              (gnu packages maths)
+             ;; services
+             (gnu packages image-viewers)
+             (w7 packages jonaburg-picom)
              ;; doc
              (gnu packages man)
-             ;; mini web
-             (gnu packages web-browsers)
              ;; guix
              (guix gexp))
 
@@ -169,6 +170,9 @@
             git
             tmux
             man-db ;; check this
+            ;; services
+            jonaburg-picom
+            synergy
             ))
 
  (services
@@ -179,7 +183,9 @@
              (bash-profile (list (plain-file "bash-profile"
                                              "export HISTFILE=$XDG_CACHE_HOME/.bash_history
 export GUIX_PROFILE=~/.guix-extra-profiles/web
-. $GUIX_PROFILE/etc/profile
+test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
+export GUIX_PROFILE=~/.guix-extra-profiles/desktop
+test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
 export PAGER=\"\"
 export PATH=\"./_opam/bin:$PATH\"
 export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
@@ -211,7 +217,7 @@ export GDK_DPI_SCALE=1")))))
                      (".xsession" ,(program-file ;; slim/gdm will exec this:
                                     "xsession"
                                     #~(system
-                                       (format #f "source ~~/.bash_profile; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
+                                       (format #f "source ~~/.bash_profile; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
                                                #$(file-append xset "/bin/xset")             "b 0 0 0"
                                                #$(file-append xset "/bin/xset")             "r rate 400 30"
                                                #$(file-append xsetroot "/bin/xsetroot")     "-cursor_name left_ptr"
@@ -220,12 +226,18 @@ export GDK_DPI_SCALE=1")))))
                                                #$(file-append xmodmap "/bin/xmodmap")       "~/.local/fixme/yggdrasill.xmodmap"
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Click Method Enabled' 0 1"
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Accel Speed' 1.0"
+                                               #$(file-append feh "/bin/feh")               "--bg-scale /data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
                      ;; git, etc:
                      (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
                      ;; when do I exec setxkbmap then ?
                      (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
                      (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))
+                     ;; shepherd & services
+                     (".config/shepherd/init.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.scm")))
+                     (".config/shepherd/init.d/picom.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/picom.scm")))
+                     (".config/shepherd/init.d/synergy.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/synergy.scm")))
+                     (".config/picom.conf" ,(local-file (string-append conf-root-dir  "/misc/picom.conf")))
                      (".config/Synergy/Synergy.conf" ,(local-file (string-append conf-root-dir  "/misc/Synergy.conf")))))
    (simple-service 'guix-config-files
                    home-files-service-type
