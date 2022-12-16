@@ -78,9 +78,8 @@
 (require 'elfeed)
 (setq elfeed-search-filter "+unread +tf")
 
+(elfeed-org)
 (setq rmh-elfeed-org-files (list (concat org-directory "notes/rss/root.org")))
-;; (map! :map elfeed-search-mode-map
-;;       :nvm "ret" #'elfeed-search-show-entry)
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
 

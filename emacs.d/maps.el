@@ -84,7 +84,7 @@
   "p'" 'projectile-find-file
   "p`" 'projectile-find-file-dwim
   "pp" 'projectile-switch-project
-  "pD" 'projectile-discover-projects-in-search-path 
+  "pD" 'projectile-discover-projects-in-search-path
   "pK" 'projectile-kill-buffers
   "pS" 'projectile-save-project-buffers
   "ps" 'projectile-run-shell
@@ -179,14 +179,26 @@
 
 (general-evil-define-key '(normal) org-mode-map
   "C-RET"           '+org/insert-item-below
-  "C-S-RET"         '+org/insert-item-above
+  "C-S-RET"         '+org/insert-item-above)
+
+(general-evil-define-key '(normal) org-mode-map
+  :prefix "RET"
   "RET"             '+org/dwim-at-point)
 
 ;; S-TAB           org-shifttab
 ;; S-RET           +org/shift-return
 ;; C-RET           +org/insert-item-below
 ;; C-S-RET           +org/insert-item-above
-;; 
+;;
 ;; <motion-state> RET RET          +org/dwim-at-point
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; elfeed
+
+;; (map! :map elfeed-search-mode-map
+;;       :nvm
+
+(general-evil-define-key '(normal) elfeed-search-mode-map
+  "RET" #'elfeed-search-show-entry)
 
 (provide 'maps)
