@@ -38,6 +38,31 @@
 ;;   "C-q" 'exwm-input-send-next-key
 ;;   )
 
+(defun my/toggle-fullscreen ()
+  "maximize buffer"
+  (interactive)
+  (if (= 1 (length (window-list)))
+      (jump-to-register '_)
+    (progn
+      (window-configuration-to-register '_)
+      (delete-other-windows))))
+
+(defun my/decrease-alpha ()
+  (interactive)
+  (let* ((a (frame-parameter (selected-frame) 'alpha))
+         (a (if a (car a) a))
+         (a (- a 5))
+         (a (if (< a 0) 0 a)))
+    (set-frame-parameter (selected-frame) 'alpha (cons a 50))))
+
+(defun my/increase-alpha ()
+  (interactive)
+  (let* ((a (frame-parameter (selected-frame) 'alpha))
+         (a (if a (car a) 100 ))
+         (a (+ a 5))
+         (a (if (> a 100) 100 a)))
+    (set-frame-parameter (selected-frame) 'alpha (cons a 50))))
+
 ;; Ctrl+Q will enable the next key to be sent directly
 (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
@@ -53,8 +78,17 @@
         ([?\s-l] . windmove-right)
         ([?\s-k] . windmove-up)
         ([?\s-j] . windmove-down)
+        ;;
+        ([?\s-f] . my/toggle-maximize-buffer)
 
         ([?\s-C] . kill-buffer)
+        ;;
+        ([?\s-,] . my/decrease-alpha)
+        ([?\s-.] . my/increase-alpha)
+        ([?\s--] . evil-window-split)
+        ([?\s-|] . evil-window-vsplit)
+
+        ([?\s-f] . my/toggle-fullscreen)
 
         ;; Launch applications via shell command
         ([?\s-&] . (lambda (command)
@@ -74,8 +108,11 @@
                   (number-sequence 0 9))))
 
 (exwm-enable)
+(setq exwm-systemtray-background-color 'workspace-background)
+;; (set-frame-parameter nil 'alpha-background 50)
+;; (frame-parameter nil 'alpha-background)
 
-(load "~/.emacs.d/init.el")
+(load "~/.emacs.d/init.el") ;; orly
 
 (provide 'exwm)
 ;;; exwm.el ends here
