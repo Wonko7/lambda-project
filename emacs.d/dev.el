@@ -82,3 +82,6 @@
                                   (when (member ext '("eliom" "eliomi"))
                                     (setq-local lsp-modeline-code-actions-enable nil))))
                                 (add-hook 'before-save-hook 'ocamlformat-before-save t t)))
+
+
+(provide 'dev)

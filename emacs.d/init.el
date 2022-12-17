@@ -1,9 +1,9 @@
 (setq emacs-home-config-root "~/.emacs.d/")
-(setq evil-want-keybinding nil) ;; sigh
+(setq evil-want-keybinding nil) ;; sigh ;; FIXME
 
 ;; UI
-(load (concat emacs-home-config-root "fancy.el"))
-(load (concat emacs-home-config-root "evil.el"))
+(require 'fancy "~/.emacs.d/fancy.el")
+(require 'evil "~/.emacs.d/evil.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emacs general config:
@@ -37,13 +37,15 @@
 
 (require 'magit)
 
-(load (concat emacs-home-config-root "misc.el"))
-(load (concat emacs-home-config-root "completion.el"))
-(load (concat emacs-home-config-root "org-conf.el"))
-(load (concat emacs-home-config-root "lisp-config.el"))
-(load (concat emacs-home-config-root "doom.el"))
-(load (concat emacs-home-config-root "maps.el"))
-(load (concat emacs-home-config-root "dev.el"))
+
+(require 'misc "~/.emacs.d/misc.el")
+(require 'completion "~/.emacs.d/completion.el")
+(require 'org-conf "~/.emacs.d/org-conf.el")
+(require 'lisp-config "~/.emacs.d/lisp-config.el")
+(require 'doom "~/.emacs.d/doom.el")
+(require 'maps "~/.emacs.d/maps.el")
+(require 'dev "~/.emacs.d/dev.el")
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; (load (concat emacs-home-config-root "exwm.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

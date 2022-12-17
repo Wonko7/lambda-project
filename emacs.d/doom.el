@@ -228,3 +228,5 @@ If on a:
            (+org--toggle-inline-images-in-subtree
             (org-element-property :begin context)
             (org-element-property :end context))))))))
+
+(provide 'doom)
