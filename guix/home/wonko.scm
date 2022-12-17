@@ -238,7 +238,8 @@ export GDK_DPI_SCALE=1")))))
                      (".config/shepherd/init.d/picom.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/picom.scm")))
                      (".config/shepherd/init.d/synergy.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/synergy.scm")))
                      (".config/picom.conf" ,(local-file (string-append conf-root-dir  "/misc/picom.conf")))
-                     (".config/Synergy/Synergy.conf" ,(local-file (string-append conf-root-dir  "/misc/Synergy.conf")))))
+                     (".config/Synergy/Synergy.conf" ,(local-file (string-append conf-root-dir  "/misc/Synergy.conf")))
+                     (".config/nyxt/init.lisp" ,(local-file (string-append conf-root-dir  "/misc/nyxt.lisp")))))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map (lambda (file)
