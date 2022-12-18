@@ -31,8 +31,11 @@
              (gnu packages m4)
              (gnu packages maths)
              ;; services
+             (gnu home services shepherd)
              (gnu packages image-viewers)
+             (gnu packages matrix)
              (w7 packages jonaburg-picom)
+             (w7 packages emacs-xyz)
              ;; doc
              (gnu packages man)
              ;; guix
@@ -122,7 +125,6 @@
             emacs-lsp-mode
             emacs-eval-sexp-fu-el
             ;; ocaml
-            emacs-tuareg
             opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
 
             ;; completion framework
@@ -170,11 +172,13 @@
             openssh
             git
             tmux
-            man-db ;; check this
             ;; services
             jonaburg-picom
             synergy
-            ))
+            ;; communication
+            pantalaimon
+            ;;
+            man-db))
 
  (services
   (list
@@ -231,13 +235,8 @@ export GDK_DPI_SCALE=1")))))
                                                #$(file-append emacs-exwm "/bin/exwm")))))
                      ;; git, etc:
                      (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
-                     ;; when do I exec setxkbmap then ?
                      (".local/fixme/yggdrasill.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
                      (".local/fixme/common.xmodmap" ,(local-file (string-append conf-root-dir  "/misc/common.xmodmap")))
-                     ;; shepherd & services
-                     (".config/shepherd/init.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.scm")))
-                     (".config/shepherd/init.d/picom.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/picom.scm")))
-                     (".config/shepherd/init.d/synergy.scm" ,(local-file (string-append conf-root-dir  "/guix/home/shepherd/init.d/synergy.scm")))
                      (".config/picom.conf" ,(local-file (string-append conf-root-dir  "/misc/picom.conf")))
                      (".config/Synergy/Synergy.conf" ,(local-file (string-append conf-root-dir  "/misc/Synergy.conf")))
                      (".config/nyxt/init.lisp" ,(local-file (string-append conf-root-dir  "/misc/nyxt.lisp")))))
@@ -247,5 +246,26 @@ export GDK_DPI_SCALE=1")))))
                           `(,(string-append ".config/guix/" file)
                             ,(local-file (string-append conf-root-dir "/guix/config/" file))))
                         '("shell-authorized-directories"
-                          "channels.scm" ;; FIXME redundant
-                          ))))))
+                          "channels.scm")))
+   (service home-shepherd-service-type
+            (home-shepherd-configuration
+             (services (list
+                        (shepherd-service
+                         (provision '(picom))
+                         (start #~(make-forkexec-constructor
+                                   (list #$(file-append jonaburg-picom "/bin/picom"))))
+                         (stop #~(make-kill-destructor))
+                         (documentation "bling"))
+                        (shepherd-service
+                         (provision '(pantalaimon))
+                         (start #~(make-forkexec-constructor
+                                   (list #($file-append pantalaimon "/bin/pantalaimon"))
+                                   #:log-file "log/matrix.log"))
+                         (stop #~(make-kill-destructor))
+                         (documentation "Crypto back-end server for ement.el"))
+                        (shepherd-service
+                         (provision '(synergy))
+                         (start #~(make-forkexec-constructor
+                                   (list #$(file-append synergy "/bin/synergy"))))
+                         (stop #~(make-kill-destructor))
+                         (documentation "can't be arsed to move IRL")))))))))
