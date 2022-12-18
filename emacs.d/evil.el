@@ -82,5 +82,12 @@
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
 
+(require 'evil-snipe)
+(setq evil-snipe-scope 'whole-visible)
+(evil-snipe-mode +1)
+(add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+;; (evil-snipe-override-mode +1)
+
 (provide 'evil)
+
 ;;; evil.el ends here

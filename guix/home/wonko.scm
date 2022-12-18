@@ -75,6 +75,7 @@
             emacs-evil-escape
             emacs-evil-collection
             emacs-evil-cleverparens
+            emacs-evil-snipe
             ;; emacs-evil-args
             ;; emacs-evil-lion (align)
             ;;emacs-evil-multiedit
