@@ -61,8 +61,4 @@
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
 
-(require 'doom-modeline)
-(setq doom-modeline-height 20)
-(doom-modeline-mode 1)
-
 (provide 'fancy)
