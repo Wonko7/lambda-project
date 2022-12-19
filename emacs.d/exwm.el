@@ -23,6 +23,8 @@
 (require 'exwm-config)
 
 (require 'desktop-environment)
+(setq desktop-environment-update-exwm-global-keys :prefix)
+(define-key desktop-environment-mode-map (kbd "s-l") nil)
 (desktop-environment-mode)
 
 (setq desktop-environment-volume-get-command "pamixer --get-volume")
@@ -31,6 +33,7 @@
 (setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
 (setq desktop-environment-volume-normal-decrement "-d 5")
 (setq desktop-environment-volume-toggle-command "pamixer -t")
+
 
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
