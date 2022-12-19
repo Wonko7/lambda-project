@@ -185,21 +185,22 @@
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #t)
+             (environment-variables
+              '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
+                ("PAGER" . "")
+                ("PATH" . "./_opam/bin:$PATH")
+                ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-profile/lib")
+                ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-profile/include")
+                ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-profile/lib")
+                ("PATH" . "~/local/bin:$PATH")
+                ("GDK_SCALE" . "2")
+                ("GDK_DPI_SCALE" . "1")))
              (bash-profile (list (plain-file "bash-profile"
-                                             "export HISTFILE=$XDG_CACHE_HOME/.bash_history
-export GUIX_PROFILE=~/.guix-extra-profiles/web
+                                             "GUIX_PROFILE=~/.guix-extra-profiles/web
 test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
-export GUIX_PROFILE=~/.guix-extra-profiles/desktop
+GUIX_PROFILE=~/.guix-extra-profiles/desktop
 test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
-export PAGER=\"\"
-export PATH=\"./_opam/bin:$PATH\"
-export LIBRARY_PATH=\"$LIBRARY_PATH:~/.guix-profile/lib\"
-export C_INCLUDE_PATH=\"$C_INCLUDE_PATH:~/.guix-profile/include\"
-export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:~/.guix-profile/lib\"
-export PATH=\"~/local/bin:$PATH\"
-test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
-export GDK_SCALE=2
-export GDK_DPI_SCALE=1")))))
+test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true")))))
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map (lambda (file)
@@ -231,7 +232,7 @@ export GDK_DPI_SCALE=1")))))
                                                #$(file-append xmodmap "/bin/xmodmap")       "~/.local/fixme/yggdrasill.xmodmap"
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Click Method Enabled' 0 1"
                                                #$(file-append xinput "/bin/xinput")         "set-prop 14 'libinput Accel Speed' 1.0"
-                                               #$(file-append feh "/bin/feh")               "--bg-scale /data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png"
+                                               #$(file-append feh "/bin/feh")               "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
                      ;; git, etc:
                      (".gitconfig" ,(local-file (string-append conf-root-dir  "/misc/gitconfig"))) ;; setxkbmap
