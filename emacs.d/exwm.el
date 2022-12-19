@@ -118,11 +118,10 @@
                   (number-sequence 0 9))))
 
 (exwm-enable)
+
 (setq exwm-systemtray-background-color 'workspace-background)
 ;; (set-frame-parameter nil 'alpha-background 50)
 ;; (frame-parameter nil 'alpha-background)
 
-(load "~/.emacs.d/init.el") ;; orly
-
-(provide 'exwm)
+(provide 'conf/exwm)
 ;;; exwm.el ends here

@@ -201,4 +201,4 @@
 (general-evil-define-key '(normal) elfeed-search-mode-map
   "RET" #'elfeed-search-show-entry)
 
-(provide 'maps)
+(provide 'conf/maps)

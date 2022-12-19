@@ -432,7 +432,4 @@
  ;; "⭠ now ─────────────────────────────────────────────────"
  )
 
-
-(org-indent-mode t)
-
-(provide 'org-conf)
+(provide 'conf/org)

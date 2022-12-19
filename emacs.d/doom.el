@@ -229,4 +229,4 @@ If on a:
             (org-element-property :begin context)
             (org-element-property :end context))))))))
 
-(provide 'doom)
+(provide 'conf/doom)

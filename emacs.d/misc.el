@@ -2,4 +2,4 @@
   (interactive)
   (insert (format-time-string "[%F %a %H:%M]")))
 
-(provide 'misc)
+(provide 'conf/misc)

@@ -84,4 +84,4 @@
                                 (add-hook 'before-save-hook 'ocamlformat-before-save t t)))
 
 
-(provide 'dev)
+(provide 'conf/dev)

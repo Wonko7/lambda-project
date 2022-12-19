@@ -88,6 +88,6 @@
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 ;; (evil-snipe-override-mode +1)
 
-(provide 'evil)
+(provide 'conf/evil)
 
 ;;; evil.el ends here

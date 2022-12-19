@@ -50,5 +50,5 @@
 ;; todo
 ;; which key
 
-(provide 'completion)
+(provide 'conf/completion)
 ;;; completion.el ends here

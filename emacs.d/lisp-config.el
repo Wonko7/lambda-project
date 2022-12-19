@@ -5,4 +5,4 @@
 (require 'evil-cleverparens)
 
 
-(provide 'lisp-config)
+(provide 'conf/lisp)

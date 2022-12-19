@@ -61,4 +61,4 @@
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
 
-(provide 'fancy)
+(provide 'conf/fancy)
