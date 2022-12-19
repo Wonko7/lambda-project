@@ -94,7 +94,7 @@
         ;;
         ([?\s-f] . my/toggle-maximize-buffer)
 
-        ([?\s-C] . kill-buffer)
+        ([?\s-C] . kill-this-buffer)
         ;;
         ([?\s-,] . my/decrease-alpha)
         ([?\s-.] . my/increase-alpha)

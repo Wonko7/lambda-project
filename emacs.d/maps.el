@@ -49,7 +49,7 @@
   "oa" 'org-agenda
   ;; buffers
   "br" 'rename-buffer
-  "bk" 'kill-buffer
+  "bk" 'kill-this-buffer
   "bn" 'evil-buffer-new
   ;; roam
   "rD" 'org-roam-demote-entire-buffer
