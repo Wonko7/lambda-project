@@ -22,6 +22,16 @@
 (require 'exwm)
 (require 'exwm-config)
 
+(require 'desktop-environment)
+(desktop-environment-mode)
+
+(setq desktop-environment-volume-get-command "pamixer --get-volume")
+(setq desktop-environment-volume-set-command "pamixer %s")
+(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
+(setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
+(setq desktop-environment-volume-normal-decrement "-d 5")
+(setq desktop-environment-volume-toggle-command "pamixer -t")
+
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
       '(?\C-x

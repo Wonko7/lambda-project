@@ -13,11 +13,18 @@
              (gnu packages aspell)
              (gnu packages libreoffice)
 	     (gnu packages ocaml)
+             ;; desktop stuff
+             (gnu packages pulseaudio)
+             (gnu packages synergy)
+             (gnu packages xorg)	; xinit
+             (gnu packages linux)
+             (gnu packages xdisorg)
+             (gnu packages suckless)
+             (gnu packages gnome)
+             (gnu packages music)
 	     ;; tools
              (gnu packages admin)
-             (gnu packages xorg)	; xinit
              (gnu packages version-control)
-             (gnu packages synergy)
              (gnu packages tmux)
              (gnu packages ssh)
 	     (gnu packages databases) ; recutils
@@ -157,6 +164,7 @@
             ;; x stuff
             emacs-desktop-environment
             xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
+            pamixer brightnessctl scrot slock upower tlp playerctl
 
             ;; fonts
             ;; font-nerd-jetbrains
