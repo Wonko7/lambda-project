@@ -83,5 +83,10 @@
                                     (setq-local lsp-modeline-code-actions-enable nil))))
                                 (add-hook 'before-save-hook 'ocamlformat-before-save t t)))
 
+(require 'diff-hl)
+(global-diff-hl-mode)
+
+(setq diff-hl-draw-borders nil)
+(setq diff-hl-side 'right)
 
 (provide 'conf/dev)
