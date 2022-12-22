@@ -53,28 +53,53 @@
 
 (defun my/toggle-fullscreen ()
   "maximize buffer"
-  (interactive)
   (if (= 1 (length (window-list)))
       (jump-to-register '_)
     (progn
       (window-configuration-to-register '_)
       (delete-other-windows))))
 
-(defun my/decrease-alpha ()
-  (interactive)
+(defun my/tune-alpha (direction)
   (let* ((a (frame-parameter (selected-frame) 'alpha))
-         (a (if a (car a) a))
-         (a (- a 5))
+         (a (if a (car a) 100))
+         (a (+ a (if (string= direction "up") 2 -2)))
+         (a (% a 100))
          (a (if (< a 0) 0 a)))
-    (set-frame-parameter (selected-frame) 'alpha (cons a 50))))
+    (set-frame-parameter (selected-frame) 'alpha (cons a 70))))
 
-(defun my/increase-alpha ()
+(defun my/tune-workspace (dir)
+  (let* ((c exwm-workspace-current-index)
+         (c (+ c (if (string= dir "up") 1 -1)))
+         (c (% c exwm-workspace-number))
+         (c (if (< c 0) (- exwm-workspace-number 1) c)))
+    (exwm-workspace-switch c)))
+
+(defun efs/exwm-update-class ()
+  (exwm-workspace-rename-buffer exwm-class-name))
+
+(defun efs/exwm-update-title ()
+  (pcase exwm-class-name
+    ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
+
+(defun efs/configure-window-by-class ()
   (interactive)
-  (let* ((a (frame-parameter (selected-frame) 'alpha))
-         (a (if a (car a) 100 ))
-         (a (+ a 5))
-         (a (if (> a 100) 100 a)))
-    (set-frame-parameter (selected-frame) 'alpha (cons a 50))))
+  (pcase exwm-class-name
+    ("Firefox" (exwm-workspace-move-window 4))
+    ;; ("vlc"
+    ;;  (exwm-layout-toggle-mode-line))
+    ;; ("mpv" ;(exwm-floating-toggle-floating)
+    ;;  (exwm-layout-toggle-mode-line))
+    ))
+
+;; When window "class" updates, use it to set the buffer name
+(add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+
+;; When window title updates, use it to set the buffer name
+(add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+
+;; Configure windows as they're created
+(add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+
 
 ;; Ctrl+Q will enable the next key to be sent directly
 (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
@@ -91,13 +116,16 @@
         ([?\s-l] . windmove-right)
         ([?\s-k] . windmove-up)
         ([?\s-j] . windmove-down)
+
+        ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
+        ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
         ;;
         ([?\s-f] . my/toggle-maximize-buffer)
 
         ([?\s-C] . kill-this-buffer)
         ;;
-        ([?\s-,] . my/decrease-alpha)
-        ([?\s-.] . my/increase-alpha)
+        ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
+        ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
         ([?\s--] . evil-window-split)
         ([?\s-|] . evil-window-vsplit)
 
@@ -110,7 +138,7 @@
 
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
-        ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
+        ;; ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
 
         ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
         ,@(mapcar (lambda (i)
@@ -125,6 +153,11 @@
 (setq exwm-systemtray-background-color 'workspace-background)
 ;; (set-frame-parameter nil 'alpha-background 50)
 ;; (frame-parameter nil 'alpha-background)
+
+(set-frame-parameter (selected-frame) 'alpha '(98 . 70))
+(add-to-list 'default-frame-alist  '(alpha . (98 . 70)))
+;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;; (add-to-list 'default-frame-alist  '(fullscreen . maximized))
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
