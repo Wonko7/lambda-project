@@ -9,7 +9,7 @@
                                               (concat org-directory d))
                                             '("wip/" "work/"
                                               "here-be-dragons/" ;?
-                                        ;"here-be-dragons/daily/"
+                                              "here-be-dragons/daily/"
                                               ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
