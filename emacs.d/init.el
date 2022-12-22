@@ -16,6 +16,13 @@
 
 (setq mouse-yank-at-point t)
 
+;; stop touching my stuff (see perfect window placement)
+(setq display-buffer-base-action
+  '((display-buffer-reuse-window display-buffer-same-window)
+    (reusable-frames . t)))
+
+(setq even-window-sizes nil)     ; avoid resizing
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spell
 
