@@ -14,6 +14,8 @@
 (require 'recentf)
 (recentf-mode)
 
+(setq mouse-yank-at-point t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spell
 
