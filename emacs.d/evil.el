@@ -40,15 +40,17 @@
 ;;   :prefix-map 'my-leader-map
 ;;   "," 'list-buffers)
 
-(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-(setq evil-want-keybinding nil)
-
+(require 'undo-fu)
+(require 'vundo)
+(setq evil-undo-system 'undo-fu)
 
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding t)
+(setq evil-want-minibuffer t)
 (require 'evil)
 (when (require 'evil-collection nil t)
   (evil-collection-init))
+
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 (setq evil-want-C-i-jump nil)

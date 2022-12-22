@@ -6,7 +6,7 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (tooltip-mode -1)
-(set-fringe-mode 10)
+(set-fringe-mode 5)
 
 (setq visible-bell t)
 (setq display-line-numbers-type t)
