@@ -1,5 +1,5 @@
 (define-configuration buffer
-  ((default-modes (append '(vi-normal-mode) %slot-default%))))
+  ((default-modes (append '(vi-normal-mode dark-mode) %slot-default%))))
 
 (define-configuration base-mode
   ((keymap-scheme
