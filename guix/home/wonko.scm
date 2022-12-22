@@ -20,8 +20,11 @@
              (gnu packages linux)
              (gnu packages xdisorg)
              (gnu packages suckless)
-             (gnu packages gnome)
              (gnu packages music)
+             (gnu packages lxde)
+             (gnu packages gnome)
+             (gnu packages kde-plasma)
+             (gnu packages kde-frameworks)
 	     ;; tools
              (gnu packages admin)
              (gnu packages version-control)
@@ -57,23 +60,25 @@
             ;; basic (bitches) stuff:
             emacs-general
             emacs-emacsql-sqlite3
+            emacs-undo-fu
+            emacs-vundo
 
             ;; org
             emacs-org
             emacs-org-roam
             emacs-org-super-agenda
+            emacs-org-web-tools
             ;; emacs-org-download (images)
             ;;"emacs-org-ref"
             ;;"emacs-org-static-blog"
             ;;"emacs-org2web"
-            ;;"emacs-org-web-tools" (sucking stuff out of www)
             ;;"emacs-org-beautify-theme"
             ;;"org-superstar-mode"
-            emacs-org-modern
             ;; FIXME emacs-org-ql
             ;; emacs-org-auto-expand
             ;; emacs-org-appear
             ;; emacs-orgit (link to magit)
+            ;; emacs-org-modern
 
             emacs-evil
             emacs-evil-surround
@@ -104,6 +109,7 @@
             emacs-pass
             emacs-magit
             emacs-magit-annex
+            emacs-diff-hl
             emacs-dirvish
             emacs-eshell-up
             emacs-dired-du
@@ -160,11 +166,14 @@
             emacs-all-the-icons-completion
             ;; exwm
             emacs-exwm
+            emacs-exwm-edit
+            emacs-perspective
+            emacs-persp-mode
             emacs-lemon
             ;; x stuff
             emacs-desktop-environment
             xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
-            pamixer brightnessctl scrot slock upower tlp playerctl
+            pamixer brightnessctl scrot upower playerctl ;; tlp and have emacs set rfkill for me? fuck that noise.
 
             ;; fonts
             ;; font-nerd-jetbrains
@@ -173,15 +182,18 @@
             font-nerd-symbols
             font-goog-noto-emoji
 
+            ;; bling
+            lxappearance
+            breeze breeze-gtk breeze-icons
             ;; other lightweight stuff I'm gonna need:
             ;; gpg!
-            recutils
+            recutils tree
             synergy
             openssh
             git
             tmux
             ;; services
-            jonaburg-picom
+            ibhagwan-picom
             synergy
             ;; communication
             pantalaimon
@@ -262,7 +274,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                         (shepherd-service
                          (provision '(picom))
                          (start #~(make-forkexec-constructor
-                                   (list #$(file-append jonaburg-picom "/bin/picom"))))
+                                   (list #$(file-append ibhagwan-picom "/bin/picom"))))
                          (stop #~(make-kill-destructor))
                          (documentation "bling"))
                         (shepherd-service
