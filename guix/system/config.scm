@@ -7,6 +7,7 @@
              ;(gnu packages zsh)
              (gnu packages networking)
              (gnu packages xdisorg)
+             (gnu packages suckless)
              (gnu system setuid)
              (nongnu packages linux)
              (nongnu system linux-initrd)
@@ -168,6 +169,7 @@
     ;; time to checkout suckless's lock.
     ;; emacs: dumpcap?
     (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl) "/bin/brightnessctl")))
+    (setuid-program (program (file-append slock "/bin/slock")))
     (setuid-program (program (file-append wireshark "/bin/dumpcap")))
     (setuid-program (program (file-append xscreensaver "/bin/xscreensaver")))
     %setuid-programs))
@@ -230,7 +232,8 @@
    (list
     (swap-space
      (target "/mnt/vault/swap/swapfile")
-     (dependencies mapped-devices))))
+     (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                           file-systems)))))
   (bootloader
    (bootloader-configuration
     (bootloader grub-efi-bootloader)
