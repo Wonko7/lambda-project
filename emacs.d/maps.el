@@ -45,6 +45,8 @@
   "aee" 'elfeed
   "aes" 'elfeed-update
   "e" 'embark-act
+  ;; secondary apps
+  "zz" 'desktop-environment-lock-screen
   ;; org
   "oa" 'org-agenda
   ;; buffers
