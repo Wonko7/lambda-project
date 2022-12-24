@@ -16,6 +16,15 @@
 (setq vertico-cycle t)
 (vertico-mode)
 
+;; Use `consult-completion-in-region' if Vertico is enabled.
+;; Otherwise use the default `completion--in-region' function.
+(setq completion-in-region-function
+      (lambda (&rest args)
+        (apply (if vertico-mode
+                   #'consult-completion-in-region
+                 #'completion--in-region)
+               args)))
+
 
 (require 'emacs)
 (defun crm-indicator (args)
@@ -44,11 +53,52 @@
 ;; orderless
 
 (require 'orderless)
-(setq completion-styles '(orderless basic)
+(setq completion-styles '(orderless)
       completion-category-defaults nil
-      completion-category-overrides '((file (styles partial-completion))))
-;; todo
-;; which key
+      completion-category-overrides nil)
+
+;; orderless-style-dispatchers
+
+(defun regex-if-twiddle (pattern _index _total)
+  (when (string-suffix-p "~" pattern)
+    `(orderless-regex . ,(substring pattern 0 -1))))
+
+(defun literal-if-equal (pattern _index _total)
+  (when (string-suffix-p "=" pattern)
+    `(orderless-literal . ,(substring pattern 0 -1))))
+
+(defun flex-if-quote (pattern _index _total)
+  ;; also on prefix.
+  (when (string-suffix-p "'" pattern)
+    `(orderless-flex . ,(substring pattern 0 -1))))
+
+(defun first-initialism (pattern index _total)
+  (if (= index 0) 'orderless-initialism))
+
+(defun without-if-bang (pattern _index _total)
+  (cond
+   ((equal "!" pattern)
+    '(orderless-literal . ""))
+   ((string-prefix-p "!" pattern)
+    `(orderless-without-literal . ,(substring pattern 1)))))
+
+
+(setq orderless-matching-styles '(orderless-literal)
+      orderless-style-dispatchers '(;; first-initialism
+                                    regex-if-twiddle
+                                    flex-if-quote
+                                    without-if-bang))
+
+;; will come in handy:
+
+;; (orderless-define-completion-style orderless+initialism
+;;   (orderless-matching-styles '(orderless-initialism
+;;                                orderless-literal
+;;                                orderless-regexp)))
+;; (setq completion-category-overrides
+;;       '((command (styles orderless+initialism))
+;;         (symbol (styles orderless+initialism))
+;;         (variable (styles orderless+initialism))))
 
 (provide 'conf/completion)
 ;;; completion.el ends here

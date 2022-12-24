@@ -2,7 +2,28 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ;; ocaml + sane defaults
+;; (require 'lsp)
+(require 'lsp-ui)
+;;(require 'lsp-ui-imenu)
+
+;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l .") 'lsp-ui-peek-find-definitions)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l ?") 'lsp-ui-peek-find-references)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l r") 'lsp-rename)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l x") 'lsp-workspace-restart)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l w") 'lsp-ui-peek-find-workspace-symbol)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l i") 'lsp-ui-peek-find-implementation)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l d") 'lsp-describe-thing-at-point)
+;; (define-key lsp-ui-mode-map (kbd "C-c C-l e") 'lsp-execute-code-action)
+
+(setq lsp-ui-sideline-enable t)
+(setq lsp-ui-doc-enable t)
+(setq lsp-ui-peek-enable t)
+(setq lsp-ui-peek-always-show t)
+
 (require 'tuareg)
+;; (require 'ocamlformat)
 
 ;; (use-package tuareg :ensure t)
 
@@ -53,22 +74,22 @@
 ;;       "a"   #'ff-get-other-file)
 
 (general-evil-define-key '(normal) tuareg-mode-map
- :prefix "RET"
- "ge"  'merlin-error-next
- "o"   'merlin-pop-stack
- "RET" 'tuareg-eval-phrase
- "b"   'tuareg-eval-buffer
- "TAB" 'tuareg-complete
- "K"   'tuareg-kill-ocaml
- "a"   'ff-get-other-file ;; find-file.el
-      ;; :nvm  "gd" #'+lookup/definition
- )
+  :prefix "RET"
+  "ge"  'merlin-error-next
+  "o"   'merlin-pop-stack
+  "RET" 'tuareg-eval-phrase
+  "b"   'tuareg-eval-buffer
+  "TAB" 'tuareg-complete
+  "K"   'tuareg-kill-ocaml
+  "a"   'ff-get-other-file ;; find-file.el
+  ;; :nvm  "gd" #'+lookup/definition
+  )
 
 ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
 (add-hook 'tuareg-mode-hook #'(lambda ()
                                 (setq mode-name "🐫")
                                 ;; FIXME( integrate this after trying them out.
-                                ;(define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
+                                        ;(define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
                                 ;; FIXME)
                                 (add-hook 'before-save-hook #'ocamlformat-before-save)
                                 (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
@@ -79,8 +100,8 @@
                                 (setq-local tuareg-interactive-program
                                             (concat tuareg-interactive-program " -nopromptcont"))
                                 (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
-                                  (when (member ext '("eliom" "eliomi"))
-                                    (setq-local lsp-modeline-code-actions-enable nil))))
+                                                 (when (member ext '("eliom" "eliomi"))
+                                                   (setq-local lsp-modeline-code-actions-enable nil))))
                                 (add-hook 'before-save-hook 'ocamlformat-before-save t t)))
 
 (require 'diff-hl)

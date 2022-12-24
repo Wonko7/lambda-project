@@ -136,6 +136,7 @@
             emacs-rainbow-delimiters
             emacs-rainbow-identifiers
             emacs-lsp-mode
+            emacs-lsp-ui
             emacs-eval-sexp-fu-el
             ;; ocaml
             opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
