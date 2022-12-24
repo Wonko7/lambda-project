@@ -198,7 +198,8 @@
             synergy
             ;; communication
             pantalaimon
-            ;;
+            ;; basic system stuff
+            acpi
             man-db))
 
  (services

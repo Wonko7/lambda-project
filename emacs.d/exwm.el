@@ -63,7 +63,7 @@
   (let* ((a (frame-parameter (selected-frame) 'alpha))
          (a (if a (car a) 100))
          (a (+ a (if (string= direction "up") 2 -2)))
-         (a (% a 100))
+         (a (if (> a 100) 100 a))
          (a (if (< a 0) 0 a)))
     (set-frame-parameter (selected-frame) 'alpha (cons a 70))))
 
