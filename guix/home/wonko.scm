@@ -124,6 +124,7 @@
             emacs-guix
 
             ;; spell
+            emacs-flycheck-guile
             emacs-flyspell-correct
             emacs-auto-dictionary-mode
 
@@ -137,6 +138,8 @@
             emacs-rainbow-identifiers
             emacs-lsp-mode
             emacs-lsp-ui
+            emacs-eglot
+            emacs-consult-eglot
             emacs-eval-sexp-fu-el
             ;; ocaml
             opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config

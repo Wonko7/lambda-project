@@ -110,11 +110,16 @@
   :desc "file recent" "fr" 'consult-recent-file
 
   ;;
-  :desc "filter line"  "ss" 'consult-line)
+  :desc "filter line"  "ss" 'consult-line
 
+  ;; code stuff
+  :desc "lsp " "cr" 'eglot-rename)
+
+;; try motion-map
 ;; (general-evil-define-key '(normal) normal-mode-map
-;;   ;; rm stuff
-;;   :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace)
+;;    ;; rm stuff
+;;   :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
