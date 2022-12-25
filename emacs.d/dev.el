@@ -3,7 +3,7 @@
 
 ;; ocaml + sane defaults
 ;; (require 'lsp)
-(require 'lsp-ui)
+;; (require 'lsp-ui)
 ;;(require 'lsp-ui-imenu)
 
 ;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)

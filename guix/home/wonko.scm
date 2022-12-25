@@ -138,6 +138,10 @@
             emacs-rainbow-identifiers
             emacs-lsp-mode
             emacs-lsp-ui
+            ;;emacs-company-lsp
+            ;;emacs-company
+            emacs-corfu
+            emacs-corfu-doc
             emacs-eglot
             emacs-consult-eglot
             emacs-eval-sexp-fu-el
