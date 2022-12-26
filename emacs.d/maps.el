@@ -31,9 +31,9 @@
   :global-prefix "C-SPC")
 
 (w/leader-keys
-  :desc "exec stuff" ":" 'execute-extended-command
-  :desc "buffers" "<SPC>" 'consult-buffer
-  :desc "grep" "/" 'consult-grep
+  :desc "exec stuff" ":"   'execute-extended-command
+  :desc "buffers" "<SPC>"  'consult-buffer
+  :desc "grep" "/"         'consult-ripgrep
   :desc "proj buffers" "'" 'projectile-find-file
   ;; "'" 'counsel-projectile-find-file
   ;; embark

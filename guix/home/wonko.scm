@@ -118,6 +118,10 @@
             emacs-all-the-icons-dired
             emacs-dired-toggle-sudo
 
+            ;; search
+            ripgrep
+            fd
+
             ;; guile/scheme <3
             emacs-geiser
             emacs-geiser-guile
