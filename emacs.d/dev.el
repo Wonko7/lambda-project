@@ -86,6 +86,10 @@
   ;; :nvm  "gd" #'+lookup/definition
   )
 
+(general-evil-define-key '(normal) prog-mode-map
+  "zj"  'flymake-goto-next-error
+  "zk"  'flymake-goto-prev-error)
+
 ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
 (add-hook 'tuareg-mode-hook #'(lambda ()
                                 (setq mode-name "🐫")
