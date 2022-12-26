@@ -31,6 +31,7 @@
              (gnu packages tmux)
              (gnu packages ssh)
 	     (gnu packages databases) ; recutils
+             (gnu packages rust-apps) ; fd rg
              ;; dev
              (gnu packages haskell-apps)
              (gnu packages compression)
@@ -121,6 +122,7 @@
             ;; search
             ripgrep
             fd
+            emacs-rg
 
             ;; guile/scheme <3
             emacs-geiser

@@ -25,6 +25,7 @@
 
 (require 'general)
 (general-evil-setup t)
+
 (general-create-definer w/leader-keys
   :keymaps '(normal insert visual emacs)
   :prefix "SPC"
@@ -36,7 +37,11 @@
   :desc "grep" "/"         'consult-ripgrep
   :desc "proj buffers" "'" 'projectile-find-file
   ;; "'" 'counsel-projectile-find-file
+
   ;; embark
+  "e" 'embark-act
+  "x" 'embark-export
+
   ;; apps
   "ab" 'ibuffer
   "ad" 'dired
@@ -44,15 +49,16 @@
   "ap" 'proced
   "aee" 'elfeed
   "aes" 'elfeed-update
-  "e" 'embark-act
   ;; secondary apps
   "zz" 'desktop-environment-lock-screen
+
   ;; org
   "oa" 'org-agenda
   ;; buffers
   "br" 'rename-buffer
   "bk" 'kill-this-buffer
   "bn" 'evil-buffer-new
+
   ;; roam
   "rD" 'org-roam-demote-entire-buffer
   "rf" 'org-roam-node-find
@@ -66,6 +72,7 @@
   "rn" 'org-roam-capture
   "rr" 'org-roam-refile
   "rR" 'org-roam-link-replace-all
+
   ;; roam date:
   :desc "Goto previous note" "rdb" 'org-roam-dailies-goto-previous-note
   :desc "Goto previous note" "rdk" 'org-roam-dailies-goto-previous-note

@@ -96,4 +96,13 @@
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (add-hook 'dired-mode-hook 'diredfl-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; search
+
+(require 'rg)
+(require 'wgrep)
+
+(autoload 'wgrep-rg-setup "wgrep-rg")
+(add-hook 'rg-mode-hook 'wgrep-rg-setup)
+
 (provide 'init)
