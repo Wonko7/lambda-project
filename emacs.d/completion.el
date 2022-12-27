@@ -38,6 +38,8 @@
 
 (require 'corfu)
 (require 'corfu-doc)
+(require 'corfu-history)
+(require 'corfu-info)
 
 (global-corfu-mode)
 
@@ -45,24 +47,17 @@
 ;; Optional customizations
 ;; :custom
 (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-(setq corfu-auto t)                 ;; Enable auto completion
+(setq corfu-auto nil)               ;; Enable auto completion
 (setq corfu-separator ?\s)          ;; Orderless field separator
 (setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
 (setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-;; (corfu-preview-current nil)    ;; Disable current candidate preview
+(setq corfu-preview-current nil)    ;; Disable current candidate preview
 (setq corfu-preselect 'prompt)      ;; Preselect the prompt
-;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+(setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
 (setq corfu-scroll-margin 5)        ;; Use scroll margin
-
-;; Enable Corfu only for certain modes.
-;; :hook ((prog-mode . corfu-mode)
-;;        (shell-mode . corfu-mode)
-;;        (eshell-mode . corfu-mode))
-
-;; Recommended: Enable Corfu globally.
-;; This is recommended since Dabbrev can be used globally (M-/).
-;; See also `corfu-excluded-modes'.
-;;            :init)
+;; auto popup:
+;; (setq corfu-auto-delay 0)
+;; (setq corfu-auto-prefix 0)
 
 (setq completion-cycle-threshold 3)
 (setq tab-always-indent 'complete)
