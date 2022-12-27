@@ -4,13 +4,10 @@
 
 (setq org-directory "/data/org/")
 (setq org-roam-directory (concat org-directory "here-be-dragons/"))
-(setq org-agenda-files (cons org-directory (mapcar
-                                            (lambda (d)
-                                              (concat org-directory d))
-                                            '("wip/" "work/"
-                                              "here-be-dragons/" ;?
-                                              "here-be-dragons/daily/"
-                                              ))))
+(setq org-agenda-files (mapcar
+                        (lambda (d)
+                          (concat org-roam-directory d))
+                        '("wip/" "work/" "wtf/" "daily/")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
