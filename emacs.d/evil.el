@@ -71,6 +71,9 @@
 (setq evil-search-wrap nil)
 (setq evil-snipe-scope 'whole-visible)
 
+(require 'evil-matchit)
+(global-evil-matchit-mode 1)
+
 (require 'evil-surround)
 (global-evil-surround-mode)
 
