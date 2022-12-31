@@ -11,10 +11,14 @@
 (require 'savehist)
 (savehist-mode)
 
+(save-place-mode)
+
 (require 'recentf)
 (recentf-mode)
 
 (setq mouse-yank-at-point t)
+
+;; (global-visual-line-mode) ;; most certainly not, was I high?
 
 ;; stop touching my stuff (see perfect window placement)
 (setq display-buffer-base-action
