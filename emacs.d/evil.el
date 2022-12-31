@@ -43,11 +43,11 @@
 (require 'undo-fu)
 (require 'vundo)
 (setq evil-undo-system 'undo-fu)
+(evil-set-undo-system evil-undo-system) ;; FIXME: this shouldn't be needed
 
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding t)
 (setq evil-want-minibuffer t)
-(require 'evil)
 (when (require 'evil-collection nil t)
   (evil-collection-init))
 
