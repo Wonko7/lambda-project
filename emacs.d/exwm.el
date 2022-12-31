@@ -119,10 +119,9 @@
 
         ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
         ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
-        ;;
-        ([?\s-f] . my/toggle-maximize-buffer)
 
         ([?\s-C] . kill-this-buffer)
+        ([?\s-c] . exwm-reset)
         ;;
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
@@ -130,6 +129,7 @@
         ([?\s-|] . evil-window-vsplit)
 
         ([?\s-f] . my/toggle-fullscreen)
+        ([?\s-F] . exwm-layout-toggle-fullscreen)
 
         ;; Launch applications via shell command
         ([?\s-&] . (lambda (command)
@@ -156,8 +156,17 @@
 
 (set-frame-parameter (selected-frame) 'alpha '(98 . 70))
 (add-to-list 'default-frame-alist  '(alpha . (98 . 70)))
+
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;; (add-to-list 'default-frame-alist  '(fullscreen . maximized))
+
+(require 'perspective)
+(persp-mode)
+
+;; persp
+(consult-customize consult--source-buffer :hidden t :default nil)
+(add-to-list 'consult-buffer-sources persp-consult-source)
+;; FIXME/TODO: check widen / consult-narrow
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
