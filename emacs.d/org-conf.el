@@ -95,13 +95,49 @@
 ;; org-roam
 
 (require 'org-roam)
-                                        ; org-roam-setup ?
-                                        ;(require 'org-roam)
+
+;; FIXME <start https://github.com/org-roam/org-roam/issues/2198
+(defalias 'org-font-lock-ensure
+        (if (fboundp 'font-lock-ensure)
+            #'font-lock-ensure
+          (lambda (&optional _beg _end)
+            (with-no-warnings (font-lock-fontify-buffer)))))
+
+(defun org-roam-fontify-like-in-org-mode (s)
+  "Fontify string S like in Org mode.
+Like `org-fontify-like-in-org-mode', but supports `org-ref'."
+  ;; NOTE: pretend that the temporary buffer created by `org-fontify-like-in-org-mode' to
+  ;; fontify a `cite:' reference has been hacked by org-ref, whatever that means;
+  ;;
+  ;; `org-ref-cite-link-face-fn', which is used to supply a face for `cite:' links, calls
+  ;; `hack-dir-local-variables' rationalizing that `bibtex-completion' would throw some warnings
+  ;; otherwise.  This doesn't seem to be the case and calling this function just before
+  ;; `org-font-lock-ensure' (alias of `font-lock-ensure') actually instead of fixing the alleged
+  ;; warnings messes the things so badly that `font-lock-ensure' crashes with error and doesn't let
+  ;; org-roam to proceed further. I don't know what's happening there exactly but disabling this hackery
+  ;; fixes the crashing.  Fortunately, org-ref provides the `org-ref-buffer-hacked' switch, which we use
+  ;; here to make it believe that the buffer was hacked.
+  ;;
+  ;; This is a workaround for `cite:' links and does not have any effect on other ref types.
+  ;;
+  ;; `org-ref-buffer-hacked' is a buffer-local variable, therefore we inline
+  ;; `org-fontify-like-in-org-mode' here
+  (with-temp-buffer
+    (insert s)
+    (let ((org-ref-buffer-hacked t))
+      (org-mode)
+      (org-font-lock-ensure)
+      (if org-link-descriptive
+          (org-link-display-format (buffer-string))
+      (buffer-string)))))
+;; FIXME end>
+
 (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
 (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 (org-roam-db-autosync-mode)
 (require 'org-roam-protocol)
 (setq org-roam-directory (concat org-directory "here-be-dragons/"))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; super agenda
