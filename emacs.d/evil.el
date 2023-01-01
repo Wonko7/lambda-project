@@ -84,6 +84,7 @@
 (require 'evil-org)
 (setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading calendar))
 (setq evil-org-retain-visual-state-on-shift t)
+(setq evil-org-special-o/O nil)
 
 ;; the equivalent for org-mode-map is in org-conf
 ;; this needs to be set after starting evil-org
