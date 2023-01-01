@@ -70,6 +70,7 @@
 ;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit?
 
 (require 'magit)
+(setq magit-status-initial-section '(3))
 
 (require 'conf/misc "~/.emacs.d/misc.el")
 (require 'conf/completion "~/.emacs.d/completion.el")

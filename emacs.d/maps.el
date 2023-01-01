@@ -122,7 +122,7 @@
 
 
   ;; magit
-  "g." 'magit-dispatch
+  "g." 'magit-file-dispatch
   "gg" 'magit-status
   "gj" '(git-gutter:next-hunk :properties (:repeat t :jump t))
   "gk" '(git-gutter:previous-hunk :repeat t :jump t)
