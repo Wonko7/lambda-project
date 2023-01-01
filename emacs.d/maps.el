@@ -104,24 +104,6 @@
   "pm" 'persp-merge
   "pu" 'persp-unmerge
 
-;;     s — persp-switch: Query a perspective to switch to, or create
-;;     ` — persp-switch-by-number: Switch to perspective by number, or switch quickly using numbers 1, 2, 3.. 0 as prefix args; note this will probably be most useful with persp-sort set to 'created
-;;     k — persp-remove-buffer: Query a buffer to remove from current perspective
-;;     c — persp-kill : Query a perspective to kill
-;;     r — persp-rename: Rename current perspective
-;;     a — persp-add-buffer: Query an open buffer to add to current perspective
-;;     A — persp-set-buffer: Add buffer to current perspective and remove it from all others
-;;     b - persp-switch-to-buffer: Like switch-to-buffer; includes all buffers from all perspectives; changes perspective if necessary
-;;     i — persp-import: Import a given perspective from another frame.
-;;     n, <right> — persp-next: Switch to next perspective
-;;     p, <left> — persp-prev: Switch to previous perspective
-;;     m — persp-merge: Temporarily merge the buffers from one perspective into another
-;;     u — persp-unmerge: Undo the effects of a persp-merge
-;;     g — persp-add-buffer-to-frame-global: Add buffer to a frame-specific "global" perspective
-;;     C-s — persp-state-save: Save all perspectives in all frames to a file
-;;     C-l — persp-state-load: Load all perspectives from a file
-
-
   ;; magit
   "g." 'magit-file-dispatch
   "gg" 'magit-status
