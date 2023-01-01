@@ -81,6 +81,7 @@
    emacs-org-roam
    emacs-org-super-agenda
    emacs-org-web-tools
+   emacs-calfw
    ;; emacs-org-download (images)
    ;;"emacs-org-ref"
    ;;"emacs-org-static-blog"

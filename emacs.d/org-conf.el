@@ -469,4 +469,10 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
  ;; "⭠ now ─────────────────────────────────────────────────"
  )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; cal
+
+(require 'calfw-org)
+
+
 (provide 'conf/org)

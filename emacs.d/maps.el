@@ -54,6 +54,7 @@
 
   ;; org
   "oa" (lambda () (interactive) (org-agenda nil "z"))
+  "oc" 'cfw:open-org-calendar ;; FIXME use this as date picker?
   ;; buffers
   "br" 'rename-buffer
   "bk" 'kill-this-buffer
