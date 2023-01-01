@@ -21,6 +21,10 @@
 
 (require 'exwm)
 (require 'exwm-config)
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+;; (setq exwm-systemtray-height 20)
+
 
 (require 'desktop-environment)
 (setq desktop-environment-update-exwm-global-keys :prefix)
