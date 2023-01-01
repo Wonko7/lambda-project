@@ -288,7 +288,9 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                      (".xsession" ,(program-file ;; slim/gdm will exec this:
                                     "xsession"
                                     #~(system
-                                       (format #f "source ~~/.bash_profile; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
+                                       (format #f "source ~~/.bash_profile; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
+                                               #$(file-append xhost "/bin/xhost")
+					       "+SI:localuser:$USER"
                                                #$(file-append xset "/bin/xset")
                                                "b 0 0 0"
                                                #$(file-append xset "/bin/xset")
