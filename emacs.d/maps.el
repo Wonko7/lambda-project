@@ -53,7 +53,7 @@
   "zz" 'desktop-environment-lock-screen
 
   ;; org
-  "oa" 'org-agenda
+  "oa" (lambda () (interactive) (org-agenda nil "z"))
   ;; buffers
   "br" 'rename-buffer
   "bk" 'kill-this-buffer
