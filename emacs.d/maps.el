@@ -155,8 +155,12 @@
  ;; NOTE: keymaps specified with :keymaps must be quoted
   "C-r"  'consult-history
   "RET" 'comint-send-input
-  "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1))
-  )
+  "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
+
+(evil-collection-define-key 'insert 'comint-mode-map
+    (kbd "C-r") #'consult-history
+    (kbd "C-p") #'comint-previous-input
+    (kbd "C-n") #'comint-next-input)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
