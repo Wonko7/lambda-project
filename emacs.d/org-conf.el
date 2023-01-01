@@ -229,13 +229,6 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 
 (require 'org-super-agenda)
 (org-super-agenda-mode)
-(setq org-agenda-files (cons org-directory (mapcar
-                                            (lambda (d)
-                                              (concat org-directory d))
-                                            '("wip/" "work/"
-                                              "here-be-dragons/" ;?
-                                        ;"here-be-dragons/daily/"
-                                              ))))
 
 (require 'org-habit)
 (setq org-habit-graph-column 60)
