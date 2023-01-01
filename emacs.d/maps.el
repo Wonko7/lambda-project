@@ -27,7 +27,7 @@
 (general-evil-setup t)
 
 (general-create-definer w/leader-keys
-  :keymaps '(normal insert visual emacs)
+  :keymaps '(normal visual emacs)
   :prefix "SPC"
   :global-prefix "C-SPC")
 
@@ -143,7 +143,6 @@
   ;; code stuff
   :desc "lsp " "cr" 'eglot-rename)
 
-;; try motion-map
 ;; (general-evil-define-key '(normal) normal-mode-map
 ;;    ;; rm stuff
 ;;   :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace
@@ -177,8 +176,7 @@
   "M-g c" #'evil-cp-wrap-next-curly
   "M-g C" #'evil-cp-wrap-previous-curly
   "M-g s" #'evil-cp-wrap-next-square
-  "M-g S" #'evil-cp-wrap-previous-square
-  )
+  "M-g S" #'evil-cp-wrap-previous-square)
 
 (general-evil-define-key '(normal) evil-cleverparens-mode-map
   :prefix "RET"
@@ -195,43 +193,22 @@
   "gC" #'evil-cp-wrap-previous-curly
   "gs" #'evil-cp-wrap-next-square
   "gS" #'evil-cp-wrap-previous-square
-  "RET" #'eval-defun
-  )
+  "RET" #'eval-defun)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
-(require 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-(require 'evil-org-agenda)
-(evil-org-agenda-set-keys)
-
-(general-evil-define-key '(insert) org-mode-map
+(general-evil-define-key '(insert) evil-org-mode-map
   "TAB"   'org-cycle
   "C-i"   'org-roam-node-insert
   "S-TAB" 'org-shiftab)
 
 (general-evil-define-key '(normal) org-mode-map
-  "C-RET"           '+org/insert-item-below
-  "C-S-RET"         '+org/insert-item-above)
-
-(general-evil-define-key '(normal) org-mode-map
   :prefix "RET"
   "RET"             '+org/dwim-at-point)
 
-;; S-TAB           org-shifttab
-;; S-RET           +org/shift-return
-;; C-RET           +org/insert-item-below
-;; C-S-RET           +org/insert-item-above
-;;
-;; <motion-state> RET RET          +org/dwim-at-point
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed
-
-;; (map! :map elfeed-search-mode-map
-;;       :nvm
 
 (general-evil-define-key '(normal) elfeed-search-mode-map
   "RET" #'elfeed-search-show-entry)

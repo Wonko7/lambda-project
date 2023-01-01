@@ -61,13 +61,12 @@
   (add-hook 'org-mode-hook
             (lambda () (flyspell-mode 1))))
 
-(global-visual-line-mode)
 
 (require 'projectile)
 (setq projectile-project-search-path '(( "/code" . 3) ( "/work" . 3) ("/data" . 1)))
 (setq projectile-sort-order 'recently-active)
 (setq projectile-enable-caching t)
-;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit? 
+;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit?
 
 (require 'magit)
 
@@ -91,7 +90,7 @@
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t);; setq-local to toggle this per shell?
-
+;; the equivalent for org-mode-map is in org-conf
 ;; (add-hook
 ;;  'eshell-mode-hook
 ;;  (lambda ()

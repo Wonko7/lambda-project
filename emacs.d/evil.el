@@ -82,8 +82,23 @@
 (evil-exchange-install)
 
 (require 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading calendar))
+(setq evil-org-retain-visual-state-on-shift t)
+
+;; the equivalent for org-mode-map is in org-conf
+;; this needs to be set after starting evil-org
+(add-hook 'org-mode-hook
+          (lambda ()
+            (evil-org-mode)
+            ;;(general-evil-define-key '(normal) evil-org-mode-map
+            ;;                      "C-RET"           '+org/insert-item-below
+            ;;                      "C-S-RET"         '+org/insert-item-above
+            ;;                      [C-return]        '+org/insert-item-below
+            ;;                      [C-S-return]      '+org/insert-item-above)
+            (evil-define-key 'normal 'evil-org-mode
+              (kbd "<C-return>")  '+org/insert-item-below
+              (kbd "<C-S-return>") '+org/insert-item-above)))
+
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
 
