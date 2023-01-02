@@ -106,15 +106,19 @@
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t);; setq-local to toggle this per shell?
-;; the equivalent for org-mode-map is in org-conf
-;; (add-hook
-;;  'eshell-mode-hook
-;;  (lambda ()
-;;    (setq pcomplete-cycle-completions nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dired
 
 (require 'diredfl)
 (require 'all-the-icons-dired) ;; and after that try all icons init
 (require 'dired-toggle-sudo)
+(require 'dired-rsync)
+(require 'dired-open)
+;; (require 'dired-ranger)
+(require 'dired-collapse)
+(setq dired-dwim-target t)
+
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (add-hook 'dired-mode-hook 'diredfl-mode)
 

@@ -134,6 +134,7 @@
    emacs-dired-du
    emacs-diredfl
    emacs-dired-rsync
+   emacs-dired-hacks
    emacs-all-the-icons-dired
    emacs-dired-toggle-sudo
 
