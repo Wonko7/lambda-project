@@ -254,6 +254,8 @@
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #t)
+             (aliases '(("g" . "git")
+                        ("psrg" . "ps aux | rg")))
              (environment-variables
               '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
@@ -264,8 +266,7 @@
                 ("PATH" . "~/local/bin:$PATH")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("GDK_SCALE" . "2")
-                ("GDK_DPI_SCALE" . "1")
-                ))
+                ("GDK_DPI_SCALE" . "1")))
              (bash-profile
               (list
                (plain-file "bash-profile"
