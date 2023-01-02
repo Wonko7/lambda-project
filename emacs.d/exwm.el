@@ -20,6 +20,7 @@
 ;;; Code:
 
 (require 'exwm)
+(require 'exwm-randr)
 (require 'exwm-config)
 (require 'exwm-systemtray)
 (exwm-systemtray-enable)
@@ -153,6 +154,7 @@
                   (number-sequence 0 9))))
 
 (exwm-enable)
+(exwm-randr-enable) ;; revisit for multi-monitor
 
 (setq exwm-systemtray-background-color 'workspace-background)
 ;; (set-frame-parameter nil 'alpha-background 50)
