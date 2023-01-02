@@ -166,13 +166,14 @@
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;; (add-to-list 'default-frame-alist  '(fullscreen . maximized))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; perspepctive
+
+(setq persp-suppress-no-prefix-key-warning t)
 (require 'perspective)
 (persp-mode)
-
-;; persp
 (consult-customize consult--source-buffer :hidden t :default nil)
 (add-to-list 'consult-buffer-sources persp-consult-source)
-;; FIXME/TODO: check widen / consult-narrow
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
