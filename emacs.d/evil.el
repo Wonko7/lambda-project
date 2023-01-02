@@ -9,6 +9,7 @@
 
 
 ;; 😈
+(setq evil-want-C-i-jump nil)
 (require 'evil)
 (evil-mode 1)
 
@@ -49,6 +50,7 @@
 (setq evil-want-keybinding t)
 (setq evil-want-minibuffer t)
 (when (require 'evil-collection nil t)
+  (setq evil-collection-key-blacklist '("SPC"))
   (evil-collection-init))
 
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
@@ -108,6 +110,10 @@
 (evil-snipe-mode +1)
 (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
 ;; (evil-snipe-override-mode +1)
+
+(require 'evil-leader)
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
 
 (provide 'conf/evil)
 

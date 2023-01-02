@@ -1,41 +1,14 @@
 (require 'which-key)
 (which-key-mode)
 
-;(evil-set-leader nil (kbd "<space>"))
-;(evil-set-leader nil nil (kbd "<ret>"))
-;;<space>-: execute-extended-command
-;;
-;; general other example/way of dealing with leader:
-;; (use-package general
-;;   :ensure t
-;;   :init
-;;   (setq general-override-states '(insert
-;;                                   emacs
-;;                                   hybrid
-;;                                   normal
-;;                                   visual
-;;                                   motion
-;;                                   operator
-;;                                   replace))
-;;   :config
-;;   (general-define-key
-;;    :states '(normal visual motion)
-;;    :keymaps 'override
-;;    "SPC" 'hydra-space/body))
-
 (require 'general)
 (general-evil-setup t)
 
-(general-create-definer w/leader-keys
-  :keymaps '(normal visual emacs)
-  :prefix "SPC"
-  :global-prefix "C-SPC")
-
-(w/leader-keys
-  :desc "exec stuff" ":"   'execute-extended-command
-  :desc "buffers" "<SPC>"  'consult-buffer
-  :desc "grep" "/"         'consult-ripgrep
-  :desc "proj buffers" "'" 'projectile-find-file
+(evil-leader/set-key
+   ":"   'execute-extended-command ;;  "exec stuff"
+   "<SPC>"  'consult-buffer        ;;  "buffers"
+   "/"         'consult-ripgrep    ;;  "grep"
+   "'" 'projectile-find-file       ;;  "proj buffers"
   ;; "'" 'counsel-projectile-find-file
 
   ;; embark
@@ -75,20 +48,20 @@
   "rR" 'org-roam-link-replace-all
 
   ;; roam date:
-  :desc "Goto previous note" "rdb" 'org-roam-dailies-goto-previous-note
-  :desc "Goto previous note" "rdk" 'org-roam-dailies-goto-previous-note
-  :desc "Goto date"          "rdd" 'org-roam-dailies-goto-date
-  :desc "Capture date"       "rdD" 'org-roam-dailies-capture-date
-  :desc "Goto next note"     "rdf" 'org-roam-dailies-goto-next-note
-  :desc "Goto next note"     "rdj" 'org-roam-dailies-goto-next-note
-  :desc "Goto tomorrow"      "rdm" 'org-roam-dailies-goto-tomorrow
-  :desc "Capture tomorrow"   "rdM" 'org-roam-dailies-capture-tomorrow
-  :desc "Capture today"      "rdn" 'org-roam-dailies-capture-today
-  :desc "Goto today"         "rdt" 'org-roam-dailies-goto-today
-  :desc "Capture today"      "rdT" 'org-roam-dailies-capture-today
-  :desc "Goto yesterday"     "rdy" 'org-roam-dailies-goto-yesterday
-  :desc "Capture yesterday"  "rdY" 'org-roam-dailies-capture-yesterday
-  :desc "Find directory"     "rd-" 'org-roam-dailies-find-directory
+   "rdb" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
+   "rdk" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
+   "rdd" 'org-roam-dailies-goto-date             ;;  :desc "Goto date"
+   "rdD" 'org-roam-dailies-capture-date          ;;  :desc "Capture date"
+   "rdf" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
+   "rdj" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
+   "rdm" 'org-roam-dailies-goto-tomorrow         ;;  :desc "Goto tomorrow"
+   "rdM" 'org-roam-dailies-capture-tomorrow      ;;  :desc "Capture tomorrow"
+   "rdn" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
+   "rdt" 'org-roam-dailies-goto-today            ;;  :desc "Goto today"
+   "rdT" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
+   "rdy" 'org-roam-dailies-goto-yesterday        ;;  :desc "Goto yesterday"
+   "rdY" 'org-roam-dailies-capture-yesterday     ;;  :desc "Capture yesterday"
+   "rd-" 'org-roam-dailies-find-directory        ;;  :desc "Find directory"
 
   ;; projectile
   "p'" 'projectile-find-file
@@ -111,20 +84,26 @@
   "gk" '(git-gutter:previous-hunk :repeat t :jump t)
   ;; roam
   ;; insert stuff
-  :desc "Emoji"        "ie" 'emojify-insert-emoji
-  :desc "date (now)"   "id" 'my/insert-inactive-timestamp
-  :desc "date (now)"   "in" 'my/insert-inactive-timestamp
+  "ie" 'emojify-insert-emoji                ;;  :desc "Emoji"
+  "id" 'my/insert-inactive-timestamp        ;;  :desc "date (now)"
+  "in" 'my/insert-inactive-timestamp        ;;  :desc "date (now)"
   ;; rm stuff
-  :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace
+  "-d" 'delete-trailing-whitespace  ;; :desc "trailing whitespace"
 
   ;; file stuff, dired, ibuffer
-  :desc "file recent" "fr" 'consult-recent-file
+  "fr" 'consult-recent-file ;; :desc "file recent"
 
   ;;
-  :desc "filter line"  "ss" 'consult-line
+  "ss" 'consult-line  ;; :desc "filter line"
 
   ;; code stuff
-  :desc "lsp " "cr" 'eglot-rename)
+  ;; M-x flymake-goto-next-error goes to previous error in the current buffer
+  ;; M-x flymake-goto-prev-error goes to next error in the current buffer
+  ;; M-. or M-x xref-find-definitions finds the definition of the symbol at point and opens it in the current window
+  ;; M-, or M-x xref-pop-marker-stack jumps back
+  ;; M-? or M-x xref-find-references finds the references of the symbol at point
+  "cr" 'eglot-rename ;; :desc "lsp "
+  )
 
 ;; (general-evil-define-key '(normal) normal-mode-map
 ;;    ;; rm stuff
