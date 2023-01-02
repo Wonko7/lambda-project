@@ -15,30 +15,10 @@
              (ice-9 format)
              (srfi srfi-1)
              (srfi srfi-88)
-             ;; (w7)
-             )
-
-;; The following code is from
-;; [[https://www.draketo.de/software/guile-capture-stdout-stderr.html]].
-
-;; Comments and some formatting by me.
-
-;; Related links:
-
-;; https://www.gnu.org/software/guile/manual/html_node/Pipes.html
-;; https://www.gnu.org/software/guile/manual/guile.html#Ports-and-File-Descriptors
-
-;; This is an example of how you can write a procedure, which allows you to run
-;; a shell command from GNU Guile and capture not only its stdout output in a
-;; string, but also its stderr output in a string. This can be useful, if you
-;; need to parse the output of both stdout and stderr.
-
-;; Import nonfree linux module.
-(use-modules (nongnu packages linux)
+             (nongnu packages linux)
              (nongnu system linux-initrd))
 
 (use-service-modules desktop networking ssh xorg docker)
-
 
 (define %channels #~(cons*
                      (channel

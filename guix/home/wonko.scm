@@ -37,6 +37,8 @@
  (gnu packages databases)
                                         ; recutils
  (gnu packages rust-apps)
+ (gnu packages gnupg)
+ (gnu packages password-utils)
                                         ; fd rg
  ;; dev
  (gnu packages haskell-apps)
@@ -227,6 +229,11 @@
    breeze breeze-gtk breeze-icons
    ;; other lightweight stuff I'm gonna need:
    ;; gpg!
+   password-store gnupg
+   emacs-pass
+   emacs-auth-source-pass
+   emacs-pinentry
+   pinentry-emacs
    recutils tree
    synergy
    openssh
@@ -254,6 +261,7 @@
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-profile/include")
                 ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-profile/lib")
                 ("PATH" . "~/local/bin:$PATH")
+                ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("GDK_SCALE" . "2")
                 ("GDK_DPI_SCALE" . "1")
                 ))

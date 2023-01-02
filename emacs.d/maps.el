@@ -77,6 +77,9 @@
   "pm" 'persp-merge
   "pu" 'persp-unmerge
 
+  ;; password-store
+  "P"  'password-store-copy
+
   ;; magit
   "g." 'magit-file-dispatch
   "gg" 'magit-status
@@ -167,6 +170,7 @@
 ;; org
 
 (general-evil-define-key '(insert) evil-org-mode-map
+  "zD"    'org-decrypt-entries
   "TAB"   'org-cycle
   "C-i"   'org-roam-node-insert
   "S-TAB" 'org-shiftab)

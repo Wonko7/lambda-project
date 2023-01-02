@@ -46,6 +46,13 @@
 (display-time-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; auth
+
+(require 'pass)
+(require 'pinentry)
+(pinentry-start)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spell
 
 ;; (global-spell-fu-mode 0)
@@ -61,6 +68,8 @@
   (add-hook 'org-mode-hook
             (lambda () (flyspell-mode 1))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; projectile
 
 (require 'projectile)
 (projectile-global-mode)
@@ -69,9 +78,16 @@
 (setq projectile-enable-caching t)
 ;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit?
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; magit
+
 (require 'magit)
 (setq magit-status-initial-section '(3))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sub config
+
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 (require 'conf/misc "~/.emacs.d/misc.el")
 (require 'conf/completion "~/.emacs.d/completion.el")
 (require 'conf/org "~/.emacs.d/org-conf.el")
@@ -79,8 +95,6 @@
 (require 'conf/doom "~/.emacs.d/doom.el")
 (require 'conf/maps "~/.emacs.d/maps.el")
 (require 'conf/dev "~/.emacs.d/dev.el")
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-;; (load (concat emacs-home-config-root "exwm.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
