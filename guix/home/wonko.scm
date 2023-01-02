@@ -81,6 +81,8 @@
    emacs-org-roam
    emacs-org-super-agenda
    emacs-org-web-tools
+   emacs-enlive
+   emacs-seq
    emacs-calfw
    ;; emacs-org-download (images)
    ;;"emacs-org-ref"
@@ -171,6 +173,7 @@
    emacs-consult-eglot
    emacs-eval-sexp-fu-el
    ;; ocaml
+   emacs-tuareg
    opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
 
    ;; completion framework
@@ -233,6 +236,7 @@
    ibhagwan-picom
    synergy
    ;; communication
+   emacs-ement
    pantalaimon
    ;; basic system stuff
    acpi
