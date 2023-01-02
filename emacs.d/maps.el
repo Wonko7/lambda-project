@@ -136,6 +136,8 @@
 
 (general-evil-define-key '(normal input visual) comint-mode-map
  ;; NOTE: keymaps specified with :keymaps must be quoted
+  "^"    'my/cd-up
+  "-"    'my/cd--
   "C-r"  'consult-history
   "RET" 'comint-send-input
   "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
