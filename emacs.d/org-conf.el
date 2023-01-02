@@ -494,10 +494,8 @@ space rather than before."
  ;; "⭠ now ─────────────────────────────────────────────────"
  )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; cal
-
 (require 'calfw-org)
+(require 'org-web-tools)
 
 
 (provide 'conf/org)
