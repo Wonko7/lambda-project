@@ -23,7 +23,7 @@
 (require 'exwm-randr)
 (require 'exwm-config)
 (require 'exwm-systemtray)
-;; (setq exwm-systemtray-height 20)
+;; TODO checkout exwm-xim
 
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
@@ -40,6 +40,9 @@
 ;;   "ESC" 'exwm-input-send-next-key
 ;;   "C-q" 'exwm-input-send-next-key
 ;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; misc functions, should move this?
 
 (defun my/toggle-fullscreen ()
   "maximize buffer"
@@ -65,6 +68,16 @@
          (c (if (< c 0) (- exwm-workspace-number 1) c)))
     (exwm-workspace-switch c)))
 
+(defun my/exwm-floating-unset-floating ()
+  "Toggle the current window between floating and non-floating states."
+  (interactive)
+  (with-current-buffer (window-buffer)
+    (if exwm--floating-frame
+        (exwm-floating--unset-floating exwm--id))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exwm hooks for window management:
+
 (defun efs/exwm-update-class ()
   (exwm-workspace-rename-buffer exwm-class-name))
 
@@ -82,21 +95,37 @@
     ;;  (exwm-layout-toggle-mode-line))
     ))
 
-;; When window "class" updates, use it to set the buffer name
-(add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; previous workspace
 
-;; When window title updates, use it to set the buffer name
-(add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+(defvar my/exwm-workspace-previous-index exwm-workspace-current-index "The previous active workspace index.")
 
-;; Configure windows as they're created
-(add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+(defun my/exwm-workspace--current-to-previous-index (_x)
+  (setq my/exwm-workspace-previous-index exwm-workspace-current-index))
 
+(defun my/fuck-me-init-exwm ()
+  ;; When window "class" updates, use it to set the buffer name
+  (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+  ;; When window title updates, use it to set the buffer name
+  (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+  ;; Configure windows as they're created
+  (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+  (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
+
+(add-hook 'exwm-init-hook 'my/fuck-me-init-exwm)
+
+(defun my/exwm-workspace-switch-to-previous ()
+  (interactive)
+  "Switch to the previous active workspace." 
+  (let ((index my/exwm-workspace-previous-index))
+    (exwm-workspace-switch index)))
 
 ;; Ctrl+Q will enable the next key to be sent directly
 (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
-;; Set up global key bindings.  These always work, no matter the input state!
-;; Keep in mind that changing this list after EXWM initializes has no effect.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; global key bindings
+
 (setq exwm-input-global-keys
       `(
         ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
@@ -129,8 +158,7 @@
 
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
-        ;; ([?\s-`] . (lambda () (interactive) (exwm-workspace-switch-create 0)))
-
+        ([?\s- ] . my/exwm-workspace-switch-to-previous)
         ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
         ,@(mapcar (lambda (i)
                     `(,(kbd (format "s-%d" i)) .
@@ -141,14 +169,20 @@
                         )))
                   (number-sequence 0 9))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; start exwm
+
 (exwm-systemtray-enable)
 (exwm-randr-enable) ;; revisit for multi-monitor
 (sleep-for 5) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
 (exwm-enable)
 
-(setq exwm-systemtray-background-color 'workspace-background)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; colors & transparency
+
 ;; (set-frame-parameter nil 'alpha-background 50)
 ;; (frame-parameter nil alpha-background)
+(setq exwm-systemtray-background-color 'workspace-background)
 
 (set-frame-parameter (selected-frame) 'alpha '(96 . 70))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -202,7 +236,6 @@
               )))
 
 (lemon-mode)
-
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
