@@ -23,41 +23,7 @@
 (require 'exwm-randr)
 (require 'exwm-config)
 (require 'exwm-systemtray)
-(exwm-systemtray-enable)
 ;; (setq exwm-systemtray-height 20)
-
-(require 'lemon)
-(require 'lemon-cpu)
-(require 'lemon-memory)
-(require 'lemon-network)
-
-(setq lemon-delay 5
-      lemon-refresh-rate 2
-      lemon-monitors
-      (list '((lemon-cpufreq-linux :display-opts '(:sparkline (:type gridded)))
-              (lemon-cpu-linux)
-              (lemon-memory-linux)
-              ;;(lemon-swap)
-              ;; also add disk space?
-              (lemon-linux-network-tx)
-              (lemon-linux-network-rx)
-              )))
-
-(lemon-mode)
-
-
-(require 'desktop-environment)
-(setq desktop-environment-update-exwm-global-keys :prefix)
-(define-key desktop-environment-mode-map (kbd "s-l") nil)
-(desktop-environment-mode)
-
-(setq desktop-environment-volume-get-command "pamixer --get-volume")
-(setq desktop-environment-volume-set-command "pamixer %s")
-(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
-(setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
-(setq desktop-environment-volume-normal-decrement "-d 5")
-(setq desktop-environment-volume-toggle-command "pamixer -t")
-
 
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
@@ -77,6 +43,7 @@
 
 (defun my/toggle-fullscreen ()
   "maximize buffer"
+  (interactive)
   (if (= 1 (length (window-list)))
       (jump-to-register '_)
     (progn
@@ -169,21 +136,39 @@
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
-                        (exwm-workspace-switch-create ,i))))
+                        (exwm-workspace-switch-create ,i)
+                        ;; (persp-switch-by-number ,i)
+                        )))
                   (number-sequence 0 9))))
 
-(exwm-enable)
+(exwm-systemtray-enable)
 (exwm-randr-enable) ;; revisit for multi-monitor
+(sleep-for 5) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
+(exwm-enable)
 
 (setq exwm-systemtray-background-color 'workspace-background)
 ;; (set-frame-parameter nil 'alpha-background 50)
-;; (frame-parameter nil 'alpha-background)
+;; (frame-parameter nil alpha-background)
 
-(set-frame-parameter (selected-frame) 'alpha '(98 . 70))
-(add-to-list 'default-frame-alist  '(alpha . (98 . 70)))
+(set-frame-parameter (selected-frame) 'alpha '(96 . 70))
+(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+(add-to-list 'default-frame-alist  '(alpha . (96 . 70)))
+(add-to-list 'default-frame-alist  '(fullscreen . maximized))
 
-;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-;; (add-to-list 'default-frame-alist  '(fullscreen . maximized))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; desktop-env
+
+(require 'desktop-environment)
+(setq desktop-environment-update-exwm-global-keys :prefix)
+(define-key desktop-environment-mode-map (kbd "s-l") nil)
+(desktop-environment-mode)
+
+(setq desktop-environment-volume-get-command "pamixer --get-volume")
+(setq desktop-environment-volume-set-command "pamixer %s")
+(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
+(setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
+(setq desktop-environment-volume-normal-decrement "-d 5")
+(setq desktop-environment-volume-toggle-command "pamixer -t")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; perspepctive
@@ -195,6 +180,29 @@
 (persp-mode)
 (consult-customize consult--source-buffer :hidden t :default nil)
 (add-to-list 'consult-buffer-sources persp-consult-source)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lemon
+
+(require 'lemon)
+(require 'lemon-cpu)
+(require 'lemon-memory)
+(require 'lemon-network)
+
+(setq lemon-delay 5
+      lemon-refresh-rate 2
+      lemon-monitors
+      (list '((lemon-cpufreq-linux :display-opts '(:sparkline (:type gridded)))
+              (lemon-cpu-linux)
+              (lemon-memory-linux)
+              ;;(lemon-swap)
+              ;; also add disk space?
+              (lemon-linux-network-tx)
+              (lemon-linux-network-rx)
+              )))
+
+(lemon-mode)
+
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
