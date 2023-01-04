@@ -9,6 +9,7 @@
 
 
 ;; 😈
+(setq evil-want-keybinding nil)
 (setq evil-want-C-i-jump nil)
 (require 'evil)
 (evil-mode 1)

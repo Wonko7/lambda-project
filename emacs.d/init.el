@@ -1,5 +1,3 @@
-(setq emacs-home-config-root "~/.emacs.d/")
-(setq evil-want-keybinding nil) ;; sigh ;; FIXME
 
 ;; UI
 (require 'conf/fancy "~/.emacs.d/fancy.el")
