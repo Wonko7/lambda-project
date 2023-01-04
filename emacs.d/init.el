@@ -18,6 +18,9 @@
 
 (setq mouse-yank-at-point t)
 
+(require 'whitespace)
+(setq whitespace-action '(auto-cleanup))
+
 ;; (global-visual-line-mode) ;; most certainly not, was I high?
 
 ;; stop touching my stuff (see perfect window placement)
