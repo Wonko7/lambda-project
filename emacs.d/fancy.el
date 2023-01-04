@@ -61,4 +61,32 @@
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; modeline
+
+(setq display-time-day-and-date t)
+;; (setq display-time-format "%a|%F|%R")
+(display-time-mode 1)
+
+(require 'doom-modeline)
+(setq doom-modeline-minor-modes t)
+(setq doom-modeline-column-zero-based t)
+(setq doom-modeline-height 5)
+(setq doom-modeline-project-detection 'projectile)
+(setq doom-modeline-buffer-encoding 'nondefault)
+(setq doom-modeline-persp-name nil)
+(setq doom-modeline-workspace-name nil)
+(setq doom-modeline-persp-icon nil)
+(doom-modeline-mode)
+
+(require 'diminish)
+(diminish 'projectile-mode)
+(diminish 'org-indent-mode)
+(diminish 'snipe-mode)
+(diminish 'evil-org-mode)
+(diminish 'evil-snipe-local-mode)
+(diminish 'evil-snipe-mode)
+(diminish 'evil-escape-mode)
+
 (provide 'conf/fancy)

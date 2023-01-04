@@ -39,13 +39,6 @@
 ;; (setq tramp-backup-directory-alist backup-directory-alist)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; modeline
-
-(setq display-time-day-and-date t)
-(setq display-time-format "%a|%F|%R")
-(display-time-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth
 
 (require 'pass)

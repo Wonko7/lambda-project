@@ -190,6 +190,8 @@
 
 (setq persp-suppress-no-prefix-key-warning t)
 (require 'perspective)
+(setq persp-show-modestring nil)
+(setq persp-initial-frame-name "don't speak unless spoken to")
 (persp-mode)
 (consult-customize consult--source-buffer :hidden t :default nil)
 (add-to-list 'consult-buffer-sources persp-consult-source)

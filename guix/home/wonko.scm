@@ -201,6 +201,7 @@
 
    ;; simple gui
    emacs-doom-modeline
+   emacs-diminish
    emacs-doom-themes
    emacs-all-the-icons
    emacs-all-the-icons-completion
