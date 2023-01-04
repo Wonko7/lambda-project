@@ -83,6 +83,7 @@
    emacs-org-roam
    emacs-org-super-agenda
    emacs-org-web-tools
+   ;; FIXME emacs-org-ql
    emacs-enlive
    emacs-seq
    emacs-calfw
@@ -92,12 +93,12 @@
    ;;"emacs-org2web"
    ;;"emacs-org-beautify-theme"
    ;;"org-superstar-mode"
-   ;; FIXME emacs-org-ql
    ;; emacs-org-auto-expand
    ;; emacs-org-appear
    ;; emacs-orgit (link to magit)
    ;; emacs-org-modern
 
+   ;; evil
    emacs-evil
    emacs-evil-surround
    emacs-evil-org
@@ -200,6 +201,7 @@
    hunspell-dict-en-gb-ize
 
    ;; simple gui
+   emacs-beacon
    emacs-doom-modeline
    emacs-diminish
    emacs-doom-themes

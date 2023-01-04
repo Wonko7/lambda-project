@@ -1,3 +1,4 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI stuff
 
 (setq inhibit-startup-message t)
@@ -13,10 +14,11 @@
 ;(display-line-numbers-mode)
 (global-linum-mode)
 
-;; icons
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; emoji & icons
+
 (when (display-graphic-p)
   (require 'all-the-icons))
-
 
 (with-eval-after-load 'emojify
   (progn
@@ -25,6 +27,9 @@
     (emojify-set-emoji-styles emojify-styles)
     (setq emojify-display-style 'unicode)
     (setq emojify-emoji-styles '(unicode))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fonts & utf-8
 
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
 ;;(setq use-default-font-for-symbols t)
@@ -43,7 +48,9 @@
 ;; test:
 ;; ☮ 🐫 📀 📐 ⛰
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; theme
+
 (require 'doom-themes)
 ;; Global settings (defaults)
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -53,14 +60,8 @@
 
 ;; Enable flashing mode-line on errors
 (doom-themes-visual-bell-config)
-;; Enable custom neotree theme (all-the-icons must be installed!)
-;; (doom-themes-neotree-config)
-;; or for treemacs users
-;; (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-(doom-themes-treemacs-config)
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; modeline
@@ -76,8 +77,16 @@
 (setq doom-modeline-project-detection 'projectile)
 (setq doom-modeline-buffer-encoding 'nondefault)
 (setq doom-modeline-persp-name nil)
-(setq doom-modeline-workspace-name nil)
+(setq doom-modeline-workspace-name t)
 (setq doom-modeline-persp-icon nil)
 (doom-modeline-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; cursor
+
+(require 'beacon)
+(beacon-mode 1)
+(setq beacon-dont-blink-commands nil)
+(setq beacon-blink-when-point-moves-horizontally 2)
 
 (provide 'conf/fancy)
