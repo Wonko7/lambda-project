@@ -53,8 +53,8 @@
   (setq evil-collection-key-blacklist '("SPC"))
   (evil-collection-init))
 
-(evil-global-set-key 'motion "j" 'evil-next-visual-line)
-(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 (setq evil-want-C-i-jump nil)
 (setq evil-search-wrap nil)
 

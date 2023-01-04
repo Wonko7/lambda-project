@@ -146,7 +146,7 @@
 
         ([?\s-C] . kill-this-buffer)
         ([?\s-c] . exwm-reset)
-        ;;
+
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
         ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
