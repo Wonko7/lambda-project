@@ -139,6 +139,8 @@
 
         ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
         ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
+        ([?\s-K] . previous-buffer)
+        ([?\s-J] . next-buffer)
 
         ([?\s-C] . kill-this-buffer)
         ([?\s-c] . exwm-reset)
