@@ -149,8 +149,8 @@
         ;;
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
-        ([?\s--] . evil-window-split)
-        ([?\s-|] . evil-window-vsplit)
+        ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
+        ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
 
         ([?\s-f] . my/toggle-fullscreen)
         ([?\s-F] . exwm-layout-toggle-fullscreen)
