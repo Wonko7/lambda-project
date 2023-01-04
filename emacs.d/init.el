@@ -94,6 +94,7 @@
 (require 'conf/doom "~/.emacs.d/doom.el")
 (require 'conf/maps "~/.emacs.d/maps.el")
 (require 'conf/dev "~/.emacs.d/dev.el")
+(require 'conf/communication "~/.emacs.d/communication.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell

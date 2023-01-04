@@ -285,6 +285,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                         ,(local-file
                           (string-append conf-root-dir "/emacs.d/" file))))
                     '("completion.el"
+                      "communication.el"
                       "dev.el"
                       "opam-user-setup.el"
                       "doom.el"
