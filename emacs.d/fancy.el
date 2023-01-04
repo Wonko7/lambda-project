@@ -80,13 +80,4 @@
 (setq doom-modeline-persp-icon nil)
 (doom-modeline-mode)
 
-(require 'diminish)
-(diminish 'projectile-mode)
-(diminish 'org-indent-mode)
-(diminish 'snipe-mode)
-(diminish 'evil-org-mode)
-(diminish 'evil-snipe-local-mode)
-(diminish 'evil-snipe-mode)
-(diminish 'evil-escape-mode)
-
 (provide 'conf/fancy)

@@ -17,6 +17,7 @@
 (recentf-mode)
 
 (setq mouse-yank-at-point t)
+(setq scroll-margin 5)
 
 (require 'whitespace)
 (setq whitespace-action '(auto-cleanup))
@@ -79,6 +80,8 @@
 
 (require 'magit)
 (setq magit-status-initial-section '(3))
+(add-hook 'magit-diff-mode-hook 'scroll-lock-mode)
+(add-hook 'magit-log-mode-hook 'scroll-lock-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
@@ -126,5 +129,17 @@
 
 (autoload 'wgrep-rg-setup "wgrep-rg")
 (add-hook 'rg-mode-hook 'wgrep-rg-setup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; end of config stuff:
+
+(require 'diminish)
+(diminish 'projectile-mode)
+(diminish 'org-indent-mode)
+(diminish 'snipe-mode)
+(diminish 'evil-org-mode)
+(diminish 'evil-snipe-local-mode)
+(diminish 'evil-snipe-mode)
+(diminish 'evil-escape-mode)
 
 (provide 'init)

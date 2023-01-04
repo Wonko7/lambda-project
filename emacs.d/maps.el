@@ -48,20 +48,20 @@
   "rR" 'org-roam-link-replace-all
 
   ;; roam date:
-   "rdb" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
-   "rdk" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
-   "rdd" 'org-roam-dailies-goto-date             ;;  :desc "Goto date"
-   "rdD" 'org-roam-dailies-capture-date          ;;  :desc "Capture date"
-   "rdf" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
-   "rdj" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
-   "rdm" 'org-roam-dailies-goto-tomorrow         ;;  :desc "Goto tomorrow"
-   "rdM" 'org-roam-dailies-capture-tomorrow      ;;  :desc "Capture tomorrow"
-   "rdn" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
-   "rdt" 'org-roam-dailies-goto-today            ;;  :desc "Goto today"
-   "rdT" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
-   "rdy" 'org-roam-dailies-goto-yesterday        ;;  :desc "Goto yesterday"
-   "rdY" 'org-roam-dailies-capture-yesterday     ;;  :desc "Capture yesterday"
-   "rd-" 'org-roam-dailies-find-directory        ;;  :desc "Find directory"
+  "rdb" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
+  "rdk" 'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
+  "rdd" 'org-roam-dailies-goto-date             ;;  :desc "Goto date"
+  "rdD" 'org-roam-dailies-capture-date          ;;  :desc "Capture date"
+  "rdf" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
+  "rdj" 'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
+  "rdm" 'org-roam-dailies-goto-tomorrow         ;;  :desc "Goto tomorrow"
+  "rdM" 'org-roam-dailies-capture-tomorrow      ;;  :desc "Capture tomorrow"
+  "rdn" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
+  "rdt" 'org-roam-dailies-goto-today            ;;  :desc "Goto today"
+  "rdT" 'org-roam-dailies-capture-today         ;;  :desc "Capture today"
+  "rdy" 'org-roam-dailies-goto-yesterday        ;;  :desc "Goto yesterday"
+  "rdY" 'org-roam-dailies-capture-yesterday     ;;  :desc "Capture yesterday"
+  "rd-" 'org-roam-dailies-find-directory        ;;  :desc "Find directory"
 
   ;; projectile
   "p'" 'projectile-find-file
@@ -106,7 +106,10 @@
   ;; M-, or M-x xref-pop-marker-stack jumps back
   ;; M-? or M-x xref-find-references finds the references of the symbol at point
   "cr" 'eglot-rename ;; :desc "lsp "
-  )
+
+  ;; misc?
+  "zl" 'scroll-lock-mode)
+
 
 ;; (general-evil-define-key '(normal) normal-mode-map
 ;;    ;; rm stuff
@@ -117,7 +120,7 @@
 ;; shell
 
 (general-evil-define-key '(normal input visual) comint-mode-map
- ;; NOTE: keymaps specified with :keymaps must be quoted
+  ;; NOTE: keymaps specified with :keymaps must be quoted
   "^"    'my/cd-up
   "-"    'my/cd--
   "C-r"  'consult-history
@@ -125,9 +128,9 @@
   "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (evil-collection-define-key 'insert 'comint-mode-map
-    (kbd "C-r") #'consult-history
-    (kbd "C-p") #'comint-previous-input
-    (kbd "C-n") #'comint-next-input)
+  (kbd "C-r") #'consult-history
+  (kbd "C-p") #'comint-previous-input
+  (kbd "C-n") #'comint-next-input)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
