@@ -26,6 +26,25 @@
 (exwm-systemtray-enable)
 ;; (setq exwm-systemtray-height 20)
 
+(require 'lemon)
+(require 'lemon-cpu)
+(require 'lemon-memory)
+(require 'lemon-network)
+
+(setq lemon-delay 5
+      lemon-refresh-rate 2
+      lemon-monitors
+      (list '((lemon-cpufreq-linux :display-opts '(:sparkline (:type gridded)))
+              (lemon-cpu-linux)
+              (lemon-memory-linux)
+              ;;(lemon-swap)
+              ;; also add disk space?
+              (lemon-linux-network-tx)
+              (lemon-linux-network-rx)
+              )))
+
+(lemon-mode)
+
 
 (require 'desktop-environment)
 (setq desktop-environment-update-exwm-global-keys :prefix)
