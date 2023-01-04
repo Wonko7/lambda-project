@@ -84,19 +84,6 @@
 (add-hook 'magit-log-mode-hook 'scroll-lock-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; sub config
-
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-(require 'conf/misc "~/.emacs.d/misc.el")
-(require 'conf/completion "~/.emacs.d/completion.el")
-(require 'conf/org "~/.emacs.d/org-conf.el")
-(require 'conf/lisp "~/.emacs.d/lisp-config.el")
-(require 'conf/doom "~/.emacs.d/doom.el")
-(require 'conf/maps "~/.emacs.d/maps.el")
-(require 'conf/dev "~/.emacs.d/dev.el")
-(require 'conf/communication "~/.emacs.d/communication.el")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
 
 (setq eshell-history-size         10000
@@ -130,6 +117,20 @@
 
 (autoload 'wgrep-rg-setup "wgrep-rg")
 (add-hook 'rg-mode-hook 'wgrep-rg-setup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sub config
+
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+(require 'conf/misc "~/.emacs.d/misc.el")
+(require 'conf/completion "~/.emacs.d/completion.el")
+(require 'conf/org "~/.emacs.d/org-conf.el")
+(require 'conf/lisp "~/.emacs.d/lisp-config.el")
+(require 'conf/doom "~/.emacs.d/doom.el")
+(require 'conf/maps "~/.emacs.d/maps.el")
+(require 'conf/dev "~/.emacs.d/dev.el")
+(require 'conf/communication "~/.emacs.d/communication.el")
+(require 'conf/elfeed "~/.emacs.d/elfeed.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; end of config stuff:

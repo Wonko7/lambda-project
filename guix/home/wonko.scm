@@ -289,6 +289,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                       "dev.el"
                       "opam-user-setup.el"
                       "doom.el"
+                      "elfeed.el"
                       "evil.el"
                       "fancy.el"
                       "init.el"

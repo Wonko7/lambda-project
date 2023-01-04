@@ -12,7 +12,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; directories
 
-
 (setq org-directory "/data/org/")
 (setq org-roam-directory (concat org-directory "here-be-dragons/"))
 (setq org-agenda-files (mapcar
@@ -77,19 +76,7 @@
       org-auto-align-tags t
       org-tags-column 72
       org-edit-timestamp-down-means-later t
-      cfw:org-agenda-schedule-args '(:timestamp)
-      )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; elfeed
-
-(require 'elfeed)
-(setq elfeed-search-filter "+unread +tf")
-
-(elfeed-org)
-(setq rmh-elfeed-org-files (list (concat org-directory "notes/rss/root.org")))
-(setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
-
+      cfw:org-agenda-schedule-args '(:timestamp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
@@ -266,10 +253,10 @@ space rather than before."
  org-crypt-key "william@underage.wang")
 (org-crypt-use-before-save-magic)
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; capture
+
+(require 'org-capture)
 
 ;; firefox integration
 (defun transform-square-brackets-to-round-ones (string-to-transform)
@@ -464,15 +451,9 @@ space rather than before."
           ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
           ;;  :jump-to-captured t)
           )))
-
 (fuck-me/init-capture)
 
-(require 'org-capture)
-
-
-
 ;; FIXME review this:
-
 (setq
  org-catch-invisible-edits 'show-and-error
  ;org-special-ctrl-a/e t

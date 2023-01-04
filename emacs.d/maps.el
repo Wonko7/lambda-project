@@ -188,4 +188,11 @@
 (general-evil-define-key '(normal) elfeed-search-mode-map
   "RET" #'elfeed-search-show-entry)
 
+(general-evil-define-key '(normal) elfeed-show-mode-map
+  "J" #'elfeed-show-next
+  "K" #'elfeed-show-prev
+  "U" #'elfeed-show-tag--unread
+  "u" #'elfeed-show-tag--read)
+
+
 (provide 'conf/maps)
