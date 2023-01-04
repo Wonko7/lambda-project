@@ -1,5 +1,6 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; basic UI stuff:
 
-;; UI
 (require 'conf/fancy "~/.emacs.d/fancy.el")
 (require 'conf/evil "~/.emacs.d/evil.el")
 
@@ -20,9 +21,7 @@
 (require 'whitespace)
 (setq whitespace-action '(auto-cleanup))
 
-;; (global-visual-line-mode) ;; most certainly not, was I high?
-
-;; stop touching my stuff (see perfect window placement)
+;; stop touching my stuff (see perfect window placement):
 (setq display-buffer-base-action
   '((display-buffer-reuse-window display-buffer-same-window)
     (reusable-frames . t)))
@@ -41,7 +40,7 @@
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; auth
+;; auth/pass
 
 (require 'pass)
 (require 'pinentry)
@@ -60,7 +59,7 @@
                                        nil utf-8)))
 
 (with-eval-after-load 'flyspell
-  (add-hook 'org-mode-hook
+  (add-hook 'org-mode-hook ;; FIXME
             (lambda () (flyspell-mode 1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -77,9 +76,9 @@
 ;; magit
 
 (require 'magit)
-(setq magit-status-initial-section '(3))
+(setq magit-status-initial-section '(((unstaged) (status))
+                                     ((staged) (status))))
 (add-hook 'magit-diff-mode-hook 'scroll-lock-mode)
-(add-hook 'magit-log-mode-hook 'scroll-lock-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
