@@ -39,6 +39,12 @@
 
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
+(setq display-line-numbers-type t)
+(global-linum-mode)
+(add-hook 'shell-mode-hook (lambda () (linum-mode 0)))
+(add-hook 'elfeed-show-mode-hook (lambda () (linum-mode 0)))
+(add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
 

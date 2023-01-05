@@ -10,9 +10,6 @@
 (set-fringe-mode 5)
 
 (setq visible-bell t)
-(setq display-line-numbers-type t)
-;(display-line-numbers-mode)
-(global-linum-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emoji & icons
