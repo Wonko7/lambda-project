@@ -22,7 +22,8 @@
   (interactive)
   (org-roam-node-open (org-roam-node-from-title-or-alias "ssdd"))
   (org-roam-node-from-ref "7f0e18fb-3b06-4200-a3ba-3675ccace7cc")
-  (org-agenda nil "z"))
+  (org-agenda nil "z")
+  (cfw:open-org-calendar))
 
 ;; (require 'enlive)
 ;; (require 'seq)

@@ -173,14 +173,25 @@
 ;; org
 
 (general-evil-define-key '(insert) evil-org-mode-map
-  "zD"    'org-decrypt-entries
   "TAB"   'org-cycle
   "C-i"   'org-roam-node-insert
   "S-TAB" 'org-shiftab)
 
 (general-evil-define-key '(normal) org-mode-map
   :prefix "RET"
-  "RET"             '+org/dwim-at-point)
+  "RET"   '+org/dwim-at-point)
+
+(general-evil-define-key '(normal) org-mode-map
+  "zD"    'org-decrypt-entries
+  "zq"    (lambda() (interactive) (org-show-branches-buffer))
+  "("     'org-previous-visible-heading
+  ")"     'org-next-visible-heading
+  "{"     'evil-backward-paragraph
+  "}"     'evil-forward-paragraph
+  "C-k"   'org-move-subtree-up
+  "C-j"   'org-move-subtree-down
+  "C-h"   'org-promote-subtree
+  "C-l"   'org-demote-subtree)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed
