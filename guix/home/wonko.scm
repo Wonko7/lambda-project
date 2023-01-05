@@ -338,6 +338,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                                                       (string-append conf-root-dir  "/misc/common.xmodmap")))
                      (".config/picom.conf" ,(local-file
                                              (string-append conf-root-dir  "/misc/picom.conf")))
+                     (".config/pantalaimon/pantalaimon.conf" ,(local-file
+                                                       (string-append conf-root-dir  "/misc/pantalaimon.conf")))
                      (".config/Synergy/Synergy.conf" ,(local-file
                                                        (string-append conf-root-dir  "/misc/Synergy.conf")))
                      (".config/nyxt/init.lisp" ,(local-file
@@ -368,8 +370,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                 (provision
                  '(pantalaimon))
                 (start #~(make-forkexec-constructor
-                          (list
-                           #($file-append pantalaimon "/bin/pantalaimon"))
+                          (list #$(file-append pantalaimon "/bin/pantalaimon"))
                           #:log-file "log/matrix.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "Crypto back-end server for ement.el"))
