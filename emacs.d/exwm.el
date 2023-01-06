@@ -116,7 +116,7 @@
 
 (defun my/exwm-workspace-switch-to-previous ()
   (interactive)
-  "Switch to the previous active workspace." 
+  "Switch to the previous active workspace."
   (let ((index my/exwm-workspace-previous-index))
     (exwm-workspace-switch index)))
 
@@ -127,9 +127,9 @@
 ;; global key bindings
 
 (setq exwm-input-global-keys
-      `(
-        ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
+      `(;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
         ([?\s-r] . exwm-reset)
+        ([?\s-i] . exwm-input-toggle-keyboard)
 
         ;; Move between windows
         ([?\s-h] . windmove-left)
