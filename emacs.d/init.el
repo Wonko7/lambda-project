@@ -44,6 +44,7 @@
 (add-hook 'shell-mode-hook (lambda () (linum-mode 0)))
 (add-hook 'elfeed-show-mode-hook (lambda () (linum-mode 0)))
 (add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
+(add-hook 'ement-room-mode-hook (lambda () (linum-mode 0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
