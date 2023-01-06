@@ -5,7 +5,7 @@ keysym	3		= 3		numbersign	ecircumflex	Ecircumflex
 keysym	4		= 4		dollar		ugrave		Ugrave
 keysym	5		= 5		percent		icircumflex	Icircumflex
 
-keysym	apostrophe	= apostrophe	quotedbl	asciicircum
+keysym	apostrophe	= apostrophe	quotedbl	asciicircum     idiaeresis
 keysym	comma		= comma		less		minus
 keysym  period		= period	greater         egrave		Egrave
 keysym	p		= p		P		equal

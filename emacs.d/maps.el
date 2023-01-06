@@ -120,17 +120,22 @@
 ;; shell
 
 (general-evil-define-key '(normal input visual) comint-mode-map
-  ;; NOTE: keymaps specified with :keymaps must be quoted
-  "^"    'my/cd-up
+  "ï"    'my/cd-up ;; restrict this to eshell, or generalise solution?
   "-"    'my/cd--
   "C-r"  'consult-history
   "RET" 'comint-send-input
   "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (evil-collection-define-key 'insert 'comint-mode-map
-  (kbd "C-r") #'consult-history
+(kbd "C-r") #'consult-history
   (kbd "C-p") #'comint-previous-input
   (kbd "C-n") #'comint-next-input)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dired
+
+(general-evil-define-key '(normal) dired-mode-map
+  "ï"    'dired-up-directory)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
