@@ -4,6 +4,9 @@
 (require 'general)
 (general-evil-setup t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; leader actions
+
 (evil-leader/set-key
    ":"   'execute-extended-command ;;  "exec stuff"
    "<SPC>"  'consult-buffer        ;;  "buffers"
@@ -110,11 +113,16 @@
   ;; misc?
   "zl" 'scroll-lock-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; states
 
-;; (general-evil-define-key '(normal) normal-mode-map
-;;    ;; rm stuff
-;;   :desc "trailing whitespace"  "-d" 'delete-trailing-whitespace
-;;   )
+(general-define-key
+  :states 'normal
+  "-" nil
+  ;; :desc "trailing whitespace"
+  "-d" 'delete-trailing-whitespace
+  "z=" 'flyspell-correct-wrapper)
+;; TODO: sentence & paragraph motions. ]], []][, pg up/down.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
@@ -123,8 +131,8 @@
   "ï"    'my/cd-up ;; restrict this to eshell, or generalise solution?
   "-"    'my/cd--
   "C-r"  'consult-history
-  "RET" 'comint-send-input
-  "A" (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
+  "RET"  'comint-send-input
+  "A"    (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (evil-collection-define-key 'insert 'comint-mode-map
 (kbd "C-r") #'consult-history
