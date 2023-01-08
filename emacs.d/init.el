@@ -56,7 +56,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spelling
 
-
 (require 'flyspell-correct)
 ;; (global-spell-fu-mode 0)
 (setenv "LANG" "en_GB-ise.utf8")
@@ -68,6 +67,7 @@
                                        nil utf-8)))
 
 (with-eval-after-load 'flyspell
+  (setq flyspell-mark-duplications-flag nil)
   (add-hook 'git-commit-mode-hook
             (lambda () (flyspell-mode 1)))
   (add-hook 'org-mode-hook
