@@ -185,10 +185,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
-(general-evil-define-key '(insert) evil-org-mode-map
-  "TAB"   'org-cycle
-  "C-i"   'org-roam-node-insert
-  "S-TAB" 'org-shiftab)
+(general-evil-define-key '(insert) org-mode-map
+  "TAB"   'completion-at-point
+  ;; "C-i"   'org-roam-node-insert
+  ;; "S-TAB" 'org-shiftab
+  )
+
 
 (general-evil-define-key '(normal) org-mode-map
   :prefix "RET"

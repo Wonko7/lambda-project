@@ -94,11 +94,6 @@
 (add-hook 'org-mode-hook
           (lambda ()
             (evil-org-mode)
-            ;;(general-evil-define-key '(normal) evil-org-mode-map
-            ;;                      "C-RET"           '+org/insert-item-below
-            ;;                      "C-S-RET"         '+org/insert-item-above
-            ;;                      [C-return]        '+org/insert-item-below
-            ;;                      [C-S-return]      '+org/insert-item-above)
             (evil-define-key 'normal 'evil-org-mode
               (kbd "<C-return>")  '+org/insert-item-below
               (kbd "<C-S-return>") '+org/insert-item-above)))

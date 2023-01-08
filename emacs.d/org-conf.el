@@ -124,6 +124,10 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (org-roam-db-autosync-mode)
 (require 'org-roam-protocol)
 (setq org-roam-directory (concat org-directory "here-be-dragons/"))
+(setq org-roam-completion-everywhere t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fix insert after cursor
 
 (defadvice org-roam-node-insert (around append-if-in-evil-normal-mode activate compile)
   "If in evil normal mode and cursor is on a whitespace character, then go into

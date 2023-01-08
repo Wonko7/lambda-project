@@ -75,13 +75,14 @@
 ;; Enable recursive minibuffers
 (setq enable-recursive-minibuffers t)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; orderless
 
 (require 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
       completion-category-overrides nil)
+(setq completion-ignore-case t)
 
 ;; orderless-style-dispatchers
 
