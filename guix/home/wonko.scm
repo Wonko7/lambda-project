@@ -363,7 +363,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                 (provision
                  '(picom))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append ibhagwan-picom "/bin/picom"))))
+                          (list #$(file-append ibhagwan-picom "/bin/picom"))
+                          #:log-file "log/picom.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "bling"))
                (shepherd-service
@@ -378,6 +379,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                 (provision
                  '(synergy))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append synergy "/bin/synergy"))))
+                          (list #$(file-append synergy "/bin/synergy"))
+                          #:log-file "log/synergy.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "can't be arsed to move IRL")))))))))
