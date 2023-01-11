@@ -4,7 +4,6 @@
              (gnu packages emacs-xyz)
              (gnu packages shells)
              (gnu packages bash)
-             ;(gnu packages zsh)
              (gnu packages networking)
              (gnu packages xdisorg)
              (gnu packages suckless)
@@ -18,7 +17,10 @@
              (nongnu packages linux)
              (nongnu system linux-initrd))
 
-(use-service-modules desktop networking ssh xorg docker)
+(use-service-modules desktop networking ssh xorg)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; channels
 
 (define %channels #~(cons*
                      (channel
@@ -39,6 +41,20 @@
                          "FF23 0627 4DFE CF36 3AD8  677C 613C 8B66 6DBE 0AEB"))))
                      %default-channels))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hosts & hostname
+
+(define (fleet-/etc/hosts host-key machines)
+  "make /etc/hosts file with fleet IPs."
+  (let* ((ks (map first machines))
+         (fleet (map (lambda (k)
+                       (string-append (nassq machines `(,host-key #:net #:wg42)) " " (keyword->string k) ".underage.wang\n"))
+                     ks)))
+    (plain-file "hosts"
+                (string-append (local-host-aliases (keyword->string host-key))
+                               (reduce string-append "" fleet)))))
+
+;; (define hostname "yggdrasill")
 (define hostname (getenv "HOST"))
 
 (define host
@@ -49,7 +65,14 @@
            (string->keyword hostname)))
         (#t (error (string-append "unknown host: " hostname "\n") 69))))
 
-(define machine-config
+(define (nassq alist ks)
+  "get data from nested map"
+  (fold (lambda (k al) (assq-ref al k)) alist ks))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; machine data:
+
+(define machine-defs
   (let ((initial  '((#:enterprise .
                      ((#:net .
                        ((#:wg42 . "10.42.0.6")))
@@ -64,32 +87,28 @@
                         (#:efi . "77DE-0AE2"))))))))
     initial))
 
-(define (nassq alist ks)
-  (fold (lambda (k al) (assq-ref al k)) alist ks))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hosts
-
-(define (fleet-/etc/hosts host-key machines)
-  "Return the default /etc/hosts file."
-  (let* ((ks (map first machines))
-         (fleet (map (lambda (k)
-                       (string-append (nassq machines `(,host-key #:net #:wg42)) " " (keyword->string k) ".underage.wang\n"))
-                     ks)))
-    (plain-file "hosts"
-                (string-append (local-host-aliases (keyword->string host-key))
-                               (reduce string-append "" fleet)))))
+;; OS
 
 (operating-system
+  (locale "en_GB.utf8")
+  (timezone "Europe/Paris")
+  (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps")))
+
   (kernel linux)
   (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
+  (bootloader
+   (bootloader-configuration
+    (bootloader grub-efi-bootloader)
+    (targets '("/boot"))
+    (keyboard-layout keyboard-layout)))
 
-  (locale "en_GB.utf8")
-  (timezone "Europe/Paris")
-  (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps")))
-  (host-name (keyword->string host))
+  (issue (string-append "[" hostname "] project-lambda / GNU Guix / Fat Cock Enthusiaste\n\n"))
+  (host-name hostname)
+  (hosts-file (fleet-/etc/hosts host machine-defs))
+
   (users (cons* (user-account
                  (name "wjc")
                  (comment "Wjc")
@@ -97,7 +116,7 @@
                  (home-directory "/home/wjc")
                  (shell (file-append zsh "/bin/zsh"))
                  (supplementary-groups
-                  '("lp" "docker" "wheel" "netdev" "audio" "video")))
+                  '("lp" "wheel" "netdev" "audio" "video")))
                 (user-account
                  (name "wonko")
                  (comment "wonko")
@@ -105,7 +124,7 @@
                  (home-directory "/home/wonko")
                  (shell (file-append bash "/bin/bash"))
                  (supplementary-groups
-                  '("lp" "docker" "wheel" "netdev" "audio" "video")))
+                  '("lp" "wheel" "netdev" "audio" "video")))
                 (user-account
                  (name "tina")
                  (comment "Tina")
@@ -115,22 +134,24 @@
                  (supplementary-groups
                   '("netdev" "audio" "video")))
                 %base-user-accounts))
+
   (packages
    (append
     (map specification->package '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw"
                                   "emacs" "emacs-exwm" "emacs-desktop-environment"
-                                  "git" "rsync")) ;; TODO remove skim & rg once full emacs OS is operational.
+                                  "git" "rsync"))
     %base-packages))
+
   (services
    (cons*
     (service openssh-service-type)
     (service tor-service-type)
-    (service docker-service-type)
-    (service guix-publish-service-type
-             (guix-publish-configuration
-              (host "0.0.0.0")
-              (port 1691)
-              (advertise? #t)))
+    ;; (service docker-service-type)
+    ;;(service guix-publish-service-type
+    ;;         (guix-publish-configuration
+    ;;          (host "0.0.0.0")
+    ;;          (port 1691)
+    ;;          (advertise? #t)))
     (bluetooth-service #:auto-enable? #t)
     (service slim-service-type (slim-configuration
                                 (display ":0")
@@ -149,21 +170,28 @@
 
     (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
 
+    ;; %desktop-services
     (modify-services %desktop-services
-                     (delete gdm-service-type)
-                     (guix-service-type config =>
-                                        (guix-configuration
-                                         (inherit config)
-                                         (substitute-urls
-                                          (append (list "https://substitutes.nonguix.org")
-                                                  %default-substitute-urls))
-                                         (authorized-keys
-                                          (append (list (local-file "./data/substitutes/nonguix.pub"))
-                                                  %default-authorized-guix-keys)))))))
+      (delete gdm-service-type)
+      (elogind-service-type config =>
+                            (elogind-configuration
+                             (handle-power-key 'ignore) ;; 'hibernate?
+                             (handle-lid-switch 'suspend)
+                             (handle-lid-switch-docked 'suspend)
+                             (handle-lid-switch-external-power 'suspend)))
+      ;; (guix-service-type config =>
+      ;;                    (guix-configuration
+      ;;                     (inherit config)
+      ;;                     (substitute-urls
+      ;;                      (append (list "https://substitutes.nonguix.org")
+      ;;                              %default-substitute-urls))
+      ;;                     (authorized-keys
+      ;;                      (append (list (local-file "./data/substitutes/nonguix.pub"))
+      ;;                              %default-authorized-guix-keys))))
+      )))
 
   (setuid-programs
    (cons*
-    ;; time to checkout suckless's lock.
     ;; emacs: dumpcap?
     (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl) "/bin/brightnessctl")))
     (setuid-program (program (file-append slock "/bin/slock")))
@@ -174,65 +202,61 @@
   (mapped-devices
    (list (mapped-device
           (source
-           (uuid (nassq machine-config `(,host #:uuids #:vault))))
+           (uuid (nassq machine-defs `(,host #:uuids #:vault))))
           (target "vault")
           (type luks-device-mapping))))
+
   (file-systems
    (cons* (file-system
-           (device "/dev/mapper/vault")
-           (mount-point "/")
-           (type "btrfs")
-           (options "subvol=_live/@guix-root")
-           (needed-for-boot? #t)
-           (dependencies mapped-devices))
+            (mount-point "/boot")
+            (device (uuid (nassq machine-defs `(,host #:uuids #:efi)) 'fat32))
+            (type "vfat"))
           (file-system
-           (mount-point "/mnt/vault")
-           (device "/dev/mapper/vault")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (device "/dev/mapper/vault")
+            (mount-point "/")
+            (type "btrfs")
+            (options "subvol=_live/@guix-root")
+            (needed-for-boot? #t)
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/home")
-           (device "/dev/mapper/vault")
-           (options "subvol=_live/@guix-home")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (mount-point "/mnt/vault")
+            (device "/dev/mapper/vault")
+            (type "btrfs")
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/code")
-           (device "/dev/mapper/vault")
-           (options "subvol=_live/@code")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (mount-point "/home")
+            (device "/dev/mapper/vault")
+            (options "subvol=_live/@guix-home")
+            (type "btrfs")
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/data")
-           (device "/dev/mapper/vault")
-           (options "subvol=_live/@data")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (mount-point "/code")
+            (device "/dev/mapper/vault")
+            (options "subvol=_live/@code")
+            (type "btrfs")
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/work")
-           (device "/dev/mapper/vault")
-           (options "subvol=_live/@work")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (mount-point "/data")
+            (device "/dev/mapper/vault")
+            (options "subvol=_live/@data")
+            (type "btrfs")
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/junkyard")
-           (device "/dev/mapper/vault")
-           (options "subvol=_live/@junkyard")
-           (type "btrfs")
-           (dependencies mapped-devices))
+            (mount-point "/work")
+            (device "/dev/mapper/vault")
+            (options "subvol=_live/@work")
+            (type "btrfs")
+            (dependencies mapped-devices))
           (file-system
-           (mount-point "/boot")
-           (device (uuid (nassq machine-config `(,host #:uuids #:efi)) 'fat32))
-           (type "vfat"))
+            (mount-point "/junkyard")
+            (device "/dev/mapper/vault")
+            (options "subvol=_live/@junkyard")
+            (type "btrfs")
+            (dependencies mapped-devices))
           %base-file-systems))
+
   (swap-devices
-   (list
-    (swap-space
-     (target "/mnt/vault/swap/swapfile")
-     (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                           file-systems)))))
-  (bootloader
-   (bootloader-configuration
-    (bootloader grub-efi-bootloader)
-    (targets '("/boot"))
-    (keyboard-layout keyboard-layout))))
+   (list (swap-space
+          (target "/mnt/vault/swap/swapfile")
+          (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                file-systems))))))
