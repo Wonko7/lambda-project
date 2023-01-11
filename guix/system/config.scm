@@ -51,17 +51,34 @@
 
 (define machine-config
   (let ((initial  '((#:enterprise .
-                     ((#:uuids .
+                     ((#:net .
+                       ((#:wg42 . "10.42.0.6")))
+                      (#:uuids .
                        ((#:vault . "125bf330-ff27-45d1-9cce-1dd96cb14975")
                         (#:efi . "6C21-E416")))))
                     (#:yggdrasill .
-                     ((#:uuids .
+                     ((#:net .
+                       ((#:wg42 . "10.42.0.3")))
+                      (#:uuids .
                        ((#:vault . "077c1391-b290-4921-ae90-f8e3cec68113")
                         (#:efi . "77DE-0AE2"))))))))
     initial))
 
 (define (nassq alist ks)
   (fold (lambda (k al) (assq-ref al k)) alist ks))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hosts
+
+(define (fleet-/etc/hosts host-key machines)
+  "Return the default /etc/hosts file."
+  (let* ((ks (map first machines))
+         (fleet (map (lambda (k)
+                       (string-append (nassq machines `(,host-key #:net #:wg42)) " " (keyword->string k) ".underage.wang\n"))
+                     ks)))
+    (plain-file "hosts"
+                (string-append (local-host-aliases (keyword->string host-key))
+                               (reduce string-append "" fleet)))))
 
 (operating-system
   (kernel linux)
