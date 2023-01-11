@@ -3,6 +3,7 @@
 
 (require 'eval-sexp-fu)
 (require 'evil-cleverparens)
+(require 'eval-in-repl-geiser)
 
 
 (provide 'conf/lisp)

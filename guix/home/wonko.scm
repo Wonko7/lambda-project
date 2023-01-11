@@ -176,6 +176,7 @@
    emacs-eglot
    emacs-consult-eglot
    emacs-eval-sexp-fu-el
+   emacs-eval-in-repl-geiser
    ;; ocaml
    emacs-tuareg
    opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config

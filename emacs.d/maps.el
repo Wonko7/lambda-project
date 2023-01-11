@@ -8,10 +8,10 @@
 ;; leader actions
 
 (evil-leader/set-key
-   ":"   'execute-extended-command ;;  "exec stuff"
-   "<SPC>"  'consult-buffer        ;;  "buffers"
-   "/"         'consult-ripgrep    ;;  "grep"
-   "'" 'projectile-find-file       ;;  "proj buffers"
+   ":"      'execute-extended-command ;;  "exec stuff"
+   "<SPC>"  'consult-buffer           ;;  "buffers"
+   "/"      'consult-ripgrep          ;;  "grep"
+   "'" 'projectile-find-file          ;;  "proj buffers"
   ;; "'" 'counsel-projectile-find-file
 
   ;; embark
@@ -19,10 +19,10 @@
   "x" 'embark-export
 
   ;; apps
-  "ab" 'ibuffer
-  "ad" 'dired
-  "as" 'shell
-  "ap" 'proced
+  "ab"  'ibuffer
+  "ad"  'dired
+  "as"  'shell
+  "ap"  'proced
   "aee" 'elfeed
   "aes" 'elfeed-update
   ;; secondary apps
@@ -181,6 +181,10 @@
   "gs" #'evil-cp-wrap-next-square
   "gS" #'evil-cp-wrap-previous-square
   "RET" #'eval-defun)
+
+(general-evil-define-key '(normal) geiser-mode-map
+  :prefix "RET"
+  "RET" #'geiser-eval-definition)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
