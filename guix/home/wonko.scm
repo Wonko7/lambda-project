@@ -254,6 +254,7 @@
    ;; basic system stuff
    acpi
    man-db))
+
  (services
   (list
    (service home-bash-service-type
@@ -261,6 +262,7 @@
              (guix-defaults? #t)
              (aliases '(("g" . "git")
                         ("psrg" . "ps aux | rg")
+                        ("nmcli" . "nmcli -c yes")
                         ("ip" . "ip -c")))
              (environment-variables
               '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
@@ -281,6 +283,7 @@ test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
 GUIX_PROFILE=~/.guix-extra-profiles/desktop
 test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
 test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true")))))
+
    (simple-service 'emacsd-config-files
                    home-files-service-type
                    (map
@@ -302,6 +305,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                       "maps.el"
                       "misc.el"
                       "org-conf.el")))
+
    (simple-service 'config-files
                    home-files-service-type
                    ;; exwm config is outside of .emacs.d:
@@ -347,6 +351,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                                                        (string-append conf-root-dir  "/misc/Synergy.conf")))
                      (".config/nyxt/init.lisp" ,(local-file
                                                  (string-append conf-root-dir  "/misc/nyxt.lisp")))))
+
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map
