@@ -362,32 +362,38 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                           (string-append conf-root-dir "/guix/config/" file))))
                     '("shell-authorized-directories"
                       "channels.scm")))
+
    ;; (service home-gnupg-service-type )
    (service home-shepherd-service-type
             (home-shepherd-configuration
              (services
               (list
                (shepherd-service
-                (provision
-                 '(picom))
+                (provision '(picom))
                 (start #~(make-forkexec-constructor
                           (list #$(file-append ibhagwan-picom "/bin/picom"))
                           #:log-file "log/picom.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "bling"))
                (shepherd-service
-                (provision
-                 '(pantalaimon))
+                (provision '(pantalaimon))
                 (start #~(make-forkexec-constructor
                           (list #$(file-append pantalaimon "/bin/pantalaimon"))
                           #:log-file "log/matrix.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "Crypto back-end server for ement.el"))
                (shepherd-service
-                (provision
-                 '(synergy))
+                (provision '(synergy))
                 (start #~(make-forkexec-constructor
                           (list #$(file-append synergy "/bin/synergy"))
                           #:log-file "log/synergy.log"))
                 (stop #~(make-kill-destructor))
-                (documentation "can't be arsed to move IRL")))))))))
+                (documentation "can't be arsed to move IRL"))
+               (shepherd-service
+                (provision '(guix-repl))
+                (start #~(make-forkexec-constructor
+                          (list (string-append (getenv "HOME") "/.config/guix/current/bin/guix") "repl" "--listen=tcp:37146")
+                          #:environment-variables '("INSIDE_EMACS=1")
+                          #:log-file "log/guix-repl.log"))
+                (stop #~(make-kill-destructor))
+                (documentation "REPL to me, like lovers do")))))))))
