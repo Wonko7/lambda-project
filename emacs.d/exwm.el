@@ -157,6 +157,7 @@
         ([?\s-&] . (lambda (command)
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command command nil command)))
+        ([?\s-y] . ws/force-run-auto-start)
 
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
@@ -234,10 +235,41 @@
               ;;(lemon-swap)
               ;; also add disk space?
               (lemon-linux-network-tx)
-              (lemon-linux-network-rx)
-              )))
+              (lemon-linux-network-rx))))
 
 (lemon-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; auto start workspaces:
+
+(require 'cl)
+
+(defvar ws/auto-start-state '(t t t t t t t t t t))
+
+(defun ws/check-and-mark-auto-start-state (i)
+  (let ((state (nth i ws/auto-start-state)))
+    (setf (nth i ws/auto-start-state) nil) ;; mark as visited
+    state))
+
+(defun ws/run-auto-start ()
+  (flet ((run-init-p (i)
+           (and (= exwm-workspace-current-index i) (ws/check-and-mark-auto-start-state i))))
+    (cond ((run-init-p 8)
+           (projectile-switch-project-by-name "/code/wonko-mono-conf"))
+          ((run-init-p 7)
+           (org-roam-node-open (org-roam-node-from-title-or-alias "ssdd"))
+           (delete-other-windows))
+          ((run-init-p 4)
+           (async-shell-command "firefox"))
+          ((run-init-p 1)
+           (shell)))))
+
+(defun ws/force-run-auto-start ()
+  (interactive)
+  (setf (nth exwm-workspace-current-index ws/auto-start-state) t)
+  (ws/run-auto-start))
+
+(add-hook 'exwm-workspace-switch-hook 'ws/run-auto-start)
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here
