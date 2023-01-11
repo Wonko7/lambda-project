@@ -187,9 +187,9 @@
 ;; (frame-parameter nil alpha-background)
 (setq exwm-systemtray-background-color 'workspace-background)
 
-(set-frame-parameter (selected-frame) 'alpha '(96 . 70))
+(set-frame-parameter (selected-frame) 'alpha '(94 . 70))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist  '(alpha . (96 . 70)))
+(add-to-list 'default-frame-alist  '(alpha . (94 . 70)))
 (add-to-list 'default-frame-alist  '(fullscreen . maximized))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -199,6 +199,8 @@
 (setq desktop-environment-update-exwm-global-keys :prefix)
 (define-key desktop-environment-mode-map (kbd "s-l") nil)
 (desktop-environment-mode)
+
+(setq desktop-environment-screenlock-command "xlock -mode xjack -lockdelay 5")
 
 (setq desktop-environment-volume-get-command "pamixer --get-volume")
 (setq desktop-environment-volume-set-command "pamixer %s")
