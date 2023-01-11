@@ -14,6 +14,7 @@
  (gnu packages emacs)
  (gnu packages emacs-xyz)
  (gnu packages aspell)
+ (gnu packages hunspell)
  (gnu packages libreoffice)
  (gnu packages ocaml)
  ;; desktop stuff
@@ -259,7 +260,8 @@
             (home-bash-configuration
              (guix-defaults? #t)
              (aliases '(("g" . "git")
-                        ("psrg" . "ps aux | rg")))
+                        ("psrg" . "ps aux | rg")
+                        ("ip" . "ip -c")))
              (environment-variables
               '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
@@ -340,7 +342,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                      (".config/picom.conf" ,(local-file
                                              (string-append conf-root-dir  "/misc/picom.conf")))
                      (".config/pantalaimon/pantalaimon.conf" ,(local-file
-                                                       (string-append conf-root-dir  "/misc/pantalaimon.conf")))
+                                                               (string-append conf-root-dir  "/misc/pantalaimon.conf")))
                      (".config/Synergy/Synergy.conf" ,(local-file
                                                        (string-append conf-root-dir  "/misc/Synergy.conf")))
                      (".config/nyxt/init.lisp" ,(local-file
