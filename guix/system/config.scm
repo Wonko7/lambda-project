@@ -160,35 +160,18 @@
                                 (default-user "wonko")
                                 (xorg-configuration (xorg-configuration
                                                      (keyboard-layout keyboard-layout)))))
-    (service slim-service-type (slim-configuration
-                                (display ":1")
-                                (vt "vt8")
-                                (auto-login? #t)
-                                (default-user "wjc")
-                                (xorg-configuration (xorg-configuration
-                                                     (keyboard-layout keyboard-layout)))))
 
     (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
 
-    ;; %desktop-services
     (modify-services %desktop-services
       (delete gdm-service-type)
+
       (elogind-service-type config =>
                             (elogind-configuration
                              (handle-power-key 'ignore) ;; 'hibernate?
                              (handle-lid-switch 'suspend)
                              (handle-lid-switch-docked 'suspend)
                              (handle-lid-switch-external-power 'suspend)))
-      ;; (guix-service-type config =>
-      ;;                    (guix-configuration
-      ;;                     (inherit config)
-      ;;                     (substitute-urls
-      ;;                      (append (list "https://substitutes.nonguix.org")
-      ;;                              %default-substitute-urls))
-      ;;                     (authorized-keys
-      ;;                      (append (list (local-file "./data/substitutes/nonguix.pub"))
-      ;;                              %default-authorized-guix-keys))))
-      )))
 
   (setuid-programs
    (cons*
