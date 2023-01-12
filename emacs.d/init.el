@@ -138,6 +138,11 @@
 (add-hook 'rg-mode-hook 'wgrep-rg-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; apps
+
+(require 'osm)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")

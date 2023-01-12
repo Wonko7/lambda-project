@@ -32,10 +32,11 @@
  (gnu packages kde-frameworks)
  ;; tools
  (gnu packages admin)
+ (gnu packages databases)
  (gnu packages version-control)
  (gnu packages tmux)
  (gnu packages ssh)
- (gnu packages databases)
+ (gnu packages bittorrent)
                                         ; recutils
  (gnu packages rust-apps)
  (gnu packages gnupg)
@@ -139,7 +140,8 @@
    emacs-dired-hacks
    emacs-all-the-icons-dired
    emacs-dired-toggle-sudo
-
+   ;; 🗺
+   emacs-osm
    ;; desktop stuff?
    emacs-nov-el
 
@@ -251,6 +253,9 @@
    ;; communication
    emacs-ement
    pantalaimon
+   ;; ☠
+   rtorrent
+   emacs-mentor
    ;; basic system stuff
    acpi
    man-db))
