@@ -20,6 +20,35 @@
 (use-service-modules desktop networking ssh xorg)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; spock
+
+(define spock
+  (let ((spock '("                                      :                                 :       \n"
+                 "                                    :                                   :       \n"
+                 "                                    :  RRVIttIti+==iiii++iii++=;:,       :      \n"
+                 "                                    : IBMMMMWWWWMMMMMBXXVVYYIi=;:,        :     \n"
+                 "                                    : tBBMMMWWWMMMMMMBXXXVYIti;;;:,,      :     \n"
+                 "                                    t YXIXBMMWMMBMBBRXVIi+==;::;::::       ,    \n"
+                 "   live long & prosper             ;t IVYt+=+iIIVMBYi=:,,,=i+=;:::::,      ;;   \n"
+                 "                                   YX=YVIt+=,,:=VWBt;::::=,,:::;;;:;:     ;;;   \n"
+                 "                                   VMiXRttItIVRBBWRi:.tXXVVYItiIi==;:   ;;;;    \n"
+                 "                                   =XIBWMMMBBBMRMBXi;,tXXRRXXXVYYt+;;: ;;;;;    \n"
+                 "                                    =iBWWMMBBMBBWBY;;;,YXRRRRXXVIi;;;:;,;;;=    \n"
+                 "                                     iXMMMMMWWBMWMY+;=+IXRRXXVYIi;:;;:,,;;=     \n"
+                 "                                     iBRBBMMMMYYXV+:,:;+XRXXVIt+;;:;++::;;;     \n"
+                 "                                     =MRRRBMMBBYtt;::::;+VXVIi=;;;:;=+;;;;=     \n"
+                 "                                      XBRBBBBBMMBRRVItttYYYYt=;;;;;;==:;=       \n"
+                 "                                       VRRRRRBRRRRXRVYYIttiti=::;:::=;=         \n"
+                 "                                        YRRRRXXVIIYIiitt+++ii=:;:::;==          \n"
+                 "                                        +XRRXIIIIYVVI;i+=;=tt=;::::;:;          \n"
+                 "                                         tRRXXVYti++==;;;=iYt;:::::,;;          \n"
+                 "                                          IXRRXVVVVYYItiitIIi=:::;,::;          \n"
+                 "                                           tVXRRRBBRXVYYYIti;::::,::::          \n"
+                 "                                            YVYVYYYYYItti+=:,,,,,:::::;         \n"
+                 "                                            YRVI+==;;;;;:,,,,,,,:::::::         \n")))
+    (apply string-append spock)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; channels
 
 (define %channels #~(cons*
@@ -105,7 +134,7 @@
     (targets '("/boot"))
     (keyboard-layout keyboard-layout)))
 
-  (issue (string-append "[" hostname "] project-lambda / GNU Guix / Fat Cock Enthusiaste\n\n"))
+  (issue (string-append spock "\n   o===8 [" hostname "] project-lambda / GNU Guix / Fat Cock Enthusiaste 8===o\n\n"))
   (host-name hostname)
   (hosts-file (fleet-/etc/hosts host machine-defs))
 
