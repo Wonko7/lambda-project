@@ -174,15 +174,12 @@
 
   (services
    (cons*
-    (service openssh-service-type)
+
     (service tor-service-type)
-    ;; (service docker-service-type)
-    ;;(service guix-publish-service-type
-    ;;         (guix-publish-configuration
-    ;;          (host "0.0.0.0")
-    ;;          (port 1691)
-    ;;          (advertise? #t)))
     (bluetooth-service #:auto-enable? #t)
+    (service openssh-service-type (openssh-configuration
+                                   (password-authentication? #f)))
+
     (service slim-service-type (slim-configuration
                                 (display ":0")
                                 (vt "vt7")
