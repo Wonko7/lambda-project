@@ -7,6 +7,7 @@
              (gnu packages networking)
              (gnu packages xdisorg)
              (gnu packages suckless)
+             (gnu packages fonts)
              (gnu system setuid)
              (nongnu packages linux)
              (nongnu system linux-initrd)
@@ -168,7 +169,7 @@
    (append
     (map specification->package '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw"
                                   "emacs" "emacs-exwm" "emacs-desktop-environment"
-                                  "git" "rsync"))
+                                  "font-terminus" "git" "rsync"))
     %base-packages))
 
   (services
@@ -201,6 +202,12 @@
                              (handle-lid-switch 'suspend)
                              (handle-lid-switch-docked 'suspend)
                              (handle-lid-switch-external-power 'suspend)))
+
+      (console-font-service-type config =>
+                                 (map (lambda (tty)
+                                        `(,tty .
+                                          ,(file-append font-terminus "/share/consolefonts/ter-132n")))
+                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6"))))))
 
   (setuid-programs
    (cons*
