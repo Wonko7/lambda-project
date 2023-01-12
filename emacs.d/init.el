@@ -21,6 +21,15 @@
 (require 'whitespace)
 (setq whitespace-action '(auto-cleanup))
 
+(setq whitespace-style
+  '(face
+    tabs trailing
+    space-before-tab
+    indentation empty space-after-tab
+    tab-mark
+    missing-newline-at-eof))
+(global-whitespace-mode 1)
+
 ;; stop touching my stuff (see perfect window placement):
 (setq display-buffer-base-action
   '((display-buffer-reuse-window display-buffer-same-window)
