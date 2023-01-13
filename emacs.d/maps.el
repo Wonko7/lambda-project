@@ -224,5 +224,22 @@
   "U" #'elfeed-show-tag--unread
   "u" #'elfeed-show-tag--read)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ement
+
+(general-evil-define-key '(normal) ement-room-mode-map
+  "K" 'ement-room-goto-prev
+  "J" 'ement-room-goto-next)
+
+(general-evil-define-key '(normal) ement-room-mode-map
+  :prefix "RET"
+  "d" 'ement-room-delete-message
+  "l" 'ement-room-list
+  "r" 'ement-view-room
+  "RET" 'ement-room-send-message
+  "c" (lambda ()
+        (interactive)
+        (ement-room-compose-message ement-room ement-session)
+        (ement-room-compose-org)))
 
 (provide 'conf/maps)
