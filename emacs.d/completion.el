@@ -59,7 +59,7 @@
 ;; (setq corfu-auto-delay 0)
 ;; (setq corfu-auto-prefix 0)
 
-(setq completion-cycle-threshold 3)
+(setq completion-cycle-threshold nil)
 (setq tab-always-indent 'complete)
 
 ;; Do not allow the cursor in the minibuffer prompt
