@@ -70,16 +70,16 @@
 (setq ispell-program-name "hunspell")
 (setq ispell-dictionary "en_GB-ise,en_GB-ize,fr-toutesvariantes")
 (setq ispell-local-dictionary-alist `(("en_GB-ise,en_GB-ize,fr-toutesvariantes"
-                                       "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
-                                       ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
-                                       nil utf-8)))
+				       "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
+				       ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
+				       nil utf-8)))
 
 (with-eval-after-load 'flyspell
   (setq flyspell-mark-duplications-flag nil)
   (add-hook 'git-commit-mode-hook
-            (lambda () (flyspell-mode 1)))
+	    (lambda () (flyspell-mode 1)))
   (add-hook 'org-mode-hook
-            (lambda () (flyspell-mode 1))))
+	    (lambda () (flyspell-mode 1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
@@ -96,7 +96,7 @@
 
 (require 'magit)
 (setq magit-status-initial-section '(((unstaged) (status))
-                                     ((staged) (status))))
+				     ((staged) (status))))
 (add-hook 'magit-diff-mode-hook 'scroll-lock-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -108,7 +108,7 @@
       eshell-scroll-to-bottom-on-input t)
 
 (setq comint-scroll-to-bottom-on-input t
-      comint-scroll-to-bottom-on-output t);; setq-local to toggle this per shell?
+      comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
