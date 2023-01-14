@@ -17,7 +17,13 @@
 
 (setq mouse-yank-at-point t)
 (setq scroll-margin 5)
-(setq truncate-lines t)
+
+(setq-default word-wrap 1)
+(setq truncate-partial-width-windows nil)
+(setq truncate-lines t) ;; who is messing with my shit?
+(setq org-startup-truncated nil) ;; org is messing with my shit
+(add-hook 'org-agenda-mode-hook (lambda () ;; only disable in agenda.
+                                  (setq truncate-lines t))) ;; and yet you shit in my mouth, why? t?
 
 (require 'whitespace)
 (setq whitespace-action '(auto-cleanup))
