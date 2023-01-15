@@ -8,8 +8,6 @@
    "m4"
    "make"
    "node"
-   "docker"
-   "docker-compose"
    "guile-colorized"
    "perl"
    "ocaml"
@@ -18,5 +16,6 @@
    ;; "rust:cargo"
    "texlive-latex-ocgx2" ;; (lol tell me why again?)
    ;; build man db:
+   "bash-completion"
    "man-db"
    ))

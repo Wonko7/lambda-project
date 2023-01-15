@@ -2,14 +2,13 @@
  '(
     ;;;; img viewers
    "feh"
-   "ristretto"
+   ;; "ristretto"
     ;;;; img editors
-   "gimp"
-   "kdenlive"
-   "krita"
+   ;; "gimp"
+   ;; "kdenlive"
+   ;; "krita"
     ;;;; screenshot:
    "scrot"
-   "xfce4-screenshooter"
     ;;;; video
    "mpv"
    "vlc"
@@ -17,32 +16,28 @@
    "guvcview"
     ;;;; ebooks & pdf
    "calibre"
-   "okular" ;; 280Mb
+   ;;"okular" ;; 280Mb
    "zathura"
    "zathura-ps"
    "zathura-pdf-mupdf"
-   "xournal" ;; shitty pdf editor
+   "xournal" ;; oldschool pdf editor
     ;;;; desktop stuff
    "ddcutil" ;; monitor settings
-   "desktop-file-utils" ;; xdg capture firefox/emacsclient
+   ;; "desktop-file-utils" ;; xdg capture firefox/emacsclient
    "dunst"
-   "jonaburg-picom"
-   "kdeconnect"
-   "light"
-   "lxqt-panel"
-   "lxrandr"
-   "pscircle"
-   "pulseaudio" ;; for pactl
-   "qlipper"
-   "redshift"
-   "rofi"
-   "tint2"
-   "unclutter"
+   ;;"kdeconnect"
+   ;;"light"
+   ;;"lxqt-panel"
+   ;; "pscircle"
+   ;;"qlipper"
+   ;;"redshift"
+   ;; "rofi"
+   ;; "tint2"
+   ;; "unclutter"
    "xrandr"
-   "xscreensaver"
    ;; terms
-   "rxvt-unicode"
-   "w7-st"
+   ;; "rxvt-unicode"
+   ;; "w7-st"
     ;;;; xorg stuff
    "setxkbmap"
    "wmctrl"
@@ -58,8 +53,8 @@
    "xprop"
    "xset"
     ;;;; pirate radio
-   "wireshark"
-   "transmission:gui"
+   ;; "wireshark"
+   ;; "transmission:gui"
     ;;;; misc:
    ;;"freecad" ;; this weighs 400MB
    ;; "cairo" ;; conky
@@ -72,8 +67,7 @@
    "xsettingsd" ;; ?
     ;;;; deps
    "mesa-utils" ;; ?
-   "qtbase"
-   "qtsvg"
    ;; build man db:
+   "bash-completion"
    "man-db"
    ))

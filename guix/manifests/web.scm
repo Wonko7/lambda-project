@@ -2,7 +2,7 @@
  '(
    "nyxt"
    "firefox"
-   ;;"ungoogled-chromium"
+   "ungoogled-chromium"
    "speedtest-cli"
    ;;"mutt"
    "netcat-openbsd"
@@ -12,5 +12,6 @@
    ;;"weechat"
    "onionshare"
    ;; build man
+   "bash-completion"
    "man-db"
    ))

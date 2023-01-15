@@ -17,5 +17,6 @@
    "mtr"
    "net-tools"
    ;; build man db:
+   "bash-completion"
    "man-db"
    ))

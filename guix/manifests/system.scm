@@ -8,18 +8,15 @@
    "dosfstools"
    "file"
    "git"
-   "mksh"
-   "ncurses" ;; clear! tic (terminfo)
    "nmap"
    "pciutils"
    "strace"
    "time"
-   "tmux"
    "unrar"
    "unzip"
    "usbutils"
    "util-linux"
-   "zsh"
    ;; build man db:
+   "bash-completion"
    "man-db"
    ))
