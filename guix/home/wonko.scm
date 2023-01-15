@@ -274,10 +274,24 @@
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #t)
-             (aliases '(("g" . "git")
-                        ("psrg" . "ps aux | rg")
-                        ("nmcli" . "nmcli -c yes")
-                        ("ip" . "ip -c")))
+             (aliases
+              '(("g" . "git")
+                ("psrg" . "ps aux | rg")
+                ("df" . "df -h")
+                ("dmesg" . "dmesg -He")
+                ("ls" . "ls --color=yes")
+                ("ll" . "ls -l --color=auto")
+                ("la" . "ls -A --color=auto")
+                ("lla" . "ls -lA --color=auto")
+                ("lsd" . "ls -lAc --color=auto")
+                ("t" . "tree -AC")
+                ("tarc" . "tar -cavf")
+                ("tarx" . "tar -xavf")
+                ("tart" . "tar -tavf")
+                ("rsy" . "rsync -hrlpD --progress")
+                ("prsy" . "rsync -hrlpD --progress --owner --group")
+                ("nmcli" . "nmcli -c yes")
+                ("ip" . "ip -c -h")))
              (environment-variables
               '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
