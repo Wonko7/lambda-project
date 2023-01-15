@@ -122,7 +122,11 @@
   ;; :desc "trailing whitespace"
   "-d" 'delete-trailing-whitespace
   "z=" 'flyspell-correct-wrapper)
-;; TODO: sentence & paragraph motions. ]], []][, pg up/down.
+;; TODO: sentence & paragraph motions.
+
+(general-define-key
+ :states '(normal emacs insert visual global motion)
+ (kbd "C-SPC") evil-leader--default-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
@@ -211,6 +215,9 @@
   "C-j"   'org-move-subtree-down
   "C-h"   'org-promote-subtree
   "C-l"   'org-demote-subtree)
+
+(define-key cfw:calendar-mode-map (kbd "SPC") nil)
+(define-key cfw:org-schedule-map (kbd "SPC") nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed

@@ -14,34 +14,6 @@
 (require 'evil)
 (evil-mode 1)
 
-;;; ;; set leader key in all states
-;;; (evil-set-leader nil (kbd "C-SPC"))
-;;;
-;;; ;; set leader key in normal state
-;;; (evil-set-leader 'normal (kbd "SPC"))
-;;;
-;;; ;; set local leader
-;;; (evil-set-leader 'normal "," t)
-;;;
-;;; (defvar my-leader-map (make-sparse-keymap)
-;;;   "Keymap for \"leader key\" shortcuts.")
-;;;
-;;; ;; binding "," to the keymap
-;;; (define-key evil-normal-state-map "," my-leader-map)
-;;;
-;;; ;; binding ",b"
-;;; (define-key my-leader-map "b" 'list-buffers)
-;;;
-;;; ;; change the "leader" key to space
-;;; (define-key evil-normal-state-map "," 'evil-repeat-find-char-reverse)
-;;; (define-key evil-normal-state-map (kbd "SPC") my-leader-map)
-
-;; general.el can automate the process of prefix map/command creation
-;; (general-nmap
-;;   :prefix "SPC"
-;;   :prefix-map 'my-leader-map
-;;   "," 'list-buffers)
-
 (require 'undo-fu)
 (require 'vundo)
 (setq evil-undo-system 'undo-fu)
@@ -54,8 +26,6 @@
   (setq evil-collection-key-blacklist '("SPC"))
   (evil-collection-init))
 
-;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 (setq evil-want-C-i-jump nil)
 (setq evil-search-wrap nil)
 
@@ -112,5 +82,4 @@
 (evil-leader/set-leader "<SPC>")
 
 (provide 'conf/evil)
-
 ;;; evil.el ends here

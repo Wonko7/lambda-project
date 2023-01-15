@@ -27,19 +27,10 @@
 
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
-      '(?\C-x
-        ?\C-u
-        ?\C-:
-        ?\C-h
-        ?\M-:
-        ;?\C-?RET   ; C-RET would be bad ass
-        ?\C-\   ; I want whitespace here
-        ))
-
-;; (evil-define-key '(normal input) exwm-mode-map
-;;   "ESC" 'exwm-input-send-next-key
-;;   "C-q" 'exwm-input-send-next-key
-;;   )
+      '(?\s-i
+        ?\C-: ;; FIXME: I need to use these
+        ?\C-\ ; I want whitespace here ;; but this is also unused
+        ?\M-:))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc functions, should move this?
