@@ -300,16 +300,22 @@
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-profile/include")
                 ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-profile/lib")
                 ("PATH" . "~/local/bin:$PATH")
+                ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("GDK_SCALE" . "2")
                 ("GDK_DPI_SCALE" . "1")))
              (bash-profile
               (list
                (plain-file "bash-profile"
-                           "GUIX_PROFILE=~/.guix-extra-profiles/web
-test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
-GUIX_PROFILE=~/.guix-extra-profiles/desktop
-test -r $GUIX_PROFILE/etc/profile && . $GUIX_PROFILE/etc/profile
+                           "# hey boy. hey girl. superstar DJ. here we go!
+for p in dev net desktop web utils; do
+    profile=$GUIX_EXTRA_PROFILES/$p
+    if [ -f $profile/etc/profile ]; then
+        GUIX_PROFILE=$profile
+        . $GUIX_PROFILE/etc/profile
+    fi
+    unset profile
+done
 test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true")))))
 
    (simple-service 'emacsd-config-files
@@ -363,10 +369,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                                                #$(file-append feh "/bin/feh")
                                                "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
                                                #$(file-append emacs-exwm "/bin/exwm")))))
-                     ;; git, etc:
                      (".gitconfig" ,(local-file
                                      (string-append conf-root-dir  "/misc/gitconfig")))
-                     ;; setxkbmap
                      (".local/fixme/yggdrasill.xmodmap" ,(local-file
                                                           (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
                      (".local/fixme/common.xmodmap" ,(local-file
@@ -391,7 +395,6 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     '("shell-authorized-directories"
                       "channels.scm")))
 
-   ;; (service home-gnupg-service-type )
    (service home-shepherd-service-type
             (home-shepherd-configuration
              (services
