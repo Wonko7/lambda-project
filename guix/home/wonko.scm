@@ -223,7 +223,7 @@
    emacs-ace-window  ;; FIXME
    emacs-ace-link ;; FIXME
    emacs-ace-jump-mode ;; FIXME
-   emacs-buffer-expose ;; FIXME
+   emacs-buffer-expose
    ;; x stuff
    emacs-desktop-environment
    xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau

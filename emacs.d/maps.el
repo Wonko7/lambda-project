@@ -110,6 +110,10 @@
   ;; M-? or M-x xref-find-references finds the references of the symbol at point
   "cr" 'eglot-rename ;; :desc "lsp "
 
+  ;; windows
+  "wx" 'buffer-expose-current-mode
+  "wX" 'buffer-expose
+
   ;; misc?
   "zl" 'scroll-lock-mode)
 
