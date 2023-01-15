@@ -1,8 +1,10 @@
 (use-modules
+ (guix gexp)
  (gnu home)
  (gnu home services)
  (gnu home services shells)
  (gnu services)
+
  ;; fonts
  (w7 packages fonts)
  ;; FIXME:
@@ -10,6 +12,7 @@
  ;; there -can- should only be one
  (gnu packages fontutils)
  (gnu packages unicode)
+
  ;; emacs
  (gnu packages emacs)
  (gnu packages emacs-xyz)
@@ -17,11 +20,11 @@
  (gnu packages hunspell)
  (gnu packages libreoffice)
  (gnu packages ocaml)
+
  ;; desktop stuff
  (gnu packages pulseaudio)
  (gnu packages synergy)
- (gnu packages xorg)
-                                        ; xinit
+ (gnu packages xorg) ;; xinit
  (gnu packages linux)
  (gnu packages xdisorg)
  (gnu packages suckless)
@@ -30,28 +33,29 @@
  (gnu packages gnome)
  (gnu packages kde-plasma)
  (gnu packages kde-frameworks)
+
  ;; tools
  (gnu packages admin)
- (gnu packages databases)
+ (gnu packages databases) ;; recutils
  (gnu packages version-control)
  (gnu packages tmux)
  (gnu packages ssh)
  (gnu packages bittorrent)
-                                        ; recutils
- (gnu packages rust-apps)
+ (gnu packages rust-apps) ;; fd rg
  (gnu packages gnupg)
  (gnu packages password-utils)
-                                        ; fd rg
+ (gnu packages bash)
+
  ;; dev
  (gnu packages haskell-apps)
  (gnu packages compression)
- (gnu packages commencement)
-                                        ; gcc
+ (gnu packages commencement) ;; gcc
  (gnu packages pkg-config)
  (gnu packages base)
  (gnu packages gdb)
  (gnu packages m4)
  (gnu packages maths)
+
  ;; services
  (gnu home services shepherd)
  (gnu packages image-viewers)
@@ -59,9 +63,7 @@
  (w7 packages jonaburg-picom)
  (w7 packages emacs-xyz)
  ;; doc
- (gnu packages man)
- ;; guix
- (guix gexp))
+ (gnu packages man))
 
 (define conf-root-dir
   (dirname
@@ -145,21 +147,15 @@
    ;; desktop stuff?
    emacs-nov-el
 
-   ;; search
-   ripgrep
-   fd
-   emacs-rg
-   emacs-wgrep
-
-   ;; guile/scheme <3
-   emacs-geiser
-   emacs-geiser-guile
-   emacs-guix
-
    ;; spell
    emacs-flycheck-guile
    emacs-flyspell-correct
    emacs-auto-dictionary-mode
+   hunspell
+   hunspell-dict-fr-toutes-variantes
+   hunspell-dict-en-us
+   hunspell-dict-en-gb
+   hunspell-dict-en-gb-ize
 
    ;; transverse:
    emacs-ibuffer-projectile
@@ -178,11 +174,17 @@
    emacs-corfu-doc
    emacs-eglot
    emacs-consult-eglot
+   emacs-consult-org-roam
    emacs-eval-sexp-fu-el
    emacs-eval-in-repl-geiser
    ;; ocaml
+   emacs-eval-in-repl-ocaml
    emacs-tuareg
    opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
+   ;; guile/scheme <3
+   emacs-geiser
+   emacs-geiser-guile
+   emacs-guix
 
    ;; completion framework
    emacs-orderless
@@ -196,13 +198,14 @@
    emacs-which-key
    emacs-yasnippet
    emacs-doom-snippets
+   emacs-bash-completion
+   bash-completion
 
-   ;; spelling
-   hunspell
-   hunspell-dict-fr-toutes-variantes
-   hunspell-dict-en-us
-   hunspell-dict-en-gb
-   hunspell-dict-en-gb-ize
+   ;; search
+   fd
+   ripgrep
+   emacs-rg
+   emacs-wgrep
 
    ;; simple gui
    emacs-beacon
@@ -217,10 +220,10 @@
    emacs-perspective
    emacs-persp-mode
    emacs-lemon
-   emacs-ace-window
-   emacs-ace-link
-   emacs-ace-jump-mode
-   emacs-buffer-expose
+   emacs-ace-window  ;; FIXME
+   emacs-ace-link ;; FIXME
+   emacs-ace-jump-mode ;; FIXME
+   emacs-buffer-expose ;; FIXME
    ;; x stuff
    emacs-desktop-environment
    xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
@@ -235,29 +238,35 @@
 
    ;; bling
    breeze breeze-gtk breeze-icons
-   ;; other lightweight stuff I'm gonna need:
-   ;; gpg!
+
+   ;; gpg/pass/ssh
    password-store gnupg
    emacs-pass
    emacs-auth-source-pass
    emacs-pinentry
    pinentry-emacs
-   recutils tree
-   synergy
    openssh
+
+   ;; other utilts
+   recutils
+   tree
    git
    tmux
+   acpi
+
    ;; services
    ibhagwan-picom
    synergy
+
    ;; communication
    emacs-ement
    pantalaimon
+
    ;; ☠
    rtorrent
    emacs-mentor
+
    ;; basic system stuff
-   acpi
    man-db))
 
  (services
