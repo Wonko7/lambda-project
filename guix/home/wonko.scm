@@ -302,6 +302,7 @@
                 ("PATH" . "~/local/bin:$PATH")
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
+                ("RIPGREP_CONFIG_PATH" . "~/.config/ripgrep/ripgreprc")
                 ("GDK_SCALE" . "2")
                 ("GDK_DPI_SCALE" . "1")))
              (bash-profile
@@ -382,7 +383,9 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                      (".config/Synergy/Synergy.conf" ,(local-file
                                                        (string-append conf-root-dir  "/misc/Synergy.conf")))
                      (".config/nyxt/init.lisp" ,(local-file
-                                                 (string-append conf-root-dir  "/misc/nyxt.lisp")))))
+                                                 (string-append conf-root-dir  "/misc/nyxt.lisp")))
+                     (".config/ripgrep/ripgreprc" ,(local-file
+                                                 (string-append conf-root-dir  "/misc/ripgreprc")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
