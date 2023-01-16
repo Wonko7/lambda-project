@@ -74,7 +74,7 @@
 (require 'evil-snipe)
 (setq evil-snipe-scope 'whole-visible)
 (evil-snipe-mode +1)
-(add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+(add-hook 'magit-mode-hook #'turn-off-evil-snipe-override-mode)
 ;; (evil-snipe-override-mode +1)
 
 (require 'evil-leader)

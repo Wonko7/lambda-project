@@ -103,7 +103,7 @@
   (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
   (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
 
-(add-hook 'exwm-init-hook 'my/fuck-me-init-exwm)
+(add-hook 'exwm-init-hook #'my/fuck-me-init-exwm)
 
 (defun my/exwm-workspace-switch-to-previous ()
   (interactive)
@@ -265,7 +265,7 @@
   (setf (nth exwm-workspace-current-index ws/auto-start-state) t)
   (ws/run-auto-start))
 
-(add-hook 'exwm-workspace-switch-hook 'ws/run-auto-start)
+(add-hook 'exwm-workspace-switch-hook #'ws/run-auto-start)
 
 (provide 'conf/exwm)
 ;;; exwm.el ends here

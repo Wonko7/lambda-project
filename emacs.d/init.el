@@ -55,10 +55,10 @@
 
 (setq display-line-numbers-type t)
 (global-linum-mode)
-(add-hook 'shell-mode-hook (lambda () (linum-mode 0)))
-(add-hook 'elfeed-show-mode-hook (lambda () (linum-mode 0)))
+(add-hook 'shell-mode-hook           (lambda () (linum-mode 0)))
+(add-hook 'elfeed-show-mode-hook     (lambda () (linum-mode 0)))
 (add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
-(add-hook 'ement-room-mode-hook (lambda () (linum-mode 0)))
+(add-hook 'ement-room-mode-hook      (lambda () (linum-mode 0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
@@ -76,9 +76,9 @@
 (setq ispell-program-name "hunspell")
 (setq ispell-dictionary "en_GB-ise,en_GB-ize,fr-toutesvariantes")
 (setq ispell-local-dictionary-alist `(("en_GB-ise,en_GB-ize,fr-toutesvariantes"
-				       "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
-				       ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
-				       nil utf-8)))
+                                       "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
+                                       ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
+                                       nil utf-8)))
 
 (with-eval-after-load 'flyspell
   (setq flyspell-mark-duplications-flag nil)
@@ -102,8 +102,8 @@
 
 (require 'magit)
 (setq magit-status-initial-section '(((unstaged) (status))
-				     ((staged) (status))))
-(add-hook 'magit-diff-mode-hook 'scroll-lock-mode)
+                                     ((staged) (status))))
+(add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
@@ -131,10 +131,10 @@
 (require 'dired-collapse)
 (setq dired-dwim-target t)
 
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-(add-hook 'dired-mode-hook 'diredfl-mode)
+(add-hook 'dired-mode-hook #'all-the-icons-dired-mode)
+(add-hook 'dired-mode-hook #'diredfl-mode)
 ;; Auto-refresh dired on file change
-(add-hook 'dired-mode-hook 'auto-revert-mode)
+(add-hook 'dired-mode-hook #'auto-revert-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; apps
@@ -149,7 +149,7 @@
 (require 'wgrep)
 
 (autoload 'wgrep-rg-setup "wgrep-rg")
-(add-hook 'rg-mode-hook 'wgrep-rg-setup)
+(add-hook 'rg-mode-hook #'wgrep-rg-setup)
 (setq char-fold-symmetric t)
 (setq evil-snipe-char-fold t)
 

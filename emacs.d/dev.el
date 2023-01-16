@@ -1,5 +1,5 @@
-(add-hook 'prog-mode-hook 'rainbow-identifiers-mode)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook #'rainbow-identifiers-mode)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; ocaml + sane defaults
 ;; (require 'lsp)
@@ -19,7 +19,7 @@
 
 
 (require 'eglot)
-(add-hook 'prog-mode-hook 'eglot-ensure)
+(add-hook 'prog-mode-hook #'eglot-ensure)
 (setq eglot-autoshutdown t)
 
 
@@ -91,23 +91,23 @@
   "zk"  'flymake-goto-prev-error)
 
 ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
-(add-hook 'tuareg-mode-hook #'(lambda ()
-                                (setq mode-name "🐫")
-                                ;; FIXME( integrate this after trying them out.
+(add-hook 'tuareg-mode-hook (lambda ()
+                              (setq mode-name "🐫")
+                              ;; FIXME( integrate this after trying them out.
                                         ;(define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
-                                ;; FIXME)
-                                (add-hook 'before-save-hook #'ocamlformat-before-save)
-                                (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
-                                                            ("\\.ml\\'" (".mli"))
-                                                            ("\\.eliomi\\'" (".eliom"))
-                                                            ("\\.eliom\\'" (".eliomi"))))
-                                (setq-local comment-style 'indent)
-                                (setq-local tuareg-interactive-program
-                                            (concat tuareg-interactive-program " -nopromptcont"))
-                                (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
-                                                 (when (member ext '("eliom" "eliomi"))
-                                                   (setq-local lsp-modeline-code-actions-enable nil))))
-                                (add-hook 'before-save-hook 'ocamlformat-before-save t t)))
+                              ;; FIXME)
+                              (add-hook 'before-save-hook #'ocamlformat-before-save)
+                              (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
+                                                          ("\\.ml\\'" (".mli"))
+                                                          ("\\.eliomi\\'" (".eliom"))
+                                                          ("\\.eliom\\'" (".eliomi"))))
+                              (setq-local comment-style 'indent)
+                              (setq-local tuareg-interactive-program
+                                          (concat tuareg-interactive-program " -nopromptcont"))
+                              (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
+                                               (when (member ext '("eliom" "eliomi"))
+                                                 (setq-local lsp-modeline-code-actions-enable nil))))
+                              (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
 
 (require 'diff-hl)
 (global-diff-hl-mode)
