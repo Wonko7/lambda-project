@@ -25,6 +25,10 @@
   "ap"  'proced
   "aee" 'elfeed
   "aes" 'elfeed-update
+  ;; browsers
+  "aBf" (lambda () (interactive) (async-shell-command "firefox"))
+  "aBc" (lambda () (interactive) (async-shell-command "chromium"))
+  "aBt" #'my/tbb
   ;; secondary apps
   "zz" 'desktop-environment-lock-screen
 

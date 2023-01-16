@@ -140,6 +140,7 @@
 ;; apps
 
 (require 'osm)
+(setq async-shell-command-buffer 'new-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search

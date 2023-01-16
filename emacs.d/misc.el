@@ -26,6 +26,30 @@
   (other-window 1)
   (cfw:open-org-calendar))
 
+(defun my/tbb ()
+  (interactive)
+  (async-shell-command "cd ~/.local/tbb/tor-browser &&             \
+    guix shell                                                     \
+      --container                                                  \
+      --network                                                    \
+      --emulate-fhs                                                \
+      --preserve='^DISPLAY$'                                       \
+      openssl@1                                                    \
+      libevent                                                     \
+      pciutils                                                     \
+      dbus-glib                                                    \
+      bash                                                         \
+      libgccjit                                                    \
+      libcxx                                                       \
+      gtk+                                                         \
+      coreutils                                                    \
+      grep                                                         \
+      sed                                                          \
+      file                                                         \
+      alsa-lib                                                     \
+      --                                                           \
+      ./start-tor-browser.desktop -v "))
+
 ;; (require 'enlive)
 ;; (require 'seq)
 ;;
