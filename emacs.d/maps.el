@@ -117,7 +117,11 @@
   "wX" #'buffer-expose
 
   ;; misc?
-  "zl" #'scroll-lock-mode)
+  "zl" #'scroll-lock-mode
+  "z''" (lambda () (interactive) (async-shell-command "dunstctl set-paused toggle"))
+  "z'c" (lambda () (interactive) (async-shell-command "dunstctl close"))
+  "z'C" (lambda () (interactive) (async-shell-command "dunstctl close-all"))
+  "z'h" (lambda () (interactive) (async-shell-command "dunstctl history")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; states

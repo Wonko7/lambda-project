@@ -134,7 +134,8 @@
         ([?\s-J] . next-buffer)
 
         ([?\s-C] . kill-this-buffer)
-        ([?\s-c] . exwm-reset)
+        ([?\s-c] . (lambda () (interactive) (async-shell-command "dunstctl close")))
+        ;;((kbd "S-C-c") . exwm-reset)
 
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
