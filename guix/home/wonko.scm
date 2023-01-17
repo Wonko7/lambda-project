@@ -306,7 +306,7 @@
                 ("PATH" . "~/local/bin:$PATH")
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
-                ("RIPGREP_CONFIG_PATH" . "~/.config/ripgrep/ripgreprc")
+                ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
                 ("GDK_SCALE" . "2")
                 ("GDK_DPI_SCALE" . "1")))
              (bash-profile
