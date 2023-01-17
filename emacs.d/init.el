@@ -141,6 +141,8 @@
 
 (require 'osm)
 (setq async-shell-command-buffer 'new-buffer)
+(add-to-list 'display-buffer-alist
+             '("*Async Shell Command*" display-buffer-no-window (nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search
