@@ -78,7 +78,9 @@
   "make /etc/hosts file with fleet IPs."
   (let* ((ks (map first machines))
          (fleet (map (lambda (k)
-                       (string-append (nassq machines `(,host-key #:net #:wg42)) " " (keyword->string k) ".underage.wang\n"))
+                       (format #f "~a ~a.underage.wang\n"
+                               (nassq machines `(,k #:net #:wg42))
+                               (keyword->string k)))
                      ks)))
     (plain-file "hosts"
                 (string-append (local-host-aliases (keyword->string host-key))
