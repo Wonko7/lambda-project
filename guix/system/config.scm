@@ -121,158 +121,158 @@
 ;; OS
 
 (operating-system
-  (locale "en_GB.utf8")
-  (timezone "Europe/Paris")
-  (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps")))
+ (locale "en_GB.utf8")
+ (timezone "Europe/Paris")
+ (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps")))
 
-  (kernel linux)
-  (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
-  (initrd microcode-initrd)
-  (firmware (list linux-firmware))
-  (bootloader
-   (bootloader-configuration
-    (bootloader grub-efi-bootloader)
-    (targets '("/boot"))
-    (keyboard-layout keyboard-layout)))
+ (kernel linux)
+ (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
+ (initrd microcode-initrd)
+ (firmware (list linux-firmware))
+ (bootloader
+  (bootloader-configuration
+   (bootloader grub-efi-bootloader)
+   (targets '("/boot"))
+   (keyboard-layout keyboard-layout)))
 
-  (issue (string-append spock "\n   o===8 [" hostname "] project-lambda / GNU Guix / Fat Cock Enthusiaste 8===o\n\n"))
-  (host-name hostname)
-  (hosts-file (fleet-/etc/hosts host machine-defs))
+ (issue (string-append spock "\n   o===8 [" hostname "] project-lambda / GNU Guix / Fat Cock Enthusiaste 8===o\n\n"))
+ (host-name hostname)
+ (hosts-file (fleet-/etc/hosts host machine-defs))
 
-  (users (cons* (user-account
-                 (name "wjc")
-                 (comment "Wjc")
-                 (group "users")
-                 (home-directory "/home/wjc")
-                 (shell (file-append zsh "/bin/zsh"))
-                 (supplementary-groups
-                  '("lp" "wheel" "netdev" "audio" "video")))
-                (user-account
-                 (name "wonko")
-                 (comment "wonko")
-                 (group "users")
-                 (home-directory "/home/wonko")
-                 (shell (file-append bash "/bin/bash"))
-                 (supplementary-groups
-                  '("lp" "wheel" "netdev" "audio" "video")))
-                (user-account
-                 (name "tina")
-                 (comment "Tina")
-                 (group "users")
-                 (home-directory "/home/tina")
-                 (shell (file-append bash "/bin/bash"))
-                 (supplementary-groups
-                  '("netdev" "audio" "video")))
-                %base-user-accounts))
+ (users (cons* (user-account
+                (name "wjc")
+                (comment "Wjc")
+                (group "users")
+                (home-directory "/home/wjc")
+                (shell (file-append zsh "/bin/zsh"))
+                (supplementary-groups
+                 '("lp" "wheel" "netdev" "audio" "video")))
+               (user-account
+                (name "wonko")
+                (comment "wonko")
+                (group "users")
+                (home-directory "/home/wonko")
+                (shell (file-append bash "/bin/bash"))
+                (supplementary-groups
+                 '("lp" "wheel" "netdev" "audio" "video")))
+               (user-account
+                (name "tina")
+                (comment "Tina")
+                (group "users")
+                (home-directory "/home/tina")
+                (shell (file-append bash "/bin/bash"))
+                (supplementary-groups
+                 '("netdev" "audio" "video")))
+               %base-user-accounts))
 
-  (packages
-   (append
-    (map specification->package '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw"
-                                  "emacs" "emacs-exwm" "emacs-desktop-environment"
-                                  "font-terminus" "git" "rsync"))
-    %base-packages))
+ (packages
+  (append
+   (map specification->package '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw"
+                                 "emacs" "emacs-exwm" "emacs-desktop-environment"
+                                 "font-terminus" "git" "rsync"))
+   %base-packages))
 
-  (services
-   (cons*
+ (services
+  (cons*
 
-    (service tor-service-type)
-    (bluetooth-service #:auto-enable? #t)
-    (service openssh-service-type (openssh-configuration
-                                   (password-authentication? #f)))
+   (service tor-service-type)
+   (bluetooth-service #:auto-enable? #t)
+   (service openssh-service-type (openssh-configuration
+                                  (password-authentication? #f)))
 
-    (service slim-service-type (slim-configuration
-                                (display ":0")
-                                (vt "vt7")
-                                (auto-login? #t)
-                                (default-user "wonko")
-                                (xorg-configuration (xorg-configuration
-                                                     (keyboard-layout keyboard-layout)))))
+   (service slim-service-type (slim-configuration
+                               (display ":0")
+                               (vt "vt7")
+                               (auto-login? #t)
+                               (default-user "wonko")
+                               (xorg-configuration (xorg-configuration
+                                                    (keyboard-layout keyboard-layout)))))
 
-    (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
+   (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
 
-    (modify-services %desktop-services
-      (delete gdm-service-type)
+   (modify-services %desktop-services
+                    (delete gdm-service-type)
 
-      (elogind-service-type config =>
-                            (elogind-configuration
-                             (handle-power-key 'ignore) ;; 'hibernate?
-                             (handle-lid-switch 'suspend)
-                             (handle-lid-switch-docked 'suspend)
-                             (handle-lid-switch-external-power 'suspend)))
+                    (elogind-service-type config =>
+                                          (elogind-configuration
+                                           (handle-power-key 'ignore) ;; 'hibernate?
+                                           (handle-lid-switch 'suspend)
+                                           (handle-lid-switch-docked 'suspend)
+                                           (handle-lid-switch-external-power 'suspend)))
 
-      (console-font-service-type config =>
-                                 (map (lambda (tty)
-                                        `(,tty .
-                                          ,(file-append font-terminus "/share/consolefonts/ter-132n")))
-                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6"))))))
+                    (console-font-service-type config =>
+                                               (map (lambda (tty)
+                                                      `(,tty .
+                                                             ,(file-append font-terminus "/share/consolefonts/ter-132n")))
+                                                    '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6"))))))
 
-  (setuid-programs
-   (cons*
-    ;; emacs: dumpcap?
-    (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl) "/bin/brightnessctl")))
-    (setuid-program (program (file-append slock "/bin/slock")))
-    (setuid-program (program (file-append wireshark "/bin/dumpcap")))
-    (setuid-program (program (file-append xscreensaver "/bin/xscreensaver")))
-    %setuid-programs))
+ (setuid-programs
+  (cons*
+   ;; emacs: dumpcap?
+   (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl) "/bin/brightnessctl")))
+   (setuid-program (program (file-append slock "/bin/slock")))
+   (setuid-program (program (file-append wireshark "/bin/dumpcap")))
+   (setuid-program (program (file-append xscreensaver "/bin/xscreensaver")))
+   %setuid-programs))
 
-  (mapped-devices
-   (list (mapped-device
-          (source
-           (uuid (nassq machine-defs `(,host #:uuids #:vault))))
-          (target "vault")
-          (type luks-device-mapping))))
+ (mapped-devices
+  (list (mapped-device
+         (source
+          (uuid (nassq machine-defs `(,host #:uuids #:vault))))
+         (target "vault")
+         (type luks-device-mapping))))
 
-  (file-systems
-   (cons* (file-system
-            (mount-point "/boot")
-            (device (uuid (nassq machine-defs `(,host #:uuids #:efi)) 'fat32))
-            (type "vfat"))
-          (file-system
-            (device "/dev/mapper/vault")
-            (mount-point "/")
-            (type "btrfs")
-            (options "subvol=_live/@guix-root")
-            (needed-for-boot? #t)
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/mnt/vault")
-            (device "/dev/mapper/vault")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/home")
-            (device "/dev/mapper/vault")
-            (options "subvol=_live/@guix-home")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/code")
-            (device "/dev/mapper/vault")
-            (options "subvol=_live/@code")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/data")
-            (device "/dev/mapper/vault")
-            (options "subvol=_live/@data")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/work")
-            (device "/dev/mapper/vault")
-            (options "subvol=_live/@work")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          (file-system
-            (mount-point "/junkyard")
-            (device "/dev/mapper/vault")
-            (options "subvol=_live/@junkyard")
-            (type "btrfs")
-            (dependencies mapped-devices))
-          %base-file-systems))
+ (file-systems
+  (cons* (file-system
+          (mount-point "/boot")
+          (device (uuid (nassq machine-defs `(,host #:uuids #:efi)) 'fat32))
+          (type "vfat"))
+         (file-system
+          (device "/dev/mapper/vault")
+          (mount-point "/")
+          (type "btrfs")
+          (options "subvol=_live/@guix-root")
+          (needed-for-boot? #t)
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/mnt/vault")
+          (device "/dev/mapper/vault")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/home")
+          (device "/dev/mapper/vault")
+          (options "subvol=_live/@guix-home")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/code")
+          (device "/dev/mapper/vault")
+          (options "subvol=_live/@code")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/data")
+          (device "/dev/mapper/vault")
+          (options "subvol=_live/@data")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/work")
+          (device "/dev/mapper/vault")
+          (options "subvol=_live/@work")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         (file-system
+          (mount-point "/junkyard")
+          (device "/dev/mapper/vault")
+          (options "subvol=_live/@junkyard")
+          (type "btrfs")
+          (dependencies mapped-devices))
+         %base-file-systems))
 
-  (swap-devices
-   (list (swap-space
-          (target "/mnt/vault/swap/swapfile")
-          (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                file-systems))))))
+ (swap-devices
+  (list (swap-space
+         (target "/mnt/vault/swap/swapfile")
+         (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                               file-systems))))))
