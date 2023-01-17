@@ -86,6 +86,14 @@
     ;;  (exwm-layout-toggle-mode-line))
     ))
 
+(push '((lambda (buffer-name action)
+          (and (string= buffer-name "*Ement Room List*")
+               (> (exwm-workspace--count) 9)))
+        (lambda (buffer alist)
+          (with-selected-frame (elt exwm-workspace--list 9)
+            (display-buffer-same-window buffer alist))))
+      display-buffer-alist)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; previous workspace
 
@@ -118,8 +126,7 @@
 ;; global key bindings
 
 (setq exwm-input-global-keys
-      `(;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
-        ([?\s-r] . exwm-reset)
+      `(([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
 
         ;; Move between windows
