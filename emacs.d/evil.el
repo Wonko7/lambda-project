@@ -42,7 +42,6 @@
       ;; evil-cross-lines t
       )
 (setq evil-search-wrap nil)
-(setq evil-snipe-scope 'whole-visible)
 
 (require 'evil-matchit)
 (global-evil-matchit-mode 1)
@@ -73,7 +72,11 @@
 
 (require 'evil-snipe)
 (setq evil-snipe-scope 'whole-visible)
-(evil-snipe-mode +1)
+(setq evil-snipe-char-fold t)
+(setq evil-snipe-smart-case t)
+(setq evil-snipe-override-mode t)
+(evil-snipe-mode 1)
+
 (add-hook 'magit-mode-hook #'turn-off-evil-snipe-override-mode)
 ;; (evil-snipe-override-mode +1)
 
