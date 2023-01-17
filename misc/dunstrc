@@ -86,29 +86,18 @@
     #history = ctrl+shift+space+
 
 [urgency_low]
-    #background = "#073642"
-    #background = "#cb4b16"
-    background = "#268bd2"
+    background = "#1B1720"
     foreground = "#CCCCCC"
     timeout = 0
 
 [urgency_normal]
-    #  was blue:
-    # background = "#268bd2"
-    # was orange:
-    # background = "#cb4b16"
-    # was green:
-    #background = "#117700"
-    # dark blue:
-    # background = "#073642"
     background = "#1B1720"
-
-    foreground = "#ED60BA"
+    foreground = "#00ffff"
     timeout = 0
 
 [urgency_critical]
-    background = "#cb4b16"
-    foreground = "#DDDDDD"
+    background = "#1B1720"
+    foreground = "#ED60BA"
     timeout = 0
 
 [new_message]
