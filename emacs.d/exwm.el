@@ -172,6 +172,11 @@
                   (number-sequence 0 9))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exwm settings
+
+(setq exwm-manage-force-tiling t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; start exwm
 
 (exwm-systemtray-enable)
