@@ -165,6 +165,8 @@
    emacs-emojify
 
    ;; code: ()
+   emacs-rainbow-mode
+   emacs-rainbow-blocks
    emacs-rainbow-delimiters
    emacs-rainbow-identifiers
    emacs-lsp-mode ;; FIXME
