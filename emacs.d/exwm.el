@@ -86,13 +86,14 @@
     ;;  (exwm-layout-toggle-mode-line))
     ))
 
-(push '((lambda (buffer-name action)
-          (and (string= buffer-name "*Ement Room List*")
-               (> (exwm-workspace--count) 9)))
-        (lambda (buffer alist)
-          (with-selected-frame (elt exwm-workspace--list 9)
-            (display-buffer-same-window buffer alist))))
-      display-buffer-alist)
+(defvar my/init-ement-room-list
+  '((lambda (buffer-name action)
+      (and (string= buffer-name "*Ement Room List*")
+           (> (exwm-workspace--count) 9)))
+    (lambda (buffer alist)
+      (with-selected-frame (elt exwm-workspace--list 9)
+        (display-buffer-same-window buffer alist))
+      (setq display-buffer-alist (delete my/init-ement-room-list display-buffer-alist)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; previous workspace
@@ -261,6 +262,7 @@
   (flet ((run-init-p (i)
            (and (= exwm-workspace-current-index i) (ws/check-and-mark-auto-start-state i))))
     (cond ((run-init-p 9)
+           (push my/init-ement-room-list display-buffer-alist)
            (my/ement-init))
           ((run-init-p 8)
            (projectile-switch-project-by-name "/code/wonko-mono-conf"))
