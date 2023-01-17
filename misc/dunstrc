@@ -1,0 +1,146 @@
+[global]
+    #font = Droid Sans Mono Slashed for Powerline 11
+
+    font = JetBrains Mono 22 # FIXME guix should take care of this
+
+    sort = yes
+    indicate_hidden = yes
+    alignment = left
+    bounce_freq = 0
+    word_wrap = yes
+    show_age_threshold = -1
+
+    width = 500
+    height = 300
+    origin = top-right
+    offset = 25x25
+    transparency = 30
+    shrink = yes
+
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_min_width = 150
+    progress_bar_frame_width = 1
+    progress_bar_corner_radius = 0
+    indicate_hidden = yes
+
+    notification_limit = 3
+
+    idle_threshold = 0
+
+    monitor = 0
+    follow = none
+
+    sticky_history = yes
+    history_length = 20
+    line_height = 0
+
+    frame_width = 0
+    separator_height = 2
+    gap_size = 20
+    markup = full
+
+    separator_color = auto
+
+    #padding = 1
+    padding = 20
+    horizontal_padding = 20
+    text_icon_padding = 5
+
+
+    markup = full
+    format = "<b>%s</b>\n%b"
+    #format = "<b>%s</b> %p\n%b"
+    #format = "%s %p\n%b"
+
+    ellipsize = end
+    vertical_alignment = center
+
+    icon_position = left
+
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+    min_icon_size = 32
+    max_icon_size = 128
+
+    icon_theme = breeze-dark
+    # Paths to default icons.
+    # icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/
+    # icon_path = ~/.guix-profile/share/icons/breeze-dark/actions/64:~/.guix-profile/share/icons/breeze-dark/animations/64:~/.guix-profile/share/icons/breeze-dark/applets/64:~/.guix-profile/share/icons/breeze-dark/apps/64:~/.guix-profile/share/icons/breeze-dark/categories/64:~/.guix-profile/share/icons/breeze-dark/devices/64:~/.guix-profile/share/icons/breeze-dark/emblems/64:~/.guix-profile/share/icons/breeze-dark/emotes/64:~/.guix-profile/share/icons/breeze-dark/mimetypes/64:~/.guix-profile/share/icons/breeze-dark/places/64:~/.guix-profile/share/icons/breeze-dark/preferences/64:~/.guix-profile/share/icons/breeze-dark/status/64
+
+    title = Dunst
+    class = Dunst
+
+    corner_radius = 0
+    ignore_dbusclose = false
+
+# these are never caught so feel free to put basic shortcuts here, see xdotool script to send shortcuts directly to dunst
+[shortcuts]
+    close = ctrl+1
+    close_all = ctrl+2
+    history = ctrl+3
+    #history = ctrl+h
+    #close_all = ctrl+shift+\"
+    #history = ctrl+\"
+    #history = ctrl+shift+space+
+
+[urgency_low]
+    #background = "#073642"
+    #background = "#cb4b16"
+    background = "#268bd2"
+    foreground = "#CCCCCC"
+    timeout = 0
+
+[urgency_normal]
+    #  was blue:
+    # background = "#268bd2"
+    # was orange:
+    # background = "#cb4b16"
+    # was green:
+    #background = "#117700"
+    # dark blue:
+    # background = "#073642"
+    background = "#1B1720"
+
+    foreground = "#ED60BA"
+    timeout = 0
+
+[urgency_critical]
+    background = "#cb4b16"
+    foreground = "#DDDDDD"
+    timeout = 0
+
+[new_message]
+    summary = "*New message*"
+    background = "#cb4b16"
+[unread_message]
+    summary = "*unread messages*"
+    background = "#cb4b16"
+
+[remote]
+    summary = "@*:*"
+    background = "#117700"
+
+# [alert_ok]
+#     summary = "@*:*"
+#     background = "#117700"
+
+[alert_nok]
+    summary = "*Power low*"
+    body = "*\[Alerting\]*"
+    background = "#ac322f"
+
+[alert_nok2]
+    summary = "*#production*"
+    #body = "*Apex*"
+    background = "#ac322f"
+
+[RDV]
+    summary = "RDV*"
+    background = "#d33682"
+
+# [ignore]
+#     appname = "bullshit*"
+#     summary = "*"
+#     format = ""

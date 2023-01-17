@@ -60,6 +60,7 @@
  (gnu home services shepherd)
  (gnu packages image-viewers)
  (gnu packages matrix)
+ (gnu packages dunst)
  (w7 packages jonaburg-picom)
  (w7 packages emacs-xyz)
  ;; doc
@@ -257,6 +258,7 @@
    ;; services
    ibhagwan-picom
    synergy
+   dunst
 
    ;; communication
    emacs-ement
@@ -341,51 +343,55 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                       "misc.el"
                       "org-conf.el")))
 
-   (simple-service 'config-files
-                   home-files-service-type
-                   ;; exwm config is outside of .emacs.d:
-                   `((".exwm" ,(local-file
-                                (string-append conf-root-dir  "/emacs.d/exwm.el")))
-                     (".xsession" ,(program-file ;; slim/gdm will exec this:
-                                    "xsession"
-                                    #~(system
-                                       (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
-                                               #$(file-append xhost "/bin/xhost")
-                                               #$(file-append xset "/bin/xset")
-                                               "b 0 0 0"
-                                               #$(file-append xset "/bin/xset")
-                                               "r rate 400 30"
-                                               #$(file-append xsetroot "/bin/xsetroot")
-                                               "-cursor_name left_ptr"
-                                               #$(file-append setxkbmap "/bin/setxkbmap")
-                                               "dvorak"
-                                               #$(file-append xmodmap "/bin/xmodmap")
-                                               "~/.local/fixme/common.xmodmap"
-                                               #$(file-append xmodmap "/bin/xmodmap")
-                                               "~/.local/fixme/yggdrasill.xmodmap"
-                                               #$(file-append xinput "/bin/xinput")
-                                               "set-prop 14 'libinput Click Method Enabled' 0 1"
-                                               #$(file-append xinput "/bin/xinput")
-                                               "set-prop 14 'libinput Accel Speed' 1.0"
-                                               #$(file-append feh "/bin/feh")
-                                               "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
-                                               #$(file-append emacs-exwm "/bin/exwm")))))
-                     (".gitconfig" ,(local-file
-                                     (string-append conf-root-dir  "/misc/gitconfig")))
-                     (".local/fixme/yggdrasill.xmodmap" ,(local-file
-                                                          (string-append conf-root-dir  "/misc/yggdrasill.xmodmap")))
-                     (".local/fixme/common.xmodmap" ,(local-file
-                                                      (string-append conf-root-dir  "/misc/common.xmodmap")))
-                     (".config/picom.conf" ,(local-file
-                                             (string-append conf-root-dir  "/misc/picom.conf")))
-                     (".config/pantalaimon/pantalaimon.conf" ,(local-file
-                                                               (string-append conf-root-dir  "/misc/pantalaimon.conf")))
-                     (".config/Synergy/Synergy.conf" ,(local-file
-                                                       (string-append conf-root-dir  "/misc/Synergy.conf")))
-                     (".config/nyxt/init.lisp" ,(local-file
-                                                 (string-append conf-root-dir  "/misc/nyxt.lisp")))
-                     (".config/ripgrep/ripgreprc" ,(local-file
-                                                 (string-append conf-root-dir  "/misc/ripgreprc")))))
+   (simple-service
+    'config-files
+    home-files-service-type
+    ;; exwm config is outside of .emacs.d:
+    `((".exwm"
+       ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
+      (".xsession"
+       ,(program-file
+         "xsession"
+         #~(system
+            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec ~a"
+                    #$(file-append xhost "/bin/xhost")
+                    #$(file-append xset "/bin/xset")
+                    "b 0 0 0"
+                    #$(file-append xset "/bin/xset")
+                    "r rate 400 30"
+                    #$(file-append xsetroot "/bin/xsetroot")
+                    "-cursor_name left_ptr"
+                    #$(file-append setxkbmap "/bin/setxkbmap")
+                    "dvorak"
+                    #$(file-append xmodmap "/bin/xmodmap")
+                    "~/.local/fixme/common.xmodmap"
+                    #$(file-append xmodmap "/bin/xmodmap")
+                    "~/.local/fixme/yggdrasill.xmodmap"
+                    #$(file-append xinput "/bin/xinput")  ;; FIXME -> make this part of xorg system config.
+                    "set-prop 14 'libinput Click Method Enabled' 0 1"
+                    #$(file-append xinput "/bin/xinput")
+                    "set-prop 14 'libinput Accel Speed' 1.0"
+                    #$(file-append feh "/bin/feh")
+                    "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
+                    #$(file-append emacs-exwm "/bin/exwm")))))
+      (".gitconfig"
+       ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
+      (".local/fixme/yggdrasill.xmodmap"
+       ,(local-file (string-append conf-root-dir "/misc/yggdrasill.xmodmap")))
+      (".local/fixme/common.xmodmap"
+       ,(local-file (string-append conf-root-dir "/misc/common.xmodmap")))
+      (".config/picom.conf"
+       ,(local-file (string-append conf-root-dir "/misc/picom.conf")))
+      (".config/dunst/dunstrc"
+       ,(local-file (string-append conf-root-dir "/misc/dunstrc")))
+      (".config/pantalaimon/pantalaimon.conf"
+       ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
+      (".config/Synergy/Synergy.conf"
+       ,(local-file (string-append conf-root-dir "/misc/Synergy.conf")))
+      (".config/nyxt/init.lisp"
+       ,(local-file (string-append conf-root-dir "/misc/nyxt.lisp")))
+      (".config/ripgrep/ripgreprc"
+       ,(local-file (string-append conf-root-dir "/misc/ripgreprc")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
@@ -416,6 +422,13 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                           #:log-file "log/matrix.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "Crypto back-end server for ement.el"))
+               (shepherd-service
+                (provision '(dunst))
+                (start #~(make-forkexec-constructor
+                          (list #$(file-append dunst "/bin/dunst"))
+                          #:log-file "log/dunst.log"))
+                (stop #~(make-kill-destructor))
+                (documentation "riced notifications"))
                (shepherd-service
                 (provision '(synergy))
                 (start #~(make-forkexec-constructor
