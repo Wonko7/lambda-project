@@ -345,6 +345,18 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                       "misc.el"
                       "org-conf.el")))
 
+   (simple-service 'emacsd-snippets-config-files
+                   home-files-service-type
+                   (map
+                    (lambda
+                        (file)
+                      `(,(string-append ".emacs.d/snippets/" file)
+                        ,(local-file
+                          (string-append conf-root-dir "/emacs.d/snippets/" file))))
+                    '("fundamental-mode/danger_triangle"
+                      "org-mode/begin_src"
+                      "org-mode/begin_quote")))
+
    (simple-service
     'config-files
     home-files-service-type

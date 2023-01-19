@@ -29,16 +29,16 @@
 (setq whitespace-action '(auto-cleanup))
 (setq whitespace-style
       '(face
-	tabs trailing
-	empty
-	tab-mark
-	missing-newline-at-eof))
+        tabs trailing
+        empty
+        tab-mark
+        missing-newline-at-eof))
 (global-whitespace-mode 1)
 
 ;; stop touching my stuff (see perfect window placement):
 (setq display-buffer-base-action
       '((display-buffer-reuse-window display-buffer-same-window)
-	(reusable-frames . t)))
+        (reusable-frames . t)))
 
 (setq even-window-sizes nil)     ; avoid resizing
 

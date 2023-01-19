@@ -95,6 +95,7 @@
   "ie" #'emojify-insert-emoji                ;;  :desc "Emoji"
   "id" #'my/insert-inactive-timestamp        ;;  :desc "date (now)"
   "in" #'my/insert-inactive-timestamp        ;;  :desc "date (now)"
+  "is" #'consult-yasnippet
   ;; rm stuff
   "-d" #'delete-trailing-whitespace  ;; :desc "trailing whitespace"
 

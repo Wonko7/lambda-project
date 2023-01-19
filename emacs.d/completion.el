@@ -134,5 +134,14 @@
 ;;
 ;; (advice-add 'company-capf--candidates :around #'just-one-face)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yasnippet
+
+(require 'yasnippet)
+(require 'consult-yasnippet)
+
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+(yas-global-mode 1)
+
 (provide 'conf/completion)
 ;;; completion.el ends here
