@@ -88,7 +88,7 @@
    emacs-org-roam
    emacs-org-super-agenda
    emacs-org-web-tools
-   ;; FIXME emacs-org-ql
+   emacs-org-ql
    emacs-enlive
    emacs-seq
    emacs-calfw

@@ -495,5 +495,49 @@ space rather than before."
 (require 'calfw-org)
 (require 'org-web-tools)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org-ql
+
+(require 'org-ql)
+(require 'org-ql-search)
+
+
+(defun my/sort-by-filename-date (a b)
+  (cl-flet ((get-fn (e)
+                    (buffer-name (marker-buffer (org-element-property :org-marker e))))
+            (to-ts (fn)
+                   (org-timestamp-format
+                    (org-timestamp-from-string
+                     (concat "[" (file-name-sans-extension fn) "]"))
+                    "%s")))
+    (string>
+     (to-ts (get-fn a))
+     (to-ts (get-fn b)))))
+
+(defun my/all-dailies ()
+  (org-ql-search-directories-files
+   :directories (mapcar (lambda (d)
+                          (concat org-roam-directory d))
+                        (list "daily"
+                              "daily/_archive/"))))
+
+(setq org-ql-views
+      (list
+       (cons "ALL >7a"
+             (list :buffers-files #'my/all-dailies
+                   :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7-9][a-c][+]? -"))
+                   :sort #'my/sort-by-filename-date))
+       (cons "recent >7a"
+             (list :buffers-files #'org-agenda-files
+                   :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7-9][a-c][+]? -"))
+                   :sort #'my/sort-by-filename-date))
+       (cons "recent >7b"
+             (list :buffers-files #'org-agenda-files
+                   :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
+                   :sort #'my/sort-by-filename-date))
+       (cons "ALL >7b"
+             (list :buffers-files #'my/all-dailies
+                   :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
+                   :sort #'my/sort-by-filename-date))))
 
 (provide 'conf/org)
