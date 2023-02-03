@@ -17,7 +17,8 @@
 (setq org-agenda-files (mapcar
                         (lambda (d)
                           (concat org-roam-directory d))
-                        '("wip/" "work/" "wtf/" "daily/")))
+                        '("wip/" "work/" "wtf/" "the-road-so-far/")))
+(setq org-roam-dailies-directory "the-road-so-far")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
@@ -514,8 +515,8 @@ space rather than before."
   (org-ql-search-directories-files
    :directories (mapcar (lambda (d)
                           (concat org-roam-directory d))
-                        (list "daily"
-                              "daily/_archive/"))))
+                        (list "the-road-so-far"
+                              "the-road-so-far/_archive/"))))
 
 (setq org-ql-views
       (list
