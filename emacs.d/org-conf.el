@@ -82,6 +82,8 @@
 ;; org-roam
 
 (require 'org-roam)
+(require 'consult-org-roam)
+(consult-org-roam-mode 1)
 
 ;; FIXME <start https://github.com/org-roam/org-roam/issues/2198
 (defalias 'org-font-lock-ensure
