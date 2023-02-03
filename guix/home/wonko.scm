@@ -115,11 +115,10 @@
    emacs-evil-cleverparens
    emacs-evil-visualstar
    emacs-evil-snipe
-   emacs-evil-indent-plus
    emacs-evil-collection
    ;; emacs-evil-owl ;; FIXME fails :/
    emacs-evil-args
-   ;; emacs-evil-lion (align)
+   emacs-evil-lion ;; (align)
    emacs-evil-multiedit
    emacs-evil-mc
    emacs-evil-textobj-syntax

@@ -90,5 +90,11 @@
 (require 'evil-visualstar)
 (global-evil-visualstar-mode t)
 
+(require 'evil-commentary)
+(evil-commentary-mode t)
+
+(require 'evil-lion)
+(evil-lion-mode)
+
 (provide 'conf/evil)
 ;;; evil.el ends here
