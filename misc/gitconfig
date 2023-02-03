@@ -1,5 +1,3 @@
-# vi: ft=gitconfig
-
 [user]
   name        = William
   email       = william@underage.wang
@@ -7,6 +5,9 @@
 
 [color]
   ui = auto
+
+[core]
+  attributesfile = ~/.config/git/attributes
 
 [alias]
   st   = status -s
@@ -90,3 +91,12 @@
   patternType = perl
 [pull] # merge:
   rebase = false
+
+[diff "common-lisp"]
+  xfuncname="^\\((def\\S+\\s+\\S+)"
+
+[diff "elisp"]
+  xfuncname="^\\((((def\\S+)|use-package)\\s+\\S+)"
+
+[diff "org"]
+  xfuncname="^\\*+[\t ]+(.*)$"

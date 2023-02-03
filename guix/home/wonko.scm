@@ -388,8 +388,10 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     #$(file-append feh "/bin/feh")
                     "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
                     #$(file-append emacs-exwm "/bin/exwm")))))
-      (".gitconfig"
+      (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
+      (".config/git/attributes"
+       ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
       (".local/fixme/yggdrasill.xmodmap"
        ,(local-file (string-append conf-root-dir "/misc/yggdrasill.xmodmap")))
       (".local/fixme/common.xmodmap"
