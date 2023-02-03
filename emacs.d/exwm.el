@@ -180,28 +180,30 @@
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
         ([?\s- ] . my/exwm-workspace-switch-to-previous)
-        ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
         ,@(mapcar (lambda (i)
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
-                        (exwm-workspace-switch-create ,i)
-                        ;; (persp-switch-by-number ,i)
-                        )))
-                  (number-sequence 0 9))))
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))
+        ,@(mapcar* (lambda (c i)
+                     `(,(kbd (format "s-%c" c)) .
+                       (lambda ()
+                         (interactive)
+                         (if exwm--id
+                             (exwm-workspace-move-window ,i)
+                           (let ((b (current-buffer)))
+                             (persp-forget-buffer b)
+                             (exwm-workspace-switch-create ,i)
+                             (persp-add-buffer b)
+                             (my/exwm-workspace-switch-to-previous))))))
+                   '(?\) ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\()
+                   (number-sequence 0 9))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exwm settings
 
 (setq exwm-manage-force-tiling t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; start exwm
-
-(exwm-systemtray-enable)
-(exwm-randr-enable) ;; revisit for multi-monitor
-(sleep-for 5) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
-(exwm-enable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; colors & transparency
