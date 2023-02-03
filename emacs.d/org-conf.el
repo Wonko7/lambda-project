@@ -542,4 +542,16 @@ space rather than before."
                    :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
                    :sort #'my/sort-by-filename-date))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; babel
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((clojure . t)
+   (emacs-lisp . t)
+   (gnuplot . t)
+   (scheme . t)
+   (shell . t)
+   (ocaml . t)))
+
 (provide 'conf/org)
