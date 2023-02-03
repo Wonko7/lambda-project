@@ -84,5 +84,11 @@
 (global-evil-leader-mode)
 (evil-leader/set-leader "<SPC>")
 
+(require 'evil-goggles)
+(evil-goggles-mode)
+
+(require 'evil-visualstar)
+(global-evil-visualstar-mode t)
+
 (provide 'conf/evil)
 ;;; evil.el ends here
