@@ -27,9 +27,9 @@
 
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
-      '(?\s-i
+      `(?\s-i
         ?\C-: ;; FIXME: I need to use these
-        ?\C-\ ; I want whitespace here ;; but this is also unused
+        ?\C-\ ;; I want whitespace here ;; but this is also unused
         ?\M-:))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,6 +124,24 @@
 (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; desktop-env
+;; this needs to be activated before we set exwm-input-global-keys
+
+(require 'desktop-environment)
+(desktop-environment-mode)
+
+(setq desktop-environment-update-exwm-global-keys :global)
+(define-key desktop-environment-mode-map (kbd "s-l") nil)
+(setq desktop-environment-screenlock-command "xlock -mode xjack -lockdelay 5")
+
+(setq desktop-environment-volume-get-command "pamixer --get-volume")
+(setq desktop-environment-volume-set-command "pamixer %s")
+(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
+(setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
+(setq desktop-environment-volume-normal-decrement "-d 5")
+(setq desktop-environment-volume-toggle-command "pamixer -t")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; global key bindings
 
 (setq exwm-input-global-keys
@@ -198,32 +216,27 @@
 (add-to-list 'default-frame-alist  '(fullscreen . maximized))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; desktop-env
-
-(require 'desktop-environment)
-(setq desktop-environment-update-exwm-global-keys :prefix)
-(define-key desktop-environment-mode-map (kbd "s-l") nil)
-(desktop-environment-mode)
-
-(setq desktop-environment-screenlock-command "xlock -mode xjack -lockdelay 5")
-
-(setq desktop-environment-volume-get-command "pamixer --get-volume")
-(setq desktop-environment-volume-set-command "pamixer %s")
-(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
-(setq desktop-environment-volume-normal-increment "-i 5 --allow-boost")
-(setq desktop-environment-volume-normal-decrement "-d 5")
-(setq desktop-environment-volume-toggle-command "pamixer -t")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; perspepctive
+;; not directly exwm stuff, but I only use it in exwm workspace context
 
 (setq persp-suppress-no-prefix-key-warning t)
 (require 'perspective)
+(persp-mode)
+
 (setq persp-show-modestring nil)
 (setq persp-initial-frame-name "don't speak unless spoken to")
-(persp-mode)
 (consult-customize consult--source-buffer :hidden t :default nil)
 (add-to-list 'consult-buffer-sources persp-consult-source)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; start exwm
+
+(exwm-systemtray-enable)
+(exwm-randr-enable) ;; revisit for multi-monitor
+(sleep-for 5) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
+(exwm-enable)
+
+(provide 'conf/exwm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lemon
@@ -260,7 +273,7 @@
 
 (defun ws/run-auto-start ()
   (flet ((run-init-p (i)
-           (and (= exwm-workspace-current-index i) (ws/check-and-mark-auto-start-state i))))
+                     (and (= exwm-workspace-current-index i) (ws/check-and-mark-auto-start-state i))))
     (cond ((run-init-p 9)
            (push my/init-ement-room-list display-buffer-alist)
            (my/ement-init))
@@ -281,6 +294,4 @@
   (ws/run-auto-start))
 
 (add-hook 'exwm-workspace-switch-hook #'ws/run-auto-start)
-
-(provide 'conf/exwm)
 ;;; exwm.el ends here
