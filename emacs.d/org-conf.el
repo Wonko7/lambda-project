@@ -503,18 +503,12 @@ space rather than before."
 (require 'org-ql)
 (require 'org-ql-search)
 
-
 (defun my/sort-by-filename-date (a b)
-  (cl-flet ((get-fn (e)
-                    (buffer-name (marker-buffer (org-element-property :org-marker e))))
-            (to-ts (fn)
-                   (org-timestamp-format
-                    (org-timestamp-from-string
-                     (concat "[" (file-name-sans-extension fn) "]"))
-                    "%s")))
-    (string>
-     (to-ts (get-fn a))
-     (to-ts (get-fn b)))))
+  (cl-flet* ((get-fn (e)
+                     (buffer-name (marker-buffer (org-element-property :org-marker e))))
+             (to-ts (e)
+                    (file-name-sans-extension (get-fn e))))
+    (string> (to-ts a) (to-ts b))))
 
 (defun my/all-dailies ()
   (org-ql-search-directories-files
