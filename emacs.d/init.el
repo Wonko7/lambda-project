@@ -137,6 +137,27 @@
 (add-hook 'dired-mode-hook #'auto-revert-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ibuffer
+
+(setq ibuffer-save-with-custom nil
+      ibuffer-saved-filter-groups
+      '(("default"
+         ("code"     (and (or (derived-mode . prog-mode)
+                              (mode . yaml-mode))
+                          (not (name . "^\\*scratch\\*$"))))
+         ("exwm"     (mode . exwm-mode))
+         ("dired"    (mode . dired-mode))
+         ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
+         ("org"      (derived-mode . org-mode))
+         ("ement"    (derived-mode . ement-room-mode))
+         ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
+         ("scratch"  (name . "^\\*scratch\\*$")))))
+
+(add-hook 'ibuffer-mode-hook
+          (lambda ()
+            (ibuffer-switch-to-saved-filter-groups "default")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; apps
 
 (require 'osm)
