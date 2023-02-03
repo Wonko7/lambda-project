@@ -105,25 +105,27 @@
 
    ;; evil
    emacs-evil
-   emacs-evil-surround
    emacs-evil-org
-   emacs-evil-matchit
    emacs-evil-leader
-   emacs-evil-goggles
-   emacs-evil-exchange
    emacs-evil-escape
-   emacs-evil-collection
+   emacs-evil-matchit
+   emacs-evil-surround
+   emacs-evil-exchange
+   emacs-evil-goggles
    emacs-evil-cleverparens
+   emacs-evil-visualstar
    emacs-evil-snipe
-   ;; emacs-evil-args
+   emacs-evil-indent-plus
+   emacs-evil-collection
+   ;; emacs-evil-owl ;; FIXME fails :/
+   emacs-evil-args
    ;; emacs-evil-lion (align)
-   ;;emacs-evil-multiedit
-   ;;emacs-evil-mc
-   ;; emacs-evil-visualstar
-   ;; emacs-evil-textobj-syntax
-   ;;emacs-evil-commentary
-   ;;emacs-evil-smartparens
-   ;;emacs-evil-paredit
+   emacs-evil-multiedit
+   emacs-evil-mc
+   emacs-evil-textobj-syntax
+   emacs-evil-commentary
+   emacs-evil-smartparens
+   emacs-evil-paredit
    ;;emacs-vdiff-magit
 
    ;; apps
@@ -184,6 +186,7 @@
    emacs-eval-in-repl-ocaml
    emacs-tuareg
    opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
+   emacs-gnuplot
    ;; guile/scheme <3
    emacs-geiser
    emacs-geiser-guile
@@ -192,7 +195,6 @@
    ;; completion framework
    emacs-orderless
    emacs-consult
-   emacs-consult-org-roam
    emacs-consult-dir
    emacs-consult-lsp
    emacs-consult-yasnippet
@@ -227,6 +229,7 @@
    emacs-ace-link ;; FIXME
    emacs-ace-jump-mode ;; FIXME
    emacs-buffer-expose
+   emacs-switch-window
    ;; x stuff
    emacs-desktop-environment
    xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
