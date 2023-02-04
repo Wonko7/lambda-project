@@ -4,10 +4,10 @@
 ;; this needs to be set before starting org
 ;; the equivalent for evil-org-mode-map is in evil
 (general-evil-define-key '(normal) org-mode-map
-  "C-RET"           '+org/insert-item-below
-  "C-S-RET"         '+org/insert-item-above
-  [C-return]        '+org/insert-item-below
-  [C-S-return]      '+org/insert-item-above)
+  "C-RET"      '+org/insert-item-below
+  "C-S-RET"    '+org/insert-item-above
+  [C-return]   '+org/insert-item-below
+  [C-S-return] '+org/insert-item-above)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; directories
@@ -26,10 +26,10 @@
 (require 'org)
 
 (defface +org-todo-active
- '((t (:inherit link :underline nil)))
+  '((t (:inherit link :underline nil)))
   "active todo")
 (defface +org-todo-onhold
- '((t (:inherit default :foreground "brown")))
+  '((t (:inherit default :foreground "brown")))
   "active todo")
 
 (setq org-directory "/data/org/"
@@ -40,24 +40,24 @@
       org-startup-folded 'content
       org-todo-keywords
       '((sequence
-         "NEXT(n/!)"                ; A task that recuring
-         "TODO(t)"                  ; A task that needs doing & is ready to do
-         "PROJ(p)"                  ; A project, which usually contains other tasks
-         "GOGO(g/!)"                ; A task that is in progress
-         "WAIT(w/!)"                ; Something external is holding up this task
-         "HOLD(h/!)"                ; This task is paused/on hold because of me
-         "ADD(a)"                   ; feature
-         "FIX(f)"                   ; feature
-         "BUG(b)"                   ; feature
+         "NEXT(n/!)"                ;; A task that recuring
+         "TODO(t)"                  ;; A task that needs doing & is ready to do
+         "PROJ(p)"                  ;; A project, which usually contains other tasks
+         "GOGO(g/!)"                ;; A task that is in progress
+         "WAIT(w/!)"                ;; Something external is holding up this task
+         "HOLD(h/!)"                ;; This task is paused/on hold because of me
+         "ADD(a)"                   ;; Add
+         "FIX(f)"                   ;; Fix
+         "BUG(b)"                   ;; Bug
          "|"
-         "DONE(d/!)"       ; Task successfully completed
-         "KILL(k)")        ; Task was cancelled, aborted or is no longer applicable
+         "DONE(d/!)"                ;; Task successfully completed
+         "KILL(k)")                 ;; Task was cancelled, aborted or is no longer applicable
         (sequence
-         "[ ](T)"                          ; A task that needs doing
-         "[-](G)"                          ; Task is in progress
-         "[?](W)"                          ; Task is being held up or paused
+         "[ ](T)"                   ;; A task that needs doing
+         "[-](G)"                   ;; Task is in progress
+         "[?](W)"                   ;; Task is being held up or paused
          "|"
-         "[X](D)"))                        ; Task was completed
+         "[X](D)"))                 ;; Task was completed
       org-todo-keyword-faces
       '(("[-]"  . +org-todo-active)
         ("NEXT" . +org-todo-active)
@@ -66,18 +66,19 @@
         ("WAIT" . +org-todo-onhold)
         ("HOLD" . +org-todo-onhold)
         ("PROJ" . +org-todo-project))
-                                        ;(org-confirm-babel-evaluate nil)
-                                        ;(org-special-ctrl-a/e t)
-                                        ;(org-hide-emphasis-markers t)
-                                        ;(org-pretty-entities t)
+      ;; (org-confirm-babel-evaluate nil)
+      ;; (org-special-ctrl-a/e t)
+      ;; (org-hide-emphasis-markers t)
+      ;; (org-pretty-entities t)
+
       ;; agenda/cal dates:
-      org-agenda-start-on-weekday 1
-      calendar-week-start-day 1
-      org-log-into-drawer t
-      org-auto-align-tags t
-      org-tags-column 72
+      org-agenda-start-on-weekday         1
+      calendar-week-start-day             1
+      org-log-into-drawer                 t
+      org-auto-align-tags                 t
+      org-tags-column                     72
       org-edit-timestamp-down-means-later t
-      cfw:org-agenda-schedule-args '(:timestamp))
+      cfw:org-agenda-schedule-args        '(:timestamp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
@@ -88,10 +89,10 @@
 
 ;; FIXME <start https://github.com/org-roam/org-roam/issues/2198
 (defalias 'org-font-lock-ensure
-        (if (fboundp 'font-lock-ensure)
-            #'font-lock-ensure
-          (lambda (&optional _beg _end)
-            (with-no-warnings (font-lock-fontify-buffer)))))
+  (if (fboundp 'font-lock-ensure)
+      #'font-lock-ensure
+    (lambda (&optional _beg _end)
+      (with-no-warnings (font-lock-fontify-buffer)))))
 
 (defun org-roam-fontify-like-in-org-mode (s)
   "Fontify string S like in Org mode.
@@ -119,7 +120,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
       (org-font-lock-ensure)
       (if org-link-descriptive
           (org-link-display-format (buffer-string))
-      (buffer-string)))))
+        (buffer-string)))))
 ;; FIXME end>
 
 (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
@@ -176,85 +177,82 @@ space rather than before."
 
 (require 'org-agenda)
 (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
-        org-agenda-prefix-format (quote
-                                  ((agenda . "%-21c%?-12t% s")
-                                   (timeline . "% s")
-                                   (todo . "%-21c")
-                                   (tags . "%-12c")
-                                   (search . "%-12c")))
-        org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
-        org-agenda-scheduled-leaders (quote ("" "S%3d: "))
-        ;; fixes fucky binding on jk on an agenda header:
-        ;; https://github.com/alphapapa/org-super-agenda/issues/50
-        org-super-agenda-header-map (make-sparse-keymap)
+      org-agenda-prefix-format (quote
+                                ((agenda . "%-21c%?-12t% s")
+                                 (timeline . "% s")
+                                 (todo . "%-21c")
+                                 (tags . "%-12c")
+                                 (search . "%-12c")))
+      org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
+      org-agenda-scheduled-leaders (quote ("" "S%3d: "))
+      ;; fixes fucky binding on jk on an agenda header:
+      ;; https://github.com/alphapapa/org-super-agenda/issues/50
+      org-super-agenda-header-map (make-sparse-keymap)
 
-        ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
-        ;;       org-agenda-skip-scheduled-if-done t
-        ;;       org-agenda-skip-deadline-if-done t
-        ;;       org-agenda-include-deadlines t
-        ;;       org-agenda-block-separator nil
-        ;;       org-agenda-compact-blocks t
-        ;;       org-agenda-start-with-log-mode t)
-        ;;
+      ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
+      ;;       org-agenda-skip-scheduled-if-done t
+      ;;       org-agenda-skip-deadline-if-done t
+      ;;       org-agenda-include-deadlines t
+      ;;       org-agenda-block-separator nil
+      ;;       org-agenda-compact-blocks t
+      ;;       org-agenda-start-with-log-mode t)
+      ;;
 
-        ;;       org-agenda-start-with-log-mode t)
-        org-agenda-start-with-log-mode t
-        org-habit-show-habits nil
-        org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-agenda-include-deadlines t
+      ;;       org-agenda-start-with-log-mode t)
+      org-agenda-start-with-log-mode t
+      org-habit-show-habits nil
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-include-deadlines t
 
-        org-agenda-custom-commands '(("c" "Simple agenda view"
-                                      ((agenda "")
-                                       (alltodo "" )))
-                                     ("z" "Super zaen view"
-                                      ((agenda "" )
-                                       (alltodo "=" ((org-agenda-overriding-header "")
-                                                     (org-super-agenda-groups
-                                                      '((:name "ssdd: daily edition"
-                                                               :tag ("ssdd")
-                                                               :order 10)
-                                                        (:name "ssdd: yolo"
-                                                               :tag ("tt" "lol" "yolo")
-                                                               :order 20)
-                                                        (:name "BS"
-                                                               :tag ("bs" "fm" "fuckme")
-                                                               :order 30)
-                                                        (:name "fun maximization"
-                                                               :tag ("fun")
-                                                               :order 40)
-                                                        (:name "WWSCD"
-                                                               :tag ("wwscd")
-                                                               :order 50)
-                                                        (:name "wtf: focus"
-                                                               :and (:tag "wtf" :tag "focus")
-                                                               :order 51)
-                                                        (:name "wtf"
-                                                               :tag ("wtf")
-                                                               :order 52)
-                                                        (:name "innerspace"
-                                                               :tag ("is" "h" "habit" "focus")
-                                                               :order 60)
-                                                        (:name "review"
-                                                               :tag ("review" "r")
-                                                               :order 70)
-                                                        (:name "next steps"
-                                                               :tag "next"
-                                                               :order 80)
-                                                        (:name "Projects"
-                                                               :todo "PROJ"
-                                                               :order 90)
-                                                        (:name "don't be a cunt"
-                                                               :tag "dbac"
-                                                               :order 100)
-                                                        ;; (:name "repeat after me"
-                                                        ;;  :order 9
-                                                        ;;  :habit t
-                                                        ;;  )
-                                                        (:name ".*"
-                                                               :order 999
-                                                               :anything t)
-                                                        ))))))))
+      org-agenda-custom-commands '(("c" "Simple agenda view"
+                                    ((agenda "")
+                                     (alltodo "" )))
+                                   ("z" "Super zaen view"
+                                    ((agenda "" )
+                                     (alltodo "=" ((org-agenda-overriding-header "")
+                                                   (org-super-agenda-groups
+                                                    '((:name "🤸 wtf: focus"
+                                                             :and (:tag "wtf" :tag "focus")
+                                                             :order 8)
+                                                      (:name "🌄 ssdd"
+                                                             :and (:tag "ssdd" :tag "tt")
+                                                             :order 9)
+                                                      (:name "🍔 work ssdd"
+                                                             :and (:tag "ssdd" :tag "work")
+                                                             :order 10)
+                                                      (:name "👑 king line hit list"
+                                                             :tag ("kl")
+                                                             :order 11)
+                                                      ;; (:name "fun maximization"
+                                                      ;;        :tag ("fun")
+                                                      ;;        :order 40)
+                                                      (:name "wtf"
+                                                             :tag ("wtf")
+                                                             :order 52)
+                                                      (:name "innerspace"
+                                                             :tag ("is" "h" "habit" "focus")
+                                                             :order 60)
+                                                      ;; (:name "review"
+                                                      ;;        :tag ("review" "r")
+                                                      ;;        :order 70)
+                                                      ;; (:name "next steps"
+                                                      ;;        :tag "next"
+                                                      ;;        :order 80)
+                                                      ;; (:name "Projects"
+                                                      ;;        :todo "PROJ"
+                                                      ;;        :order 90)
+                                                      ;; ;;(:name "don't be a cunt"
+                                                      ;; ;;       :tag "dbac"
+                                                      ;; ;;       :order 100)
+                                                      ;; (:name "repeat after me"
+                                                      ;;  :order 9
+                                                      ;;  :habit t
+                                                      ;;  )
+                                                      ;;(:name ".*"
+                                                      ;;       :order 999
+                                                      ;;       :anything t)
+                                                      ))))))))
 (setq org-agenda-compact-blocks t
       ;;org-agenda-start-with-follow-mode t
       org-super-agenda-header-separator "\n")
@@ -266,11 +264,10 @@ space rather than before."
 (setq org-habit-graph-column 60)
 
 (require 'org-crypt)
-(setq
- epa-file-encrypt-to '("william@underage.wang")
- org-tags-exclude-from-inheritance (quote ("crypt"))
- org-crypt-disable-auto-save "encrypt"
- org-crypt-key "william@underage.wang")
+(setq epa-file-encrypt-to '("william@underage.wang")
+      org-tags-exclude-from-inheritance (quote ("crypt"))
+      org-crypt-disable-auto-save "encrypt"
+      org-crypt-key "william@underage.wang")
 (org-crypt-use-before-save-magic)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -302,51 +299,11 @@ space rather than before."
           ("QL" "Protocol Link direct" entry
            (file+olp "here-be-dragons/20210915144652-browsing_inbox.org" "browsing" "inbox")
            "* [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n%U"
-           :immediate-finish t)
-
-          ;; TODO these look nice, look into this:
-          ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
-          ;; {todo,notes,changelog}.org file is found in a parent directory.
-          ;; Uses the basename from `+org-capture-todo-file',
-          ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry ; {project-root}/todo.org
-           (file+headline +org-capture-project-todo-file "Inbox")
-           "* TODO %?\n%i\n%a" :prepend t)
-          ("pn" "Project-local notes" entry ; {project-root}/notes.org
-           (file+headline +org-capture-project-notes-file "Inbox")
-           "* %U %?\n%i\n%a" :prepend t)
-          ("pc" "Project-local changelog" entry ; {project-root}/changelog.org
-           (file+headline +org-capture-project-changelog-file "Unreleased")
-           "* %U %?\n%i\n%a" :prepend t)
-          ;; Will use {org-directory}/{+org-capture-projects-file} and store
-          ;; these under {ProjectName}/{Tasks,Notes,Changelog} headings. They
-          ;; support `:parents' to specify what headings to put them under, e.g.
-          ;; :parents ("Projects")
-          ("o" "Centralized templates for projects")
-          ("ot" "Project todo" entry
-           (function +org-capture-central-project-todo-file)
-           "* TODO %?\n %i\n %a"
-           :heading "Tasks"
-           :prepend nil)
-          ("on" "Project notes" entry
-           (function +org-capture-central-project-notes-file)
-           "* %U %?\n %i\n %a"
-           :heading "Notes"
-           :prepend t)
-          ("oc" "Project changelog" entry
-           (function +org-capture-central-project-changelog-file)
-           "* %U %?\n %i\n %a"
-           :heading "Changelog"
-           :prepend t))
+           :immediate-finish t))
 
         org-roam-dailies-capture-templates
         `(,(my/make-daily-capture "n" "note" "* %?\n%U\n" t)
-          ("d" "ssdd top" entry "* [ ] %?"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🖖 ssdd"))
-           :prepend t)
-          ("s" "ssdd bottom" entry "* [ ] %?"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🖖 ssdd")))
+
           ("g" "go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
 
           ("m" "media")
@@ -379,10 +336,10 @@ space rather than before."
           ("ih" "home" entry "* 🏡 [[id:ce6bdbed-76a3-42b6-b614-43438ffd742d][home]] %?\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("iH" "Health" entry "* ⚖ [[id:721ab13d-c8ff-4f55-8c8f-54687d031fab][weight]] %?\n%U"
+          ("iH" "Health" entry "* 🏥 [[id:3e525893-2e96-401b-bb98-a5a47601192d][health]] %?\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("iw" "weight" entry "* 🏥 [[id:3e525893-2e96-401b-bb98-a5a47601192d][health]] %?\n%U"
+          ("iw" "weight" entry "* ⚖ [[id:721ab13d-c8ff-4f55-8c8f-54687d031fab][weight]] %?\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
           ("im" "metta" entry "* ☯ metta\n%U\n%?"
@@ -413,7 +370,7 @@ space rather than before."
           ("wf" "fingerboard" entry "* 🤘 [[id:f9bffcdd-13d2-474b-811a-3a8f90458daf][fingerboard]] :wtf:\n%U\n** 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]]\n- %?\n** 💪 [[id:0c8446f1-0640-4492-9f2c-5cddfb601a27][pull-ups]]\n** 🐒 [[id:dc388e37-deec-4241-b014-7d99e7f02ad4][campusing]]\n** 🤘 [[id:793f903d-06eb-4368-b057-b30412aff151][deadhangs]]"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wh" "handstands" entry "** 🤸 [[id:4fd6d453-4088-4182-91b8-ae020d456487][handstands]] :wtf:\n%U *** 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]]\n- %?x *** 💪 [[id:5636c886-4684-4343-8797-b46ae4c08301][crow to push butt up high straight back]]\n*** 💪 [[id:ee90c7f5-5ee6-4db4-b613-fccf792e6c2f][baby HSPUs]]\n*** 🤸 [[id:4fd6d453-4088-4182-91b8-ae020d456487][handstands]]\nsession max hold: \n*** 🍌 [[id:6d270194-77c5-4dba-a682-6de4e28ecd38][btw banana stretch]]"
+          ("wh" "handstands" entry "* 🤸 [[id:4fd6d453-4088-4182-91b8-ae020d456487][handstands]] :wtf:\n%U\n** 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]]\n- %?\n** 💪 [[id:5636c886-4684-4343-8797-b46ae4c08301][crow to push butt up high straight back]]\n** 💪 [[id:ee90c7f5-5ee6-4db4-b613-fccf792e6c2f][baby HSPUs]]\n** 🤸 [[id:4fd6d453-4088-4182-91b8-ae020d456487][handstands]]\nsession max hold: \n** 🍌 [[id:6d270194-77c5-4dba-a682-6de4e28ecd38][btw banana stretch]]"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
           ("wr" "rice bucket" entry "* 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]] :wtf:\n%U%?"
@@ -461,22 +418,13 @@ space rather than before."
            :jump-to-captured t)
           ("br" "réu" entry "* %? :bs:\n%U"
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-           :jump-to-captured t)
-          ;; ("ba" "réu appli" entry
-          ;;  ,(->> (+pass-get-entry "besport/capture/team")
-          ;;        (mapcar #'cdr)
-          ;;        (-drop 1)
-          ;;        (mapcar (lambda (s) (concat s "\n")))
-          ;;        (apply #'concat))
-          ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-          ;;  :jump-to-captured t)
-          )))
+           :jump-to-captured t))))
 (fuck-me/init-capture)
 
 ;; FIXME review this:
 (setq
  org-catch-invisible-edits 'show-and-error
- ;org-special-ctrl-a/e t
+ ;; org-special-ctrl-a/e t
  org-insert-heading-respect-content t
  org-indent-mode t
 
