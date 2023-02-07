@@ -306,6 +306,9 @@ space rather than before."
 
           ("g" "go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
 
+          ,(my/make-daily-capture "r" "RDV"
+                                  "* RDV %?\n<%<%Y-%m-%d>>\n" t)
+
           ("m" "media")
           ("mt" "tv" entry "* 📺 %?\n%U"
            :jump-to-captured t
@@ -358,8 +361,6 @@ space rather than before."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
 
-          ,(my/make-daily-capture "r" "RDV"
-                                  "* RDV %? \n<%<%Y-%m-%d>>\n" t)
           ("w" "witness the fitness")
           ("wb" "bouldering" entry "* ⛰ [[id:546e7d60-daa1-413c-96de-a026f4649a17][bouldering]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[id:820e7fc2-6cd0-4865-988f-7f526f5545a9][injuries]]\n"
            :jump-to-captured t
