@@ -116,7 +116,7 @@
    emacs-evil-visualstar
    emacs-evil-snipe
    emacs-evil-collection
-   ;; emacs-evil-owl ;; FIXME fails :/
+   emacs-evil-owl ;; (show registers)
    emacs-evil-args
    emacs-evil-lion ;; (align)
    emacs-evil-multiedit

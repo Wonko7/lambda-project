@@ -206,5 +206,6 @@
 (diminish 'evil-snipe-local-mode)
 (diminish 'evil-snipe-mode)
 (diminish 'evil-escape-mode)
+(diminish 'evil-owl-mode)
 
 (provide 'init)

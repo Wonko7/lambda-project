@@ -93,8 +93,13 @@
 (require 'evil-commentary)
 (evil-commentary-mode t)
 
+;; <zoo
 (require 'evil-lion)
 (evil-lion-mode)
+
+(require 'evil-owl)
+(evil-owl-mode)
+;; zoo>
 
 (provide 'conf/evil)
 ;;; evil.el ends here
