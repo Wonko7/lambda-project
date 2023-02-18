@@ -99,8 +99,8 @@
   (when (string-suffix-p "'" pattern)
     `(orderless-flex . ,(substring pattern 0 -1))))
 
-(defun first-initialism (pattern index _total)
-  (if (= index 0) 'orderless-initialism))
+(defun first-flex (pattern index _total)
+  (if (= index 0) 'orderless-flex))
 
 (defun without-if-bang (pattern _index _total)
   (cond
@@ -110,9 +110,8 @@
     `(orderless-without-literal . ,(substring pattern 1)))))
 
 
-(setq orderless-matching-styles '(orderless-literal)
-      orderless-style-dispatchers '(;; first-initialism
-                                    regex-if-twiddle
+(setq orderless-matching-styles '(char-fold-to-regexp)
+      orderless-style-dispatchers '(regex-if-twiddle
                                     flex-if-quote
                                     without-if-bang))
 
