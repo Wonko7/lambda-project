@@ -1,6 +1,6 @@
 (specifications->manifest
  '(
-   ;; "clojure"
+   "clojure"
    ;; "clojure-tools"
    "gcc-toolchain"
    "gdb"
@@ -10,7 +10,7 @@
    "node"
    "guile-colorized"
    "perl"
-   "ocaml"
+   "ocaml" "ocaml-batteries" "ocaml5.0-eio-main"
    ;;"rust-cargo"
    ;; "rust"
    ;; "rust:cargo"

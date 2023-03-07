@@ -1,5 +1,6 @@
 (specifications->manifest
  '(
+   "adb"
    "bc"
    "bmon"
    "cowsay"
@@ -19,9 +20,8 @@
    "imagemagick"
    "jq"
    "lsof"
-   "mksh"
-   "neofetch"
    "mercurial"
+   "moreutils"
    "onionshare"
    "pandoc"
    "pavucontrol-qt"
@@ -40,7 +40,7 @@
    "unrar"
    "unrtf"
    "unzip"
-   "valgrind"
+   ;; "valgrind"
    "w3m"
    ;; "weechat"
    "youtube-dl"
