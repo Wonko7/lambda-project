@@ -391,7 +391,13 @@ space rather than before."
           ("tg" "guix" entry "* 🐧 [[id:844ed739-42ce-4277-b7b5-b8f4a79869dc][guix]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("te" "emacs" entry "* 🐧 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
+          ("te" "emacs" entry "* 🇪 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+          ("tc" "clojure" entry "* ☯ [[id:4f11e3fe-1d86-42de-a84e-9c903893aa0a][clojure]]\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+          ("to" "ocaml" entry "* 🐫 [[id:f5dd5816-0736-43d2-88c7-75e66d1ddf67][ocaml]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
           ("tl" "linux" entry "* 🐧 [[id:25647313-7296-4803-b2c4-f57b5b6e2d72][linux]]\n%U\n%?"
@@ -400,7 +406,6 @@ space rather than before."
           ("tp" "physics" entry "* ⚛ [[id:a3e5f916-a260-4925-81ef-5f7c6f5e3157][physics]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-
 
           ("b" "besport")
           ("bd" "BS ssdd top" entry "* [ ] %?"
@@ -443,6 +448,7 @@ space rather than before."
  ;; org-agenda-current-time-string
  ;; "⭠ now ─────────────────────────────────────────────────"
  )
+(setq org-agenda-span 15)
 
 (require 'calfw-org)
 (require 'org-web-tools)
