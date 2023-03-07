@@ -19,9 +19,21 @@
 ;;
 ;;; Code:
 
+(require 'cl)
+
+;; (frame-list)
+;; exwm-workspace--workspace-from-frame-or-index(exwm-workspace--count)
+;; (list exwm-workspace--list)
+;; (exwm-workspace--init)
+;; (require 'xcb)
+;; (exwm-init)
+;; (exwm-workspace--init)
+
+(setq exwm-workspace-number 10)
 (require 'exwm)
 (require 'exwm-randr)
 (require 'exwm-config)
+(require 'exwm-workspace)
 (require 'exwm-systemtray)
 ;; TODO checkout exwm-xim
 
@@ -172,7 +184,7 @@
         ([?\s-F] . exwm-layout-toggle-fullscreen)
 
         ;; Launch applications via shell command
-        ([?\s-&] . (lambda (command)
+        ([?\s-:] . (lambda (command)
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command command nil command)))
         ([?\s-y] . ws/force-run-auto-start)
@@ -235,10 +247,9 @@
 
 (exwm-systemtray-enable)
 (exwm-randr-enable) ;; revisit for multi-monitor
-(sleep-for 5) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
+(sleep-for 10) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
 (exwm-enable)
 
-(provide 'conf/exwm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lemon
@@ -264,8 +275,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto start workspaces:
 
-(require 'cl)
-
 (defvar ws/auto-start-state '(t t t t t t t t t t))
 
 (defun ws/check-and-mark-auto-start-state (i)
@@ -274,8 +283,9 @@
     state))
 
 (defun ws/run-auto-start ()
-  (flet ((run-init-p (i)
-                     (and (= exwm-workspace-current-index i) (ws/check-and-mark-auto-start-state i))))
+  (cl-flet ((run-init-p (i)
+                        (and (= exwm-workspace-current-index i)
+                             (ws/check-and-mark-auto-start-state i))))
     (cond ((run-init-p 9)
            (push my/init-ement-room-list display-buffer-alist)
            (my/ement-init))
@@ -284,6 +294,7 @@
           ((run-init-p 7)
            (my/init-org))
           ((run-init-p 6)
+           (require 'conf/elfeed "~/.emacs.d/elfeed.el")
            (elfeed))
           ((run-init-p 4)
            (async-shell-command "firefox"))
@@ -296,4 +307,6 @@
   (ws/run-auto-start))
 
 (add-hook 'exwm-workspace-switch-hook #'ws/run-auto-start)
+
 ;;; exwm.el ends here
+(provide 'conf/exwm)

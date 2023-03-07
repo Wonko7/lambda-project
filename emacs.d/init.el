@@ -193,7 +193,8 @@
 (require 'conf/maps "~/.emacs.d/maps.el")
 (require 'conf/dev "~/.emacs.d/dev.el")
 (require 'conf/communication "~/.emacs.d/communication.el")
-(require 'conf/elfeed "~/.emacs.d/elfeed.el")
+
+;; (require 'conf/elfeed "~/.emacs.d/elfeed.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; end of config stuff:
