@@ -90,7 +90,7 @@
 
 (require 'beacon)
 (beacon-mode 1)
-(setq beacon-dont-blink-commands nil)
+;; (setq beacon-dont-blink-commands nil)
 (setq beacon-blink-when-point-moves-horizontally 2)
 
 (provide 'conf/fancy)
