@@ -105,6 +105,9 @@
                                      ((staged) (status))))
 (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
 
+(require 'magit-todos)
+(magit-todos-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
 

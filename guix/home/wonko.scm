@@ -125,7 +125,8 @@
    emacs-evil-commentary
    emacs-evil-smartparens
    emacs-evil-paredit
-   ;;emacs-vdiff-magit
+   ;; emacs-hercules
+   ;; emacs-vdiff-magit
 
    ;; apps
    emacs-elfeed
@@ -135,6 +136,7 @@
    emacs-pass
    emacs-magit
    emacs-magit-annex
+   emacs-magit-todos
    emacs-diff-hl
    emacs-dirvish
    emacs-eshell-up
