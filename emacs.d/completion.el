@@ -55,6 +55,8 @@
 (setq corfu-preselect 'prompt)      ;; Preselect the prompt
 (setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
 (setq corfu-scroll-margin 5)        ;; Use scroll margin
+(setq corfu-preselect 'first)
+
 ;; auto popup:
 ;; (setq corfu-auto-delay 0)
 ;; (setq corfu-auto-prefix 0)
