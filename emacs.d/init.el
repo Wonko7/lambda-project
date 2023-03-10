@@ -1,4 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; guix home gives us stuff:
+
+(require 'conf/generated-values "~/.emacs.d/generated-values.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic UI stuff:
 
 (require 'conf/fancy "~/.emacs.d/fancy.el")
@@ -102,10 +107,14 @@
 
 (require 'magit)
 (setq magit-status-initial-section '(((unstaged) (status))
-                                     ((staged) (status))))
+                                     ((staged) (status))
+                                     ((TODOs) (status))))
 (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
 
 (require 'magit-todos)
+(setq magit-todos-ignore-case t)
+(setq magit-todos-max-items 1000)
+(setq magit-todos-auto-group-items 'always)
 (magit-todos-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -197,6 +206,7 @@
 (require 'conf/dev "~/.emacs.d/dev.el")
 (require 'conf/communication "~/.emacs.d/communication.el")
 
+;; FIXME: powerline errors, could that break exwm init?
 ;; (require 'conf/elfeed "~/.emacs.d/elfeed.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

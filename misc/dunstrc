@@ -1,7 +1,7 @@
 [global]
     #font = Droid Sans Mono Slashed for Powerline 11
 
-    font = JetBrains Mono 22 # FIXME guix should take care of this
+    font = =FONT= =FONT_SIZE=
 
     sort = yes
     indicate_hidden = yes
@@ -107,27 +107,27 @@
     summary = "*unread messages*"
     background = "#cb4b16"
 
-[remote]
-    summary = "@*:*"
-    background = "#117700"
-
+# [remote]
+#     summary = "@*:*"
+#     background = "#117700"
+#
 # [alert_ok]
 #     summary = "@*:*"
 #     background = "#117700"
-
-[alert_nok]
-    summary = "*Power low*"
-    body = "*\[Alerting\]*"
-    background = "#ac322f"
-
-[alert_nok2]
-    summary = "*#production*"
-    #body = "*Apex*"
-    background = "#ac322f"
-
-[RDV]
-    summary = "RDV*"
-    background = "#d33682"
+#
+# [alert_nok]
+#     summary = "*Power low*"
+#     body = "*\[Alerting\]*"
+#     background = "#ac322f"
+#
+# [alert_nok2]
+#     summary = "*#production*"
+#     #body = "*Apex*"
+#     background = "#ac322f"
+#
+# [RDV]
+#     summary = "RDV*"
+#     background = "#d33682"
 
 # [ignore]
 #     appname = "bullshit*"

@@ -43,7 +43,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fonts & utf-8
 
-(set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
+(set-face-attribute 'default nil :font my/font :height my/font-size)
 ;;(setq use-default-font-for-symbols t)
 (set-fontset-font t 'symbol "Symbols Nerd Font Mono" nil 'append)
 
@@ -77,7 +77,7 @@
 (setq doom-modeline-minor-modes t)
 (setq doom-modeline-column-zero-based t)
 (setq column-number-mode t)
-(setq doom-modeline-height 5)
+(setq doom-modeline-height my/modeline-height)
 (setq doom-modeline-project-detection 'projectile)
 (setq doom-modeline-buffer-encoding 'nondefault)
 (setq doom-modeline-persp-name nil)

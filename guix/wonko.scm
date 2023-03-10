@@ -1,3 +1,6 @@
+(add-to-load-path (dirname (current-filename)))
+;; (add-to-load-path "/code/wonko-mono-conf/guix")
+
 (use-modules
  (guix gexp)
  (gnu home)
@@ -64,13 +67,38 @@
  (w7 packages jonaburg-picom)
  (w7 packages emacs-xyz)
  ;; doc
- (gnu packages man))
+ (gnu packages man)
+
+ ;; my stuff
+ (fleet)
+ (spock)
+ (dotfiles))
 
 (define conf-root-dir
   (dirname
    (dirname
-    (dirname
-     (current-filename))))) ;; threading macro plz?
+    (dirname (current-filename))
+    ))) ;; threading macro plz?
+
+(chdir (dirname (current-filename))) ;; "/code/wonko-mono-conf/guix"
+;; (chdir "/code/wonko-mono-conf/guix")
+
+
+(define-public hostname (getenv "HOSTNAME"))
+(define %host (hostname->ship "yggdrasill"))
+(define %host (hostname->ship hostname))
+;; (display (ship-emacs-font-size %host))
+;; (display (identity %yggdrasill))
+
+(display (spock-say (string-append "building HOME for " (ship-name %host))))
+(display (dunst-configuration %host))
+(exit 0)
+
+(define %emacs-values
+  #~(progn (setq my/font #$%font
+                 my/font-size #$(ship-emacs-font-size %host)
+                 my/modeline-height #$(ship-emacs-modeline-height %host))
+           (provide 'conf/generated-values)))
 
 (home-environment
  (packages
@@ -254,7 +282,7 @@
    pinentry-emacs
    openssh
 
-   ;; other utilts
+   ;; other utils
    recutils
    tree
    git
@@ -268,6 +296,7 @@
 
    ;; communication
    emacs-ement
+   emacs-mastodon
    pantalaimon
 
    ;; ☠
@@ -283,9 +312,10 @@
             (home-bash-configuration
              (guix-defaults? #t)
              (aliases
-              '(("g" . "git")
+              `(("g" . "git")
                 ("psrg" . "ps aux | rg")
                 ("df" . "df -h")
+                ("st" . ,(format #f "-f '~a:~a'" %font (ship-st-font-size %host)))
                 ("dmesg" . "dmesg -He")
                 ("ls" . "ls --color=yes")
                 ("ll" . "ls -l --color=auto")
@@ -301,7 +331,7 @@
                 ("nmcli" . "nmcli -c yes")
                 ("ip" . "ip -c -h")))
              (environment-variables
-              '(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
+              `(("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
                 ("PATH" . "./_opam/bin:$PATH")
                 ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-profile/lib")
@@ -311,7 +341,7 @@
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
-                ("GDK_SCALE" . "2")
+                ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
                 ("GDK_DPI_SCALE" . "1")))
              (bash-profile
               (list
@@ -360,6 +390,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     '("fundamental-mode/danger_triangle"
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
+
+   (simple-service 'emacsd-generated-config-files
+                   home-files-service-type
+                   (list `(".emacs.d/generated-values.el"
+                           ,(scheme-file "_" %emacs-values))))
 
    (simple-service
     'config-files
