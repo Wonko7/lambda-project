@@ -72,13 +72,13 @@
  ;; my stuff
  (fleet)
  (spock)
- (dotfiles))
+ (dotfiles)
+ (pkgs))
 
 (define conf-root-dir
   (dirname
-   (dirname
-    (dirname (current-filename))
-    ))) ;; threading macro plz?
+   (dirname (current-filename))
+   )) ;; threading macro plz?
 
 (chdir (dirname (current-filename))) ;; "/code/wonko-mono-conf/guix"
 ;; (chdir "/code/wonko-mono-conf/guix")
@@ -102,209 +102,24 @@
 
 (home-environment
  (packages
-  (list
-   emacs ;; TODO: native compilation
-   ;; emacs-next
-   ;; basic (bitches) stuff:
-   emacs-general
-   emacs-emacsql-sqlite3
-   emacs-undo-fu
-   emacs-vundo
+  (append
+   %emacs-world
 
-   ;; org
-   emacs-org
-   emacs-org-roam
-   emacs-org-super-agenda
-   emacs-org-web-tools
-   emacs-org-ql
-   emacs-enlive
-   emacs-seq
-   emacs-calfw
-   ;; emacs-org-download (images)
-   ;;"emacs-org-ref"
-   ;;"emacs-org-static-blog"
-   ;;"emacs-org2web"
-   ;;"emacs-org-beautify-theme"
-   ;;"org-superstar-mode"
-   ;; emacs-org-auto-expand
-   ;; emacs-org-appear
-   ;; emacs-orgit (link to magit)
-   ;; emacs-org-modern
+   (list
+    ;; other utils
+    recutils
+    tree
+    git
+    tmux
+    acpi
 
-   ;; evil
-   emacs-evil
-   emacs-evil-org
-   emacs-evil-leader
-   emacs-evil-escape
-   emacs-evil-matchit
-   emacs-evil-surround
-   emacs-evil-exchange
-   emacs-evil-goggles
-   emacs-evil-cleverparens
-   emacs-evil-visualstar
-   emacs-evil-snipe
-   emacs-evil-collection
-   emacs-evil-owl ;; (show registers)
-   emacs-evil-args
-   emacs-evil-lion ;; (align)
-   emacs-evil-multiedit
-   emacs-evil-mc
-   emacs-evil-textobj-syntax
-   emacs-evil-commentary
-   emacs-evil-smartparens
-   emacs-evil-paredit
-   ;; emacs-hercules
-   ;; emacs-vdiff-magit
+    ;; services
+    ibhagwan-picom
+    synergy
+    dunst
 
-   ;; apps
-   emacs-elfeed
-   emacs-elfeed-org
-   emacs-elfeed-goodies
-   emacs-circe
-   emacs-pass
-   emacs-magit
-   emacs-magit-annex
-   emacs-magit-todos
-   emacs-diff-hl
-   emacs-dirvish
-   emacs-eshell-up
-   emacs-dired-du
-   emacs-diredfl
-   emacs-dired-rsync
-   emacs-dired-hacks
-   emacs-all-the-icons-dired
-   emacs-dired-toggle-sudo
-   ;; 🗺
-   emacs-osm
-   ;; desktop stuff?
-   emacs-nov-el
-
-   ;; spell
-   emacs-flycheck-guile
-   emacs-flyspell-correct
-   emacs-auto-dictionary-mode
-   hunspell
-   hunspell-dict-fr-toutes-variantes
-   hunspell-dict-en-us
-   hunspell-dict-en-gb
-   hunspell-dict-en-gb-ize
-
-   ;; transverse:
-   emacs-ibuffer-projectile
-   emacs-projectile
-   emacs-perspective
-   emacs-emojify
-
-   ;; code: ()
-   emacs-rainbow-mode
-   emacs-rainbow-blocks
-   emacs-rainbow-delimiters
-   emacs-rainbow-identifiers
-   emacs-lsp-mode ;; FIXME
-   emacs-lsp-ui
-   ;;emacs-company-lsp
-   ;;emacs-company
-   emacs-corfu
-   emacs-corfu-doc
-   emacs-eglot
-   emacs-consult-eglot
-   emacs-consult-org-roam
-   emacs-eval-sexp-fu-el
-   emacs-eval-in-repl-geiser
-   ;; ocaml
-   emacs-eval-in-repl-ocaml
-   emacs-tuareg
-   opam mercurial darcs unzip gcc-toolchain gdb gnuplot m4 gnu-make pkg-config
-   emacs-gnuplot
-   ;; guile/scheme <3
-   emacs-geiser
-   emacs-geiser-guile
-   emacs-guix
-
-   ;; completion framework
-   emacs-orderless
-   emacs-consult
-   emacs-consult-dir
-   emacs-consult-lsp
-   emacs-consult-yasnippet
-   emacs-embark
-   emacs-vertico
-   emacs-which-key
-   emacs-yasnippet
-   emacs-doom-snippets
-   emacs-bash-completion
-   bash-completion
-
-   ;; search
-   fd
-   ripgrep
-   emacs-rg
-   emacs-wgrep
-
-   ;; simple gui
-   emacs-beacon
-   emacs-doom-modeline
-   emacs-diminish
-   emacs-doom-themes
-   emacs-all-the-icons
-   emacs-all-the-icons-completion
-   ;; exwm
-   emacs-exwm
-   emacs-exwm-edit
-   emacs-perspective
-   emacs-persp-mode
-   emacs-lemon
-   emacs-ace-window  ;; FIXME
-   emacs-ace-link ;; FIXME
-   emacs-ace-jump-mode ;; FIXME
-   emacs-buffer-expose
-   emacs-switch-window
-   ;; x stuff
-   emacs-desktop-environment
-   xinit xset xhost xorg-server xf86-input-libinput xf86-video-fbdev xf86-video-nouveau
-   pamixer brightnessctl scrot upower playerctl ;; tlp and have emacs set rfkill for me? fuck that noise.
-
-   ;; fonts
-   ;; font-nerd-jetbrains
-   font-jetbrains-mono
-   font-nerd-noto
-   font-nerd-symbols
-   font-goog-noto-emoji
-
-   ;; bling
-   breeze breeze-gtk breeze-icons
-
-   ;; gpg/pass/ssh
-   password-store gnupg
-   emacs-pass
-   emacs-auth-source-pass
-   emacs-pinentry
-   pinentry-emacs
-   openssh
-
-   ;; other utils
-   recutils
-   tree
-   git
-   tmux
-   acpi
-
-   ;; services
-   ibhagwan-picom
-   synergy
-   dunst
-
-   ;; communication
-   emacs-ement
-   emacs-mastodon
-   pantalaimon
-
-   ;; ☠
-   rtorrent
-   emacs-mentor
-
-   ;; basic system stuff
-   man-db))
+    ;; basic system stuff
+    man-db)))
 
  (services
   (list
@@ -431,14 +246,14 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
       (".config/git/attributes"
        ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
-      (".local/fixme/yggdrasill.xmodmap"
-       ,(local-file (string-append conf-root-dir "/misc/yggdrasill.xmodmap")))
+      (,(string-append ".local/fixme/" (ship-name %host) ".xmodmap")
+       ,(local-file (string-append conf-root-dir "/misc/" (ship-name %host) ".xmodmap")))
       (".local/fixme/common.xmodmap"
        ,(local-file (string-append conf-root-dir "/misc/common.xmodmap")))
       (".config/picom.conf"
        ,(local-file (string-append conf-root-dir "/misc/picom.conf")))
       (".config/dunst/dunstrc"
-       ,(local-file (string-append conf-root-dir "/misc/dunstrc")))
+       ,(plain-file "dunstrc" (dunst-configuration %host)))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
@@ -451,8 +266,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map
-                    (lambda
-                        (file)
+                    (lambda (file)
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
                           (string-append conf-root-dir "/guix/config/" file))))
