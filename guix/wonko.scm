@@ -234,11 +234,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     #$(file-append xmodmap "/bin/xmodmap")
                     "~/.local/fixme/common.xmodmap"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    "~/.local/fixme/yggdrasill.xmodmap"
                     #$(file-append xinput "/bin/xinput")  ;; FIXME -> make this part of xorg system config.
                     "set-prop 14 'libinput Click Method Enabled' 0 1"
                     #$(file-append xinput "/bin/xinput")
                     "set-prop 14 'libinput Accel Speed' 1.0"
+                    (string-append ".local/fixme/" (ship-name %host) ".xmodmap")
                     #$(file-append feh "/bin/feh")
                     "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
                     #$(file-append emacs-exwm "/bin/exwm")))))
