@@ -22,12 +22,11 @@
  (gnu packages aspell)
  (gnu packages hunspell)
  (gnu packages libreoffice)
- (gnu packages ocaml)
 
  ;; desktop stuff
  (gnu packages pulseaudio)
  (gnu packages synergy)
- (gnu packages xorg) ;; xinit
+ (gnu packages xorg)
  (gnu packages linux)
  (gnu packages xdisorg)
  (gnu packages suckless)
@@ -85,14 +84,10 @@
 
 
 (define-public hostname (getenv "HOSTNAME"))
-(define %host (hostname->ship "yggdrasill"))
-(define %host (hostname->ship hostname))
-;; (display (ship-emacs-font-size %host))
-;; (display (identity %yggdrasill))
+(define %host (host->nameship hostname))
 
 (display (spock-say (string-append "building HOME for " (ship-name %host))))
-(display (dunst-configuration %host))
-(exit 0)
+(display "\n")
 
 (define %emacs-values
   #~(progn (setq my/font #$%font
@@ -103,16 +98,14 @@
 (home-environment
  (packages
   (append
+
    %emacs-world
+   %crypto-world
+   %xorg-world
+   %fonts-world
+   %ocaml5-world
 
    (list
-    ;; other utils
-    recutils
-    tree
-    git
-    tmux
-    acpi
-
     ;; services
     ibhagwan-picom
     synergy
@@ -137,7 +130,7 @@
                 ("la" . "ls -A --color=auto")
                 ("lla" . "ls -lA --color=auto")
                 ("lsd" . "ls -lAc --color=auto")
-                ("t" . "tree -AC")
+                ("t" . "tree -AC") ;; FIXME
                 ("tarc" . "tar -cavf")
                 ("tarx" . "tar -xavf")
                 ("tart" . "tar -tavf")
@@ -221,7 +214,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(program-file
          "xsession"
          #~(system
-            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; exec dbus-launch --exit-with-session ~a"
+            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a -- ~a &; exec dbus-launch --exit-with-session ~a"
                     #$(file-append xhost "/bin/xhost")
                     #$(file-append xset "/bin/xset")
                     "b 0 0 0"
@@ -232,15 +225,14 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     #$(file-append setxkbmap "/bin/setxkbmap")
                     "dvorak"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    "~/.local/fixme/common.xmodmap"
+                    (string-append "~/.local/fixme/common.xmodmap")
                     #$(file-append xmodmap "/bin/xmodmap")
-                    #$(file-append xinput "/bin/xinput")  ;; FIXME -> make this part of xorg system config.
-                    "set-prop 14 'libinput Click Method Enabled' 0 1"
-                    #$(file-append xinput "/bin/xinput")
-                    "set-prop 14 'libinput Accel Speed' 1.0"
                     (string-append ".local/fixme/" (ship-name %host) ".xmodmap")
                     #$(file-append feh "/bin/feh")
                     "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
+                    #$(ship-x-config %host)
+                    #$(file-append xss-lock "/bin/xsslock")
+                    "/run/setuid-programs/xlock -mode daisiy -lockdelay 5"
                     #$(file-append emacs-exwm "/bin/exwm")))))
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))

@@ -1,14 +1,18 @@
 (define-module (fleet)
-  #:use-module (spock)
+  #:use-module (guix gexp)
   #:use-module (guix records)
+  #:use-module (gnu packages xorg)
   #:export (ship
             ship-name
             ship-font
+            ship-x-config
             ship-st-font-size
             ship-dunst-font-size
             ship-emacs-font-size
             ship-emacs-modeline-height
-            ship-gdk-scale))
+            ship-gdk-scale
+            ;; host->nameship
+            ))
 
 (define-public %font "JetBrains Mono")
 
@@ -24,6 +28,7 @@
   this-ship
   (name ship-name (sanitize (check string?)))
   (font ship-font (sanitize (check string?)))
+  (x-config ship-x-config (sanitize (check gexp?)))
   (st-font-size ship-st-font-size (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
   (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
@@ -47,11 +52,24 @@
    (emacs-font-size 250)
    (dunst-font-size 22)
    (st-font-size 25)
-   (gdk-scale 2)))
+   (gdk-scale 2)
+   (x-config
+    #~(format #f "~a ~a; ~a ~a"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 14 'libinput Click Method Enabled' 0 1"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 14 'libinput Accel Speed' 1.0"))))
 
-(define-public (hostname->ship hn)
+(define-public %rocinante
+  (ship
+   (inherit %yggdrasill)
+   (name "rocinante")
+   (x-config
+    #~(format #f "~a ~a; ~a ~a"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 14 'libinput Accel Speed' 0.7"))))
+
+(define-public (host->nameship hn)
   (eval-string (string-append "%" hn)))
-
-(ship-emacs-font-size %yggdrasill)
-
-(%yggdrasill emacs-font-size)
