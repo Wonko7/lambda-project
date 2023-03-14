@@ -123,7 +123,7 @@
               `(("g" . "git")
                 ("psrg" . "ps aux | rg")
                 ("df" . "df -h")
-                ("st" . ,(format #f "-f '~a:~a'" %font (ship-st-font-size %host)))
+                ("st" . ,(format #f "st -f '~a:size=~a'" %font (ship-st-font-size %host)))
                 ("dmesg" . "dmesg -He")
                 ("ls" . "ls --color=yes")
                 ("ll" . "ls -l --color=auto")
