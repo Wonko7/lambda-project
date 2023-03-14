@@ -210,12 +210,18 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
     ;; exwm config is outside of .emacs.d:
     `((".exwm"
        ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
+      (".x-config"
+       ,(program-file
+         "x-config"
+         #~(system #$(ship-x-config %host))))
       (".xsession"
        ,(program-file
          "xsession"
          #~(system
-            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a -- ~a &; exec dbus-launch --exit-with-session ~a"
+            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~~/.x-config; ~a ~a; exec dbus-launch --exit-with-session ~a"
                     #$(file-append xhost "/bin/xhost")
+                    #$(file-append xset "/bin/xset")
+                    "dpms 180 1200 0"
                     #$(file-append xset "/bin/xset")
                     "b 0 0 0"
                     #$(file-append xset "/bin/xset")
@@ -225,14 +231,12 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     #$(file-append setxkbmap "/bin/setxkbmap")
                     "dvorak"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    (string-append "~/.local/fixme/common.xmodmap")
+                    "~/.local/fixme/common.xmodmap"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    (string-append ".local/fixme/" (ship-name %host) ".xmodmap")
+                    #$(string-append ".local/fixme/" (ship-name %host) ".xmodmap")
+                    ;; .x-config
                     #$(file-append feh "/bin/feh")
                     "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
-                    #$(ship-x-config %host)
-                    #$(file-append xss-lock "/bin/xsslock")
-                    "/run/setuid-programs/xlock -mode daisiy -lockdelay 5"
                     #$(file-append emacs-exwm "/bin/exwm")))))
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
@@ -291,17 +295,24 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                 (stop #~(make-kill-destructor))
                 (documentation "riced notifications"))
                (shepherd-service
-                (provision '(synergy))
-                (start #~(make-forkexec-constructor
-                          (list #$(file-append synergy "/bin/synergy"))
-                          #:log-file "log/synergy.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "can't be arsed to move IRL"))
-               (shepherd-service
                 (provision '(guix-repl))
                 (start #~(make-forkexec-constructor
                           (list (string-append (getenv "HOME") "/.config/guix/current/bin/guix") "repl" "--listen=tcp:37146")
                           #:environment-variables '("INSIDE_EMACS=1")
                           #:log-file "log/guix-repl.log"))
                 (stop #~(make-kill-destructor))
-                (documentation "REPL to me, like lovers do")))))))))
+                (documentation "REPL to me, like lovers do"))
+               (shepherd-service
+                (provision '(xss-lock))
+                (start #~(make-forkexec-constructor
+                          (list #$(file-append xss-lock "/bin/xss-lock") "--" "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "5")
+                          #:log-file "log/xss-lock.log"))
+                (stop #~(make-kill-destructor))
+                (documentation "can't be arsed to move IRL"))
+               (shepherd-service
+                (provision '(synergy))
+                (start #~(make-forkexec-constructor
+                          (list #$(file-append synergy "/bin/synergy"))
+                          #:log-file "log/synergy.log"))
+                (stop #~(make-kill-destructor))
+                (documentation "can't be arsed to move IRL")))))))))
