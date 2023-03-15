@@ -1,5 +1,6 @@
 (define-module (pkgs)
   #:use-module (guix gexp)
+  #:use-module (gnu packages)
   ;; fonts
   #:use-module (w7 packages fonts)
   ;; FIXME:

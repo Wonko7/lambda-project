@@ -231,9 +231,9 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                     #$(file-append setxkbmap "/bin/setxkbmap")
                     "dvorak"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    "~/.local/fixme/common.xmodmap"
+                    "~/.config/x-config/common.xmodmap"
                     #$(file-append xmodmap "/bin/xmodmap")
-                    #$(string-append ".local/fixme/" (ship-name %host) ".xmodmap")
+                    #$(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
                     ;; .x-config
                     #$(file-append feh "/bin/feh")
                     "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
@@ -242,9 +242,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
       (".config/git/attributes"
        ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
-      (,(string-append ".local/fixme/" (ship-name %host) ".xmodmap")
+      (,".config/x-config/xsettingsd"
+       ,(plain-file "xsettingsd" (ship-xsettingsd-config %host)))
+      (,(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
        ,(local-file (string-append conf-root-dir "/misc/" (ship-name %host) ".xmodmap")))
-      (".local/fixme/common.xmodmap"
+      (".config/x-config/common.xmodmap"
        ,(local-file (string-append conf-root-dir "/misc/common.xmodmap")))
       (".config/picom.conf"
        ,(local-file (string-append conf-root-dir "/misc/picom.conf")))
@@ -273,6 +275,13 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
             (home-shepherd-configuration
              (services
               (list
+               (shepherd-service
+                (provision '(xsettingsd))
+                (start #~(make-forkexec-constructor
+                          (list #$(file-append xsettingsd "/bin/xsettingsd") "-c" "/home/wonko/.config/x-config/xsettingsd") ;; FIXME
+                          #:log-file "log/xsettingsd.log"))
+                (stop #~(make-kill-destructor))
+                (documentation "x settings"))
                (shepherd-service
                 (provision '(picom))
                 (start #~(make-forkexec-constructor
@@ -305,7 +314,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                (shepherd-service
                 (provision '(xss-lock))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append xss-lock "/bin/xss-lock") "--" "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "5")
+                          (list #$(file-append xss-lock "/bin/xss-lock") "--" "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10")
                           #:log-file "log/xss-lock.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "can't be arsed to move IRL"))

@@ -11,8 +11,7 @@
             ship-emacs-font-size
             ship-emacs-modeline-height
             ship-gdk-scale
-            ;; host->nameship
-            ))
+            ship-xsettingsd-config))
 
 (define-public %font "JetBrains Mono")
 
@@ -28,6 +27,7 @@
   this-ship
   (name ship-name (sanitize (check string?)))
   (font ship-font (sanitize (check string?)))
+  (xsettingsd-config ship-xsettingsd-config (sanitize (check string?)))
   (x-config ship-x-config (sanitize (check gexp?)))
   (st-font-size ship-st-font-size (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
@@ -58,12 +58,55 @@
               #$(file-append xinput "/bin/xinput")
               "set-prop 14 'libinput Click Method Enabled' 0 1"
               #$(file-append xinput "/bin/xinput")
-              "set-prop 14 'libinput Accel Speed' 1.0"))))
+              "set-prop 14 'libinput Accel Speed' 1.0"))
+   (xsettingsd-config
+    (string-append
+     ;; "Net/ThemeName \"Human\"\n"
+     "Xft/Antialias 1\n"
+     ;; "Xft/DPI 9216\n"
+     "Xft/DPI 192\n"
+     ;;  Gtk/CursorThemeName
+     "Xft/HintStyle \"hintfull\"\n"
+     "Xft/Hinting 1\n"
+     "Xft/RGBA \"rgb\"\n"
+     "Xft/lcdfilter \"none\"\n"))))
+;;;
+;; wonko@rocinante ~$ xdpyinfo | grep -B2 resolution
+;; screen #0:
+;;   dimensions:    1920x1080 pixels (508x285 millimeters)
+;;   resolution:    96x96 dots per inch
+
+
 
 (define-public %rocinante
   (ship
    (inherit %yggdrasill)
    (name "rocinante")
+   (emacs-font-size 120)
+   (emacs-modeline-height 40)
+   (gdk-scale 1)
+   (x-config
+    #~(format #f "~a ~a; ~a ~a; ~a ~a"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.7"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Enabled' 1"
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Drag Lock Enabled' 1"))
+   (xsettingsd-config
+    (string-append
+     "Xft/Antialias 1\n"
+     "Xft/DPI 96\n"
+     ;;  Gtk/CursorThemeName
+     "Xft/HintStyle \"hintfull\"\n"
+     "Xft/Hinting 1\n"
+     "Xft/RGBA \"rgb\"\n"
+     "Xft/lcdfilter \"none\"\n"))))
+
+(define-public %enterprise
+  (ship
+   (inherit %rocinante)
+   (name "enterprise")
    (x-config
     #~(format #f "~a ~a; ~a ~a"
               #$(file-append xinput "/bin/xinput")
