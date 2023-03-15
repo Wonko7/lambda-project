@@ -149,8 +149,9 @@
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
-                ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
-                ("GDK_DPI_SCALE" . "1")))
+                ;; ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
+                ;; ("GDK_DPI_SCALE" . "1")
+                ))
              (bash-profile
               (list
                (plain-file "bash-profile"

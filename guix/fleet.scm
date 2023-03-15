@@ -49,27 +49,32 @@
    (name "yggdrasill")
    (font %font)
    (emacs-modeline-height 5)
-   (emacs-font-size 250)
+   (emacs-font-size 80)
    (dunst-font-size 22)
    (st-font-size 25)
-   (gdk-scale 2)
+   (gdk-scale 1)
    (x-config
-    #~(format #f "~a ~a; ~a ~a"
+    #~(format #f "~a ~a; ~a ~a; ~a ~a"
+              #$(file-append xrandr "/bin/xrandr")
+              "--dpi 288"
               #$(file-append xinput "/bin/xinput")
               "set-prop 14 'libinput Click Method Enabled' 0 1"
               #$(file-append xinput "/bin/xinput")
               "set-prop 14 'libinput Accel Speed' 1.0"))
    (xsettingsd-config
     (string-append
-     ;; "Net/ThemeName \"Human\"\n"
+     "Net/ThemeName \"Breeze-Dark\"\n"
+     "Net/IconThemeName \"breeze-dark\"\n"
      "Xft/Antialias 1\n"
      ;; "Xft/DPI 9216\n"
-     "Xft/DPI 192\n"
+     ;; "Xft/DPI 288\n"
      ;;  Gtk/CursorThemeName
      "Xft/HintStyle \"hintfull\"\n"
      "Xft/Hinting 1\n"
      "Xft/RGBA \"rgb\"\n"
-     "Xft/lcdfilter \"none\"\n"))))
+     "Xft/lcdfilter \"none\"\n"
+     "Gtk/FontName \"NotoSans NF 16\""
+     ))))
 ;;;
 ;; wonko@rocinante ~$ xdpyinfo | grep -B2 resolution
 ;; screen #0:
