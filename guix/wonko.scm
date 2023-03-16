@@ -215,6 +215,10 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(program-file
          "x-config"
          #~(system #$(ship-x-config %host))))
+      ("spock"
+       ,(program-file "spock" #~(system
+                                 #$(cmd+arg->script
+                                    `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\"")))))))
       (".xsession"
        ,(program-file
          "xsession"
