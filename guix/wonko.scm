@@ -84,8 +84,9 @@
 ;; (chdir "/code/wonko-mono-conf/guix")
 
 
-(define-public hostname (getenv "HOSTNAME"))
+(define hostname (getenv "HOSTNAME"))
 (define %host (host->nameship hostname))
+(define %home (getenv "HOME"))
 
 (display (spock-say (string-append "building HOME for " (ship-name %host))))
 (display "\n")
@@ -156,6 +157,7 @@
              (bash-profile
               (list
                (plain-file "bash-profile"
+                           ;; FIXME: list of manifets. script init manifests + init gits
                            "# hey boy. hey girl. superstar DJ. here we go!
 for p in dev net desktop web utils; do
     profile=$GUIX_EXTRA_PROFILES/$p
@@ -214,11 +216,6 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
       (".x-config"
        ,(program-file "x-config" (ship-x-config %host)))
-      ("spock"
-       ,(program-file
-         "spock"
-         (cmd+arg->script
-          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\""))))))
       (".xsession"
        ,(program-file
          "xsession"
@@ -233,12 +230,20 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
             (xmodmap . "~/.config/x-config/common.xmodmap")
             (xmodmap . ,(string-append ".config/x-config/" (ship-name %host) ".xmodmap"))
             (feh . ,(string-append "--bg-scale '" (ship-wallpaper %host) "'"))
+            ("~/.x-config"  . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
              . #$(file-append emacs-exwm "/bin/exwm"))))))
+      ("spock"
+       ,(program-file
+         "spock"
+         (cmd+arg->script
+          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\""))))))
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
       (".config/git/attributes"
        ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
+      (".XCompose"
+       ,(local-file (string-append conf-root-dir "/misc/XCompose")))
       (,".config/x-config/xsettingsd"
        ,(plain-file "xsettingsd" (ship-xsettingsd-config %host)))
       (,(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
@@ -276,7 +281,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                (shepherd-service
                 (provision '(xsettingsd))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append xsettingsd "/bin/xsettingsd") "-c" "/home/wonko/.config/x-config/xsettingsd") ;; FIXME
+                          (list #$(file-append xsettingsd "/bin/xsettingsd") "-c"
+                                (string-append #$%home "/.config/x-config/xsettingsd"))
                           #:log-file "log/xsettingsd.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "x settings"))
@@ -304,7 +310,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                (shepherd-service
                 (provision '(guix-repl))
                 (start #~(make-forkexec-constructor
-                          (list (string-append (getenv "HOME") "/.config/guix/current/bin/guix") "repl" "--listen=tcp:37146")
+                          (list (string-append #$%home "/.config/guix/current/bin/guix")
+                                "repl" "--listen=tcp:37146")
                           #:environment-variables '("INSIDE_EMACS=1")
                           #:log-file "log/guix-repl.log"))
                 (stop #~(make-kill-destructor))
@@ -312,10 +319,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
                (shepherd-service
                 (provision '(xss-lock))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append xss-lock "/bin/xss-lock") "--" "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10")
+                          (list #$(file-append xss-lock "/bin/xss-lock") "--"
+                                "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10")
                           #:log-file "log/xss-lock.log"))
                 (stop #~(make-kill-destructor))
-                (documentation "can't be arsed to move IRL"))
+                (documentation "don't touch my stuff"))
                (shepherd-service
                 (provision '(synergy))
                 (start #~(make-forkexec-constructor
