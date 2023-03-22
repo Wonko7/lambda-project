@@ -4,7 +4,7 @@
   #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
-  #:use-module (fleet))
+  #:export (cmd+arg->script))
 
 (define (field-replace key value file)
   (regexp-substitute/global #f key file
@@ -14,14 +14,14 @@
                                 value)
                             'post))
 
-(define-public (dunst-configuration ship)
+(define-public (dunst-configuration ship-font ship-dunst-font-size)
   (let ((file (call-with-input-file "../misc/dunstrc" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
              (field-replace k v file)))
           file
-          `(("=FONT=" . ,(ship-font ship))
-            ("=FONT_SIZE=" . ,(ship-dunst-font-size ship))))))
+          `(("=FONT=" . ,ship-font)
+            ("=FONT_SIZE=" . ,ship-dunst-font-size)))))
 
 (define (make-tuple-config fa fb)
   (lambda (lines)
@@ -39,14 +39,18 @@
                     (cond ((number? b) (format #f "~a" b))
                           ((string? b) (format #f "\"~a\"" b))
                           ((symbol? b) (format #f "\"~a\"" (symbol->string b))))
+                    "\n"))))
 
-                    ";\n"))))
-
-(define-public cmd+arg->script
-  (make-tuple-config
-     (lambda (a)
-       (if (symbol? a)
-           #~(string-append #$(file-append a (string-append "/bin/" (symbol->string a))))
-           a))
-     (lambda (b)
-       (string-append " " b "; "))))
+(define-macro (cmd+arg->script cmds)
+  (let ((cmds (eval cmds (current-module))))
+    `(gexp
+      (system
+       (string-append
+        ,@(map (lambda (command)
+                 (let-values (((cmd args) (car+cdr command)))
+                   (cond ((gexp? cmd)   `(string-append (ungexp ,cmd) " " ,args "; "))
+                         ((string? cmd) `(string-append ,cmd  " " ,args "; "))
+                         (#t            `(string-append (ungexp ,cmd) "/bin/"
+                                                        ,(symbol->string cmd) " "
+                                                        ,args "; ")))))
+               cmds))))))

@@ -24,6 +24,7 @@
  (gnu packages libreoffice)
 
  ;; desktop stuff
+ (gnu packages glib)
  (gnu packages pulseaudio)
  (gnu packages synergy)
  (gnu packages xorg)
@@ -212,37 +213,28 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
     `((".exwm"
        ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
       (".x-config"
-       ,(program-file
-         "x-config"
-         #~(system #$(ship-x-config %host))))
+       ,(program-file "x-config" (ship-x-config %host)))
       ("spock"
-       ,(program-file "spock" #~(system
-                                 #$(cmd+arg->script
-                                    `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\"")))))))
+       ,(program-file
+         "spock"
+         (cmd+arg->script
+          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\""))))))
       (".xsession"
        ,(program-file
          "xsession"
-         #~(system
-            (format #f "source ~~/.bash_profile; ~a +SI:localuser:$USER; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~a ~a; ~~/.x-config; ~a ~a; exec dbus-launch --exit-with-session ~a"
-                    #$(file-append xhost "/bin/xhost")
-                    #$(file-append xset "/bin/xset")
-                    "dpms 180 1200 0"
-                    #$(file-append xset "/bin/xset")
-                    "b 0 0 0"
-                    #$(file-append xset "/bin/xset")
-                    "r rate 400 30"
-                    #$(file-append xsetroot "/bin/xsetroot")
-                    "-cursor_name left_ptr"
-                    #$(file-append setxkbmap "/bin/setxkbmap")
-                    "dvorak"
-                    #$(file-append xmodmap "/bin/xmodmap")
-                    "~/.config/x-config/common.xmodmap"
-                    #$(file-append xmodmap "/bin/xmodmap")
-                    #$(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
-                    ;; .x-config
-                    #$(file-append feh "/bin/feh")
-                    "--bg-scale '/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png'"
-                    #$(file-append emacs-exwm "/bin/exwm")))))
+         (cmd+arg->script
+          `(("source" . "~/.bash_profile")
+            (xhost . "+SI:localuser:$USER")
+            (xset . "b 0 0 0")
+            (xset . "r rate 400 30")
+            (xset . "dpms 180 1200 0")
+            (xsetroot . "-cursor_name left_ptr")
+            (setxkbmap . "dvorak")
+            (xmodmap . "~/.config/x-config/common.xmodmap")
+            (xmodmap . ,(string-append ".config/x-config/" (ship-name %host) ".xmodmap"))
+            (feh . ,(string-append "--bg-scale '" (ship-wallpaper %host) "'"))
+            (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
+             . #$(file-append emacs-exwm "/bin/exwm"))))))
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
       (".config/git/attributes"
@@ -256,7 +248,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       (".config/picom.conf"
        ,(local-file (string-append conf-root-dir "/misc/picom.conf")))
       (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc" (dunst-configuration %host)))
+       ,(plain-file "dunstrc" (dunst-configuration (ship-font %host)
+                                                   (ship-dunst-font-size %host))))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
