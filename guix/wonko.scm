@@ -151,9 +151,10 @@
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
-                ;; ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
-                ;; ("GDK_DPI_SCALE" . "1")
-                ))
+                ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
+                ("GDK_DPI_SCALE" . ,(number->string (ship-gdk-dpi-scale %host)))
+                ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
+                ("QT_STYLE_OVERRIDE" . "kvantum")))
              (bash-profile
               (list
                (plain-file "bash-profile"
@@ -244,8 +245,12 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
       (".XCompose"
        ,(local-file (string-append conf-root-dir "/misc/XCompose")))
-      (,".config/x-config/xsettingsd"
-       ,(plain-file "xsettingsd" (ship-xsettingsd-config %host)))
+      (".gtkrc-2.0"
+       ,(local-file (string-append conf-root-dir "/misc/gtkrc-2.0")))
+      (".config/gtk-3.0/settings.ini"
+       ,(local-file (string-append conf-root-dir "/misc/gtkrc-3.0")))
+      (".config/Kvantum/kvantum.kvconfig"
+       ,(local-file (string-append conf-root-dir "/misc/kvantum.kvconfig")))
       (,(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
        ,(local-file (string-append conf-root-dir "/misc/" (ship-name %host) ".xmodmap")))
       (".config/x-config/common.xmodmap"
@@ -278,14 +283,6 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
             (home-shepherd-configuration
              (services
               (list
-               (shepherd-service
-                (provision '(xsettingsd))
-                (start #~(make-forkexec-constructor
-                          (list #$(file-append xsettingsd "/bin/xsettingsd") "-c"
-                                (string-append #$%home "/.config/x-config/xsettingsd"))
-                          #:log-file "log/xsettingsd.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "x settings"))
                (shepherd-service
                 (provision '(picom))
                 (start #~(make-forkexec-constructor

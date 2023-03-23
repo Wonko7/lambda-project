@@ -15,7 +15,6 @@
   #:use-module (gnu packages hunspell)
   #:use-module (gnu packages libreoffice)
   #:use-module (gnu packages ocaml)
-  #:use-module (gnu packages ocaml)
   ;; desktop stuff
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages synergy)
@@ -28,6 +27,8 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages kde-plasma)
   #:use-module (gnu packages kde-frameworks)
+  #:use-module (gnu packages lxqt)
+  #:use-module (gnu packages qt)
   ;; tools
   #:use-module (gnu packages admin)
   #:use-module (gnu packages databases) ;; recutils
@@ -246,11 +247,12 @@
         xf86-video-fbdev
         xf86-video-nouveau
 
-        xsettingsd
+        xsettingsd ;; meh.
         ;; xautolock
         xss-lock
 
         pamixer
+        pavucontrol-qt
         brightnessctl
         scrot
         upower
@@ -258,6 +260,7 @@
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
         ;; bling
+        kvantum
         breeze breeze-gtk breeze-icons))
 
 (define-public %fonts-world
