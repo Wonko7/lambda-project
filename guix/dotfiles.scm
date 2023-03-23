@@ -14,14 +14,23 @@
                                 value)
                             'post))
 
-(define-public (dunst-configuration ship-font ship-dunst-font-size)
+(define-public (dunst-configuration ship-font ship-dunst-font-size ship-dunst-width)
   (let ((file (call-with-input-file "../misc/dunstrc" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
              (field-replace k v file)))
           file
           `(("=FONT=" . ,ship-font)
-            ("=FONT_SIZE=" . ,ship-dunst-font-size)))))
+            ("=FONT_SIZE=" . ,ship-dunst-font-size)
+            ("=WIDTH=" . ,ship-dunst-width)))))
+
+(define-public (picom-configuration ship-picom-radius)
+  (let ((file (call-with-input-file "../misc/picom.conf" get-string-all)))
+    (fold (lambda (l file)
+            (let-values (((k v) (car+cdr l)))
+             (field-replace k v file)))
+          file
+          `(("=RADIUS=" . ,ship-picom-radius)))))
 
 (define (make-tuple-config fa fb)
   (lambda (lines)

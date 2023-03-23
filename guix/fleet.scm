@@ -11,11 +11,11 @@
             ship-gdk-scale
             ship-gdk-dpi-scale
             ship-st-font-size
+            ship-picom-radius
+            ship-dunst-width
             ship-dunst-font-size
             ship-emacs-font-size
-            ship-emacs-modeline-height
-            ;; ship-xsettingsd-config
-            ))
+            ship-emacs-modeline-height))
 
 (define-public %font "JetBrains Mono")
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
@@ -33,12 +33,13 @@
   (name ship-name (sanitize (check string?)))
   (font ship-font (sanitize (check string?)))
   (wallpaper ship-wallpaper (sanitize (check string?)))
-  ;; (xsettingsd-config ship-xsettingsd-config (sanitize (check string?)))
   (x-config ship-x-config (sanitize (check gexp?)))
   (dpi ship-dpi (sanitize (check number?)))
   (gdk-scale ship-gdk-scale (sanitize (check number?)))
   (gdk-dpi-scale ship-gdk-dpi-scale (sanitize (check number?)))
   (st-font-size ship-st-font-size (sanitize (check number?)))
+  (picom-radius ship-picom-radius (sanitize (check number?)))
+  (dunst-width ship-dunst-width (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
   (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
   (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?))))
@@ -52,6 +53,8 @@
    (emacs-font-size 80)
    (st-font-size 8)
    (dunst-font-size 8)
+   (dunst-width 175)
+   (picom-radius 25)
    (gdk-scale 1)
    (gdk-dpi-scale 1.5)
    (dpi 288)
@@ -71,6 +74,9 @@
    (name "rocinante")
    (emacs-font-size 120)
    (emacs-modeline-height 40)
+   (dunst-font-size 12)
+   (dunst-width 300)
+   (picom-radius 10)
    (dpi 96)
    (gdk-scale 1)
    (gdk-dpi-scale 1)

@@ -256,10 +256,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       (".config/x-config/common.xmodmap"
        ,(local-file (string-append conf-root-dir "/misc/common.xmodmap")))
       (".config/picom.conf"
-       ,(local-file (string-append conf-root-dir "/misc/picom.conf")))
+       ,(plain-file "picom.conf" (picom-configuration (ship-picom-radius %host))))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc" (dunst-configuration (ship-font %host)
-                                                   (ship-dunst-font-size %host))))
+                                                   (ship-dunst-font-size %host)
+                                                   (ship-dunst-width %host))))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"

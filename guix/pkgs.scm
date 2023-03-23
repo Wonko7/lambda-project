@@ -177,6 +177,8 @@
         emacs-geiser
         emacs-geiser-guile
         emacs-guix
+        ;; rest
+        emacs-plz
 
         ;; completion framework
         emacs-orderless
