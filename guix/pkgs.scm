@@ -30,6 +30,7 @@
   #:use-module (gnu packages lxqt)
   #:use-module (gnu packages qt)
   ;; tools
+  #:use-module (w7 packages w7-st)
   #:use-module (gnu packages admin)
   #:use-module (gnu packages databases) ;; recutils
   #:use-module (gnu packages version-control)
@@ -39,8 +40,13 @@
   #:use-module (gnu packages rust-apps) ;; fd rg
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages password-utils)
+  #:use-module (gnu packages moreutils)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages disk)
+  #:use-module (gnu packages curl)
+  #:use-module (gnu packages web)
   ;; dev
+  #:use-module (gnu packages android)
   #:use-module (gnu packages haskell-apps)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages commencement) ;; gcc
@@ -262,7 +268,9 @@
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
         ;; bling
-        kvantum
+        qtsvg   ;; needed for rendering icons
+        kvantum ;; for qt theme
+        qt5ct   ;; for changing icon theme & font size.
         breeze breeze-gtk breeze-icons))
 
 (define-public %fonts-world
@@ -295,7 +303,24 @@
         git))
 
 (define-public %utils-world
-  (list recutils
-        tree
-        tmux
-        acpi))
+  (list
+   ;; system
+   acpi
+   tmux
+   w7-st
+   net-tools
+   ;; disk
+   parted
+   ;; files
+   coreutils
+   recutils
+   moreutils
+   tree
+   ;; compression
+   p7zip
+   unzip
+   ;; android
+   adb
+   ;; web
+   curl
+   jq))

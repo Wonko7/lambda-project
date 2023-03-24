@@ -154,7 +154,8 @@
                 ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
                 ("GDK_DPI_SCALE" . ,(number->string (ship-gdk-dpi-scale %host)))
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
-                ("QT_STYLE_OVERRIDE" . "kvantum")))
+                ("QT_STYLE_OVERRIDE" . "kvantum")
+                ("XDG_CURRENT_DESKTOP" . "qt5ct")))
              (bash-profile
               (list
                (plain-file "bash-profile"
@@ -233,24 +234,33 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
             (feh . ,(string-append "--bg-scale '" (ship-wallpaper %host) "'"))
             ("~/.x-config"  . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
-             . #$(file-append emacs-exwm "/bin/exwm"))))))
+                . #$(file-append emacs-exwm "/bin/exwm"))))))
       ("spock"
        ,(program-file
          "spock"
          (cmd+arg->script
           `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\""))))))
+      ;; utils:
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
       (".config/git/attributes"
        ,(local-file (string-append conf-root-dir "/misc/gitattributes")))
-      (".XCompose"
-       ,(local-file (string-append conf-root-dir "/misc/XCompose")))
+      (".config/ripgrep/ripgreprc"
+       ,(local-file (string-append conf-root-dir "/misc/ripgreprc")))
+      ;; GTK & QT configs:
       (".gtkrc-2.0"
        ,(local-file (string-append conf-root-dir "/misc/gtkrc-2.0")))
       (".config/gtk-3.0/settings.ini"
        ,(local-file (string-append conf-root-dir "/misc/gtkrc-3.0")))
       (".config/Kvantum/kvantum.kvconfig"
        ,(local-file (string-append conf-root-dir "/misc/kvantum.kvconfig")))
+      (".config/Kvantum/KvGnomish#/KvGnomish#.kvconfig"
+       ,(local-file (string-append conf-root-dir "/misc/kv_yggdrasill.kvconfig")))
+      (".config/qt5ct/qt5ct.conf"
+       ,(local-file (string-append conf-root-dir "/misc/qt5ct.conf")))
+      ;; my X stuff:
+      (".XCompose"
+       ,(local-file (string-append conf-root-dir "/misc/XCompose")))
       (,(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
        ,(local-file (string-append conf-root-dir "/misc/" (ship-name %host) ".xmodmap")))
       (".config/x-config/common.xmodmap"
@@ -264,11 +274,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
-       ,(local-file (string-append conf-root-dir "/misc/Synergy.conf")))
-      (".config/nyxt/init.lisp"
-       ,(local-file (string-append conf-root-dir "/misc/nyxt.lisp")))
-      (".config/ripgrep/ripgreprc"
-       ,(local-file (string-append conf-root-dir "/misc/ripgreprc")))))
+       ,(local-file (string-append conf-root-dir "/misc/Synergy.conf")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
