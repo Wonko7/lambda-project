@@ -70,31 +70,22 @@
  (gnu packages man)
 
  ;; my stuff
+ (defs)
  (fleet)
  (spock)
  (dotfiles)
- (pkgs))
+ (pkgs)
+ (stateful-prelude))
 
-(define conf-root-dir
-  (dirname
-   (dirname (current-filename))
-   )) ;; threading macro plz?
-
-(chdir (dirname (current-filename))) ;; "/code/wonko-mono-conf/guix"
-;; (chdir "/code/wonko-mono-conf/guix")
-
-
-(define hostname (getenv "HOSTNAME"))
-(define %host (host->nameship hostname))
-(define %home (getenv "HOME"))
-
-(display (spock-say (string-append "building HOME for " (ship-name %host))))
-(display "\n")
+(display (spock-say (string-append "building HOME for " (ship-name %ship)))
+         (current-error-port))
+(display "\n"
+         (current-error-port))
 
 (define %emacs-values
   #~(progn (setq my/font #$%font
-                 my/font-size #$(ship-emacs-font-size %host)
-                 my/modeline-height #$(ship-emacs-modeline-height %host))
+                 my/font-size #$(ship-emacs-font-size %ship)
+                 my/modeline-height #$(ship-emacs-modeline-height %ship))
            (provide 'conf/generated-values)))
 
 (home-environment
@@ -125,7 +116,7 @@
               `(("g" . "git")
                 ("psrg" . "ps aux | rg")
                 ("df" . "df -h")
-                ("st" . ,(format #f "st -f '~a:size=~a'" %font (ship-st-font-size %host)))
+                ("st" . ,(format #f "st -f '~a:size=~a'" %font (ship-st-font-size %ship)))
                 ("dmesg" . "dmesg -He")
                 ("ls" . "ls --color=yes")
                 ("ll" . "ls -l --color=auto")
@@ -151,8 +142,8 @@
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
-                ("GDK_SCALE" . ,(number->string (ship-gdk-scale %host)))
-                ("GDK_DPI_SCALE" . ,(number->string (ship-gdk-dpi-scale %host)))
+                ("GDK_SCALE" . ,(number->string (ship-gdk-scale %ship)))
+                ("GDK_DPI_SCALE" . ,(number->string (ship-gdk-dpi-scale %ship)))
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
                 ("QT_STYLE_OVERRIDE" . "kvantum")
                 ("XDG_CURRENT_DESKTOP" . "qt5ct")))
@@ -217,7 +208,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
     `((".exwm"
        ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
       (".x-config"
-       ,(program-file "x-config" (ship-x-config %host)))
+       ,(program-file "x-config" (ship-x-config %ship)))
       (".xsession"
        ,(program-file
          "xsession"
@@ -230,8 +221,8 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
             (xsetroot . "-cursor_name left_ptr")
             (setxkbmap . "dvorak")
             (xmodmap . "~/.config/x-config/common.xmodmap")
-            (xmodmap . ,(string-append ".config/x-config/" (ship-name %host) ".xmodmap"))
-            (feh . ,(string-append "--bg-scale '" (ship-wallpaper %host) "'"))
+            (xmodmap . ,(string-append ".config/x-config/" (ship-name %ship) ".xmodmap"))
+            (feh . ,(string-append "--bg-scale '" (ship-wallpaper %ship) "'"))
             ("~/.x-config"  . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
                 . #$(file-append emacs-exwm "/bin/exwm"))))))
@@ -239,7 +230,7 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
        ,(program-file
          "spock"
          (cmd+arg->script
-          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper")  "\""))))))
+          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper!")  "\""))))))
       ;; utils:
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
@@ -261,16 +252,16 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       ;; my X stuff:
       (".XCompose"
        ,(local-file (string-append conf-root-dir "/misc/XCompose")))
-      (,(string-append ".config/x-config/" (ship-name %host) ".xmodmap")
-       ,(local-file (string-append conf-root-dir "/misc/" (ship-name %host) ".xmodmap")))
+      (,(string-append ".config/x-config/" (ship-name %ship) ".xmodmap")
+       ,(local-file (string-append conf-root-dir "/misc/" (ship-name %ship) ".xmodmap")))
       (".config/x-config/common.xmodmap"
        ,(local-file (string-append conf-root-dir "/misc/common.xmodmap")))
       (".config/picom.conf"
-       ,(plain-file "picom.conf" (picom-configuration (ship-picom-radius %host))))
+       ,(plain-file "picom.conf" (picom-configuration (ship-picom-radius %ship))))
       (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc" (dunst-configuration (ship-font %host)
-                                                   (ship-dunst-font-size %host)
-                                                   (ship-dunst-width %host))))
+       ,(plain-file "dunstrc" (dunst-configuration (ship-font %ship)
+                                                   (ship-dunst-font-size %ship)
+                                                   (ship-dunst-width %ship))))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"

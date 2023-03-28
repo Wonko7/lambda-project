@@ -35,8 +35,9 @@
 
 (use-service-modules desktop networking ssh xorg)
 
-(display (spock-say (string-append "building OS for " (ship-name %ship))))
-(display "\n")
+(display (spock-say (string-append "building OS for " (ship-name %ship)))
+         (current-error-port))
+(display "\n" (current-error-port))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; channels
