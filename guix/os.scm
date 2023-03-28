@@ -1,0 +1,287 @@
+(add-to-load-path (dirname (current-filename)))
+
+(use-modules (gnu)
+             (gnu packages)
+             (gnu packages base)
+             (gnu packages emacs)
+             (gnu packages emacs-xyz)
+             (gnu packages shells)
+             (gnu packages bash)
+             (gnu packages networking)
+             (gnu packages xdisorg)
+             (gnu packages suckless)
+             (gnu packages fonts)
+             (gnu system setuid)
+             (gnu services desktop)
+             (gnu services xorg)
+             (gnu services networking)
+             (gnu services ssh)
+             (nongnu packages linux)
+             (nongnu system linux-initrd)
+             (guix gexp)
+             (ice-9 format)
+             (srfi srfi-1)
+             (srfi srfi-11)
+             (srfi srfi-88)
+             (nongnu packages linux)
+             (nongnu system linux-initrd)
+
+             ;; my stuff
+             (defs)
+             (spock)
+             (fleet)
+             (crew)
+             (stateful-prelude))
+
+(use-service-modules desktop networking ssh xorg)
+
+(display (spock-say (string-append "building OS for " (ship-name %ship))))
+(display "\n")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; channels
+
+(define %channels #~(cons*
+                     (channel
+                      (name 'nonguix)
+                      (url "https://gitlab.com/nonguix/nonguix")
+                      (introduction
+                       (make-channel-introduction
+                        "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+                        (openpgp-fingerprint
+                         "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
+                     (channel
+                      (name 'w7)
+                      (url "https://gitlab.com/wonko7/w7-guix-channel")
+                      (introduction
+                       (make-channel-introduction
+                        "e6afee0a2c3e941e186b2a9035c0217e5e94e9d5"
+                        (openpgp-fingerprint
+                         "FF23 0627 4DFE CF36 3AD8  677C 613C 8B66 6DBE 0AEB"))))
+                     %default-channels))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; helpers
+
+(define (desktop? ship)
+  (equal? (ship-class ship) 'desktop-laptop))
+
+(define (ephemeral? ship)
+  (equal? (ship-class ship) 'ephemeral))
+
+;; (define (btrfs-vault-subvol deps args)
+;;   (let-values (((mount-p sv-name) args))
+;;     (file-system
+;;       (device "/dev/mapper/vault")
+;;       (mount-point mount-p)
+;;       (type "btrfs")
+;;       (options (string-append "subvol=_live/@" sv-name))
+;;       (needed-for-boot? (equal? "/" mount-p))
+;;       (dependencies deps))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; services
+
+(define (ship->services ship) ;; also depends on %fleet
+  (let* ((fleet-desktop-base
+          (list
+           (screen-locker-service xlockmore "xlock")
+           (bluetooth-service #:auto-enable? #t)
+           (service slim-service-type
+                    (slim-configuration
+                     (display ":0")
+                     (vt "vt7")
+                     (auto-login? #t)
+                     (default-user (crew-name %wonko))
+                     (xorg-configuration (xorg-configuration
+                                          (keyboard-layout (crew-kb %wonko))))))))
+
+         (fleet-permanent-base
+          (list (service guix-publish-service-type
+                                              (guix-publish-configuration
+                                               (host "0.0.0.0")
+                                               (port 1337)
+                                               (advertise? #t)))))
+
+         (fleet-base
+          (cons*
+           (simple-service 'fleet-hosts-entries hosts-service-type
+                           (fleet->hosts %fleet))
+           (service tor-service-type)
+           (service openssh-service-type (openssh-configuration
+                                          (authorized-keys
+                                           `(("wonko" ,(local-file "data/ssh/yggdrasill.pub"))))
+                                          (x11-forwarding? #t)
+                                          (password-authentication? #f)))
+           (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
+           (modify-services (if (desktop? ship)
+                                %desktop-services
+                                %base-services)
+             (delete gdm-service-type)
+             (guix-service-type config =>
+                                (guix-configuration
+                                 (discover? #t)
+                                 (substitute-urls
+                                  (append (list "http://192.168.1.106:1337" ;; FIXME yggdrassil
+                                           "https://substitutes.nonguix.org")
+                                          %default-substitute-urls))
+                                 (authorized-keys
+                                  (append (list (local-file "./data/substitutes/yggdrasill.pub")
+                                                (local-file "./data/substitutes/nonguix.pub"))
+                                          %default-authorized-guix-keys))))
+             (elogind-service-type config =>
+                                   (elogind-configuration
+                                    (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                                    (handle-lid-switch 'suspend)
+                                    (handle-lid-switch-docked 'suspend)
+                                    (handle-lid-switch-external-power 'suspend)))
+             (console-font-service-type
+              config => (map (lambda (tty)
+                               `(,tty
+                                 . ,(file-append font-terminus "/share/consolefonts/ter-132n")))
+                             '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6"))))))
+
+         (basic-networking-services
+          (list
+           (service network-manager-service-type)
+           (service wpa-supplicant-service-type))))
+
+    (cond ((desktop? ship)   (append fleet-base fleet-permanent-base fleet-desktop-base))
+          ((ephemeral? ship) (append fleet-base basic-networking-services)))))
+
+(define (ship->os ship);; also depends on %crew & %wonko
+  (operating-system
+    (locale "en_GB.utf8")
+    (timezone "Europe/Paris")
+    (keyboard-layout (ship-kb ship))
+
+    (kernel linux)
+    (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
+    (initrd microcode-initrd)
+    (firmware (list linux-firmware))
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-efi-bootloader)
+      (targets '("/boot"))
+      (keyboard-layout keyboard-layout)))
+
+    (host-name (ship-name ship))
+    (issue (string-append (spock-say "live long & prosper!") "\n   o===8 ["
+                          (ship-name ship)
+                          "] project-lambda / GNU Guix / Fat Cock Enthusiaste 8===o\n\n"))
+
+    (users (map crew->user-account %crew))
+
+    (packages
+     (append
+      (map specification->package
+           (append (if (desktop? ship)
+                       '("emacs-exwm" "emacs-desktop-environment")
+                       '())
+                   '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw" ;; FIXME pkgs
+                     "emacs"
+                     "font-terminus"
+                     "git" "rsync" "bash-completion"
+                     "parted" "cryptsetup" "btrfs-progs" "dosfstools" "network-manager")))
+      %base-packages))
+
+    (services (ship->services ship))
+
+    (setuid-programs
+     (cons*
+      ;; FIXME dumpcap? ping?
+      (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl)
+                                            "/bin/brightnessctl")))
+      %setuid-programs))
+
+    (mapped-devices
+     (if (ephemeral? ship)
+         '()
+         (list (mapped-device
+                (source (uuid (assoc-ref (ship-uuids ship) 'vault)))
+                (target "vault")
+                (type luks-device-mapping)))))
+
+    (file-systems
+     (if (ephemeral? ship)
+         %base-file-systems
+         (cons* (file-system
+                  (mount-point "/boot")
+                  (device (uuid (assoc-ref (ship-uuids ship) 'efi)
+                                'fat32))
+                  (type "vfat"))
+                (file-system
+                  (mount-point "/mnt/vault")
+                  (device "/dev/mapper/vault")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                (file-system
+                  (device "/dev/mapper/vault")
+                  (mount-point "/")
+                  (type "btrfs")
+                  (options "subvol=_live/@guix-root")
+                  (needed-for-boot? #t)
+                  (dependencies mapped-devices))
+                (file-system
+                  (mount-point "/home")
+                  (device "/dev/mapper/vault")
+                  (options "subvol=_live/@guix-home")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                (file-system
+                  (mount-point "/code")
+                  (device "/dev/mapper/vault")
+                  (options "subvol=_live/@code")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                (file-system
+                  (mount-point "/data")
+                  (device "/dev/mapper/vault")
+                  (options "subvol=_live/@data")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                (file-system
+                  (mount-point "/work")
+                  (device "/dev/mapper/vault")
+                  (options "subvol=_live/@work")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                (file-system
+                  (mount-point "/junkyard")
+                  (device "/dev/mapper/vault")
+                  (options "subvol=_live/@junkyard")
+                  (type "btrfs")
+                  (dependencies mapped-devices))
+                %base-file-systems
+                ;; (let ((btrfs-vault-subvol (lambda (args)
+                ;;                             (let-values (((mount-p sv-name) args))
+                ;;                               (file-system
+                ;;                                 (device "/dev/mapper/vault")
+                ;;                                 (mount-point mount-p)
+                ;;                                 (type "btrfs")
+                ;;                                 (options (string-append "subvol=_live/@"
+                ;;                                                         sv-name))
+                ;;                                 (needed-for-boot? (equal? "/" mount-p))
+                ;;                                 (dependencies mapped-devices))))))
+                ;;   (append
+                ;;    (map btrfs-vault-subvol
+                ;;         `(("/" . "guix-root")
+                ;;           ("/home" . "guix-home")
+                ;;           ("/code" . "code")
+                ;;           ("/data" . "data")
+                ;;           ("/work" . "work")
+                ;;           ("/junkyard" . "junkyard")))
+                ;;    %base-file-systems))
+                ;; -> Wrong number of values returned to continuation (expected 2)
+                )))
+
+    ;; fixme: take care of making this? idem @btrfs subvol
+    (swap-devices
+     (if (ephemeral? ship)
+         '()
+         (list (swap-space
+                (target "/mnt/vault/swap/swapfile")
+                (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                      file-systems))))))))
+
+(ship->os %ship)

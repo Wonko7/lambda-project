@@ -1,10 +1,18 @@
 (define-module (fleet)
+  #:use-module (srfi srfi-1)
   #:use-module (guix gexp)
   #:use-module (guix records)
   #:use-module (gnu packages xorg)
+  #:use-module (gnu)
+  ;; my stuff
+  #:use-module (defs)
   #:use-module (dotfiles)
   #:export (ship
             ship-name
+            ship-net
+            ship-class
+            ship-uuids
+            ship-kb
             ship-font
             ship-wallpaper
             ship-x-config
@@ -17,20 +25,20 @@
             ship-emacs-font-size
             ship-emacs-modeline-height))
 
-(define-public %font "JetBrains Mono")
-(define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
-
-(define (check predicate)
-  (lambda (v)
-    (if (predicate v)
-        v
-        (display (string-append "bad ship value : " v)))))
+(use-service-modules desktop networking ssh xorg)
 
 (define-record-type* <ship>
   ship make-ship
   ship?
   this-ship
+  ;; common
   (name ship-name (sanitize (check string?)))
+  ;; os
+  (net ship-net (sanitize (check list?)))
+  (uuids ship-uuids (sanitize (check list?)))
+  (class ship-class (sanitize (check symbol?))) ;; FIXME?
+  (kb ship-kb (sanitize (check keyboard-layout?)))
+  ;; home
   (font ship-font (sanitize (check string?)))
   (wallpaper ship-wallpaper (sanitize (check string?)))
   (x-config ship-x-config (sanitize (check gexp?)))
@@ -44,10 +52,18 @@
   (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
   (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?))))
 
+
 (define-public %yggdrasill
   (ship
    (name "yggdrasill")
    (font %font)
+   ;; os
+   (class 'desktop-laptop)
+   (kb %dvorak-kb)
+   (net `((wg42 . "10.42.0.3")))
+   (uuids `((vault . "077c1391-b290-4921-ae90-f8e3cec68113")
+            (efi . "77DE-0AE2")))
+   ;; home
    (wallpaper %wallpaper)
    (emacs-modeline-height 5)
    (emacs-font-size 80)
@@ -63,15 +79,16 @@
                        (xinput . "set-prop 14 'libinput Click Method Enabled' 0 1")
                        (xinput . "set-prop 14 'libinput Accel Speed' 1.0"))))))
 
-;; wonko@rocinante ~$ xdpyinfo | grep -B2 resolution
-;; screen #0:
-;;   dimensions:    1920x1080 pixels (508x285 millimeters)
-;;   resolution:    96x96 dots per inch
-
 (define-public %rocinante
   (ship
    (inherit %yggdrasill)
    (name "rocinante")
+   ;; os
+   (kb %fr-kb)
+   (net `((wg42 . "10.42.0.4")))
+   (uuids `((vault . "ec7a9b12-4611-469c-8a6f-aadf4d525d5e")
+            (efi . "918C-B182")))
+   ;; home
    (emacs-font-size 120)
    (emacs-modeline-height 40)
    (dunst-font-size 12)
@@ -91,11 +108,36 @@
   (ship
    (inherit %rocinante)
    (name "enterprise")
+   (kb %dvorak-kb)
+   (net `((wg42 . "10.42.0.6")))
+   (uuids `((vault . "125bf330-ff27-45d1-9cce-1dd96cb14975")
+            (efi . "6C21-E416")))
    (x-config
     (cmd+arg->script
      `((xrandr . "--dpi 96")
        (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
        (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7"))))))
 
-(define-public (host->nameship hn)
+(define-public %discovery
+  (ship
+   (inherit %enterprise)
+   (name "discovery")
+   (class 'ephemeral)))
+
+(define-public %fleet (list %yggdrasill
+                            %rocinante
+                            %enterprise))
+
+(define-public (hostname->ship hn)
   (eval-string (string-append "%" hn)))
+
+(define-public (fleet->hosts machines)
+  "make /etc/hosts file with fleet IPs."
+  (filter identity
+          (map (lambda (ship)
+                 (let ((ip (assoc-ref (ship-net ship) 'wg42)))
+                   (if ip
+                       (host ip
+                             (string-append (ship-name ship) ".starfleet.local"))
+                       #f)))
+               machines)))
