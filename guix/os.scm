@@ -8,12 +8,14 @@
              (gnu packages shells)
              (gnu packages bash)
              (gnu packages networking)
+             (gnu packages display-managers)
              (gnu packages xdisorg)
              (gnu packages suckless)
              (gnu packages fonts)
              (gnu system setuid)
              (gnu services desktop)
              (gnu services xorg)
+             (gnu services sddm)
              (gnu services networking)
              (gnu services ssh)
              (nongnu packages linux)
@@ -25,12 +27,12 @@
              (srfi srfi-88)
              (nongnu packages linux)
              (nongnu system linux-initrd)
-
              ;; my stuff
              (defs)
              (spock)
-             (fleet)
              (crew)
+             (fleet)
+             (pkgs)
              (stateful-prelude))
 
 (use-service-modules desktop networking ssh xorg)
@@ -53,12 +55,12 @@
                          "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
                      (channel
                       (name 'w7)
-                      (url "https://gitlab.com/wonko7/w7-guix-channel")
-                      (introduction
-                       (make-channel-introduction
-                        "e6afee0a2c3e941e186b2a9035c0217e5e94e9d5"
-                        (openpgp-fingerprint
-                         "FF23 0627 4DFE CF36 3AD8  677C 613C 8B66 6DBE 0AEB"))))
+                      (url "https://gitlab.com/wonko7/w7-guix-channel"))
+                     (introduction
+                      (make-channel-introduction
+                       "e6afee0a2c3e941e186b2a9035c0217e5e94e9d5"
+                       (openpgp-fingerprint
+                        "FF23 0627 4DFE CF36 3AD8  677C 613C 8B66 6DBE 0AEB")))
                      %default-channels))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,39 +72,30 @@
 (define (ephemeral? ship)
   (equal? (ship-class ship) 'ephemeral))
 
-;; (define (btrfs-vault-subvol deps args)
-;;   (let-values (((mount-p sv-name) args))
-;;     (file-system
-;;       (device "/dev/mapper/vault")
-;;       (mount-point mount-p)
-;;       (type "btrfs")
-;;       (options (string-append "subvol=_live/@" sv-name))
-;;       (needed-for-boot? (equal? "/" mount-p))
-;;       (dependencies deps))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services
 
 (define (ship->services ship) ;; also depends on %fleet
-  (let* ((fleet-desktop-base
-          (list
-           (screen-locker-service xlockmore "xlock")
-           (bluetooth-service #:auto-enable? #t)
-           (service slim-service-type
-                    (slim-configuration
-                     (display ":0")
-                     (vt "vt7")
-                     (auto-login? #t)
-                     (default-user (crew-name %wonko))
-                     (xorg-configuration (xorg-configuration
-                                          (keyboard-layout (crew-kb %wonko))))))))
+  (let* ((fleet-desktop-base (list
+                              (service bluetooth-service-type)
+                              ;; (service gdm-service-type
+                              ;;          (gdm-configuration
+                              ;;           (default-user (crew-name %wonko))
+                              ;;           (auto-login? #t)))
+                              (service sddm-service-type
+                                       (sddm-configuration
+                                        (theme "guix-simplyblack-sddm")
+                                        (auto-login-user (crew-name %wonko))))))
 
-         (fleet-permanent-base
-          (list (service guix-publish-service-type
+         (fleet-permanent-base (list (service guix-publish-service-type
                                               (guix-publish-configuration
                                                (host "0.0.0.0")
                                                (port 1337)
                                                (advertise? #t)))))
+
+         (basic-networking-services (list
+                                     (service network-manager-service-type)
+                                     (service wpa-supplicant-service-type)))
 
          (fleet-base
           (cons*
@@ -124,7 +117,7 @@
                                  (discover? #t)
                                  (substitute-urls
                                   (append (list "http://192.168.1.106:1337" ;; FIXME yggdrassil
-                                           "https://substitutes.nonguix.org")
+                                                "https://substitutes.nonguix.org")
                                           %default-substitute-urls))
                                  (authorized-keys
                                   (append (list (local-file "./data/substitutes/yggdrasill.pub")
@@ -140,12 +133,7 @@
               config => (map (lambda (tty)
                                `(,tty
                                  . ,(file-append font-terminus "/share/consolefonts/ter-132n")))
-                             '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6"))))))
-
-         (basic-networking-services
-          (list
-           (service network-manager-service-type)
-           (service wpa-supplicant-service-type))))
+                             '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))))))
 
     (cond ((desktop? ship)   (append fleet-base fleet-permanent-base fleet-desktop-base))
           ((ephemeral? ship) (append fleet-base basic-networking-services)))))
@@ -173,18 +161,12 @@
 
     (users (map crew->user-account %crew))
 
-    (packages
-     (append
-      (map specification->package
-           (append (if (desktop? ship)
-                       '("emacs-exwm" "emacs-desktop-environment")
-                       '())
-                   '("nss-certs" "isc-dhcp" "wireguard-tools" "iproute2" "iw" ;; FIXME pkgs
-                     "emacs"
-                     "font-terminus"
-                     "git" "rsync" "bash-completion"
-                     "parted" "cryptsetup" "btrfs-progs" "dosfstools" "network-manager")))
-      %base-packages))
+    (packages (append (list guix-simplyblack-sddm-theme)
+                      %utils-world
+                      %os-disk-world
+                      %os-net-world
+                      %os-misc-world
+                      %base-packages))
 
     (services (ship->services ship))
 
