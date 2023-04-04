@@ -3,9 +3,7 @@
   #:use-module (gnu packages)
   ;; fonts
   #:use-module (w7 packages fonts)
-  ;; FIXME:
   #:use-module (gnu packages fonts)
-  ;; there -can- should only be one
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages unicode)
   ;; emacs
@@ -29,6 +27,12 @@
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages lxqt)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages terminals)
+  #:use-module (gnu packages ebook)
+  #:use-module (gnu packages video)
+  #:use-module (gnu packages gimp)
+  #:use-module (gnu packages pdf)
+  #:use-module (gnu packages kde)
   ;; tools
   #:use-module (w7 packages w7-st)
   #:use-module (gnu packages admin)
@@ -36,6 +40,7 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages tmux)
   #:use-module (gnu packages ssh)
+  #:use-module (gnu packages vim)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages rust-apps) ;; fd rg
   #:use-module (gnu packages gnupg)
@@ -43,8 +48,14 @@
   #:use-module (gnu packages moreutils)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages disk)
+  #:use-module (gnu packages rsync)
+  #:use-module (gnu packages cryptsetup)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages web)
+  #:use-module (gnu packages networking)
+  #:use-module (gnu packages vpn)
+  #:use-module (gnu packages hardware) ;; ddcutil
+  #:use-module (gnu packages certs)
   ;; dev
   #:use-module (gnu packages android)
   #:use-module (gnu packages haskell-apps)
@@ -255,6 +266,16 @@
         xf86-video-fbdev
         xf86-video-nouveau
 
+        xev
+        xfontsel
+        xdpyinfo
+        xrdb
+        setxkbmap
+        xmodmap
+        xprop
+        xclip
+        xinput
+
         xsettingsd ;; meh.
         ;; xautolock
         xss-lock
@@ -267,15 +288,49 @@
         playerctl
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
+        ;; terms
+        w7-st
+        alacritty ;; FIXME config this and make it useful?
+
+        ;; x <3
+        xeyes
+
         ;; bling
+        feh
         qtsvg   ;; needed for rendering icons
         kvantum ;; for qt theme
         qt5ct   ;; for changing icon theme & font size.
         breeze breeze-gtk breeze-icons))
 
+(define-public %desktop-world
+  (list calibre
+        scrot
+        ;; video
+        mpv
+        vlc
+        ;; webcam
+        guvcview
+        ;; ebooks & pdf
+        calibre
+        ;;okular ;; 280Mb
+        zathura ;; FIXME config this
+        zathura-ps
+        zathura-pdf-mupdf
+        xournal ;; oldschool pdf editor
+        ;; desktop stuff
+        ddcutil ;; monitor settings
+        ))
+
+(define-public %hack-the-world
+  (list wireshark))
+
+(define-public %image-edition-world
+  (list gimp
+        ;; kdenlive
+        krita))
+
 (define-public %fonts-world
   (list font-jetbrains-mono
-        ;; font-nerd-jetbrains
         font-nerd-noto
         font-nerd-symbols
         font-goog-noto-emoji))
@@ -303,24 +358,44 @@
         git))
 
 (define-public %utils-world
-  (list
-   ;; system
-   acpi
-   tmux
-   w7-st
-   net-tools
-   ;; disk
-   parted
-   ;; files
-   coreutils
-   recutils
-   moreutils
-   tree
-   ;; compression
-   p7zip
-   unzip
-   ;; android
-   adb
-   ;; web
-   curl
-   jq))
+  (list ripgrep
+        fd
+        ;; system
+        acpi
+        tmux
+        net-tools
+        ;; disk
+        parted
+        ;; files
+        coreutils
+        recutils
+        moreutils
+        tree
+        ;; compression
+        p7zip
+        unzip
+        ;; android
+        adb
+        ;; web
+        curl
+        jq))
+
+(define-public %os-net-world
+  (list nss-certs
+        wireguard-tools
+        iproute
+        iw))
+
+(define-public %os-misc-world
+  (list font-terminus
+        emacs
+        vim))
+
+(define-public %os-disk-world
+  (list git
+        rsync
+        parted
+        cryptsetup
+        btrfs-progs
+        dosfstools
+        util-linux))
