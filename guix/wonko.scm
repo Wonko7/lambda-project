@@ -232,8 +232,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       ("spock"
        ,(program-file
          "spock"
-         (cmd+arg->script
-          `(("echo" . ,(string-append "\"" (spock-say "live long & prosper!")  "\""))))))
+         (with-imported-modules '((spock))
+           #~(begin
+               (use-modules (spock))
+               (display (spock-say "live long & prosper!"))
+               (newline)))))
       ;; utils:
       (".config/git/config"
        ,(local-file (string-append conf-root-dir "/misc/gitconfig")))
@@ -268,7 +271,24 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
-       ,(local-file (string-append conf-root-dir "/misc/Synergy.conf")))))
+       ,(local-file (string-append conf-root-dir "/misc/Synergy.conf")))
+      ;; deploy secrets
+      ("local/bin/secrets"
+       ,(program-file
+         "secrets"
+         (with-imported-modules '((spock)
+                                  (guix build utils))
+           #~(begin
+               (use-modules (spock)
+                            (guix build utils))
+               (display (spock-say (string-append "deploying SECRETS for " #$(ship-name %ship)))
+                        (current-error-port))
+               (newline (current-error-port))
+               (let ((pass   #$(file-append password-store "/bin/pass"))
+                     (base64 #$(file-append coreutils "/bin/base64"))
+                     (tar    #$(file-append tar "/bin/tar")))
+                 (system (string-append pass " show fleet/" #$(ship-name %ship) "/ssh | "
+                                        base64 " -d | " tar " xz ")))))))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
