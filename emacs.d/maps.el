@@ -183,6 +183,13 @@
   "ï"    #'dired-up-directory)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; magit
+
+(general-evil-define-key '(normal) git-rebase-mode-map
+  "K"    #'git-rebase-move-line-up
+  "J"    #'git-rebase-move-line-down)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
 
 (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
