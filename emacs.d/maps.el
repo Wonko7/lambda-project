@@ -78,7 +78,7 @@
   "pD" #'projectile-discover-projects-in-search-path
   "pK" #'projectile-kill-buffers
   "pS" #'projectile-save-project-buffers
-  "ps" #'projectile-run-shell
+  "ps" #'projectile-run-eshell
   "pb" #'projectile-ibuffer
   "pd" #'projectile-dired
   "pm" #'persp-merge
@@ -142,10 +142,30 @@
  (kbd "C-SPC") evil-leader--default-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; eshell
+
+(general-evil-define-key '(normal insert visual) eshell-mode-map
+  "C-r"        (lambda ()
+                 (interactive)
+                 (evil-insert 1)
+                 (consult-history))
+  "C-k"        #'eshell-previous-prompt
+  "C-j"        #'eshell-next-prompt
+  "C-<return>" #'eshell-copy-old-input)
+
+(evil-collection-define-key 'normal 'eshell-mode-map
+  (kbd "ï")    #'my/cd-up ;; restrict this to eshell, or generalise map?
+  (kbd "-")    #'my/cd--
+  (kbd "A")    (lambda ()
+                 (interactive)
+                 (evil-goto-line)
+                 (evil-append 1)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
-(general-evil-define-key '(normal input visual) comint-mode-map
-  "ï"    #'my/cd-up ;; restrict this to eshell, or generalise solution?
+(general-evil-define-key '(normal insert visual) comint-mode-map
+  "ï"    #'my/cd-up
   "-"    #'my/cd--
   "C-r"  #'consult-history
   "RET"  #'comint-send-input

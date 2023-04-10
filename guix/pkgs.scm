@@ -143,6 +143,8 @@
         emacs-diff-hl
         emacs-dirvish
         emacs-eshell-up
+        emacs-eshell-syntax-highlighting
+        emacs-esh-autosuggest
         emacs-dired-du
         emacs-diredfl
         emacs-dired-rsync

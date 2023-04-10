@@ -299,7 +299,7 @@
           ((run-init-p 4)
            (async-shell-command "firefox"))
           ((run-init-p 1)
-           (shell)))))
+           (eshell)))))
 
 (defun ws/force-run-auto-start ()
   (interactive)

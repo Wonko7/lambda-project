@@ -61,6 +61,7 @@
 (setq display-line-numbers-type t)
 (global-linum-mode)
 (add-hook 'shell-mode-hook           (lambda () (linum-mode 0)))
+(add-hook 'eshell-mode-hook          (lambda () (linum-mode 0)))
 (add-hook 'elfeed-show-mode-hook     (lambda () (linum-mode 0)))
 (add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
 (add-hook 'ement-room-mode-hook      (lambda () (linum-mode 0)))
@@ -125,6 +126,14 @@
       eshell-buffer-maximum-lines 10000
       eshell-hist-ignoredups t
       eshell-scroll-to-bottom-on-input t)
+
+(require 'esh-autosuggest)
+(add-hook 'eshell-mode-hook #'esh-autosuggest-mode)
+(require 'eshell-syntax-highlighting)
+(eshell-syntax-highlighting-global-mode +1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; shell
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
