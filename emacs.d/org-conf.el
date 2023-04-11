@@ -407,24 +407,13 @@ space rather than before."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
 
-          ("b" "besport")
-          ("bd" "BS ssdd top" entry "* [ ] %?"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS ssdd"))
-           :prepend t)
-          ("bs" "BS ssdd bottom" entry "* [ ] %?"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS ssdd")))
-          ("bb" "boop" entry "* boop %? :bs:boop:\n%U\n"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-           :jump-to-captured t)
-          ("bl" "backlog prep" entry "* backlog :bs:bl:\n%U\n%?"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-           :jump-to-captured t)
-          ("bn" "note" entry "* %? :bs:\n%U"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-           :jump-to-captured t)
-          ("br" "réu" entry "* %? :bs:\n%U"
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐫 BS"))
-           :jump-to-captured t))))
+          ("W" "work")
+           ("j" "Journal" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")
+          ("Wm" "marge+" plain ""
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 work: [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]]"))
+           :jump-to-captured t
+           ))))
 (fuck-me/init-capture)
 
 ;; FIXME review this:
