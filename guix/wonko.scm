@@ -88,6 +88,27 @@
                  my/modeline-height #$(ship-emacs-modeline-height %ship))
            (provide 'conf/generated-values)))
 
+(define %aliases
+  `(("g" . "git")
+    ("psrg" . "ps aux | rg")
+    ("df" . "df -h")
+    ("st" . ,(format #f "st -f '~a:size=~a'" %font
+                     (ship-st-font-size %ship)))
+    ("dmesg" . "dmesg -He")
+    ("ls" . "ls --color=yes")
+    ("ll" . "ls -l --color=auto")
+    ("la" . "ls -A --color=auto")
+    ("lla" . "ls -lA --color=auto")
+    ("lsd" . "ls -lAc --color=auto")
+    ("t" . "tree -C")
+    ("tarc" . "tar -cavf")
+    ("tarx" . "tar -xavf")
+    ("tart" . "tar -tavf")
+    ("rsy" . "rsync -hrlpD --progress")
+    ("prsy" . "rsync -hrlpD --progress --owner --group")
+    ("nmcli" . "nmcli -c yes")
+    ("ip" . "ip -c -h")))
+
 (home-environment
  (packages
   (append
@@ -112,25 +133,7 @@
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #t)
-             (aliases
-              `(("g" . "git")
-                ("psrg" . "ps aux | rg")
-                ("df" . "df -h")
-                ("st" . ,(format #f "st -f '~a:size=~a'" %font (ship-st-font-size %ship)))
-                ("dmesg" . "dmesg -He")
-                ("ls" . "ls --color=yes")
-                ("ll" . "ls -l --color=auto")
-                ("la" . "ls -A --color=auto")
-                ("lla" . "ls -lA --color=auto")
-                ("lsd" . "ls -lAc --color=auto")
-                ("t" . "tree -AC") ;; FIXME
-                ("tarc" . "tar -cavf")
-                ("tarx" . "tar -xavf")
-                ("tart" . "tar -tavf")
-                ("rsy" . "rsync -hrlpD --progress")
-                ("prsy" . "rsync -hrlpD --progress --owner --group")
-                ("nmcli" . "nmcli -c yes")
-                ("ip" . "ip -c -h")))
+             (aliases %aliases)
              (environment-variables
               `(("HISTFILESIZE" . "100000")
                 ("HISTSIZE" . "100000")
@@ -210,6 +213,9 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
     ;; exwm config is outside of .emacs.d:
     `((".exwm"
        ,(local-file (string-append conf-root-dir  "/emacs.d/exwm.el")))
+      (".emacs.d/aliases"
+       ,(plain-file "aliases"
+                    (emacs-eshell-aliases-configuration %aliases)))
       (".x-config"
        ,(program-file "x-config" (ship-x-config %ship)))
       (".xsession"

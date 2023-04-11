@@ -50,6 +50,13 @@
                           ((symbol? b) (format #f "\"~a\"" (symbol->string b))))
                     "\n"))))
 
+(define-public emacs-eshell-aliases-configuration
+  (make-tuple-config
+   (lambda (a)
+     (string-append "alias " a))
+   (lambda (b)
+     (string-append " " b " $*\n"))))
+
 (define-macro (cmd+arg->script cmds)
   (let ((cmds (eval cmds (current-module))))
     `(gexp
