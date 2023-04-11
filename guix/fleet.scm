@@ -129,7 +129,9 @@
                             %enterprise))
 
 (define-public (hostname->ship hn)
-  (eval-string (string-append "%" hn)))
+  (if (not hn)
+      #f
+      (eval-string (string-append "%" hn))))
 
 (define-public (fleet->hosts machines)
   "make /etc/hosts file with fleet IPs."
