@@ -115,4 +115,13 @@
 (setq diff-hl-draw-borders nil)
 (setq diff-hl-side 'right)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; buffer-env
+
+;; use guix shell automagically <3
+(require 'buffer-env)
+(add-hook 'hack-local-variables-hook 'buffer-env-update)
+(add-hook 'eshell-directory-change-hook 'buffer-env-update) ;; overkill: revisit. but works.
+(require 'inheritenv)
+
 (provide 'conf/dev)

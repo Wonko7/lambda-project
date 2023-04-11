@@ -198,6 +198,9 @@
         emacs-guix
         ;; rest
         emacs-plz
+        ;; guix / dev env:
+        emacs-buffer-env
+        emacs-inheritenv
 
         ;; completion framework
         emacs-orderless
