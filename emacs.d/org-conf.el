@@ -493,4 +493,6 @@ space rather than before."
    (shell . t)
    (ocaml . t)))
 
+(setq org-confirm-babel-evaluate nil)
+
 (provide 'conf/org)
