@@ -145,6 +145,7 @@
         emacs-eshell-up
         emacs-eshell-syntax-highlighting
         emacs-esh-autosuggest
+        emacs-eshell-prompt-extras
         emacs-dired-du
         emacs-diredfl
         emacs-dired-rsync
