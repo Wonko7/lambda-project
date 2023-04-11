@@ -156,20 +156,8 @@
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
                 ("QT_STYLE_OVERRIDE" . "kvantum")
                 ("XDG_CURRENT_DESKTOP" . "qt5ct")))
-             (bash-profile
-              (list
-               (plain-file "bash-profile"
-                           ;; FIXME: list of manifets. script init manifests + init gits
-                           "# hey boy. hey girl. superstar DJ. here we go!
-for p in dev net desktop web utils; do
-    profile=$GUIX_EXTRA_PROFILES/$p
-    if [ -f $profile/etc/profile ]; then
-        GUIX_PROFILE=$profile
-        . $GUIX_PROFILE/etc/profile
-    fi
-    unset profile
-done
-test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true")))))
+             (bash-profile (list
+                            (bash-profile-source-manifests '(dev net desktop web utils))))))
 
    (simple-service 'emacsd-config-files
                    home-files-service-type

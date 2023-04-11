@@ -57,6 +57,25 @@
    (lambda (b)
      (string-append " " b " $*\n"))))
 
+(define-public (bash-profile-source-manifests manifests)
+  (let* ((manifests (concatenate
+                     (zip
+                      (map symbol->string manifests)
+                      (circular-list " "))))
+         (manifests (apply string-append manifests)))
+    (mixed-text-file
+     "bash-profile"
+     "# hey boy. hey girl. superstar DJ. here we go!\n"
+     (string-append "for p in " manifests "; do\n")
+     "    profile=$GUIX_EXTRA_PROFILES/$p\n"
+     "    if [ -f $profile/etc/profile ]; then\n"
+     "        GUIX_PROFILE=$profile\n"
+     "        . $GUIX_PROFILE/etc/profile\n"
+     "    fi\n"
+     "    unset profile\n"
+     "done\n")))
+     ;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true"
+
 (define-macro (cmd+arg->script cmds)
   (let ((cmds (eval cmds (current-module))))
     `(gexp
