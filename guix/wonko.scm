@@ -7,6 +7,7 @@
  (gnu home services)
  (gnu home services shells)
  (gnu services)
+ (srfi srfi-1)
 
  ;; fonts
  (w7 packages fonts)
@@ -66,6 +67,7 @@
  (gnu packages dunst)
  (w7 packages jonaburg-picom)
  (w7 packages emacs-xyz)
+
  ;; doc
  (gnu packages man)
 
@@ -80,14 +82,21 @@
 (display
  (spock-say (string-append "building HOME for " (ship-name %ship)))
  (current-error-port))
-(display "\n"
-         (current-error-port))
+(newline (current-error-port))
 
 (define %emacs-values
   #~(progn
      (setq my/font #$%font
            my/font-size #$(ship-emacs-font-size %ship)
-           my/modeline-height #$(ship-emacs-modeline-height %ship))
+           my/modeline-height #$(ship-emacs-modeline-height %ship)
+           my/term-cmd #$(format #f "st -f 'JetBrains Mono:size=~a'"
+                                 (ship-st-font-size %ship))
+           my/lock-cmd #$(apply
+                          string-append
+                          (concatenate
+                           ((@ (srfi srfi-1) zip)
+                            %lock-cmd
+                            (circular-list " ")))))
      (provide 'conf/generated-values)))
 
 (define %aliases
@@ -367,9 +376,9 @@
                (shepherd-service
                 (provision '(xss-lock))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append xss-lock "/bin/xss-lock")
-                                "--"
-                                "/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10")
+                          (cons* #$(file-append xss-lock "/bin/xss-lock")
+                                  "--"
+                                  '#$%lock-cmd)
                           #:log-file "log/xss-lock.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "don't touch my stuff"))

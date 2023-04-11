@@ -18,19 +18,24 @@
   "e" #'embark-act
   "x" #'embark-export
 
-  ;; apps
+  ;; emacs apps
   "ab"  #'ibuffer
   "ad"  #'dired
   "as"  #'shell
   "ap"  #'proced
+  ;; elfeed
   "aee" #'elfeed
   "aes" #'elfeed-update
+  ;; external apps
+  "aat" (lambda () (interactive) (async-shell-command my/term-cmd))
+  "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
+  "aap" (lambda () (interactive) (async-shell-command "pavucontrol-qt"))
   ;; browsers
   "aBf" (lambda () (interactive) (async-shell-command "firefox"))
   "aBc" (lambda () (interactive) (async-shell-command "chromium"))
   "aBt" #'my/tbb
-  ;; secondary apps
-  "zz"  #'desktop-environment-lock-screen
+  ;; utils
+  "zz"  (lambda () (interactive) (async-shell-command my/lock-cmd))
 
   ;; org
   "oa" (lambda () (interactive) (org-agenda nil "z"))

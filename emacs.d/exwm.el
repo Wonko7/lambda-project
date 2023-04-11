@@ -144,7 +144,7 @@
 
 (setq desktop-environment-update-exwm-global-keys :global)
 (define-key desktop-environment-mode-map (kbd "s-l") nil)
-(setq desktop-environment-screenlock-command "xlock -mode xjack -lockdelay 5")
+(setq desktop-environment-screenlock-command my/lock-cmd)
 
 (setq desktop-environment-volume-get-command "pamixer --get-volume")
 (setq desktop-environment-volume-set-command "pamixer %s")
@@ -298,6 +298,10 @@
            (elfeed))
           ((run-init-p 4)
            (async-shell-command "firefox"))
+          ((run-init-p 3)
+           (projectile-switch-project))
+          ((run-init-p 2)
+           (async-shell-command my/term-cmd))
           ((run-init-p 1)
            (eshell)))))
 
