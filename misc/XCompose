@@ -93,6 +93,7 @@ include "%L"
 <Multi_key> <m> <s> : "∑"
 <Multi_key> <m> <m> : "∏"
 <Multi_key> <m> <p> : "π"
+<Multi_key> <m> <l> : "λ"
 
 <Multi_key> <d> <c> : "℃"
 <Multi_key> <d> <n> : "℉"
