@@ -75,17 +75,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services
 
-(define (ship->services ship) ;; also depends on %fleet
+(define (ship->services ship) ;; also depends on %fleet and %wonko
   (let* ((fleet-desktop-base (list
                               (service bluetooth-service-type)
-                              ;; (service gdm-service-type
-                              ;;          (gdm-configuration
-                              ;;           (default-user (crew-name %wonko))
-                              ;;           (auto-login? #t)))
-                              (service sddm-service-type
-                                       (sddm-configuration
-                                        (theme "guix-simplyblack-sddm")
-                                        (auto-login-user (crew-name %wonko))))))
+                              (service slim-service-type
+                                       (slim-configuration
+                                        (display ":0")
+                                        (vt "vt7")
+                                        (auto-login? #t)
+                                        (default-user (crew-name %wonko))
+                                        (xorg-configuration (xorg-configuration
+                                                             (keyboard-layout (crew-kb %wonko))))))))
 
          (fleet-permanent-base (list (service guix-publish-service-type
                                               (guix-publish-configuration
@@ -258,7 +258,7 @@
                 ;; -> Wrong number of values returned to continuation (expected 2)
                 )))
 
-    ;; fixme: take care of making this? idem @btrfs subvol
+    ;; FIXME: take care of making this? idem @btrfs subvol
     (swap-devices
      (if (ephemeral? ship)
          '()
