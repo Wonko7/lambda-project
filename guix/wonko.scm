@@ -6,6 +6,7 @@
  (gnu home services)
  (gnu home services shells)
  (gnu services)
+ (guix profiles)
  (srfi srfi-1)
 
  ;; fonts
@@ -311,10 +312,46 @@
       (".config/Synergy/Synergy.conf"
        ,(local-file
          (string-append conf-root-dir "/misc/Synergy.conf")))
-      ;; deploy secrets
-      ("local/bin/secrets"
+      ;; profiles FIXME -> generate these from a list?
+      ("local/manifests/desktop"
+       ,(scheme-file
+         "desktop.scm"
+         #~(begin
+             #$(manifest->code
+                (packages->manifest %desktop-world)))))
+      ("local/manifests/web"
+       ,(scheme-file
+         "web.scm"
+         #~(begin
+             #$(manifest->code
+                (packages->manifest %web-world)))))
+      ;; update profiles
+      ("local/bin/guix-extra-profiles-update"
        ,(program-file
-         "secrets"
+         "_"
+         (with-imported-modules
+             '((spock)
+               (guix build utils))
+           #~(begin
+               (use-modules (spock)
+                            (guix build utils))
+               (display (spock-say
+                         (string-append "update EXTRA PROFILES for " #$(ship-name %ship)))
+                        (current-error-port))
+               (newline (current-error-port))
+               (let ((guix   #$(string-append %home "/.config/guix/current/bin/guix")))
+                 (map (lambda (p)
+                        (display (spock-say
+                                  (string-append "update PROFILE " p))
+                                 (current-error-port))
+                        (system
+                         (string-append guix " package -m ~/local/manifests/" p
+                                        " -p $GUIX_EXTRA_PROFILES/" p)))
+                      '("web" "desktop"))))))) ;; FIXME list
+      ;; secrets
+      ("local/bin/secrets-backup"
+       ,(program-file
+         "_"
          (with-imported-modules
           '((spock)
             (guix build utils))
@@ -322,7 +359,33 @@
               (use-modules (spock)
                            (guix build utils))
               (display (spock-say
-                        (string-append "deploying SECRETS for " #$(ship-name %ship)))
+                        (string-append "backup SECRETS for " #$(ship-name %ship)))
+                       (current-error-port))
+              (newline (current-error-port))
+              (let ((pass   #$(file-append password-store "/bin/pass"))
+                    (cat    #$(file-append coreutils "/bin/cat"))
+                    (cp     #$(file-append coreutils "/bin/cp"))
+                    (base64 #$(file-append coreutils "/bin/base64"))
+                    (tar    #$(file-append tar "/bin/tar")))
+                (system
+                 (string-append "cd " #$%home " && " tar " czf - .ssh/id_ed25519* | "
+                                base64 " | "
+                                pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
+                (system
+                 (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
+                                "/code/wonko-mono-conf/guix/data/ssh/" #$(ship-name %ship)
+                                ".pub")))))))
+      ("local/bin/secrets-deploy"
+       ,(program-file
+         "_"
+         (with-imported-modules
+          '((spock)
+            (guix build utils))
+          #~(begin
+              (use-modules (spock)
+                           (guix build utils))
+              (display (spock-say
+                        (string-append "deploy SECRETS for " #$(ship-name %ship)))
                        (current-error-port))
               (newline (current-error-port))
               (let ((pass   #$(file-append password-store "/bin/pass"))

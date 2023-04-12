@@ -33,6 +33,10 @@
   #:use-module (gnu packages gimp)
   #:use-module (gnu packages pdf)
   #:use-module (gnu packages kde)
+  ;; web
+  #:use-module (nongnu packages mozilla)
+  #:use-module (gnu packages chromium)
+  #:use-module (gnu packages tor)
   ;; tools
   #:use-module (w7 packages w7-st)
   #:use-module (gnu packages admin)
@@ -326,6 +330,14 @@
         ;; desktop stuff
         ddcutil ;; monitor settings
         ))
+
+(define-public %web-world
+  (list firefox
+        ungoogled-chromium
+        speedtest-cli
+        netcat-openbsd
+        nmap
+        onionshare))
 
 (define-public %hack-the-world
   (list wireshark))
