@@ -1,4 +1,4 @@
-(add-to-load-path (dirname (current-filename)))
+(add-to-load-path "/code/wonko-mono-conf/guix") ;; sigh
 
 (use-modules (gnu)
              (gnu packages)

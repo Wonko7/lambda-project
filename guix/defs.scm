@@ -8,6 +8,7 @@
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
 (define-public %lock-cmd
   '("/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10"))
+(define-public %lambda-project "/code/wonko-mono-conf")
 
 
 (define-public %dvorak-kb

@@ -290,7 +290,7 @@
            (push my/init-ement-room-list display-buffer-alist)
            (my/ement-init))
           ((run-init-p 8)
-           (projectile-switch-project-by-name "/code/wonko-mono-conf"))
+           (projectile-switch-project-by-name my/lambda-project))
           ((run-init-p 7)
            (my/init-org))
           ((run-init-p 6)

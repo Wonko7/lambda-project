@@ -86,6 +86,7 @@
 (define %emacs-values
   #~(progn
      (setq my/font #$%font
+           my/lambda-project #$%lambda-project
            my/font-size #$(ship-emacs-font-size %ship)
            my/modeline-height #$(ship-emacs-modeline-height %ship)
            my/term-cmd #$(format #f "st -f 'JetBrains Mono:size=~a'"
