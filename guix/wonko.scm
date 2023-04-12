@@ -164,8 +164,12 @@
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
                 ("QT_STYLE_OVERRIDE" . "kvantum")
                 ("XDG_CURRENT_DESKTOP" . "qt5ct")))
-             (bash-profile (list
-                            (bash-profile-source-manifests '(dev net desktop web utils))))))
+             (bash-profile
+              (list
+               (bash-profile-source-manifests '(desktop web))))
+             (bashrc
+              (list
+               (bash-profile-source-manifests '(desktop web))))))
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
@@ -376,8 +380,8 @@
                 (provision '(xss-lock))
                 (start #~(make-forkexec-constructor
                           (cons* #$(file-append xss-lock "/bin/xss-lock")
-                                  "--"
-                                  '#$%lock-cmd)
+                                 "--"
+                                 '#$%lock-cmd)
                           #:log-file "log/xss-lock.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "don't touch my stuff"))
