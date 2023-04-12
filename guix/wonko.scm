@@ -1,6 +1,5 @@
-(add-to-load-path (dirname (current-filename)))
-;; (add-to-load-path "/code/wonko-mono-conf/guix")
-
+;;(add-to-load-path (dirname (current-filename)))
+(add-to-load-path "/code/wonko-mono-conf/guix")
 (use-modules
  (guix gexp)
  (gnu home)

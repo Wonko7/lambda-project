@@ -19,12 +19,12 @@
 
 
 (require 'eglot)
-(add-hook 'prog-mode-hook #'eglot-ensure)
-(setq eglot-autoshutdown t)
+;; (add-hook 'prog-mode-hook #'eglot-ensure)
+;; (setq eglot-autoshutdown t)
 
 
 (require 'tuareg)
-;; (require 'ocamlformat)
+(require 'ocamlformat)
 
 ;; (use-package tuareg :ensure t)
 

@@ -52,6 +52,9 @@
    "xmodmap"
    "xprop"
    "xset"
+   "xfontsel"
+   "xdpyinfo"
+   "xrdb"
     ;;;; pirate radio
    ;; "wireshark"
    ;; "transmission:gui"
@@ -66,7 +69,6 @@
    "oxygen-icons"
    "xsettingsd" ;; ?
     ;;;; deps
-   "mesa-utils" ;; ?
    ;; build man db:
    "bash-completion"
    "man-db"

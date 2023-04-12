@@ -18,7 +18,7 @@
   (let ((file (call-with-input-file "../misc/dunstrc" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
-             (field-replace k v file)))
+              (field-replace k v file)))
           file
           `(("=FONT=" . ,ship-font)
             ("=FONT_SIZE=" . ,ship-dunst-font-size)
@@ -28,7 +28,7 @@
   (let ((file (call-with-input-file "../misc/picom.conf" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
-             (field-replace k v file)))
+              (field-replace k v file)))
           file
           `(("=RADIUS=" . ,ship-picom-radius)))))
 
@@ -74,7 +74,7 @@
      "    fi\n"
      "    unset profile\n"
      "done\n")))
-     ;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true"
+;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true"
 
 (define-macro (cmd+arg->script cmds)
   (let ((cmds (eval cmds (current-module))))
