@@ -1,5 +1,7 @@
 (define-module (dotfiles)
   #:use-module (guix gexp)
+  #:use-module (guix modules)
+  #:use-module (guix profiles)
   #:use-module (ice-9 textual-ports)
   #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)
@@ -75,6 +77,14 @@
      "    unset profile\n"
      "done\n")))
 ;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true"
+
+(define-public (pkgs->manifest name ps)
+  `(,(string-append "local/manifests/" name)
+    ,(scheme-file
+      name
+      #~(begin
+          #$(manifest->code
+             (packages->manifest ps))))))
 
 (define-macro (cmd+arg->script cmds)
   (let ((cmds (eval cmds (current-module))))

@@ -2,6 +2,7 @@
 (add-to-load-path "/code/wonko-mono-conf/guix")
 (use-modules
  (guix gexp)
+ (guix modules)
  (gnu home)
  (gnu home services)
  (gnu home services shells)
@@ -312,21 +313,12 @@
       (".config/Synergy/Synergy.conf"
        ,(local-file
          (string-append conf-root-dir "/misc/Synergy.conf")))
-      ;; profiles FIXME -> generate these from a list?
-      ("local/manifests/desktop"
-       ,(scheme-file
-         "desktop.scm"
-         #~(begin
-             #$(manifest->code
-                (packages->manifest %desktop-world)))))
-      ("local/manifests/web"
-       ,(scheme-file
-         "web.scm"
-         #~(begin
-             #$(manifest->code
-                (packages->manifest %web-world)))))
+      ;; profiles FIXME -> generate these from a list
+      ,(pkgs->manifest "desktop" %desktop-world)
+      ,(pkgs->manifest "utils" %utils-world)
+      ,(pkgs->manifest "web" %web-world)
       ;; update profiles
-      ("local/bin/guix-extra-profiles-update"
+      ("local/bin/guix-extra-profiles-build"
        ,(program-file
          "_"
          (with-imported-modules
@@ -335,19 +327,16 @@
            #~(begin
                (use-modules (spock)
                             (guix build utils))
-               (display (spock-say
-                         (string-append "update EXTRA PROFILES for " #$(ship-name %ship)))
-                        (current-error-port))
-               (newline (current-error-port))
-               (let ((guix   #$(string-append %home "/.config/guix/current/bin/guix")))
+               (let ((guix #$(string-append %home "/.config/guix/current/bin/guix")))
                  (map (lambda (p)
                         (display (spock-say
-                                  (string-append "update PROFILE " p))
+                                  (string-append "build PROFILE " p))
                                  (current-error-port))
+                        (newline (current-error-port))
                         (system
                          (string-append guix " package -m ~/local/manifests/" p
                                         " -p $GUIX_EXTRA_PROFILES/" p)))
-                      '("web" "desktop"))))))) ;; FIXME list
+                      '("desktop" "utils" "web"))))))) ;; FIXME list
       ;; secrets
       ("local/bin/secrets-backup"
        ,(program-file
