@@ -368,7 +368,8 @@
 (define-public %ocaml5-world
   (list ocaml5.0-eio-main
         ocaml-batteries
-        ocamlformat))
+        ocamlformat
+        ocaml-utop))
 
 (define-public %vcs-world
   (list mercurial

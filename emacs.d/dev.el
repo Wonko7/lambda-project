@@ -25,6 +25,11 @@
 
 (require 'tuareg)
 (require 'ocamlformat)
+(require 'utop)
+
+(setq utop-command "dune utop . -- -emacs")
+(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+(add-hook 'tuareg-mode-hook 'utop-minor-mode)
 
 ;; (use-package tuareg :ensure t)
 
@@ -72,42 +77,45 @@
 ;;       "b"   #'tuareg-eval-buffer
 ;;       "TAB" #'tuareg-complete
 ;;       "K"   #'tuareg-kill-ocaml
+  ;; :nvm  "gd" #'+lookup/definition
 ;;       "a"   #'ff-get-other-file)
 
 (general-evil-define-key '(normal) tuareg-mode-map
   :prefix "RET"
-  "ge"  'merlin-error-next
-  "o"   'merlin-pop-stack
-  "RET" 'tuareg-eval-phrase
-  "b"   'tuareg-eval-buffer
-  "TAB" 'tuareg-complete
-  "K"   'tuareg-kill-ocaml
-  "a"   'ff-get-other-file ;; find-file.el
-  ;; :nvm  "gd" #'+lookup/definition
-  )
+  "ge"  #'merlin-error-next
+  "o"   #'merlin-pop-stack
+  "RET" #'tuareg-eval-phrase
+  "b"   #'tuareg-eval-buffer
+  "TAB" #'tuareg-complete
+  "K"   #'tuareg-kill-ocaml
+  "a"   #'ff-get-other-file)
+
+(general-evil-define-key '(normal) utop-minor-mode-map
+  :prefix "RET"
+  "RET" #'utop-eval-phrase
+  "b"   #'utop-eval-buffer
+  "K"   #'utop-kill)
 
 (general-evil-define-key '(normal) prog-mode-map
-  "zj"  'flymake-goto-next-error
-  "zk"  'flymake-goto-prev-error)
+  "zj"  #'flymake-goto-next-error
+  "zk"  #'flymake-goto-prev-error)
 
 ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
-(add-hook 'tuareg-mode-hook (lambda ()
-                              (setq mode-name "🐫")
-                              ;; FIXME( integrate this after trying them out.
-                                        ;(define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
-                              ;; FIXME)
-                              (add-hook 'before-save-hook #'ocamlformat-before-save)
-                              (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
-                                                          ("\\.ml\\'" (".mli"))
-                                                          ("\\.eliomi\\'" (".eliom"))
-                                                          ("\\.eliom\\'" (".eliomi"))))
-                              (setq-local comment-style 'indent)
-                              (setq-local tuareg-interactive-program
-                                          (concat tuareg-interactive-program " -nopromptcont"))
-                              (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
-                                               (when (member ext '("eliom" "eliomi"))
-                                                 (setq-local lsp-modeline-code-actions-enable nil))))
-                              (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (setq mode-name "🐫")
+            (add-hook 'before-save-hook #'ocamlformat-before-save)
+            (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
+                                        ("\\.ml\\'" (".mli"))
+                                        ("\\.eliomi\\'" (".eliom"))
+                                        ("\\.eliom\\'" (".eliomi"))))
+            (setq-local comment-style 'indent)
+            (setq-local tuareg-interactive-program
+                        (concat tuareg-interactive-program " -nopromptcont"))
+            (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
+                             (when (member ext '("eliom" "eliomi"))
+                               (setq-local lsp-modeline-code-actions-enable nil))))
+            (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
 
 (require 'diff-hl)
 (global-diff-hl-mode)
@@ -120,8 +128,11 @@
 
 ;; use guix shell automagically <3
 (require 'buffer-env)
-(add-hook 'hack-local-variables-hook 'buffer-env-update)
-(add-hook 'eshell-directory-change-hook 'buffer-env-update) ;; overkill: revisit. but works.
+(setq buffer-env-script-name "guix.scm")
+(add-hook 'hack-local-variables-hook #'buffer-env-update)
+(add-hook 'eshell-directory-change-hook #'buffer-env-update) ;; overkill: revisit. but works.
+(add-hook 'utop-mode-hook #'buffer-env-update)
+
 (require 'inheritenv)
 
 (provide 'conf/dev)
