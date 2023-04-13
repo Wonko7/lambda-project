@@ -9,6 +9,7 @@
  (gnu services)
  (guix profiles)
  (srfi srfi-1)
+ (srfi srfi-11)
 
  ;; fonts
  (w7 packages fonts)
@@ -122,16 +123,22 @@
     ("nmcli" . "nmcli -c yes")
     ("ip" . "ip -c -h")))
 
+(define-public %profiles
+  `(("desktop" . ,%desktop-world)
+    ("utils" . ,%utils-world)
+    ("web" . ,%web-world)))
+
+(define-public (profiles->names ps)
+  (map car ps))
+
 (home-environment
  (packages
   (append
-
    %emacs-world
    %crypto-world
    %xorg-world
    %fonts-world
    %ocaml5-world
-
    (list
     ;; services
     ibhagwan-picom
@@ -169,10 +176,10 @@
                 ("XDG_CURRENT_DESKTOP" . "qt5ct")))
              (bash-profile
               (list
-               (bash-profile-source-manifests '(desktop web))))
+               (bash-profile-source-profiles (profiles->names %profiles))))
              (bashrc
               (list
-               (bash-profile-source-manifests '(desktop web))))))
+               (bash-profile-source-profiles (profiles->names %profiles))))))
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
@@ -245,18 +252,18 @@
                                    "'"))
             ("~/.x-config"  . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
-                . #$(file-append emacs-exwm "/bin/exwm"))))))
+             . #$(file-append emacs-exwm "/bin/exwm"))))))
       ("spock"
        ,(program-file
          "spock"
          (with-imported-modules
-          '((spock))
-          #~(begin
-              (use-modules
-               (spock))
-              (display
-               (spock-say "live long & prosper!"))
-              (newline)))))
+             '((spock))
+           #~(begin
+               (use-modules
+                (spock))
+               (display
+                (spock-say "live long & prosper!"))
+               (newline)))))
       ;; utils:
       (".config/git/config"
        ,(local-file
@@ -312,13 +319,30 @@
          (string-append conf-root-dir "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
-         (string-append conf-root-dir "/misc/Synergy.conf")))
-      ;; profiles FIXME -> generate these from a list
-      ,(pkgs->manifest "desktop" %desktop-world)
-      ,(pkgs->manifest "utils" %utils-world)
-      ,(pkgs->manifest "web" %web-world)
-      ;; update profiles
-      ("local/bin/guix-extra-profiles-build"
+         (string-append conf-root-dir "/misc/Synergy.conf")))))
+
+   (simple-service 'guix-config-files
+                   home-files-service-type
+                   (map
+                    (lambda (file)
+                      `(,(string-append ".config/guix/" file)
+                        ,(local-file
+                          (string-append conf-root-dir "/guix/config/" file))))
+                    '("shell-authorized-directories"
+                      "channels.scm")))
+
+   (simple-service 'guix-manifests
+                   home-files-service-type
+                   (map
+                    (lambda (np)
+                      (let-values (((n p) (car+cdr np)))
+                        (pkgs->manifest n p)))
+                    %profiles))
+
+   (simple-service
+    'guix-profiles-scripts
+    home-files-service-type
+    `(("local/bin/guix-extra-profiles-build"
        ,(program-file
          "_"
          (with-imported-modules
@@ -336,63 +360,56 @@
                         (system
                          (string-append guix " package -m ~/local/manifests/" p
                                         " -p $GUIX_EXTRA_PROFILES/" p)))
-                      '("desktop" "utils" "web"))))))) ;; FIXME list
-      ;; secrets
-      ("local/bin/secrets-backup"
+                      '#$(profiles->names %profiles)))))))))
+
+   (simple-service
+    'secrets-scripts
+    home-files-service-type
+    `(("local/bin/secrets-backup"
        ,(program-file
          "_"
          (with-imported-modules
-          '((spock)
-            (guix build utils))
-          #~(begin
-              (use-modules (spock)
-                           (guix build utils))
-              (display (spock-say
-                        (string-append "backup SECRETS for " #$(ship-name %ship)))
-                       (current-error-port))
-              (newline (current-error-port))
-              (let ((pass   #$(file-append password-store "/bin/pass"))
-                    (cat    #$(file-append coreutils "/bin/cat"))
-                    (cp     #$(file-append coreutils "/bin/cp"))
-                    (base64 #$(file-append coreutils "/bin/base64"))
-                    (tar    #$(file-append tar "/bin/tar")))
-                (system
-                 (string-append "cd " #$%home " && " tar " czf - .ssh/id_ed25519* | "
-                                base64 " | "
-                                pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
-                (system
-                 (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
-                                "/code/wonko-mono-conf/guix/data/ssh/" #$(ship-name %ship)
-                                ".pub")))))))
+             '((spock)
+               (guix build utils))
+           #~(begin
+               (use-modules (spock)
+                            (guix build utils))
+               (display (spock-say
+                         (string-append "backup SECRETS for " #$(ship-name %ship)))
+                        (current-error-port))
+               (newline (current-error-port))
+               (let ((pass   #$(file-append password-store "/bin/pass"))
+                     (cat    #$(file-append coreutils "/bin/cat"))
+                     (cp     #$(file-append coreutils "/bin/cp"))
+                     (base64 #$(file-append coreutils "/bin/base64"))
+                     (tar    #$(file-append tar "/bin/tar")))
+                 (system
+                  (string-append "cd " #$%home " && " tar " czf - .ssh/id_ed25519* | "
+                                 base64 " | "
+                                 pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
+                 (system
+                  (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
+                                 "/code/wonko-mono-conf/guix/data/ssh/" #$(ship-name %ship)
+                                 ".pub")))))))
       ("local/bin/secrets-deploy"
        ,(program-file
          "_"
          (with-imported-modules
-          '((spock)
-            (guix build utils))
-          #~(begin
-              (use-modules (spock)
-                           (guix build utils))
-              (display (spock-say
-                        (string-append "deploy SECRETS for " #$(ship-name %ship)))
-                       (current-error-port))
-              (newline (current-error-port))
-              (let ((pass   #$(file-append password-store "/bin/pass"))
-                    (base64 #$(file-append coreutils "/bin/base64"))
-                    (tar    #$(file-append tar "/bin/tar")))
-                (system
-                 (string-append pass " show fleet/" #$(ship-name %ship) "/ssh | "
-                                base64 " -d | " tar " xz ")))))))))
-
-   (simple-service 'guix-config-files
-                   home-files-service-type
-                   (map
-                    (lambda (file)
-                      `(,(string-append ".config/guix/" file)
-                        ,(local-file
-                          (string-append conf-root-dir "/guix/config/" file))))
-                    '("shell-authorized-directories"
-                      "channels.scm")))
+             '((spock)
+               (guix build utils))
+           #~(begin
+               (use-modules (spock)
+                            (guix build utils))
+               (display (spock-say
+                         (string-append "deploy SECRETS for " #$(ship-name %ship)))
+                        (current-error-port))
+               (newline (current-error-port))
+               (let ((pass   #$(file-append password-store "/bin/pass"))
+                     (base64 #$(file-append coreutils "/bin/base64"))
+                     (tar    #$(file-append tar "/bin/tar")))
+                 (system
+                  (string-append pass " show fleet/" #$(ship-name %ship) "/ssh | "
+                                 base64 " -d | " tar " xz ")))))))))
 
    (service home-shepherd-service-type
             (home-shepherd-configuration

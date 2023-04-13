@@ -59,16 +59,16 @@
    (lambda (b)
      (string-append " " b " $*\n"))))
 
-(define-public (bash-profile-source-manifests manifests)
-  (let* ((manifests (concatenate
-                     (zip
-                      (map symbol->string manifests)
-                      (circular-list " "))))
-         (manifests (apply string-append manifests)))
+(define-public (bash-profile-source-profiles profiles)
+  (let* ((profiles (concatenate
+                    (zip
+                     profiles
+                     (circular-list " "))))
+         (profiles (apply string-append profiles)))
     (mixed-text-file
      "bash-profile"
      "# hey boy. hey girl. superstar DJ. here we go!\n"
-     (string-append "for p in " manifests "; do\n")
+     (string-append "for p in " profiles "; do\n")
      "    profile=$GUIX_EXTRA_PROFILES/$p\n"
      "    if [ -f $profile/etc/profile ]; then\n"
      "        GUIX_PROFILE=$profile\n"
