@@ -1,5 +1,3 @@
-;;(add-to-load-path (dirname (current-filename)))
-(add-to-load-path "/code/wonko-mono-conf/guix")
 (use-modules
  (guix gexp)
  (guix modules)
@@ -165,6 +163,8 @@
                 ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-profile/lib")
                 ("PATH" . "~/local/bin:$PATH")
                 ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
+                ("GUILE_LOAD_PATH" .
+                 ,(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
                 ("GDK_SCALE" . ,(number->string
@@ -187,7 +187,7 @@
                     (lambda (file)
                       `(,(string-append ".emacs.d/" file)
                         ,(local-file
-                          (string-append conf-root-dir "/emacs.d/" file))))
+                          (string-append %lambda-project "/emacs.d/" file))))
                     '("completion.el"
                       "communication.el"
                       "dev.el"
@@ -208,7 +208,7 @@
                     (lambda (file)
                       `(,(string-append ".emacs.d/snippets/" file)
                         ,(local-file
-                          (string-append conf-root-dir "/emacs.d/snippets/" file))))
+                          (string-append %lambda-project "/emacs.d/snippets/" file))))
                     '("fundamental-mode/danger_triangle"
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
@@ -225,7 +225,7 @@
     ;; exwm config is outside of .emacs.d:
     `((".exwm"
        ,(local-file
-         (string-append conf-root-dir  "/emacs.d/exwm.el")))
+         (string-append %lambda-project "/emacs.d/exwm.el")))
       (".emacs.d/aliases"
        ,(plain-file "aliases"
                     (emacs-eshell-aliases-configuration %aliases)))
@@ -250,60 +250,50 @@
             (feh . ,(string-append "--bg-scale '"
                                    (ship-wallpaper %ship)
                                    "'"))
-            ("~/.x-config"  . "")
+            ("~/.x-config" . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
              . #$(file-append emacs-exwm "/bin/exwm"))))))
-      ("spock"
-       ,(program-file
-         "spock"
-         (with-imported-modules
-             '((spock))
-           #~(begin
-               (use-modules
-                (spock))
-               (display
-                (spock-say "live long & prosper!"))
-               (newline)))))
+
       ;; utils:
       (".config/git/config"
        ,(local-file
-         (string-append conf-root-dir "/misc/gitconfig")))
+         (string-append %lambda-project "/misc/gitconfig")))
       (".config/git/attributes"
        ,(local-file
-         (string-append conf-root-dir "/misc/gitattributes")))
+         (string-append %lambda-project "/misc/gitattributes")))
       (".config/ripgrep/ripgreprc"
        ,(local-file
-         (string-append conf-root-dir "/misc/ripgreprc")))
+         (string-append %lambda-project "/misc/ripgreprc")))
       ;; GTK & QT configs:
       (".gtkrc-2.0"
        ,(local-file
-         (string-append conf-root-dir "/misc/gtkrc-2.0")))
+         (string-append %lambda-project "/misc/gtkrc-2.0")))
       (".config/gtk-3.0/settings.ini"
        ,(local-file
-         (string-append conf-root-dir "/misc/gtkrc-3.0")))
+         (string-append %lambda-project "/misc/gtkrc-3.0")))
       (".config/Kvantum/kvantum.kvconfig"
        ,(local-file
-         (string-append conf-root-dir "/misc/kvantum.kvconfig")))
+         (string-append %lambda-project "/misc/kvantum.kvconfig")))
       (".config/Kvantum/KvGnomish#/KvGnomish#.kvconfig"
        ,(local-file
-         (string-append conf-root-dir "/misc/kv_yggdrasill.kvconfig")))
+         (string-append %lambda-project "/misc/kv_yggdrasill.kvconfig")))
       (".config/qt5ct/qt5ct.conf"
        ,(local-file
-         (string-append conf-root-dir "/misc/qt5ct.conf")))
+         (string-append %lambda-project "/misc/qt5ct.conf")))
       ;; my X stuff:
       (".XCompose"
        ,(local-file
-         (string-append conf-root-dir "/misc/XCompose")))
+         (string-append %lambda-project "/misc/XCompose")))
       (,(string-append ".config/x-config/"
                        (ship-name %ship)
                        ".xmodmap")
        ,(local-file
-         (string-append conf-root-dir "/misc/"
+         (string-append %lambda-project "/misc/"
                         (ship-name %ship)
                         ".xmodmap")))
       (".config/x-config/common.xmodmap"
        ,(local-file
-         (string-append conf-root-dir "/misc/common.xmodmap")))
+         (string-append %lambda-project "/misc/common.xmodmap")))
       (".config/picom.conf"
        ,(plain-file "picom.conf"
                     (picom-configuration
@@ -316,10 +306,10 @@
                      (ship-dunst-width %ship))))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file
-         (string-append conf-root-dir "/misc/pantalaimon.conf")))
+         (string-append %lambda-project "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
-         (string-append conf-root-dir "/misc/Synergy.conf")))))
+         (string-append %lambda-project "/misc/Synergy.conf")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
@@ -327,7 +317,7 @@
                     (lambda (file)
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
-                          (string-append conf-root-dir "/guix/config/" file))))
+                          (string-append %lambda-project "/guix/config/" file))))
                     '("shell-authorized-directories"
                       "channels.scm")))
 
@@ -363,6 +353,22 @@
                       '#$(profiles->names %profiles)))))))))
 
    (simple-service
+    'home-scripts
+    home-files-service-type
+    `(("local/bin/spock"
+       ,(program-file
+         "spock"
+         (with-imported-modules
+             '((spock))
+           #~(begin
+               (use-modules
+                (spock))
+               (display
+                (spock-say "live long & prosper!"))
+               (newline)))))
+      ))
+
+   (simple-service
     'secrets-scripts
     home-files-service-type
     `(("local/bin/secrets-backup"
@@ -389,7 +395,7 @@
                                  pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
                  (system
                   (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
-                                 "/code/wonko-mono-conf/guix/data/ssh/" #$(ship-name %ship)
+                                ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
                                  ".pub")))))))
       ("local/bin/secrets-deploy"
        ,(program-file

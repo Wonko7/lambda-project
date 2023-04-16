@@ -1,5 +1,3 @@
-(add-to-load-path "/code/wonko-mono-conf/guix") ;; sigh
-
 (use-modules (gnu)
              (gnu packages)
              (gnu packages base)
@@ -39,7 +37,7 @@
 
 (display (spock-say (string-append "building OS for " (ship-name %ship)))
          (current-error-port))
-(display "\n" (current-error-port))
+(newline (current-error-port))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; channels

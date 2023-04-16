@@ -8,5 +8,5 @@ I have achieved peak computing.
   guix home container wonko.scm
   # deploy
   sudo SHIP=`hostname` `which guix` system reconfigure os.scm
-  guix home reconfigure wonko.scm
+  SHIP=`hostname` guix home reconfigure wonko.scm
 #+end_src
