@@ -186,75 +186,25 @@
     (file-systems
      (if (ephemeral? ship)
          %base-file-systems
-         (cons* (file-system
-                  (mount-point "/boot")
-                  (device (uuid (assoc-ref (ship-uuids ship) 'efi)
-                                'fat32))
-                  (type "vfat"))
-                (file-system
-                  (mount-point "/mnt/vault")
-                  (device "/dev/mapper/vault")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                (file-system
-                  (device "/dev/mapper/vault")
-                  (mount-point "/")
-                  (type "btrfs")
-                  (options "subvol=_live/@guix-root")
-                  (needed-for-boot? #t)
-                  (dependencies mapped-devices))
-                (file-system
-                  (mount-point "/home")
-                  (device "/dev/mapper/vault")
-                  (options "subvol=_live/@guix-home")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                (file-system
-                  (mount-point "/code")
-                  (device "/dev/mapper/vault")
-                  (options "subvol=_live/@code")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                (file-system
-                  (mount-point "/data")
-                  (device "/dev/mapper/vault")
-                  (options "subvol=_live/@data")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                (file-system
-                  (mount-point "/work")
-                  (device "/dev/mapper/vault")
-                  (options "subvol=_live/@work")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                (file-system
-                  (mount-point "/junkyard")
-                  (device "/dev/mapper/vault")
-                  (options "subvol=_live/@junkyard")
-                  (type "btrfs")
-                  (dependencies mapped-devices))
-                %base-file-systems
-                ;; (let ((btrfs-vault-subvol (lambda (args)
-                ;;                             (let-values (((mount-p sv-name) args))
-                ;;                               (file-system
-                ;;                                 (device "/dev/mapper/vault")
-                ;;                                 (mount-point mount-p)
-                ;;                                 (type "btrfs")
-                ;;                                 (options (string-append "subvol=_live/@"
-                ;;                                                         sv-name))
-                ;;                                 (needed-for-boot? (equal? "/" mount-p))
-                ;;                                 (dependencies mapped-devices))))))
-                ;;   (append
-                ;;    (map btrfs-vault-subvol
-                ;;         `(("/" . "guix-root")
-                ;;           ("/home" . "guix-home")
-                ;;           ("/code" . "code")
-                ;;           ("/data" . "data")
-                ;;           ("/work" . "work")
-                ;;           ("/junkyard" . "junkyard")))
-                ;;    %base-file-systems))
-                ;; -> Wrong number of values returned to continuation (expected 2)
-                )))
+         (let ((btrfs-vault-subvol (lambda (args)
+                                     (let-values (((mount-p sv-name) (car+cdr args)))
+                                       (file-system
+                                        (device "/dev/mapper/vault")
+                                        (mount-point mount-p)
+                                        (type "btrfs")
+                                        (options (string-append "subvol=_live/@"
+                                                                sv-name))
+                                        (needed-for-boot? (equal? "/" mount-p))
+                                        (dependencies mapped-devices))))))
+           (append
+            (map btrfs-vault-subvol
+                 `(("/" . "guix-root")
+                   ("/home" . "guix-home")
+                   ("/code" . "code")
+                   ("/data" . "data")
+                   ("/work" . "work")
+                   ("/junkyard" . "junkyard")))
+            %base-file-systems))))
 
     ;; FIXME: take care of making this? idem @btrfs subvol
     (swap-devices
