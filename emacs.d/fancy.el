@@ -93,4 +93,10 @@
 ;; (setq beacon-dont-blink-commands nil)
 (setq beacon-blink-when-point-moves-horizontally 2)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; nyan
+
+(require 'nyan-mode)
+(setq nyan-animate-nyancat t)
+
 (provide 'conf/fancy)

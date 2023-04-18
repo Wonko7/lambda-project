@@ -229,6 +229,7 @@
 
         ;; simple gui
         emacs-beacon
+        emacs-nyan-mode
         emacs-doom-modeline
         emacs-diminish
         emacs-doom-themes
