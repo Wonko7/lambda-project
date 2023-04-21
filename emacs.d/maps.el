@@ -152,7 +152,7 @@
 (general-evil-define-key '(normal insert visual) eshell-mode-map
   "C-r"        (lambda ()
                  (interactive)
-                 (evil-insert 1)
+                 (evil-append 1)
                  (consult-history))
   "C-k"        #'eshell-previous-prompt
   "C-j"        #'eshell-next-prompt
