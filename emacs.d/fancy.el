@@ -98,5 +98,6 @@
 
 (require 'nyan-mode)
 (setq nyan-animate-nyancat t)
+(nyan-mode 1)
 
 (provide 'conf/fancy)
