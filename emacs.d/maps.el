@@ -170,20 +170,21 @@
 ;; shell
 
 (general-evil-define-key '(normal visual) comint-mode-map
-  "ï"    #'my/cd-up
-  "-"    #'my/cd--
-  "C-k"  #'comint-previous-prompt
-  "C-j"  #'comint-next-prompt
-  "C-r"  #'consult-history
-  "RET"  #'comint-send-input
-  "C-<return>" #'comint-copy-old-input
-  "A"    (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
+  "ï"           #'my/cd-up
+  "-"           #'my/cd--
+  "C-k"         #'comint-previous-prompt
+  "C-j"         #'comint-next-prompt
+  "C-r"         #'consult-history
+  "RET"         #'comint-send-input
+  "C-<return>"  #'comint-copy-old-input
+  "A"           (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (general-evil-define-key '(insert) comint-mode-map
-  "C-k"  #'comint-previous-prompt
-  "C-j"  #'comint-next-prompt
-  "C-r"  #'consult-history
-  "RET"  #'comint-send-input)
+  "C-k"         #'comint-previous-prompt
+  "C-j"         #'comint-next-prompt
+  "C-r"         #'consult-history
+  "C-<return>"  #'comint-copy-old-input
+  "RET"         #'comint-send-input)
 
 (evil-collection-define-key 'insert 'comint-mode-map
   (kbd "C-r") #'consult-history
