@@ -6,6 +6,8 @@
 
 (define-public %lambda-project "/code/wonko-mono-conf")
 
+(define-public %guix-extra-profiles-dir "/.guix-extra-profiles")
+
 (define-public %font "JetBrains Mono")
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
 (define-public %lock-cmd

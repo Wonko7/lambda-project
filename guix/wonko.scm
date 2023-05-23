@@ -49,6 +49,7 @@
  (gnu packages gnupg)
  (gnu packages password-utils)
  (gnu packages bash)
+ (gnu packages tor)
 
  ;; dev
  (gnu packages haskell-apps)
@@ -122,9 +123,11 @@
     ("ip" . "ip -c -h")))
 
 (define-public %profiles
-  `(("desktop" . ,%desktop-world)
+  `(("communication" . ,%communication-world) ;; 18786ae50272627a665a160bc5becc587957d8a3
+    ("desktop" . ,%desktop-world)
     ("utils" . ,%utils-world)
-    ("web" . ,%web-world)))
+    ("web" . ,%web-world)
+    ("zonked" . ,(list onionshare-cli)))) ;; --commit=0f0c1c66f4d0bb32f2f5c74cc15b472fbd30e6c1
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -137,6 +140,7 @@
    %crypto-world
    %xorg-world
    %fonts-world
+   %vcs-world
    %ocaml5-world
    (list
     ;; services
@@ -163,7 +167,8 @@
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
                 ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
                 ("PATH" . "~/local/bin:$PATH")
-                ("GUIX_EXTRA_PROFILES" . "$HOME/.guix-extra-profiles")
+                ("GUIX_EXTRA_PROFILES" .
+                 ,(string-append "$HOME" %guix-extra-profiles-dir))
                 ("GUILE_LOAD_PATH" .
                  ,(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
                 ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
@@ -465,7 +470,8 @@
                (shepherd-service
                 (provision '(pantalaimon))
                 (start #~(make-forkexec-constructor
-                          (list #$(file-append pantalaimon "/bin/pantalaimon"))
+                          (list #$(string-append %home %guix-extra-profiles-dir
+                                                 "/communication/bin/pantalaimon"))
                           #:log-file "log/matrix.log"))
                 (stop #~(make-kill-destructor))
                 (documentation "Crypto back-end server for ement.el"))

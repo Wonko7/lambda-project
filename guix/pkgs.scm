@@ -37,6 +37,8 @@
   #:use-module (nongnu packages mozilla)
   #:use-module (gnu packages chromium)
   #:use-module (gnu packages tor)
+  #:use-module (gnu packages matrix)
+  #:use-module (gnu packages irc)
   ;; tools
   #:use-module (w7 packages w7-st)
   #:use-module (gnu packages admin)
@@ -257,7 +259,7 @@
         ;; communication
         emacs-ement
         emacs-mastodon
-        pantalaimon
+        ;; pantalaimon
 
         ;; ☠
         rtorrent
@@ -342,7 +344,8 @@
         speedtest-cli
         netcat-openbsd
         nmap
-        onionshare))
+        ;; onionshare
+        ))
 
 (define-public %hack-the-world
   (list wireshark))
@@ -428,3 +431,7 @@
         btrfs-progs
         dosfstools
         util-linux+udev))
+
+(define-public %communication-world
+  (list pantalaimon
+        weechat))
