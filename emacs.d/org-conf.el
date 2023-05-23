@@ -200,7 +200,7 @@ space rather than before."
 
       ;;       org-agenda-start-with-log-mode t)
       org-agenda-start-with-log-mode t
-      org-habit-show-habits nil
+      org-habit-show-habits t
       org-agenda-skip-scheduled-if-done t
       org-agenda-skip-deadline-if-done t
       org-agenda-include-deadlines t
