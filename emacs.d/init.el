@@ -66,6 +66,8 @@
 (add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
 (add-hook 'ement-room-mode-hook      (lambda () (linum-mode 0)))
 
+(setq custom-file "~/.emacs.d/custom-cache.el")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
 
