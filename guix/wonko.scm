@@ -341,11 +341,17 @@
          "_"
          (with-imported-modules
              '((spock)
+               (srfi srfi-1)
                (guix build utils))
            #~(begin
                (use-modules (spock)
+                            (srfi srfi-1)
                             (guix build utils))
-               (let ((guix #$(string-append %home "/.config/guix/current/bin/guix")))
+               (let ((guix #$(string-append %home "/.config/guix/current/bin/guix"))
+                     (ps   (let ((args (drop (program-arguments) 1)))
+                            (if (null? args)
+                                '#$(profiles->names %profiles)
+                                args))))
                  (map (lambda (p)
                         (display (spock-say
                                   (string-append "build PROFILE " p))
@@ -354,7 +360,7 @@
                         (system
                          (string-append guix " package -m ~/local/manifests/" p
                                         " -p $GUIX_EXTRA_PROFILES/" p)))
-                      '#$(profiles->names %profiles)))))))
+                      ps))))))
 
       ("local/bin/guix-os-reconfigure"
        ,(program-file
