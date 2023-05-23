@@ -81,7 +81,7 @@
 
 (require 'flyspell-correct)
 ;; (global-spell-fu-mode 0)
-(setenv "LANG" "en_GB-ise.utf8")
+;; (setenv "LANG" "en_GB-ise.utf8") ;; hmmmm no. revisit.
 (setq ispell-program-name "hunspell")
 (setq ispell-dictionary "en_GB-ise,en_GB-ize,fr-toutesvariantes")
 (setq ispell-local-dictionary-alist `(("en_GB-ise,en_GB-ize,fr-toutesvariantes"
