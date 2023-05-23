@@ -305,7 +305,7 @@
           ((run-init-p 2)
            (async-shell-command my/term-cmd))
           ((run-init-p 1)
-           (eshell)))))
+           (shell)))))
 
 (defun ws/force-run-auto-start ()
   (interactive)

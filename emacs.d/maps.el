@@ -83,7 +83,7 @@
   "pD" #'projectile-discover-projects-in-search-path
   "pK" #'projectile-kill-buffers
   "pS" #'projectile-save-project-buffers
-  "ps" #'projectile-run-eshell
+  "ps" #'projectile-run-shell
   "pb" #'projectile-ibuffer
   "pd" #'projectile-dired
   "pm" #'persp-merge
@@ -176,6 +176,7 @@
   "C-j"  #'comint-next-prompt
   "C-r"  #'consult-history
   "RET"  #'comint-send-input
+  "C-<return>" #'comint-copy-old-input
   "A"    (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (general-evil-define-key '(insert) comint-mode-map
