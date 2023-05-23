@@ -277,14 +277,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-(require 'conf/misc "~/.emacs.d/misc.el")
-(require 'conf/completion "~/.emacs.d/completion.el")
-(require 'conf/org "~/.emacs.d/org-conf.el")
-(require 'conf/lisp "~/.emacs.d/lisp-config.el")
-(require 'conf/doom "~/.emacs.d/doom.el")
-(require 'conf/maps "~/.emacs.d/maps.el")
-(require 'conf/dev "~/.emacs.d/dev.el")
+(require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el")
+(require 'conf/misc          "~/.emacs.d/misc.el")
+(require 'conf/completion    "~/.emacs.d/completion.el")
+(require 'conf/org           "~/.emacs.d/org-conf.el")
+(require 'conf/lisp          "~/.emacs.d/lisp-config.el")
+(require 'conf/doom          "~/.emacs.d/doom.el")
+(require 'conf/maps          "~/.emacs.d/maps.el")
+(require 'conf/dev           "~/.emacs.d/dev.el")
 (require 'conf/communication "~/.emacs.d/communication.el")
 
 ;; FIXME: powerline errors, could that break exwm init?
