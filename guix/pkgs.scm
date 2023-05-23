@@ -96,6 +96,8 @@
         emacs-org-super-agenda
         emacs-org-web-tools
         emacs-org-ql
+        emacs-org-board
+        emacs-org-books
         emacs-enlive
         emacs-seq
         emacs-calfw

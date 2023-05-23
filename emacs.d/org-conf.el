@@ -495,4 +495,14 @@ space rather than before."
 
 (setq org-confirm-babel-evaluate nil)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; board
+
+(require 'org-board)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; books
+
+(require 'org-books)
+
 (provide 'conf/org)
