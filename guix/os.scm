@@ -197,6 +197,16 @@
                                         (needed-for-boot? (equal? "/" mount-p))
                                         (dependencies mapped-devices))))))
            (append
+            (list (file-system
+                    (mount-point "/boot")
+                    (device (uuid (assoc-ref (ship-uuids ship) 'efi)
+                                  'fat32))
+                    (type "vfat"))
+                  (file-system
+                    (mount-point "/mnt/vault")
+                    (device "/dev/mapper/vault")
+                    (type "btrfs")
+                    (dependencies mapped-devices)))
             (map btrfs-vault-subvol
                  `(("/" . "guix-root")
                    ("/home" . "guix-home")
