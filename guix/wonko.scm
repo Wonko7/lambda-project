@@ -133,6 +133,7 @@
  (packages
   (append
    %emacs-world
+   %babel-world
    %crypto-world
    %xorg-world
    %fonts-world

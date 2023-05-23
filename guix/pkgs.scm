@@ -251,6 +251,8 @@
 
         ;; x stuff
         emacs-desktop-environment
+        ;; locale
+        glibc-locales
 
         ;; communication
         emacs-ement
@@ -374,6 +376,11 @@
         ocamlformat
         ocaml-utop))
 
+(define-public %babel-world
+  (list gnuplot
+        ;; clojure
+        ))
+
 (define-public %vcs-world
   (list mercurial
         darcs
@@ -420,4 +427,4 @@
         cryptsetup
         btrfs-progs
         dosfstools
-        util-linux))
+        util-linux+udev))
