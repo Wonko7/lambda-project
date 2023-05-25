@@ -141,7 +141,7 @@
    %xorg-world
    %fonts-world
    %vcs-world
-   %ocaml5-world
+   ;; %ocaml5-world
    (list
     ;; services
     ibhagwan-picom

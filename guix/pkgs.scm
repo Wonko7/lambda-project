@@ -13,6 +13,10 @@
   #:use-module (gnu packages hunspell)
   #:use-module (gnu packages libreoffice)
   #:use-module (gnu packages ocaml)
+  #:use-module (gnu packages java)
+  #:use-module (gnu packages clojure)
+  #:use-module (nongnu packages clojure)
+  #:use-module (gnu packages uml)
   ;; desktop stuff
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages synergy)
@@ -198,9 +202,11 @@
         emacs-eval-sexp-fu-el
         emacs-eval-in-repl-geiser
         emacs-gnuplot
-        ;; ocaml
         emacs-eval-in-repl-ocaml
         emacs-tuareg
+        ;; clojure
+        emacs-cider
+        emacs-clojure-mode
         ;; guile/scheme <3
         emacs-geiser
         emacs-geiser-guile
@@ -374,15 +380,23 @@
         pkg-config))
 
 (define-public %ocaml5-world
-  (list ocaml5.0-eio-main
+  (list ocaml
+        ocaml5.0-eio-main
         ocaml-batteries
-        ocamlformat
-        ocaml-utop))
+        ocamlformat))
 
 (define-public %babel-world
   (list gnuplot
-        ;; clojure
-        ))
+        plantuml
+        clojure
+        icedtea
+	leiningen
+        ocaml
+        ocamlformat
+	ocaml-utop
+        ocaml-batteries
+        opam
+	dune))
 
 (define-public %vcs-world
   (list mercurial

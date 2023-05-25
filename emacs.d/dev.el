@@ -124,6 +124,13 @@
 (setq diff-hl-side 'right)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; clojure
+
+(require 'cider)
+(require 'clojure-mode)
+(setq org-babel-clojure-backend 'cider)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; buffer-env
 
 ;; use guix shell automagically <3
