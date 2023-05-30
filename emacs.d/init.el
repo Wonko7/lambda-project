@@ -206,8 +206,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
+(require 'coterm)
+(coterm-mode)
+
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
+
+(defun toggle-scroll-to-bottom-on-output ()
+  (interactive)
+  (setq-local comint-scroll-to-bottom-on-output
+              (not comint-scroll-to-bottom-on-output)))
 
 (require 'bash-completion)
 (bash-completion-setup)

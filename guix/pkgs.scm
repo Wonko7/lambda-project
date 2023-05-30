@@ -154,6 +154,8 @@
         emacs-magit-todos
         emacs-diff-hl
         emacs-dirvish
+        emacs-coterm
+        ;; FIXME remove these?
         emacs-eshell-up
         emacs-eshell-syntax-highlighting
         emacs-esh-autosuggest
