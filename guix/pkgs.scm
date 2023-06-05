@@ -179,7 +179,6 @@
         hunspell-dict-fr-toutes-variantes
         hunspell-dict-en-us
         hunspell-dict-en-gb
-        hunspell-dict-en-gb-ize
 
         ;; transverse:
         emacs-ibuffer-projectile

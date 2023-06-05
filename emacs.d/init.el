@@ -81,10 +81,10 @@
 
 (require 'flyspell-correct)
 ;; (global-spell-fu-mode 0)
-;; (setenv "LANG" "en_GB-ise.utf8") ;; hmmmm no. revisit.
+(setenv "DICTIONARY" "en_GB-ise")
 (setq ispell-program-name "hunspell")
-(setq ispell-dictionary "en_GB-ise,en_GB-ize,fr-toutesvariantes")
-(setq ispell-local-dictionary-alist `(("en_GB-ise,en_GB-ize,fr-toutesvariantes"
+(setq ispell-dictionary "en_GB-ise,en_US,fr-toutesvariantes")
+(setq ispell-local-dictionary-alist `(("en_GB-ise,en_US,fr-toutesvariantes"
                                        "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
                                        ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
                                        nil utf-8)))
