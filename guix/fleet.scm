@@ -65,7 +65,7 @@
             (efi . "77DE-0AE2")))
    ;; home
    (wallpaper %wallpaper)
-   (emacs-modeline-height 5)
+   (emacs-modeline-height 75)
    (emacs-font-size 80)
    (st-font-size 8)
    (dunst-font-size 8)
