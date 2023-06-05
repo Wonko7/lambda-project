@@ -76,8 +76,8 @@
    (dpi 288)
    (x-config
     (cmd+arg->script `((xrandr . "--dpi 288")
-                       (xinput . "set-prop 14 'libinput Click Method Enabled' 0 1")
-                       (xinput . "set-prop 14 'libinput Accel Speed' 1.0"))))))
+                       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
+                       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0"))))))
 
 (define-public %rocinante
   (ship
