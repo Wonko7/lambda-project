@@ -42,8 +42,8 @@
       `(?\s-i
         ?\C-: ;; FIXME: I need to use these
         ?\C-\ ;; I want whitespace here ;; but this is also unused
-        ?\s-j
-        ?\s-k
+        ?\s-J
+        ?\s-K
         ?\M-:))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
