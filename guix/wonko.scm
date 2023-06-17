@@ -11,9 +11,7 @@
 
  ;; fonts
  (w7 packages fonts)
- ;; FIXME:
  (gnu packages fonts)
- ;; there -can- should only be one
  (gnu packages fontutils)
  (gnu packages unicode)
 

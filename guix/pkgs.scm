@@ -77,6 +77,8 @@
   #:use-module (gnu packages m4)
   #:use-module (gnu packages maths)
   #:use-module (gnu packages ocaml)
+  #:use-module (gnu packages libevent)
+  #:use-module (gnu packages tls)
   ;; services
   #:use-module (gnu home services shepherd)
   #:use-module (gnu packages image-viewers)
@@ -373,12 +375,21 @@
         mercurial
         darcs
         unzip
+        ;; gcc
         gcc-toolchain
         gdb
         gnuplot
         m4
         gnu-make
-        pkg-config))
+        pkg-config
+        libev
+        openssl
+        ))
+
+(define-public %ocaml-mode-deps
+  (list ocaml-utop
+	dune
+        ocamlformat))
 
 (define-public %ocaml5-world
   (list ocaml
@@ -386,18 +397,20 @@
         ocaml-batteries
         ocamlformat))
 
-(define-public %babel-world
-  (list gnuplot
-        plantuml
-        clojure
-        icedtea
-	leiningen
-        ocaml
-        ocamlformat
-	ocaml-utop
-        ocaml-batteries
-        opam
-	dune))
+;; this now lives in org's guix.scm
+;; (define-public %babel-world
+;;
+;;   (list gnuplot
+;;         plantuml
+;;         clojure
+;;         icedtea
+;; 	leiningen
+;;         ;; ocaml ;; FIXME.
+;;         ocamlformat
+;; 	ocaml-utop
+;;         ocaml-batteries
+;;         opam
+;; 	dune))
 
 (define-public %vcs-world
   (list mercurial
