@@ -218,7 +218,7 @@ space rather than before."
                                                       (:name "🌄 ssdd"
                                                              :and (:tag "ssdd" :tag "tt")
                                                              :order 9)
-                                                      (:name "🍔 work ssdd"
+                                                      (:name "🍰 work ssdd"
                                                              :and (:tag "ssdd" :tag "work")
                                                              :order 10)
                                                       (:name "👑 king line hit list"
@@ -391,7 +391,7 @@ space rather than before."
           ("tg" "guix" entry "* 🐧 [[id:844ed739-42ce-4277-b7b5-b8f4a79869dc][guix]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("te" "emacs" entry "* 🇪 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
+          ("te" "emacs" entry "* 🐃 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
           ("tc" "clojure" entry "* ☯ [[id:4f11e3fe-1d86-42de-a84e-9c903893aa0a][clojure]]\n%U\n%?"
@@ -409,11 +409,15 @@ space rather than before."
 
           ("W" "work")
            ("j" "Journal" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a")
+            "* %?\nEntered on %U\n  %i\n  %a")
           ("Wm" "marge+" plain ""
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 work: [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]]"))
-           :jump-to-captured t
-           ))))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+           :jump-to-captured t)
+          ("Wr" "RDV marge+" plain ""
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+           :jump-to-captured t)) ;; \n<%<%Y-%m-%d>
+        ))
+
 (fuck-me/init-capture)
 
 ;; FIXME review this:
