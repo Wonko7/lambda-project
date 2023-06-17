@@ -162,6 +162,7 @@
                 ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
                 ;; ("PATH" . "./_opam/bin:$PATH")
+                ("DICTIONARY" . "en_GB-ise") ;; hunspell
                 ("BLOCK_SIZE" . "human-readable")
                 ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-home/profile/lib")
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
