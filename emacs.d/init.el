@@ -217,6 +217,8 @@
   (setq-local comint-scroll-to-bottom-on-output
               (not comint-scroll-to-bottom-on-output)))
 
+(setq history-length 100000)
+
 (require 'bash-completion)
 (bash-completion-setup)
 
