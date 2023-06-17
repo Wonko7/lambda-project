@@ -40,10 +40,14 @@
 (setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
       `(?\s-i
-        ?\C-: ;; FIXME: I need to use these
+        ?\s-I
+        ;; ?\C-: ;; FIXME: I need to use these
         ?\C-\ ;; I want whitespace here ;; but this is also unused
         ?\s-J
         ?\s-K
+        ?\s-l
+        ?\s-h
+        ?\s-\  ;; yep
         ?\M-:))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,11 +56,13 @@
 (defun my/toggle-fullscreen ()
   "maximize buffer"
   (interactive)
-  (if (= 1 (length (window-list)))
-      (jump-to-register '_)
-    (progn
-      (window-configuration-to-register '_)
-      (delete-other-windows))))
+  (if exwm-class-name
+      (exwm-layout-toggle-fullscreen exwm--id)
+    (if (= 1 (length (window-list)))
+        (jump-to-register '_)
+      (progn
+        (window-configuration-to-register '_)
+        (delete-other-windows)))))
 
 (defun my/tune-alpha (direction)
   (let* ((a (frame-parameter (selected-frame) 'alpha))
@@ -161,6 +167,7 @@
 (setq exwm-input-global-keys
       `(([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
+        ([?\s-I] . coterm-char-mode-cycle)
 
         ;; Move between windows
         ([?\s-h] . windmove-left)
