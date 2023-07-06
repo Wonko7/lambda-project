@@ -144,5 +144,33 @@
 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
 (yas-global-mode 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; shell / bash
+
+(add-hook 'shell-mode-hook
+          (lambda ()
+            (setq-local corfu-auto nil)
+            (corfu-mode)))
+
+;; When pressing RET while the Corfu popup is visible, the corfu-insert command will be invoked. This command does inserts the currently selected candidate, but it does not send the prompt input to Eshell or the comint process. Therefore you often have to press RET twice which feels like an unnecessary double confirmation. Fortunately it is easy to improve this! In my configuration I define the advice corfu-send-shell which sends the candidate after insertion.
+
+;; (defun corfu-send-shell (&rest _)
+;;   "Send completion candidate when inside comint/eshell."
+;;   (cond
+;;    ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+;;     (eshell-send-input))
+;;    ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
+;;     (comint-send-input))))
+;;
+;; (advice-add #'corfu-insert :after #'corfu-send-shell)
+
+(when (< emacs-major-version 29) ;; FIXME
+  ;; Silence the pcomplete capf, no errors or messages!
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+
+  ;; Ensure that pcomplete does not write to the buffer
+  ;; and behaves as a pure `completion-at-point-function'.
+  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+
 (provide 'conf/completion)
 ;;; completion.el ends here
