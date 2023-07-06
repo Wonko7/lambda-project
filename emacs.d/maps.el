@@ -289,19 +289,106 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ement
 
+(general-evil-define-key '(normal) ement-room-list-mode-map
+  "X"  #'ement-room-list-kill-buffer)
+
+(general-evil-define-key '(normal) ement-room-list-mode-map
+  :prefix "RET"
+  "RET" #'ement-room-list-RET)
+
+(general-evil-define-key '(normal) ement-directory-mode-map
+  :prefix "RET"
+  "RET" #'ement-directory-RET)
+
 (general-evil-define-key '(normal) ement-room-mode-map
-  "K" #'ement-room-goto-prev
-  "J" #'ement-room-goto-next)
+  ;; migrate stuff down to prefix-map as these get annoying:
+  ;; Movement
+  "TAB" #'ement-room-goto-next
+  "<backtab>" #'ement-room-goto-prev
+  ;; "SPC" #'ement-room-scroll-up-mark-read
+  "S-SPC" #'ement-room-scroll-down-command
+  "M-SPC" #'ement-room-goto-fully-read-marker
+  "m" #'ement-room-mark-read
+  ;; (define-key map [remap scroll-down-command] #'ement-room-scroll-down-command)
+  ;; (define-key map [remap mwheel-scroll] #'ement-room-mwheel-scroll)
+  "c-p" #'ement-room-goto-prev
+  "c-n" #'ement-room-goto-next
+  "c-j" #'ement-room-goto-prev
+  "c-k" #'ement-room-goto-next
+  "l" #'ement-tabulated-room-list
+  "L" #'ement-room-list-side-window
+
+  ;; Switching
+  ;; "g l" #'ement-tabulated-room-list
+  ;; "g r" #'ement-view-room
+  ;; "g m" #'ement-notify-switch-to-mentions-buffer
+  ;; "g n" #'ement-notify-switch-to-notifications-buffer
+  "q" #'quit-window
+
+  ;; Messages
+  ;; "RET" #'ement-room-send-message
+  "S-<return>" #'ement-room-write-reply
+  "M-RET" #'ement-room-compose-message
+  "<insert>" #'ement-room-edit-message
+  "x" #'ement-room-edit-message
+  "X" #'ement-room-delete-message
+  "s r" #'ement-room-send-reaction
+  "s e" #'ement-room-send-emote
+  "s f" #'ement-room-send-file
+  "s i" #'ement-room-send-image
+  "v" #'ement-room-view-event
+
+  ;; Users
+  "u RET" #'ement-send-direct-message
+  "u i" #'ement-invite-user
+  "u I" #'ement-ignore-user
+
+  ;; Room
+  "r o" #'ement-room-occur
+  "r d" #'ement-describe-room
+  "r m" #'ement-list-members
+  "r t" #'ement-room-set-topic
+  "r f" #'ement-room-set-message-format
+  "r n" #'ement-room-set-notification-state
+  "r N" #'ement-room-override-name
+  "r T" #'ement-tag-room
+
+  ;; Room membership
+  "R c" #'ement-create-room
+  "R j" #'ement-join-room
+  "R l" #'ement-leave-room
+  "R F" #'ement-forget-room
+  "R n" #'ement-room-set-display-name
+  "R s" #'ement-room-toggle-space
+
+  ;; Other
+  )
 
 (general-evil-define-key '(normal) ement-room-mode-map
   :prefix "RET"
-  "d"   #'ement-room-delete-message
-  "l"   #'ement-room-list
+ ;; "g l" #'ement-tabulated-room-list
+ ;; "g r" #'ement-view-room
+  "g m" #'ement-notify-switch-to-mentions-buffer
+  "g n" #'ement-notify-switch-to-notifications-buffer
+
+  "l"   #'ement-tabulated-room-list
   "r"   #'ement-view-room
+  "R"   #'ement-room-sync
+
   "RET" #'ement-room-send-message
   "c"   (lambda ()
           (interactive)
           (ement-room-compose-message ement-room ement-session)
           (ement-room-compose-org)))
+
+;; room-list
+;; (defvar ement-room-list-mode-map
+;;   (let ((map (make-sparse-keymap)))
+;;     #'ement-room-list-RET
+;;     #'ement-room-list-next-unread
+;;     #'ement-room-list-section-toggle
+;;     #'ement-room-toggle-space)
+;;   "Keymap for `ement-room-list' buffers.
+;; See also `ement-room-list-button-map'.")
 
 (provide 'conf/maps)
