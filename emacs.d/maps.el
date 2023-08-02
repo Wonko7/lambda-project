@@ -11,7 +11,7 @@
   ":"      #'execute-extended-command ;;  "exec stuff"
   "<SPC>"  #'consult-buffer           ;;  "buffers"
   "/"      #'consult-ripgrep          ;;  "grep"
-  "'"      #'projectile-find-file          ;;  "proj buffers"
+  "'"      #'projectile-find-file     ;;  "proj buffers"
   ;; "'" #'counsel-projectile-find-file
 
   ;; embark
@@ -60,20 +60,20 @@
   "rR" #'org-roam-link-replace-all
 
   ;; roam date:
-  "rdb" #'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
-  "rdk" #'org-roam-dailies-goto-previous-note    ;;  :desc "Goto previous note"
-  "rdd" #'org-roam-dailies-goto-date             ;;  :desc "Goto date"
-  "rdD" #'org-roam-dailies-capture-date          ;;  :desc "Capture date"
-  "rdf" #'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
-  "rdj" #'org-roam-dailies-goto-next-note        ;;  :desc "Goto next note"
-  "rdm" #'org-roam-dailies-goto-tomorrow         ;;  :desc "Goto tomorrow"
-  "rdM" #'org-roam-dailies-capture-tomorrow      ;;  :desc "Capture tomorrow"
-  "rdn" #'org-roam-dailies-capture-today         ;;  :desc "Capture today"
-  "rdt" #'org-roam-dailies-goto-today            ;;  :desc "Goto today"
-  "rdT" #'org-roam-dailies-capture-today         ;;  :desc "Capture today"
-  "rdy" #'org-roam-dailies-goto-yesterday        ;;  :desc "Goto yesterday"
-  "rdY" #'org-roam-dailies-capture-yesterday     ;;  :desc "Capture yesterday"
-  "rd-" #'org-roam-dailies-find-directory        ;;  :desc "Find directory"
+  "rdb" #'org-roam-dailies-goto-previous-note ;;  :desc "Goto previous note"
+  "rdk" #'org-roam-dailies-goto-previous-note ;;  :desc "Goto previous note"
+  "rdd" #'org-roam-dailies-goto-date          ;;  :desc "Goto date"
+  "rdD" #'org-roam-dailies-capture-date       ;;  :desc "Capture date"
+  "rdf" #'org-roam-dailies-goto-next-note     ;;  :desc "Goto next note"
+  "rdj" #'org-roam-dailies-goto-next-note     ;;  :desc "Goto next note"
+  "rdm" #'org-roam-dailies-goto-tomorrow      ;;  :desc "Goto tomorrow"
+  "rdM" #'org-roam-dailies-capture-tomorrow   ;;  :desc "Capture tomorrow"
+  "rdn" #'org-roam-dailies-capture-today      ;;  :desc "Capture today"
+  "rdt" #'org-roam-dailies-goto-today         ;;  :desc "Goto today"
+  "rdT" #'org-roam-dailies-capture-today      ;;  :desc "Capture today"
+  "rdy" #'org-roam-dailies-goto-yesterday     ;;  :desc "Goto yesterday"
+  "rdY" #'org-roam-dailies-capture-yesterday  ;;  :desc "Capture yesterday"
+  "rd-" #'org-roam-dailies-find-directory     ;;  :desc "Find directory"
 
   ;; projectile
   "p'" #'projectile-find-file
@@ -97,18 +97,18 @@
   "gg" #'magit-status
   ;; roam
   ;; insert stuff
-  "ie" #'emojify-insert-emoji                ;;  :desc "Emoji"
-  "id" #'my/insert-inactive-timestamp        ;;  :desc "date (now)"
-  "in" #'my/insert-inactive-timestamp        ;;  :desc "date (now)"
+  "ie" #'emojify-insert-emoji         ;;  :desc "Emoji"
+  "id" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
+  "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
   ;; rm stuff
-  "-d" #'delete-trailing-whitespace  ;; :desc "trailing whitespace"
+  "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
   ;; file stuff, dired, ibuffer
   "fr" #'consult-recent-file ;; :desc "file recent"
 
   ;;
-  "ss" #'consult-line  ;; :desc "filter line"
+  "ss" #'consult-line ;; :desc "filter line"
 
   ;; code stuff
   ;; M-x flymake-goto-next-error goes to previous error in the current buffer
@@ -121,6 +121,8 @@
   ;; windows
   "wx" #'buffer-expose-current-mode
   "wX" #'buffer-expose
+  "ws" #'switch-window-then-swap-buffer
+  "wo" #'other-window
 
   ;; misc?
   "zl" #'scroll-lock-mode
@@ -172,6 +174,8 @@
 (general-evil-define-key '(normal visual) comint-mode-map
   "ï"           #'my/cd-up
   "-"           #'my/cd--
+  "{"           #'comint-previous-prompt
+  "}"           #'comint-next-prompt
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
@@ -180,6 +184,8 @@
   "A"           (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (general-evil-define-key '(insert) comint-mode-map
+  "{"           #'comint-previous-prompt
+  "}"           #'comint-next-prompt
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
@@ -269,7 +275,9 @@
   "C-k"   #'org-move-subtree-up
   "C-j"   #'org-move-subtree-down
   "C-h"   #'org-promote-subtree
-  "C-l"   #'org-demote-subtree)
+  "C-l"   #'org-demote-subtree
+  "{"     #'org-backward-element
+  "}"     #'org-forward-element)
 
 (define-key cfw:calendar-mode-map (kbd "SPC") nil)
 (define-key cfw:org-schedule-map (kbd "SPC") nil)
@@ -290,10 +298,25 @@
 ;; ement
 
 (general-evil-define-key '(normal) ement-room-list-mode-map
-  "X"  #'ement-room-list-kill-buffer)
+  "u" #'ement-tabulated-room-list-next-unread
+  "X"  #'ement-room-list-kill-buffer
+  "h" #'my/ement-home
+  "l" #'ement-tabulated-room-list)
+
+(general-evil-define-key '(normal) ement-tabulated-room-list-mode-map
+  "u" #'ement-tabulated-room-list-next-unread
+  "X"  #'ement-room-list-kill-buffer
+  "h" #'my/ement-home
+  "l" #'ement-tabulated-room-list)
 
 (general-evil-define-key '(normal) ement-room-list-mode-map
   :prefix "RET"
+  "n" #'ement-tabulated-room-list-next-unread
+  "RET" #'ement-room-list-RET)
+
+(general-evil-define-key '(normal) ement-tabulated-room-list-mode-map
+  :prefix "RET"
+  "n" #'ement-tabulated-room-list-next-unread
   "RET" #'ement-room-list-RET)
 
 (general-evil-define-key '(normal) ement-directory-mode-map
@@ -315,8 +338,12 @@
   "c-n" #'ement-room-goto-next
   "c-j" #'ement-room-goto-prev
   "c-k" #'ement-room-goto-next
+  "{" #'ement-room-goto-prev
+  "}" #'ement-room-goto-next
   "l" #'ement-tabulated-room-list
   "L" #'ement-room-list-side-window
+  "h" #'my/ement-home
+  "y" #'my/ement-home
 
   ;; Switching
   ;; "g l" #'ement-tabulated-room-list
@@ -374,6 +401,7 @@
   "l"   #'ement-tabulated-room-list
   "r"   #'ement-view-room
   "R"   #'ement-room-sync
+  "y"   #'my/ement-home
 
   "RET" #'ement-room-send-message
   "c"   (lambda ()
