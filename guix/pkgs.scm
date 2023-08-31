@@ -26,6 +26,7 @@
   #:use-module (gnu packages suckless)
   #:use-module (gnu packages music)
   #:use-module (gnu packages lxde)
+  #:use-module (gnu packages xfce)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages kde-plasma)
   #:use-module (gnu packages kde-frameworks)
@@ -155,6 +156,7 @@
         emacs-magit
         emacs-magit-annex
         emacs-magit-todos
+        emacs-forge
         emacs-diff-hl
         emacs-dirvish
         emacs-coterm
@@ -200,6 +202,8 @@
         ;;emacs-company
         emacs-corfu
         emacs-corfu-doc
+        emacs-pcmpl-args
+        emacs-cape
         emacs-eglot
         emacs-consult-eglot
         emacs-consult-org-roam
@@ -249,6 +253,7 @@
         emacs-doom-themes
         emacs-all-the-icons
         emacs-all-the-icons-completion
+        emacs-kind-icon
         ;; exwm
         emacs-exwm
         emacs-exwm-edit
@@ -274,6 +279,12 @@
         ;; ☠
         rtorrent
         emacs-mentor))
+
+(define-public %xfce-world
+  (list xfce
+        xfce4-session
+        xfconf
+        xfce4-battery-plugin))
 
 (define-public %crypto-world
   (list gnupg
@@ -331,7 +342,9 @@
 
 (define-public %desktop-world
   (list calibre
+        ;; img
         scrot
+        imagemagick
         ;; video
         mpv
         vlc
@@ -354,6 +367,7 @@
         speedtest-cli
         netcat-openbsd
         nmap
+        youtube-dl
         ;; onionshare
         ))
 

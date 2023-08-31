@@ -134,12 +134,12 @@
  (packages
   (append
    %emacs-world
-   %babel-world
+   %ocaml-with-opam-world
+   %ocaml-mode-deps
    %crypto-world
    %xorg-world
    %fonts-world
    %vcs-world
-   ;; %ocaml5-world
    (list
     ;; services
     ibhagwan-picom
