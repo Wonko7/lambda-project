@@ -285,6 +285,12 @@
 (setq buffer-expose-rescale-factor 0.5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; midnight
+
+(require 'midnight)
+(setq clean-buffer-list-delay-general 3) ;; days
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
 (require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
