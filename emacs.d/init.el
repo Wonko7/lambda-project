@@ -287,7 +287,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
-(require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el")
+(require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
 (require 'conf/misc          "~/.emacs.d/misc.el")
 (require 'conf/completion    "~/.emacs.d/completion.el")
 (require 'conf/org           "~/.emacs.d/org-conf.el")

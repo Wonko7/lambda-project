@@ -18,9 +18,11 @@
 ;; (define-key lsp-ui-mode-map (kbd "C-c C-l e") 'lsp-execute-code-action)
 
 
-(require 'eglot)
-;; (add-hook 'prog-mode-hook #'eglot-ensure)
+;; (require 'eglot)
+;; (add-hook 'tuareg-mode-hook #'eglot-ensure)
 ;; (setq eglot-autoshutdown t)
+;; FIXME: eglot doesn't seem to like ocsigen.
+
 
 
 (require 'tuareg)
@@ -64,7 +66,9 @@
         ("\\.gitignore\\'" . conf-unix-mode)
         ("\\.merlin\\'" . conf-space-mode)
         ("\\.ocamlinit\\'" . tuareg-mode)
-        ("\\.top\\'" . tuareg-mode)))
+        ("\\.top\\'" . tuareg-mode)
+        ("\\.mli?\\'" . tuareg-mode)
+        ("\\.eliomi?\\'" . tuareg-mode)))
 
 ;; Hack to open files like Makefile.local with the right mode.
 (add-to-list 'auto-mode-alist '("\\.[^\\.].*\\'" nil t) t)
@@ -105,16 +109,16 @@
           (lambda ()
             (setq mode-name "🐫")
             (add-hook 'before-save-hook #'ocamlformat-before-save)
-            (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
-                                        ("\\.ml\\'" (".mli"))
-                                        ("\\.eliomi\\'" (".eliom"))
-                                        ("\\.eliom\\'" (".eliomi"))))
+            ;; (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
+            ;;                             ("\\.ml\\'" (".mli"))
+            ;;                             ("\\.eliomi\\'" (".eliom"))
+            ;;                             ("\\.eliom\\'" (".eliomi"))))
             (setq-local comment-style 'indent)
             (setq-local tuareg-interactive-program
                         (concat tuareg-interactive-program " -nopromptcont"))
-            (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
-                             (when (member ext '("eliom" "eliomi"))
-                               (setq-local lsp-modeline-code-actions-enable nil))))
+            ;; (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
+            ;;                  (when (member ext '("eliom" "eliomi"))
+            ;;                    (setq-local lsp-modeline-code-actions-enable nil))))
             (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
 
 (require 'diff-hl)
