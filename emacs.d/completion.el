@@ -164,6 +164,11 @@
 ;;
 ;; (advice-add #'corfu-insert :after #'corfu-send-shell)
 
+(require 'pcmpl-args-autoloads)
+(require 'pcmpl-unix)
+(require 'pcmpl-gnu)
+(require 'pcmpl-cvs)
+
 (when (< emacs-major-version 29) ;; FIXME
   ;; Silence the pcomplete capf, no errors or messages!
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
@@ -171,6 +176,13 @@
   ;; Ensure that pcomplete does not write to the buffer
   ;; and behaves as a pure `completion-at-point-function'.
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+
+;; (add-to-list completion-at-point-functions #'cape-symbol)
+(setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
+                                                           #'cape-keyword
+                                                           #'cape-dabbrev
+                                                           #'cape-elisp-block
+                                                           #'cape-file)))
 
 (provide 'conf/completion)
 ;;; completion.el ends here
