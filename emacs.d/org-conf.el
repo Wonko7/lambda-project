@@ -3,11 +3,11 @@
 
 ;; this needs to be set before starting org
 ;; the equivalent for evil-org-mode-map is in evil
-(general-evil-define-key '(normal) org-mode-map
+(general-evil-define-key '(insert normal) org-mode-map
   "C-RET"      '+org/insert-item-below
-  "C-S-RET"    '+org/insert-item-above
+  "S-RET"    '+org/insert-item-above
   [C-return]   '+org/insert-item-below
-  [C-S-return] '+org/insert-item-above)
+  [S-return] '+org/insert-item-above)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; directories

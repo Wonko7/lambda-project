@@ -141,6 +141,7 @@
  ;; :desc "trailing whitespace"
  "-d" #'delete-trailing-whitespace
  "z=" #'flyspell-correct-wrapper
+ "Y"  #'evil-cp-yank-enclosing
  ;; FIXME: add something on shift= so this can exist "zX" #'flyspell-correct-at-point
  )
 ;; TODO: sentence & paragraph motions.
@@ -223,6 +224,7 @@
 ;; lisps
 
 (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
+  "Y"     #'evil-cp-yank-enclosing
   "{"     #'evil-backward-paragraph
   "}"     #'evil-forward-paragraph
   ")"     #'evil-cp-next-closing
@@ -352,7 +354,7 @@
   "l" #'ement-tabulated-room-list
   "L" #'ement-room-list-side-window
   "h" #'my/ement-home
-  "y" #'my/ement-home
+  ;; "y" #'my/ement-home
 
   ;; Switching
   ;; "g l" #'ement-tabulated-room-list
