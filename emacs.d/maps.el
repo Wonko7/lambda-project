@@ -95,6 +95,7 @@
   ;; magit
   "g." #'magit-file-dispatch
   "gg" #'magit-status
+
   ;; roam
   ;; insert stuff
   "ie" #'emojify-insert-emoji         ;;  :desc "Emoji"
@@ -209,6 +210,14 @@
 (general-evil-define-key '(normal) git-rebase-mode-map
   "K"    #'git-rebase-move-line-up
   "J"    #'git-rebase-move-line-down)
+
+(general-evil-define-key '(normal) smerge-mode-map
+  "grk" #'smerge-prev
+  "grj" #'smerge-next
+  "C-k" #'smerge-prev
+  "C-j" #'smerge-next
+  "gru" #'smerge-keep-upper
+  "grl" #'smerge-keep-lower)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
