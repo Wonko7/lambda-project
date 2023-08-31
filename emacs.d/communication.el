@@ -17,6 +17,10 @@
   (split-window-horizontally)
   (ement-tabulated-room-list))
 
+(add-hook 'ement-room-compose-hook #'ement-room-compose-org)
+;; enable flyspell in the minibuffer:
+(add-hook 'ement-room-read-string-setup-hook #'flyspell-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; erc
 

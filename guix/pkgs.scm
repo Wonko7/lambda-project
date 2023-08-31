@@ -34,6 +34,7 @@
   #:use-module (gnu packages terminals)
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages video)
+  #:use-module (gnu packages imagemagick)
   #:use-module (gnu packages gimp)
   #:use-module (gnu packages pdf)
   #:use-module (gnu packages kde)
