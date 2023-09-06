@@ -288,147 +288,171 @@ space rather than before."
         :if-new (list 'file+head my/daily-file my/daily-header)
         :jump-to-captured jump))
 
-(defun fuck-me/init-capture ()
-  (setq org-capture-projects-file "dev"
-        ;; add project stuff.
-        org-capture-templates
-        `(("Qp" "Protocol" entry
-           (file+olp "here-be-dragons/20210915144652-browsing_inbox.org" "browsing" "inbox")
-           "* [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n%U\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE"
-           :immediate-finish t)
-          ("QL" "Protocol Link direct" entry
-           (file+olp "here-be-dragons/20210915144652-browsing_inbox.org" "browsing" "inbox")
-           "* [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n%U"
-           :immediate-finish t))
+(setq org-capture-projects-file "dev"
+      ;; add project stuff.
+      org-capture-templates ;; REVIEW: revive this?
+      `(("Qp" "Protocol" entry
+         (file+olp "here-be-dragons/20210915144652-browsing_inbox.org" "browsing" "inbox")
+         ,(string-join '("* [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
+                         "%U\n"
+                         "#+BEGIN_QUOTE\n"
+                         "%i\n"
+                         "#+END_QUOTE"))
+         :immediate-finish t)
+        ("QL" "Protocol Link direct" entry
+         (file+olp "here-be-dragons/20210915144652-browsing_inbox.org" "browsing" "inbox")
+         ,(string-join '("* [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
+                         "%U"))
+         :immediate-finish t))
 
-        org-roam-dailies-capture-templates
-        `(,(my/make-daily-capture "n" "note" "* %?\n%U\n" t)
+      org-roam-dailies-capture-templates
+      `(,(my/make-daily-capture "n" "note" "* %?\n%U\n" t)
 
-          ("g" "go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
+        ("g" "go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
 
-          ,(my/make-daily-capture "r" "RDV"
-                                  "* RDV %?\n<%<%Y-%m-%d>>\n" t)
+        ,(my/make-daily-capture "r" "RDV"
+                                "* RDV %?\n<%<%Y-%m-%d>>\n" t)
 
-          ("m" "media")
-          ("mt" "tv" entry "* 📺 %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-          ("mb" "book" entry "%(let* ((url (substring-no-properties (current-kill 0)))
+        ("m" "media")
+        ("mt" "tv" entry "* 📺 %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ("mb" "book" entry "%(let* ((url (substring-no-properties (current-kill 0)))
                                       (details (org-books-get-details url)))
                                  (when details (apply #'org-books-format 1 details)))"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-          ("mm" "music (is so nice)" entry "* 🎵 %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-          ("mp" "podcast" entry "* 🎙 %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ("mm" "music (is so nice)" entry "* 🎵 %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ("mp" "podcast" entry "* 🎙 %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
 
-          ("i" "innerspace")
-          ("ic" "coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("ie" "third eye" entry "* ☯ [[roam:prying open my third eye]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("ii" "innerspace" entry "* ☯ %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("if" "fam" entry "* ❤ %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("ih" "home" entry "* 🏡 [[roam:home]] %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("iH" "Health" entry "* 🏥 [[roam:health]] %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("iw" "weight" entry "* ⚖ [[roam:weight]] %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("im" "metta" entry "* ☯ metta\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("ip" "piracy" entry "* ☠ %?\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("iv" "vipassana" entry "* ☯ [[id:37187551-897a-4f6a-a978-c057644f34af][vipassana]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("is" "sleep / dreams" entry "* 🌙 sleep / dreams\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-          ("it" "trees" entry "* 🌳 trees / [[id:cadf3871-658d-4db2-b16c-36aa03dc71dc][brocoli]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("i" "innerspace")
+        ("ic" "coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("ie" "third eye" entry "* ☯ [[roam:prying open my third eye]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("ii" "innerspace" entry "* ☯ %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("if" "fam" entry "* ❤ %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("ih" "home" entry "* 🏡 [[roam:home]] %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("iH" "Health" entry "* 🏥 [[roam:health]] %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("iw" "weight" entry "* ⚖ [[roam:weight]] %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("im" "metta" entry "* ☯ metta\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("ip" "piracy" entry "* ☠ %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("iv" "vipassana" entry "* ☯ [[id:37187551-897a-4f6a-a978-c057644f34af][vipassana]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("is" "sleep / dreams" entry "* 🌙 sleep / dreams\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("it" "trees" entry "* 🌳 trees / [[id:cadf3871-658d-4db2-b16c-36aa03dc71dc][brocoli]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
 
-          ("w" "witness the fitness")
-          ("wb" "bouldering" entry "* ⛰ [[roam:bouldering]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("ws" "sport climbing" entry "* ⛰ [[roam:sport climbing]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wf" "fingerboard" entry "* 🤘 [[roam:fingerboard]] :wtf:\n%U\n** 🍚 [[roam:rice bucket]]\n- %?\n** 💪 [[roam:pull-ups]]\n** 🐒 [[roam:campusing]]\n** 🤘 [[roam:deadhangs]]"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wh" "handstands" entry
-           ,(string-join '("* 🤸 [[roam:handstands]] :wtf:\n"
-                            "%U\n"
-                            "** 🍚 [[roam:rice bucket]]\n"
-                            "- %?\n"
-                            "** 💪 [[roam:HSPU]]\n"
-                            "** 💪 [[roam:press]]\n"
-                            "** 🤸 [[roam:handstands]]\n"
-                            "session max hold: \n"))
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wr" "rice bucket" entry "* 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]] :wtf:\n%U%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wl" "leg day" entry "* 💪 leg day :wtf:\n%U\n** 🍚 [[roam:rice bucket]]\n- %?\n** 💪 [[roam:cossak hip rotations]]\n** 💪 [[roam:pistol squats]]\n"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wi" "injuries" entry "* 🏥 [[id:820e7fc2-6cd0-4865-988f-7f526f5545a9][injuries]] :wtf:inj:\n%U\n%?\n"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("ww" "woody" entry "* 📐 [[roam:woody]] :wtf:\n%U\n** 🍚 [[roam:rice bucket]]\n- %?\n** 🔥 topped\n** 👷 projects\n** 🐒 [[roam:campusing]]\n** 🏥 [[roam:injuries]]"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("w" "witness the fitness")
+        ("wb" "bouldering" entry ,(string-join '("* ⛰ [[roam:bouldering]] %? :wtf:\n"
+                                                 "%U\n"
+                                                 "** ❤ with :innerspace:\n"
+                                                 "** 🔥 topped\n"
+                                                 "** 👷 projects\n"
+                                                 "** 🏥 [[roam:injuries]]\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("ws" "sport climbing" entry "* ⛰ [[roam:sport climbing]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wf" "fingerboard" entry ,(string-join '("* 🤘 [[roam:fingerboard]] :wtf:\n"
+                                                  "%U\n"
+                                                  "** 🍚 [[roam:rice bucket]]\n"
+                                                  "- %?\n"
+                                                  "** 💪 [[roam:pull-ups]]\n"
+                                                  "** 🐒 [[roam:campusing]]\n"
+                                                  "** 🤘 [[roam:deadhangs]]"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wh" "handstands" entry
+         ,(string-join '("* 🤸 [[roam:handstands]] :wtf:\n"
+                         "%U\n"
+                         "** 🍚 [[roam:rice bucket]]\n"
+                         "- %?\n"
+                         "** 💪 [[roam:HSPU]]\n"
+                         "** 💪 [[roam:press]]\n"
+                         "** 🤸 [[roam:handstands]]\n"
+                         "session max hold: \n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wr" "rice bucket" entry "* 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]] :wtf:\n%U%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wl" "leg day" entry ,(string-join '("* 💪 leg day :wtf:\n"
+                                              "%U\n"
+                                              "** 🍚 [[roam:rice bucket]]\n"
+                                              "- %?\n"
+                                              "** 💪 [[roam:cossak hip rotations]]\n"
+                                              "** 💪 [[roam:pistol squats]]\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wi" "injuries" entry "* 🏥 [[id:820e7fc2-6cd0-4865-988f-7f526f5545a9][injuries]] :wtf:inj:\n%U\n%?\n"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:\n"
+                                            "%U\n"
+                                            "** 🍚 [[roam:rice bucket]]\n"
+                                            "- %?\n"
+                                            "** 🔥 topped\n"
+                                            "** 👷 projects\n"
+                                            "** 🐒 [[roam:campusing]]\n"
+                                            "** 🏥 [[roam:injuries]]"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
 
-          ("t" "tech")
-          ("tg" "guix" entry "* 🐧 [[id:844ed739-42ce-4277-b7b5-b8f4a79869dc][guix]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("te" "emacs" entry "* 🐃 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("tc" "clojure" entry "* ☯ [[id:4f11e3fe-1d86-42de-a84e-9c903893aa0a][clojure]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("to" "ocaml" entry "* 🐫 [[id:f5dd5816-0736-43d2-88c7-75e66d1ddf67][ocaml]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("tl" "linux" entry "* 🐧 [[id:25647313-7296-4803-b2c4-f57b5b6e2d72][linux]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ("tp" "physics" entry "* ⚛ [[id:a3e5f916-a260-4925-81ef-5f7c6f5e3157][physics]]\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("t" "tech")
+        ("tg" "guix" entry "* 🐧 [[id:844ed739-42ce-4277-b7b5-b8f4a79869dc][guix]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("te" "emacs" entry "* 🐃 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("tc" "clojure" entry "* ☯ [[id:4f11e3fe-1d86-42de-a84e-9c903893aa0a][clojure]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("to" "ocaml" entry "* 🐫 [[id:f5dd5816-0736-43d2-88c7-75e66d1ddf67][ocaml]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("tl" "linux" entry "* 🐧 [[id:25647313-7296-4803-b2c4-f57b5b6e2d72][linux]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("tp" "physics" entry "* ⚛ [[id:a3e5f916-a260-4925-81ef-5f7c6f5e3157][physics]]\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
 
-          ("W" "work")
-           ("j" "Journal" entry (file+datetree "~/org/journal.org")
-            "* %?\nEntered on %U\n  %i\n  %a")
-          ("Wm" "marge+" plain ""
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
-           :jump-to-captured t)
-          ("Wr" "RDV marge+" plain ""
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
-           :jump-to-captured t)) ;; \n<%<%Y-%m-%d>
-        ))
-
-(fuck-me/init-capture)
+        ("W" "work")
+        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")
+        ("Wm" "marge+" plain ""
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+         :jump-to-captured t)
+        ("Wr" "RDV marge+" plain ""
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+         :jump-to-captured t)))
 
 ;; FIXME review this:
 (setq
