@@ -60,11 +60,13 @@
 
 (setq display-line-numbers-type t)
 (global-linum-mode)
-(add-hook 'shell-mode-hook           (lambda () (linum-mode 0)))
-(add-hook 'eshell-mode-hook          (lambda () (linum-mode 0)))
-(add-hook 'elfeed-show-mode-hook     (lambda () (linum-mode 0)))
-(add-hook 'elfeed-search-update-hook (lambda () (linum-mode 0)))
-(add-hook 'ement-room-mode-hook      (lambda () (linum-mode 0)))
+(add-hook 'shell-mode-hook                     (lambda () (linum-mode 0)))
+(add-hook 'eshell-mode-hook                    (lambda () (linum-mode 0)))
+(add-hook 'elfeed-show-mode-hook               (lambda () (linum-mode 0)))
+(add-hook 'elfeed-search-update-hook           (lambda () (linum-mode 0)))
+(add-hook 'ement-room-mode-hook                (lambda () (linum-mode 0)))
+(add-hook 'ement-room-list-mode-hook           (lambda () (linum-mode 0)))
+(add-hook 'ement-tabulated-room-list-mode-hook (lambda () (linum-mode 0)))
 
 (setq custom-file "~/.emacs.d/custom-cache.el")
 
