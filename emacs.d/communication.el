@@ -1,6 +1,5 @@
 (require 'ement)
 
-;; (setq ement-room-list-avatars nil) ;; FIXME/review bug workaround
 (setq ement-room-message-format-spec "%S> %W%B%r%R%t")
 (setq ement-room-prism 'both)
 (setq ement-save-sessions nil)
