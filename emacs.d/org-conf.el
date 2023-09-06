@@ -373,7 +373,15 @@ space rather than before."
           ("wf" "fingerboard" entry "* 🤘 [[roam:fingerboard]] :wtf:\n%U\n** 🍚 [[roam:rice bucket]]\n- %?\n** 💪 [[roam:pull-ups]]\n** 🐒 [[roam:campusing]]\n** 🤘 [[roam:deadhangs]]"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-          ("wh" "handstands" entry "* 🤸 [[roam:handstands]] :wtf:\n%U\n** 🍚 [[roam:rice bucket]]\n- %?\n** 💪 [[roam:crow to push butt up high straight back]]\n** 💪 [[roam:baby HSPUs]]\n** 🤸 [[roam:handstands]]\nsession max hold: \n** 🍌 [[roam:btw banana stretch]]"
+          ("wh" "handstands" entry
+           ,(string-join '("* 🤸 [[roam:handstands]] :wtf:\n"
+                            "%U\n"
+                            "** 🍚 [[roam:rice bucket]]\n"
+                            "- %?\n"
+                            "** 💪 [[roam:HSPU]]\n"
+                            "** 💪 [[roam:press]]\n"
+                            "** 🤸 [[roam:handstands]]\n"
+                            "session max hold: \n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
           ("wr" "rice bucket" entry "* 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]] :wtf:\n%U%?"
