@@ -333,7 +333,7 @@ space rather than before."
         ("ic" "coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-        ("ie" "third eye" entry "* ☯ [[roam:prying open my third eye]]\n%U\n%?"
+        ("ie" "third eye" entry "* 👁 [[roam:prying open my third eye]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
         ("ii" "innerspace" entry "* ☯ %?\n%U"
