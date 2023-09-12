@@ -16,6 +16,7 @@
              (gnu services sddm)
              (gnu services networking)
              (gnu services ssh)
+             (guix build utils)
              (nongnu packages linux)
              (nongnu system linux-initrd)
              (guix gexp)
@@ -76,14 +77,24 @@
 (define (ship->services ship) ;; also depends on %fleet and %wonko
   (let* ((fleet-desktop-base (list
                               (service bluetooth-service-type)
-                              (service slim-service-type
-                                       (slim-configuration
-                                        (display ":0")
-                                        (vt "vt7")
-                                        (auto-login? #t)
-                                        (default-user (crew-name %wonko))
-                                        (xorg-configuration (xorg-configuration
-                                                             (keyboard-layout (crew-kb %wonko))))))))
+                              (service
+                               slim-service-type
+                               (slim-configuration
+                                (display ":9")
+                                (vt "vt9")
+                                (auto-login? #t)
+                                (default-user (crew-name %wonko))
+                                (xorg-configuration (xorg-configuration
+                                                     (keyboard-layout (crew-kb %wonko))))))
+                              (service
+                               slim-service-type
+                               (slim-configuration
+                                (display ":10")
+                                (vt "vt10")
+                                (auto-login? #t) ;; FIXME
+                                (default-user (crew-name %tina))
+                                (xorg-configuration (xorg-configuration
+                                                     (keyboard-layout (crew-kb %tina))))))))
 
          (fleet-permanent-base (list (service guix-publish-service-type
                                               (guix-publish-configuration
@@ -159,7 +170,7 @@
 
     (users (map crew->user-account %crew))
 
-    (packages (append (list guix-simplyblack-sddm-theme)
+    (packages (append %xfce-world ;; FIXME put this in Tina's world
                       %utils-world
                       %os-disk-world
                       %os-net-world
