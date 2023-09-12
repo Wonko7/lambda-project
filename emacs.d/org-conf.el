@@ -541,6 +541,21 @@ space rather than before."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; books
 
-(require 'org-books)
+(require 'org-books) ;; never worked :(
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org commit
+
+(defun my/magit-get-root ()
+  (magit-with-toplevel (pwd)))
+
+;; FIXME: pops up before quitting magit diff preview, which is a pity
+(defun my/org-commit-msg-setup ()
+  (when (string= (my/magit-get-root) "Directory /data/org/")
+    (emojify-insert-emoji)))
+(add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
+
+;; register macro for bleau.info url
+;; [68 32 58 117 114 108 return 32 114 73 106 106 94 119]
 
 (provide 'conf/org)
