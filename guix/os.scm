@@ -113,7 +113,8 @@
            (service tor-service-type)
            (service openssh-service-type (openssh-configuration
                                           (authorized-keys
-                                           `(("wonko" ,(local-file "data/ssh/yggdrasill.pub"))))
+                                           `(("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
+                                             ("wonko" ,(local-file "data/ssh/enterprise.pub"))))
                                           (x11-forwarding? #t)
                                           (password-authentication? #f)))
            (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
