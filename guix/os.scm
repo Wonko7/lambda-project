@@ -106,6 +106,10 @@
                                      (service network-manager-service-type)
                                      (service wpa-supplicant-service-type)))
 
+         (lid-switch-action (if (ship-media-station? ship)
+                                'ignore
+                                'suspend))
+
          (fleet-base
           (cons*
            (simple-service 'fleet-hosts-entries hosts-service-type
@@ -136,11 +140,9 @@
              (elogind-service-type config =>
                                    (elogind-configuration
                                     (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                                    (handle-lid-switch (if (ship-media-station? ship)
-                                                           'ignore
-                                                           'suspend))
-                                    (handle-lid-switch-docked 'suspend)
-                                    (handle-lid-switch-external-power 'suspend)))
+                                    (handle-lid-switch lid-switch-action)
+                                    (handle-lid-switch-docked  lid-switch-action)
+                                    (handle-lid-switch-external-power lid-switch-action)))
              (console-font-service-type
               config => (map (lambda (tty)
                                `(,tty
