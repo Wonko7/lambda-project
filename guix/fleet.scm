@@ -11,6 +11,7 @@
             ship-name
             ship-net
             ship-class
+            ship-media-station?
             ship-uuids
             ship-kb
             ship-font
@@ -33,6 +34,7 @@
   this-ship
   ;; common
   (name ship-name (sanitize (check string?)))
+  (media-station ship-media-station? (sanitize (check boolean?)))
   ;; os
   (net ship-net (sanitize (check list?)))
   (uuids ship-uuids (sanitize (check list?)))
@@ -52,13 +54,13 @@
   (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
   (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?))))
 
-
 (define-public %yggdrasill
   (ship
    (name "yggdrasill")
    (font %font)
    ;; os
    (class 'desktop-laptop)
+   (media-station #f)
    (kb %dvorak-kb)
    (net `((wg42 . "10.42.0.3")))
    (uuids `((vault . "077c1391-b290-4921-ae90-f8e3cec68113")
@@ -83,6 +85,7 @@
   (ship
    (inherit %yggdrasill)
    (name "rocinante")
+   (media-station #t)
    ;; os
    (kb %fr-kb)
    (net `((wg42 . "10.42.0.4")))

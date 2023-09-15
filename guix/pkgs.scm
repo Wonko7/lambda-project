@@ -313,6 +313,7 @@
         xprop
         xclip
         xinput
+        xrandr
 
         xsettingsd ;; meh.
         ;; xautolock

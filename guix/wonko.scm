@@ -248,6 +248,9 @@
             (xhost . "+SI:localuser:$USER")
             (xset . "b 0 0 0")
             (xset . "r rate 400 30")
+            ,(if (ship-media-station? %ship)
+                 `(xset . "s off -dpms")
+                 `(xset . "dpms 180 1200 0"))
             (xset . "dpms 180 1200 0")
             (xsetroot . "-cursor_name left_ptr")
             (setxkbmap . "dvorak")
@@ -455,55 +458,61 @@
                   (string-append pass " show fleet/" #$(ship-name %ship) "/ssh | "
                                  base64 " -d | " tar " xz ")))))))))
 
-   (service home-shepherd-service-type
-            (home-shepherd-configuration
-             (services
-              (list
-               (shepherd-service
-                (provision '(picom))
-                (start #~(make-forkexec-constructor
-                          (list #$(file-append ibhagwan-picom "/bin/picom"))
-                          #:log-file "log/picom.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "bling"))
-               (shepherd-service
-                (provision '(pantalaimon))
-                (start #~(make-forkexec-constructor
-                          (list #$(string-append %home %guix-extra-profiles-dir
-                                                 "/communication/bin/pantalaimon"))
-                          #:log-file "log/matrix.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "Crypto back-end server for ement.el"))
-               (shepherd-service
-                (provision '(dunst))
-                (start #~(make-forkexec-constructor
-                          (list #$(file-append dunst "/bin/dunst"))
-                          #:log-file "log/dunst.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "riced notifications"))
-               (shepherd-service
-                (provision '(guix-repl))
-                (start #~(make-forkexec-constructor
-                          (list
-                           (string-append #$%home "/.config/guix/current/bin/guix")
-                           "repl" "--listen=tcp:37146")
-                          #:environment-variables '("INSIDE_EMACS=1")
-                          #:log-file "log/guix-repl.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "REPL to me, like lovers do"))
-               (shepherd-service
-                (provision '(xss-lock))
-                (start #~(make-forkexec-constructor
-                          (cons* #$(file-append xss-lock "/bin/xss-lock")
-                                 "--"
-                                 '#$%lock-cmd)
-                          #:log-file "log/xss-lock.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "don't touch my stuff"))
-               (shepherd-service
-                (provision '(synergy))
-                (start #~(make-forkexec-constructor
-                          (list #$(file-append synergy "/bin/synergy"))
-                          #:log-file "log/synergy.log"))
-                (stop #~(make-kill-destructor))
-                (documentation "can't be arsed to move IRL")))))))))
+   (service
+    home-shepherd-service-type
+    (home-shepherd-configuration
+     (services
+      (list
+       (shepherd-service
+        (provision '(picom))
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append ibhagwan-picom "/bin/picom"))
+                  #:log-file "log/picom.log"))
+        (stop #~(make-kill-destructor))
+        (documentation "bling"))
+       (shepherd-service
+        (provision '(pantalaimon))
+        (start #~(make-forkexec-constructor
+                  (list #$(string-append %home %guix-extra-profiles-dir
+                                         "/communication/bin/pantalaimon"))
+                  #:log-file "log/matrix.log"))
+        (stop #~(make-kill-destructor))
+        (documentation "Crypto back-end server for ement.el"))
+       (shepherd-service
+        (provision '(dunst))
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append dunst "/bin/dunst"))
+                  #:log-file "log/dunst.log"))
+        (stop #~(make-kill-destructor))
+        (documentation "riced notifications"))
+       (shepherd-service
+        (provision '(guix-repl))
+        (start #~(make-forkexec-constructor
+                  (list
+                   (string-append #$%home "/.config/guix/current/bin/guix")
+                   "repl" "--listen=tcp:37146")
+                  #:environment-variables '("INSIDE_EMACS=1")
+                  #:log-file "log/guix-repl.log"))
+        (stop #~(make-kill-destructor))
+        (documentation "REPL to me, like lovers do"))
+       (shepherd-service
+        (provision '(xss-lock))
+        (start #~(make-forkexec-constructor
+                  (cons* #$(file-append xss-lock "/bin/xss-lock")
+                         "--"
+                         '#$%lock-cmd)
+                  #:log-file "log/xss-lock.log"))
+        (stop #~(make-kill-destructor))
+        (documentation "don't touch my stuff"))
+       (shepherd-service
+        (provision '(synergy))
+        ;; (auto-start? #f)
+        (start (if (ship-media-station? %ship)
+                   #~(make-forkexec-constructor
+                      (list #$(file-append synergy "/bin/synergyc -f 192.168.1.106"))
+                      #:log-file "log/synergy.log")
+                   #~(make-forkexec-constructor
+                      (list #$(file-append synergy "/bin/synergy"))
+                      #:log-file "log/synergy.log")))
+        (stop #~(make-kill-destructor))
+        (documentation "can't be arsed to move IRL")))))))))

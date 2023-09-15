@@ -136,7 +136,9 @@
              (elogind-service-type config =>
                                    (elogind-configuration
                                     (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                                    (handle-lid-switch 'suspend)
+                                    (handle-lid-switch (if (ship-media-station? ship)
+                                                           'ignore
+                                                           'suspend))
                                     (handle-lid-switch-docked 'suspend)
                                     (handle-lid-switch-external-power 'suspend)))
              (console-font-service-type
