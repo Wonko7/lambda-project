@@ -62,7 +62,8 @@
    (class 'desktop-laptop)
    (media-station #f)
    (kb %dvorak-kb)
-   (net `((wg42 . "10.42.0.3")))
+   (net `((wg42 . "10.42.0.3")
+          (local . "192.168.1.3")))
    (uuids `((vault . "077c1391-b290-4921-ae90-f8e3cec68113")
             (efi . "77DE-0AE2")))
    ;; home
@@ -88,7 +89,8 @@
    (media-station #t)
    ;; os
    (kb %fr-kb)
-   (net `((wg42 . "10.42.0.4")))
+   (net `((wg42 . "10.42.0.4")
+          (local . "192.168.1.4")))
    (uuids `((vault . "ec7a9b12-4611-469c-8a6f-aadf4d525d5e")
             (efi . "918C-B182")))
    ;; home
@@ -112,7 +114,8 @@
    (inherit %rocinante)
    (name "enterprise")
    (kb %dvorak-kb)
-   (net `((wg42 . "10.42.0.6")))
+   (net `((wg42 . "10.42.0.6")
+          (local . "192.168.1.6")))
    (uuids `((vault . "125bf330-ff27-45d1-9cce-1dd96cb14975")
             (efi . "6C21-E416")))
    (x-config
@@ -136,13 +139,21 @@
       #f
       (eval-string (string-append "%" hn))))
 
+;; nispe .9
 (define-public (fleet->hosts machines)
   "make /etc/hosts file with fleet IPs."
-  (filter identity
-          (map (lambda (ship)
-                 (let ((ip (assoc-ref (ship-net ship) 'wg42)))
-                   (if ip
-                       (host ip
-                             (string-append (ship-name ship) ".starfleet.local"))
-                       #f)))
-               machines)))
+  ;; FIXME refactor this, can't be arsed right now
+  (apply append
+         (map (lambda (ship)
+                (let ((ip-42 (assoc-ref (ship-net ship) 'wg42))
+                      (ip-local (assoc-ref (ship-net ship) 'local))
+                      (hostname (ship-name ship)))
+                  (append (if ip-42
+                              (list (host ip-42
+                                          (string-append (ship-name ship) ".starfleet.local")))
+                              '())
+                          (if ip-local
+                              (list (host ip-local
+                                          (string-append (ship-name ship) ".local")))
+                              '()))))
+              machines)))
