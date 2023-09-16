@@ -525,7 +525,8 @@
         ;; (auto-start? #f)
         (start (if (ship-media-station? %ship)
                    #~(make-forkexec-constructor
-                      (list #$(file-append synergy "/bin/synergyc -f 192.168.1.106"))
+                      (list #$(file-append synergy "/bin/synergyc")
+                             "-f" "yggdrasill.local")
                       #:log-file "log/synergy.log")
                    #~(make-forkexec-constructor
                       (list #$(file-append synergy "/bin/synergy"))
