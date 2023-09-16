@@ -303,7 +303,6 @@
         xf86-input-libinput
         xf86-video-fbdev
         xf86-video-nouveau
-
         xev
         xfontsel
         xdpyinfo

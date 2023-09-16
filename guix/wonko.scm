@@ -407,7 +407,23 @@
                (display
                 (spock-say "live long & prosper!"))
                (newline)))))
-      ))
+      ("local/bin/repos-deploy"
+       ,(program-file
+         "repos-deploy"
+         (with-imported-modules
+          '((spock)
+            (srfi srfi-1))
+           #~(begin
+               (use-modules
+                (srfi srfi-1)
+                (spock))
+               (display
+                (spock-say "deploy REPOS"))
+               (newline)
+               (let ((args (drop (program-arguments) 1)))
+                 ;; (if (null? args) ...)
+                 (display
+                  (format #t "~a\n" args)))))))))
 
    (simple-service
     'secrets-scripts
@@ -436,7 +452,7 @@
                                  pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
                  (system
                   (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
-                                ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
+                                 ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
                                  ".pub")))))))
       ("local/bin/secrets-deploy"
        ,(program-file

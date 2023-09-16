@@ -125,6 +125,35 @@
                                           (x11-forwarding? #t)
                                           (password-authentication? #f)))
            (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
+           (extra-special-file
+            "/usr/local/bin/make-default-btrfs-subvols"
+            (program-file
+             "make-default-btrfs-subvols"
+             (with-imported-modules
+                 '((spock)
+                   ;;(guix utils)
+                   ;;(ice-9 match)
+                   (srfi srfi-1))
+               #~(begin
+                   (use-modules
+                    (spock)
+                    (ice-9 match))
+                   (display
+                    (spock-say "making BTRFS SUBVOLS on "))
+                   (newline)
+                   (let* ((args (program-arguments))
+                          (sdX  (second args))
+                          (subvols '("code" "data" "junkyard" "work"))
+                          (btrfs #$(file-append btrfs-progs "/bin/btrfs"))
+                          (mkdir #$(file-append coreutils "/bin/mkdir"))
+                          (mk-dirs (lambda (x)
+                                     x)))
+                     ;; (map mk-dirs subvols)
+                     ;; (map mk-subvols subvols)
+                     (display
+                      (format #t "~a\n" args))
+                     (display
+                      (format #t "~a\n" (second args))))))))
            (modify-services (if (desktop? ship)
                                 (modify-services %desktop-services
                                   (delete gdm-service-type)
