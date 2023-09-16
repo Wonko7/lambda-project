@@ -41,7 +41,7 @@
 (require 'corfu-history)
 (require 'corfu-info)
 
-(global-corfu-mode)
+(global-corfu-mode 0) ;; i don't like popups
 
 ;;(use-package corfu
 ;; Optional customizations
@@ -56,6 +56,7 @@
 (setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
 (setq corfu-scroll-margin 5)        ;; Use scroll margin
 (setq corfu-preselect 'first)
+;; (setq corfu-doc-auto t)
 
 ;; auto popup:
 ;; (setq corfu-auto-delay 0)
