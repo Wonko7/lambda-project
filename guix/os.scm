@@ -1,6 +1,7 @@
 (use-modules (gnu)
              (gnu packages)
              (gnu packages base)
+             (gnu packages linux)
              (gnu packages emacs)
              (gnu packages emacs-xyz)
              (gnu packages shells)
@@ -113,7 +114,9 @@
          (fleet-base
           (cons*
            (simple-service 'fleet-hosts-entries hosts-service-type
-                           (fleet->hosts %fleet))
+                           (append
+                            (fleet->hosts %fleet)
+                            (list (host "192.168.1.9" "nispe.local"))))
            (service tor-service-type)
            (service openssh-service-type (openssh-configuration
                                           (authorized-keys
@@ -123,26 +126,35 @@
                                           (password-authentication? #f)))
            (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
            (modify-services (if (desktop? ship)
-                                %desktop-services
-                                %base-services)
-             (delete gdm-service-type)
-             (guix-service-type config =>
-                                (guix-configuration
-                                 (discover? #t)
-                                 (substitute-urls
-                                  (append (list "http://192.168.1.106:1337" ;; FIXME yggdrassil
-                                                "https://substitutes.nonguix.org")
-                                          %default-substitute-urls))
-                                 (authorized-keys
-                                  (append (list (local-file "./data/substitutes/yggdrasill.pub")
-                                                (local-file "./data/substitutes/nonguix.pub"))
-                                          %default-authorized-guix-keys))))
-             (elogind-service-type config =>
+                                (modify-services %desktop-services
+                                  (delete gdm-service-type)
+                                  (elogind-service-type config =>
                                    (elogind-configuration
                                     (handle-power-key 'ignore) ;; FIXME: 'hibernate?
                                     (handle-lid-switch lid-switch-action)
                                     (handle-lid-switch-docked  lid-switch-action)
-                                    (handle-lid-switch-external-power lid-switch-action)))
+                                    (handle-lid-switch-external-power lid-switch-action))))
+                                %base-services)
+             (guix-service-type config =>
+                                (guix-configuration
+                                 (discover? (not (ephemeral? ship)))
+                                 (substitute-urls
+                                  (append
+                                   (if (ephemeral? ship)
+                                       (map (lambda (s) ;; no discovery on discovery. heh.
+                                              (string-append "http://"
+                                                             (assoc-ref (ship-net s) 'local)
+                                                             ":1337"))
+                                            fleet)
+                                       '())
+                                   (list
+                                    "https://substitutes.nonguix.org")
+                                   %default-substitute-urls))
+                                 (authorized-keys
+                                  (append (list (local-file "./data/substitutes/yggdrasill.pub")
+                                                (local-file "./data/substitutes/nonguix.pub"))
+                                          %default-authorized-guix-keys))))
+
              (console-font-service-type
               config => (map (lambda (tty)
                                `(,tty
