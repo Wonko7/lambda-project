@@ -75,8 +75,9 @@
      "        . $GUIX_PROFILE/etc/profile\n"
      "    fi\n"
      "    unset profile\n"
-     "done\n")))
-;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true"
+     "done\n"
+     ;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true\n"
+     )))
 
 (define-public (pkgs->manifest name ps)
   `(,(string-append "local/manifests/" name)

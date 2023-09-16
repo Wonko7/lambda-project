@@ -159,13 +159,13 @@
                 ("HISTSIZE" . "100000")
                 ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
-                ;; ("PATH" . "./_opam/bin:$PATH")
                 ("DICTIONARY" . "en_GB-ise") ;; hunspell
                 ("BLOCK_SIZE" . "human-readable")
                 ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-home/profile/lib")
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
                 ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
-                ("PATH" . "~/local/bin:$PATH")
+                ("PATH" . "$HOME/local/bin:$PATH")
+                ("PATH" . "./_opam/bin:$PATH")
                 ("GUIX_EXTRA_PROFILES" .
                  ,(string-append "$HOME" %guix-extra-profiles-dir))
                 ("GUILE_LOAD_PATH" .
