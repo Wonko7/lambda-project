@@ -357,13 +357,13 @@ space rather than before."
         ("ip" "piracy" entry "* ☠ %?\n%U"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-        ("iv" "vipassana" entry "* ☯ [[id:37187551-897a-4f6a-a978-c057644f34af][vipassana]]\n%U\n%?"
+        ("iv" "vipassana" entry "* ☯ [[roam:vipassana]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
         ("is" "sleep / dreams" entry "* 🌙 sleep / dreams\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-        ("it" "trees" entry "* 🌳 trees / [[id:cadf3871-658d-4db2-b16c-36aa03dc71dc][brocoli]]\n%U\n%?"
+        ("it" "trees" entry "* 🌳 trees / [[roam:brocoli]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
 
@@ -399,7 +399,7 @@ space rather than before."
                          "session max hold: \n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-        ("wr" "rice bucket" entry "* 🍚 [[id:7acd1856-7e65-4134-b6ec-715976a03e7e][rice bucket]] :wtf:\n%U%?"
+        ("wr" "rice bucket" entry "* 🍚 [[roam:rice bucket]] :wtf:\n%U%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wl" "leg day" entry ,(string-join '("* 💪 leg day :wtf:\n"
@@ -410,7 +410,7 @@ space rather than before."
                                               "** 💪 [[roam:pistol squats]]\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-        ("wi" "injuries" entry "* 🏥 [[id:820e7fc2-6cd0-4865-988f-7f526f5545a9][injuries]] :wtf:inj:\n%U\n%?\n"
+        ("wi" "injuries" entry "* 🏥 [[roam:injuries]] :wtf:inj:\n%U\n%?\n"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:\n"
@@ -425,25 +425,45 @@ space rather than before."
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
 
         ("t" "tech")
-        ("tg" "guix" entry "* 🐧 [[id:844ed739-42ce-4277-b7b5-b8f4a79869dc][guix]]\n%U\n%?"
+        ("tg" "guix" entry "* 🐧 [[roam:guix]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-        ("te" "emacs" entry "* 🐃 [[id:ab80bf16-aadd-4fa3-a9d6-4d4f7fd1b2e9][emacs]]\n%U\n%?"
+        ("te" "emacs" entry "* 🐃 [[roam:emacs]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-        ("tc" "clojure" entry "* ☯ [[id:4f11e3fe-1d86-42de-a84e-9c903893aa0a][clojure]]\n%U\n%?"
+        ("tc" "clojure" entry "* ☯ [[roam:clojure]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-        ("to" "ocaml" entry "* 🐫 [[id:f5dd5816-0736-43d2-88c7-75e66d1ddf67][ocaml]]\n%U\n%?"
+        ("to" "ocaml" entry "* 🐫 [[roam:ocaml]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-        ("tl" "linux" entry "* 🐧 [[id:25647313-7296-4803-b2c4-f57b5b6e2d72][linux]]\n%U\n%?"
+        ("tl" "linux" entry "* 🐧 [[roam:linux]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-        ("tp" "physics" entry "* ⚛ [[id:a3e5f916-a260-4925-81ef-5f7c6f5e3157][physics]]\n%U\n%?"
+        ("tp" "physics" entry "* ⚛ [[roam:physics]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-
+        ("ts" "ssh session" entry
+         ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
+                          "#+begin_src shell :dir /ssh:wonko@rocinante.local:/junkyard\n"
+                          "  %?\n"
+                          "#+end_src\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        ("tS" "sudo ssh session" entry
+         ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
+                          "#+begin_src shell :dir /ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
+                          "  %?\n"
+                          "#+end_src\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+       ("tM" "ssh session" entry
+        ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
+                         "#+begin_src shell :dir /ssh:wonko@rocinante.local:/mnt/trantor/media\n"
+                         "  %?\n"
+                         "#+end_src\n"))
+        :jump-to-captured t
+        :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
         ("W" "work")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
