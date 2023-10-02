@@ -99,12 +99,11 @@
 (defun efs/configure-window-by-class ()
   (interactive)
   (pcase exwm-class-name
-    ("Firefox" (exwm-workspace-move-window 4))
-    ;; ("vlc"
-    ;;  (exwm-layout-toggle-mode-line))
-    ;; ("mpv" ;(exwm-floating-toggle-floating)
-    ;;  (exwm-layout-toggle-mode-line))
-    ))
+    ("Firefox" (progn
+                 (exwm-workspace-move-window 4)
+                 (exwm-layout-set-fullscreen))
+    ("vlc" (exwm-layout-set-fullscreen))
+    ("mpv" (exwm-layout-set-fullscreen))))
 
 (defvar my/init-ement-room-list
   '((lambda (buffer-name action)
