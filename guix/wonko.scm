@@ -4,6 +4,7 @@
  (gnu home)
  (gnu home services)
  (gnu home services shells)
+ (gnu system shadow)
  (gnu services)
  (guix profiles)
  (srfi srfi-1)
@@ -106,6 +107,7 @@
     ("st" . ,(format #f "st -f '~a:size=~a'" %font
                      (ship-st-font-size %ship)))
     ("dmesg" . "dmesg -He")
+    ("grep" . "grep --color=auto")
     ("ls" . "ls --color=yes")
     ("ll" . "ls -l --color=auto")
     ("la" . "ls -A --color=auto")
@@ -152,7 +154,7 @@
   (list
    (service home-bash-service-type
             (home-bash-configuration
-             (guix-defaults? #t)
+             (guix-defaults? #f)
              (aliases %aliases)
              (environment-variables
               `(("HISTFILESIZE" . "100000")
@@ -160,6 +162,7 @@
                 ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
                 ("PAGER" . "")
                 ("DICTIONARY" . "en_GB-ise") ;; hunspell
+                ("DISPLAY" . ":9")
                 ("BLOCK_SIZE" . "human-readable")
                 ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-home/profile/lib")
                 ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
@@ -174,6 +177,7 @@
                 ("LANG" . "en_GB.utf8")
                 ("PASSWORD_STORE_DIR" . "/data/pass")
                 ("PASSWORD_STORE_GENERATED_LENGTH" . "33")
+                ;; ("PS1" . "is in bashrc because I want it after source /etc/bashrc")
                 ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
                 ("GDK_SCALE" . ,(number->string
                                  (ship-gdk-scale %ship)))
@@ -187,6 +191,18 @@
                (bash-profile-source-profiles (profiles->names %profiles))))
              (bashrc
               (list
+               (mixed-text-file
+                "bash-options"
+                "shopt -s nocaseglob\n"
+                "# Source the system-wide file.\n"
+                "[ -f /etc/bashrc ] && source /etc/bashrc\n"
+                "[[ $- != *i* ]] && return ## ssh/non-interactive shell config stops here\n"
+                "PS1='\\u@\\h ${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+                "shopt -s autocd\n"
+                "shopt -s extglob\n"
+                "shopt -s globstar\n"
+                "set -o vi\n"
+                "bind '\"jj\":vi-movement-mode'\n")
                (bash-profile-source-profiles (profiles->names %profiles))))))
 
    (simple-service 'emacsd-config-files
