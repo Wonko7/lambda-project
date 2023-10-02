@@ -20,6 +20,7 @@
 
   ;; emacs apps
   "ab"  #'ibuffer
+  "ac"  #'calc
   "ad"  #'dired
   "as"  #'shell
   "ap"  #'proced

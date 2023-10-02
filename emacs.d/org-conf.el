@@ -445,21 +445,23 @@ space rather than before."
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
         ("ts" "ssh session" entry
          ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
-                          "#+begin_src shell :dir /ssh:wonko@rocinante.local:/junkyard\n"
+                          "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/junkyard\n"
                           "  %?\n"
                           "#+end_src\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
         ("tS" "sudo ssh session" entry
          ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
-                          "#+begin_src shell :dir /ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
+                          "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
                           "  %?\n"
                           "#+end_src\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-       ("tM" "ssh session" entry
-        ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
-                         "#+begin_src shell :dir /ssh:wonko@rocinante.local:/mnt/trantor/media\n"
+        ("tM" "ssh session" entry
+         ,(string-join '("* ⚛ [[roam:ssh session]]\n"
+                         "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/mnt/trantor/media\n"
+                         "  export DISPLAY=:9\n"
+                         "  . $GUIX_EXTRA_PROFILES/desktop/etc/profile\n"
                          "  %?\n"
                          "#+end_src\n"))
         :jump-to-captured t
@@ -545,11 +547,19 @@ space rather than before."
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((clojure . t)
+   (css . t)
+   (dot . t)
    (emacs-lisp . t)
    (gnuplot . t)
+   (latex . t)
+   ;; (matlab . t)
+   (sass . t)
    (scheme . t)
+   (sed . t)
    (shell . t)
-   (ocaml . t)))
+   (sql . t)
+   (ocaml . t)
+   (org . t)))
 
 (setq org-confirm-babel-evaluate nil)
 

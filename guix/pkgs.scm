@@ -50,6 +50,7 @@
   #:use-module (gnu packages admin)
   #:use-module (gnu packages databases) ;; recutils
   #:use-module (gnu packages version-control)
+  #:use-module (gnu packages file)
   #:use-module (gnu packages tmux)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages vim)
@@ -445,6 +446,7 @@
         coreutils
         recutils
         moreutils
+        file
         tree
         ;; compression
         p7zip

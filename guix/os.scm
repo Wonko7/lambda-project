@@ -174,7 +174,7 @@
                                               (string-append "http://"
                                                              (assoc-ref (ship-net s) 'local)
                                                              ":1337"))
-                                            fleet)
+                                            %fleet)
                                        '())
                                    (list
                                     "https://substitutes.nonguix.org")
