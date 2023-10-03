@@ -213,7 +213,9 @@
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
-(setq shell-prompt-pattern "^[^#$%>\n]*[#$%>λ] *")
+;;(setq shell-prompt-pattern "^[^#$%>\n]*[#$%>λ] *")
+;; (setq shell-prompt-pattern "^.*\n*[#$%>λ]")
+(setq shell-prompt-pattern "^[🍏🍎].*\nλ")
 
 (defun toggle-scroll-to-bottom-on-output ()
   (interactive)

@@ -102,8 +102,8 @@
     ("Firefox" (progn
                  (exwm-workspace-move-window 4)
                  (exwm-layout-set-fullscreen))
-    ("vlc" (exwm-layout-set-fullscreen))
-    ("mpv" (exwm-layout-set-fullscreen))))
+     ("vlc" (exwm-layout-set-fullscreen))
+     ("mpv" (exwm-layout-set-fullscreen)))))
 
 (defvar my/init-ement-room-list
   '((lambda (buffer-name action)
@@ -114,6 +114,27 @@
         (display-buffer-same-window buffer alist))
       (setq display-buffer-alist (delete my/init-ement-room-list display-buffer-alist)))))
 
+;; see https://github.com/ch11ng/exwm/wiki/Cookbook
+(defun my/set-window-dedicated (arg)
+  "Toggle loose window dedication.  If prefix ARG, set strong."
+  (interactive "P")
+  (let* ((dedicated (if arg t (if (window-dedicated-p) nil "loose"))))
+    (message "setting window dedication to %s" dedicated)
+    (set-window-dedicated-p (selected-window) dedicated)))
+
+(defun my/dedicate-exwm-window (&rest ignored)
+  "Loosely dedicate current window."
+  (when exwm-class-name
+    (set-window-dedicated-p (selected-window) "loose")))
+(advice-add 'exwm-manage--on-MapNotify :after 'my/dedicate-exwm-window)
+
+(defun my/undedicate-exwm-window (&rest ignored)
+  "Remove dedication on an exwm window."
+  (when exwm-class-name
+    (set-window-dedicated-p (selected-window) nil)))
+;; undedicate on unmap, otherwise Emacs window will be destroyed
+(advice-add 'exwm-manage--on-UnmapNotify :before 'my/undedicate-exwm-window)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; previous workspace
 
@@ -122,7 +143,7 @@
 (defun my/exwm-workspace--current-to-previous-index (_x)
   (setq my/exwm-workspace-previous-index exwm-workspace-current-index))
 
-(defun my/fuck-me-init-exwm ()
+(defun my/init-exwm ()
   ;; When window "class" updates, use it to set the buffer name
   (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
   ;; When window title updates, use it to set the buffer name
@@ -131,7 +152,7 @@
   (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
   (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
 
-(add-hook 'exwm-init-hook #'my/fuck-me-init-exwm)
+(add-hook 'exwm-init-hook #'my/init-exwm)
 
 (defun my/exwm-workspace-switch-to-previous ()
   (interactive)
@@ -190,6 +211,7 @@
 
         ([?\s-f] . my/toggle-fullscreen)
         ([?\s-F] . exwm-layout-toggle-fullscreen)
+        ([?\s-d] . my/set-window-dedicated)
 
         ;; Launch applications via shell command
         ([?\s-:] . (lambda (command)
