@@ -322,6 +322,19 @@ space rather than before."
                                  (when details (apply #'org-books-format 1 details)))"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ("mb" "bookmark" entry
+         ,(string-join '("* %? :bm:\n"
+                         "#+begin_src shell  :results value output :dir "
+                         "/ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
+                         "  export DISPLAY=:9\n"
+                         "  . $GUIX_EXTRA_PROFILES/desktop/etc/profile\n"
+                         "  ls -t\n"
+                         "#+end_src\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ("mB" "book" entry "* 📚 %?\n%U"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
         ("mm" "music (is so nice)" entry "* 🎵 %?\n%U"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
@@ -470,10 +483,10 @@ space rather than before."
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
         ("Wm" "marge+" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[roam:marge+]] :work:"))
          :jump-to-captured t)
         ("Wr" "RDV marge+" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[id:a8b719fa-7b0b-4118-afc2-5a244082d777][marge+]] :work:"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[roam:marge+]] :work:"))
          :jump-to-captured t)))
 
 ;; FIXME review this:
