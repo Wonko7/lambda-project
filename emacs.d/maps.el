@@ -144,7 +144,7 @@
  "z=" #'flyspell-correct-wrapper
  "Y"  #'evil-cp-yank-enclosing
  ;; FIXME: add something on shift= so this can exist "zX" #'flyspell-correct-at-point
- )
+ "/" #'consult-line)
 ;; TODO: sentence & paragraph motions.
 
 (general-define-key
@@ -177,8 +177,8 @@
 (general-evil-define-key '(normal visual) comint-mode-map
   "ï"           #'my/cd-up
   "-"           #'my/cd--
-  "{"           #'comint-previous-prompt
-  "}"           #'comint-next-prompt
+  "("           #'comint-previous-prompt
+  ")"           #'comint-next-prompt
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
@@ -187,8 +187,8 @@
   "A"           (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
 
 (general-evil-define-key '(insert) comint-mode-map
-  "{"           #'comint-previous-prompt
-  "}"           #'comint-next-prompt
+  "("           #'comint-previous-prompt
+  ")"           #'comint-next-prompt
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
@@ -209,6 +209,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
+(general-evil-define-key '(normal) magit-diff-mode-map
+  "("    #'diff-hunk-prev
+  ")"    #'diff-hunk-next
+  "C-k"    #'diff-hunk-prev
+  "C-j"    #'diff-hunk-next)
+
+(general-evil-define-key '(normal) magit-mode-map
+  "("    #'magit-section-backward-sibling
+  ")"    #'magit-section-forward-sibling
+  "C-k"    #'magit-section-backward-sibling
+  "C-j"    #'magit-section-backward-sibling)
+
 (general-evil-define-key '(normal) git-rebase-mode-map
   "K"    #'git-rebase-move-line-up
   "J"    #'git-rebase-move-line-down)
@@ -218,16 +230,18 @@
   "grj" #'smerge-next
   "C-k" #'smerge-prev
   "C-j" #'smerge-next
-  "gru" #'smerge-keep-upper
-  "grl" #'smerge-keep-lower)
+  "(" #'smerge-prev
+  ")" #'smerge-next
+  "Ku" #'smerge-keep-upper
+  "Kl" #'smerge-keep-lower)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
 
 (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
   "Y"     #'evil-cp-yank-enclosing
-  "{"     #'evil-backward-paragraph
-  "}"     #'evil-forward-paragraph
+  "("     #'evil-backward-paragraph
+  ")"     #'evil-forward-paragraph
   ")"     #'evil-cp-next-closing
   "("     #'sp-backward-up-sexp
   "é"     #'evil-cp-previous-opening ; FIXME put this in global map?
@@ -280,16 +294,18 @@
 (general-evil-define-key '(normal) org-mode-map
   "zD"    #'org-decrypt-entries
   "zq"    (lambda() (interactive) (org-show-branches-buffer))
+  "C-k"   #'org-previous-visible-heading
+  "C-j"   #'org-next-visible-heading
   "("     #'org-previous-visible-heading
   ")"     #'org-next-visible-heading
-  "{"     #'evil-backward-paragraph
-  "}"     #'evil-forward-paragraph
-  "C-k"   #'org-move-subtree-up
-  "C-j"   #'org-move-subtree-down
-  "C-h"   #'org-promote-subtree
-  "C-l"   #'org-demote-subtree
-  "{"     #'org-backward-element
-  "}"     #'org-forward-element)
+  "("     #'evil-backward-paragraph
+  ")"     #'evil-forward-paragraph
+  "C-K"   #'org-move-subtree-up
+  "C-J"   #'org-move-subtree-down
+  "C-H"   #'org-promote-subtree
+  "C-L"   #'org-demote-subtree
+  "("     #'org-backward-element
+  ")"     #'org-forward-element)
 
 (define-key cfw:calendar-mode-map (kbd "SPC") nil)
 (define-key cfw:org-schedule-map (kbd "SPC") nil)
@@ -350,8 +366,8 @@
   "c-n" #'ement-room-goto-next
   "c-j" #'ement-room-goto-prev
   "c-k" #'ement-room-goto-next
-  "{" #'ement-room-goto-prev
-  "}" #'ement-room-goto-next
+  "(" #'ement-room-goto-prev
+  ")" #'ement-room-goto-next
   "l" #'ement-tabulated-room-list
   "L" #'ement-room-list-side-window
   "h" #'my/ement-home
