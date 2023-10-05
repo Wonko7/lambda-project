@@ -97,7 +97,7 @@
         ;; emacs-next
         ;; basic (bitches) stuff:
         emacs-general
-        emacs-emacsql-sqlite3
+        ;; rm emacs-emacsql-sqlite3
         emacs-undo-fu
         emacs-vundo
 

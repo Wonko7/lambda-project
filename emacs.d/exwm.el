@@ -47,8 +47,16 @@
         ?\s-K
         ?\s-l
         ?\s-h
-        ?\s-\  ;; yep
-        ?\M-:))
+        ?\s-\ ;; yep
+        ?\M-:
+        ?\A-\s-i
+        ?\A-\s-I
+        ?\A-\s-J
+        ?\A-\s-K
+        ?\A-\s-l
+        ?\A-\s-h
+        ?\A-\s-  ;; yep
+        ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc functions, should move this?
@@ -185,7 +193,54 @@
 ;; global key bindings
 
 (setq exwm-input-global-keys
-      `(([?\s-r] . exwm-reset)
+      `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x,
+        ;; sometimes \s-x
+        ([?\A-\s-r] . exwm-reset)
+        ([?\A-\s-i] . exwm-input-toggle-keyboard)
+        ([?\A-\s-I] . coterm-char-mode-cycle)
+
+        ;; Move between windows
+        ([?\A-\s-h] . windmove-left)
+        ([?\A-\s-l] . windmove-right)
+        ([?\A-\s-k] . windmove-up)
+        ([?\A-\s-j] . windmove-down)
+
+        ([?\A-\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
+        ([?\A-\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
+        ([?\A-\s-K] . previous-buffer)
+        ([?\A-\s-J] . next-buffer)
+
+        ([?\A-\s-C] . kill-this-buffer)
+        ([?\A-\s-c] . (lambda () (interactive) (async-shell-command "dunstctl close")))
+
+        ([?\A-\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
+        ([?\A-\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
+        ([?\A-\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
+        ([?\A-\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
+        ([?\A-\s-&] . async-shell-command)
+
+        ([?\A-\s-f] . my/toggle-fullscreen)
+        ([?\A-\s-F] . exwm-layout-toggle-fullscreen)
+        ([?\A-\s-d] . my/set-window-dedicated)
+
+        ;; Launch applications via shell command
+        ([?\A-\s-:] . (lambda (command)
+                     (interactive (list (read-shell-command "$ ")))
+                     (start-process-shell-command command nil command)))
+        ([?\A-\s-y] . ws/force-run-auto-start)
+
+        ;; Switch workspace
+        ([?\A-\s-w] . exwm-workspace-switch)
+        ([?\A-\s- ] . my/exwm-workspace-switch-to-previous)
+        ([?\A-\s-M] . exwm-workspace-move-window)
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "A-s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))
+
+        ([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
         ([?\s-I] . coterm-char-mode-cycle)
 
@@ -202,12 +257,12 @@
 
         ([?\s-C] . kill-this-buffer)
         ([?\s-c] . (lambda () (interactive) (async-shell-command "dunstctl close")))
-        ;;((kbd "S-C-c") . exwm-reset)
 
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
         ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
         ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
+        ([?\s-&] . async-shell-command)
 
         ([?\s-f] . my/toggle-fullscreen)
         ([?\s-F] . exwm-layout-toggle-fullscreen)
@@ -222,25 +277,14 @@
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
         ([?\s- ] . my/exwm-workspace-switch-to-previous)
+        ([?\s-M] . exwm-workspace-move-window)
         ,@(mapcar (lambda (i)
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))
-        ,@(mapcar* (lambda (c i)
-                     `(,(kbd (format "s-%c" c)) .
-                       (lambda ()
-                         (interactive)
-                         (if exwm--id
-                             (exwm-workspace-move-window ,i)
-                           (let ((b (current-buffer)))
-                             (persp-forget-buffer b)
-                             (exwm-workspace-switch-create ,i)
-                             (persp-add-buffer b)
-                             (my/exwm-workspace-switch-to-previous))))))
-                   '(?\) ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\()
-                   (number-sequence 0 9))))
+        ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exwm settings
@@ -314,8 +358,8 @@
 
 (defun ws/run-auto-start ()
   (cl-flet ((run-init-p (i)
-                        (and (= exwm-workspace-current-index i)
-                             (ws/check-and-mark-auto-start-state i))))
+              (and (= exwm-workspace-current-index i)
+                   (ws/check-and-mark-auto-start-state i))))
     (cond ((run-init-p 9)
            (push my/init-ement-room-list display-buffer-alist)
            (my/ement-init))

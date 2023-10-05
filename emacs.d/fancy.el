@@ -96,7 +96,7 @@
 ;; nyan
 
 (require 'nyan-mode)
-(setq nyan-animate-nyancat t)
+(setq nyan-animate-nyancat nil) ;; FIXME doesn't like to animate with emacs 29.1
 (nyan-mode 1)
 
 (provide 'conf/fancy)
