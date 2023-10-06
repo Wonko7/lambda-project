@@ -198,7 +198,7 @@
                 "[ -f /etc/bashrc ] && source /etc/bashrc\n"
                 "[[ $- != *i* ]] && return ## ssh/non-interactive shell config stops here\n"
                 "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
-                " \\A \\u@\\h \\w ${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+                " \\A \\u@\\h \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
                 "shopt -s autocd\n"
                 "shopt -s extglob\n"
                 "shopt -s globstar\n"
