@@ -101,5 +101,9 @@
 (evil-owl-mode)
 ;; zoo>
 
+(setq evil-mc-cursors-map (make-sparse-keymap)) ;; FIXME: workaround on zonked req evil-mc
+(require 'evil-mc)
+(global-evil-mc-mode)
+
 (provide 'conf/evil)
 ;;; evil.el ends here
