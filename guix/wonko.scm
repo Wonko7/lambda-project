@@ -104,6 +104,10 @@
   `(("g" . "git")
     ("psrg" . "ps aux | rg")
     ("df" . "df -h")
+    ("feh" . ,(string-append "feh --borderless"
+                             " --menu-font JetBrainsMono-Regular/30"
+                             " --font JetBrainsMono-Regular/30"
+                             " --fontpath ~/.guix-home/profile/share/fonts/truetype/"))
     ("st" . ,(format #f "st -f '~a:size=~a'" %font
                      (ship-st-font-size %ship)))
     ("dmesg" . "dmesg -He")
