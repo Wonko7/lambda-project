@@ -159,6 +159,7 @@
               `(("HISTFILESIZE" . "100000")
                 ("HISTSIZE" . "100000")
                 ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
+                ("HISTCONTROL" . "ignorespace")
                 ("PAGER" . "")
                 ("DICTIONARY" . "en_GB-ise") ;; hunspell
                 ("DISPLAY" . ":9")
