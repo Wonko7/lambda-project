@@ -130,19 +130,6 @@
     (message "setting window dedication to %s" dedicated)
     (set-window-dedicated-p (selected-window) dedicated)))
 
-(defun my/dedicate-exwm-window (&rest ignored)
-  "Loosely dedicate current window."
-  (when exwm-class-name
-    (set-window-dedicated-p (selected-window) "loose")))
-(advice-add 'exwm-manage--on-MapNotify :after 'my/dedicate-exwm-window)
-
-(defun my/undedicate-exwm-window (&rest ignored)
-  "Remove dedication on an exwm window."
-  (when exwm-class-name
-    (set-window-dedicated-p (selected-window) nil)))
-;; undedicate on unmap, otherwise Emacs window will be destroyed
-(advice-add 'exwm-manage--on-UnmapNotify :before 'my/undedicate-exwm-window)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; previous workspace
 
@@ -193,8 +180,8 @@
 ;; global key bindings
 
 (setq exwm-input-global-keys
-      `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x,
-        ;; sometimes \s-x
+      `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x, sometimes \s-x
+        ;; same as this guy: https://emacs.stackexchange.com/questions/78135/why-does-emacs-29-translates-meta-to-metahyper-m-somekey-to-h-m-somekey
         ([?\A-\s-r] . exwm-reset)
         ([?\A-\s-i] . exwm-input-toggle-keyboard)
         ([?\A-\s-I] . coterm-char-mode-cycle)
