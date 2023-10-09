@@ -19,7 +19,8 @@
             ship-x-config
             ship-gdk-scale
             ship-gdk-dpi-scale
-            ship-st-font-size
+            ship-feh-font-size
+            ship-rxvt-font-size
             ship-picom-radius
             ship-dunst-width
             ship-dunst-font-size
@@ -47,7 +48,8 @@
   (dpi ship-dpi (sanitize (check number?)))
   (gdk-scale ship-gdk-scale (sanitize (check number?)))
   (gdk-dpi-scale ship-gdk-dpi-scale (sanitize (check number?)))
-  (st-font-size ship-st-font-size (sanitize (check number?)))
+  (feh-font-size ship-feh-font-size (sanitize (check number?)))
+  (rxvt-font-size ship-rxvt-font-size (sanitize (check number?)))
   (picom-radius ship-picom-radius (sanitize (check number?)))
   (dunst-width ship-dunst-width (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
@@ -70,7 +72,8 @@
    (wallpaper %wallpaper)
    (emacs-modeline-height 75)
    (emacs-font-size 80)
-   (st-font-size 8)
+   (rxvt-font-size 8)
+   (feh-font-size 20)
    (dunst-font-size 8)
    (dunst-width 175)
    (picom-radius 25)
@@ -78,9 +81,10 @@
    (gdk-dpi-scale 1.5)
    (dpi 288)
    (x-config
-    (cmd+arg->script `((xrandr . "--dpi 288")
-                       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
-                       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0"))))))
+    (cmd+arg->script
+     `((xrandr . "--dpi 288")
+       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
+       (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0"))))))
 
 (define-public %rocinante
   (ship

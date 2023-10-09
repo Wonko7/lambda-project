@@ -79,6 +79,15 @@
      ;; "test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true\n"
      )))
 
+(define-public (xresources-configuration font rxvt-font-size)
+  (let ((file (call-with-input-file "../misc/Xresources" get-string-all)))
+    (fold (lambda (l file)
+            (let-values (((k v) (car+cdr l)))
+              (field-replace k v file)))
+          file
+          `(("=FONT=" . ,font)
+            ("=SIZE=" . ,rxvt-font-size)))))
+
 (define-public (pkgs->manifest name ps)
   `(,(string-append "local/manifests/" name)
     ,(scheme-file

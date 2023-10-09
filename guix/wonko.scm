@@ -84,14 +84,15 @@
  (current-error-port))
 (newline (current-error-port))
 
+(define %term-cmd "urxvt")
+
 (define %emacs-values
   #~(progn
      (setq my/font #$%font
            my/lambda-project #$%lambda-project
            my/font-size #$(ship-emacs-font-size %ship)
            my/modeline-height #$(ship-emacs-modeline-height %ship)
-           my/term-cmd #$(format #f "st -f 'JetBrains Mono:size=~a'"
-                                 (ship-st-font-size %ship))
+           my/term-cmd #$%term-cmd
            my/lock-cmd #$(apply
                           string-append
                           (concatenate
@@ -104,12 +105,6 @@
   `(("g" . "git")
     ("psrg" . "ps aux | rg")
     ("df" . "df -h")
-    ("feh" . ,(string-append "feh --borderless"
-                             " --menu-font JetBrainsMono-Regular/30"
-                             " --font JetBrainsMono-Regular/30"
-                             " --fontpath ~/.guix-home/profile/share/fonts/truetype/"))
-    ("st" . ,(format #f "st -f '~a:size=~a'" %font
-                     (ship-st-font-size %ship)))
     ("dmesg" . "dmesg -He")
     ("grep" . "grep --color=auto")
     ("ls" . "ls --color=yes")
@@ -282,6 +277,7 @@
             (feh . ,(string-append "--bg-scale '"
                                    (ship-wallpaper %ship)
                                    "'"))
+            (xrdb  . "-load ~/.Xresources")
             ("~/.x-config" . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
              . #$(file-append emacs-exwm "/bin/exwm"))))))
@@ -341,8 +337,20 @@
          (string-append %lambda-project "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
-         (string-append %lambda-project "/misc/Synergy.conf")))))
-
+         (string-append %lambda-project "/misc/Synergy.conf")))
+      (".config/feh/themes"
+       ,(let ((fsz (number->string (ship-feh-font-size %ship))))
+          (mixed-text-file
+           "feh_symlink_name_is_theme_name"
+           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+           " --fontpath " %home "/.guix-home/profile/share/fonts/truetype/"
+           " --menu-font JetBrainsMono-Regular/" fsz
+           " --font JetBrainsMono-Regular/" fsz "\n")))
+      (".Xresources"
+       ,(plain-file "Xresources"
+                    (xresources-configuration
+                     (ship-font %ship)
+                     (ship-rxvt-font-size %ship))))))
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map
