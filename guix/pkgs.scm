@@ -314,6 +314,8 @@
         xclip
         xinput
         xrandr
+        xdotool
+        wmctrl
 
         xsettingsd ;; meh.
         ;; xautolock
@@ -325,15 +327,11 @@
         scrot
         upower
         playerctl
+        rxvt-unicode
         ;; tlp and have emacs set rfkill for me? fuck that noise.
-
-        ;; terms
-        w7-st
-        alacritty ;; FIXME config this and make it useful?
 
         ;; x <3
         xeyes
-
         ;; bling
         feh
         qtsvg   ;; needed for rendering icons
@@ -431,7 +429,8 @@
 (define-public %vcs-world
   (list mercurial
         darcs
-        git))
+        git
+        git-annex))
 
 (define-public %utils-world
   (list ripgrep
