@@ -22,6 +22,7 @@
   "ab"  #'ibuffer
   "ac"  #'calc
   "ad"  #'dired
+  "aD"  #'dictionary-lookup-definition
   "as"  #'shell
   "ap"  #'proced
   ;; elfeed
