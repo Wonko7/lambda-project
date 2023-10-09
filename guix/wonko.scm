@@ -195,8 +195,11 @@
                 "bash-options"
                 "shopt -s nocaseglob\n"
                 "# Source the system-wide file.\n"
-                "[ -f /etc/bashrc ] && source /etc/bashrc\n"
-                "[[ $- != *i* ]] && return ## ssh/non-interactive shell config stops here\n"
+                "[ -f /etc/bashrc ] && source /etc/bashrc\n")
+               (bash-profile-source-profiles (profiles->names %profiles))
+               (mixed-text-file
+                "interactive-shell-bash-options"
+                "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
                 "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
                 " \\A \\u@\\h "
                 "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
@@ -205,8 +208,7 @@
                 "shopt -s extglob\n"
                 "shopt -s globstar\n"
                 "set -o vi\n"
-                "bind '\"jj\":vi-movement-mode'\n")
-               (bash-profile-source-profiles (profiles->names %profiles))))))
+                "bind '\"jj\":vi-movement-mode'\n")))))
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
