@@ -216,12 +216,16 @@
 
     (users (map crew->user-account %crew))
 
-    (packages (append %xfce-world ;; FIXME put this in Tina's world
-                      %utils-world
-                      %os-disk-world
-                      %os-net-world
-                      %os-misc-world
-                      %base-packages))
+    (packages (append
+               (if (ephemeral? ship)
+                   '()
+                   %xfce-world) ;; FIXME put this in Tina's world
+               %git-world
+               %utils-world
+               %os-disk-world
+               %os-net-world
+               %os-misc-world
+               %base-packages))
 
     (services (ship->services ship))
 
