@@ -9,4 +9,8 @@ I have achieved peak computing.
   # deploy
   sudo SHIP=`hostname` `which guix` system reconfigure os.scm
   SHIP=`hostname` guix home reconfigure wonko.scm
+  # discovery on usb
+  SHIP=discovery guix system image -t iso9660 os.scm
+  sudo dd if=$(SHIP=discovery guix system image -t iso9660 os.scm) of=/dev/sda status=progress
+  sudo sync /dev/sda
 #+end_src

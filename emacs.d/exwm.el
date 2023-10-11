@@ -181,7 +181,9 @@
 
 (setq exwm-input-global-keys
       `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x, sometimes \s-x
-        ;; same as this guy: https://emacs.stackexchange.com/questions/78135/why-does-emacs-29-translates-meta-to-metahyper-m-somekey-to-h-m-somekey
+        ;; https://emacs.stackexchange.com/questions/78135/why-does-emacs-29-translates-meta-to-metahyper-m-somekey-to-h-m-somekey
+        ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51001
+        ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=65802
         ([?\A-\s-r] . exwm-reset)
         ([?\A-\s-i] . exwm-input-toggle-keyboard)
         ([?\A-\s-I] . coterm-char-mode-cycle)
