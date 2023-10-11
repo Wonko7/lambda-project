@@ -97,6 +97,7 @@
   ;; magit
   "g." #'magit-file-dispatch
   "gg" #'magit-status
+  "gb" #'magit-blame
 
   ;; roam
   ;; insert stuff
