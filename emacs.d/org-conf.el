@@ -364,7 +364,10 @@ space rather than before."
         ("iw" "weight" entry "* ⚖ [[roam:weight]] %?\n%U"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-        ("im" "metta" entry "* ☯ metta\n%U\n%?"
+        ("im" "metta" entry "* ❤ metta\n%U\n%?"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("in" "neoplatonism" entry "* ☯ [[roam:neoplatonism]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
         ("ip" "piracy" entry "* ☠ %?\n%U"
