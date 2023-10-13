@@ -20,10 +20,7 @@
 ;; Otherwise use the default `completion--in-region' function.
 (setq completion-in-region-function
       (lambda (&rest args)
-        (apply (if vertico-mode
-                   #'consult-completion-in-region
-                 #'completion--in-region)
-               args)))
+        (apply #'consult-completion-in-region args)))
 
 
 (require 'emacs)
