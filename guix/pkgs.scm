@@ -447,6 +447,7 @@
         moreutils
         file
         tree
+        lsof
         ;; compression
         p7zip
         unzip
