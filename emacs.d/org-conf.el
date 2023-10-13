@@ -426,6 +426,9 @@ space rather than before."
                                               "** 💪 [[roam:pistol squats]]\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wB" "breath work" entry "* 🍃 [[roam:breath work]] :wtf:\n%U\n%?\n"
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wi" "injuries" entry "* 🏥 [[roam:injuries]] :wtf:inj:\n%U\n%?\n"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
