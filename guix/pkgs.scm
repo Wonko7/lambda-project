@@ -432,6 +432,10 @@
         git
         git-annex))
 
+(define-public %git-world
+  (list git
+        git-annex))
+
 (define-public %utils-world
   (list ripgrep
         fd
