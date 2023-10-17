@@ -21,6 +21,7 @@
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages synergy)
   #:use-module (gnu packages xorg) ;; xinit
+  #:use-module (gnu packages toys)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages suckless)
@@ -46,11 +47,11 @@
   #:use-module (gnu packages matrix)
   #:use-module (gnu packages irc)
   ;; tools
-  #:use-module (w7 packages w7-st)
   #:use-module (gnu packages admin)
   #:use-module (gnu packages databases) ;; recutils
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages file)
+  #:use-module (gnu packages lsof)
   #:use-module (gnu packages tmux)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages vim)
@@ -331,6 +332,7 @@
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
         ;; x <3
+        oneko
         xeyes
         ;; bling
         feh
