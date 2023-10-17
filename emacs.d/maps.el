@@ -150,6 +150,10 @@
 ;; TODO: sentence & paragraph motions.
 
 (general-define-key
+ :states 'insert
+ "C-e" #'emojify-insert-emoji)
+
+(general-define-key
  :states '(normal emacs insert visual global motion)
  (kbd "C-SPC") evil-leader--default-map)
 
@@ -181,6 +185,7 @@
   "-"           #'my/cd--
   "("           #'comint-previous-prompt
   ")"           #'comint-next-prompt
+  "gm"          #'man-follow
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
@@ -283,6 +288,7 @@
 
 (general-evil-define-key '(insert) org-mode-map
   "TAB"   #'completion-at-point
+  "C-l"   #'org-demote-subtree
   ;; "C-i"   #'org-roam-node-insert
   ;; "S-TAB" #'org-shiftab
   )
