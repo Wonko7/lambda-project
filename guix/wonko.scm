@@ -570,10 +570,10 @@
         (stop #~(make-kill-destructor))
         (documentation "can't be arsed to move IRL"))
        (shepherd-service
-        (provision '(oneko))
-        (auto-start? #f)
+        (provision '(neko))
+        (auto-start? (not (ship-media-station? %ship)))
         (start #~(make-forkexec-constructor
-                  (list #$(file-append oneko "/bin/oneko -dog"))
+                  (list #$(file-append oneko "/bin/oneko") "-dog")
                   #:log-file "log/oneko.log"))
         (stop #~(make-kill-destructor))
         (documentation "neko")))))))))
