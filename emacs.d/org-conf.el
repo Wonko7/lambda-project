@@ -395,6 +395,16 @@ space rather than before."
         ("ws" "sport climbing" entry "* ⛰ [[roam:sport climbing]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:\n"
+                                            "%U\n"
+                                            "** 🍚 [[roam:rice bucket]]\n"
+                                            "- %?\n"
+                                            "** 🔥 topped\n"
+                                            "** 👷 projects\n"
+                                            "** 🐒 [[roam:campusing]]\n"
+                                            "** 🏥 [[roam:injuries]]"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wf" "fingerboard" entry ,(string-join '("* 🤘 [[roam:fingerboard]] :wtf:\n"
                                                   "%U\n"
                                                   "** 🍚 [[roam:rice bucket]]\n"
@@ -418,6 +428,10 @@ space rather than before."
         ("wr" "rice bucket" entry "* 🍚 [[roam:rice bucket]] :wtf:\n%U%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+        ("wH" "Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
+                                            "%U\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wl" "leg day" entry ,(string-join '("* 💪 leg day :wtf:\n"
                                               "%U\n"
                                               "** 🍚 [[roam:rice bucket]]\n"
@@ -430,16 +444,6 @@ space rather than before."
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wi" "injuries" entry "* 🏥 [[roam:injuries]] :wtf:inj:\n%U\n%?\n"
-         :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-        ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:\n"
-                                            "%U\n"
-                                            "** 🍚 [[roam:rice bucket]]\n"
-                                            "- %?\n"
-                                            "** 🔥 topped\n"
-                                            "** 👷 projects\n"
-                                            "** 🐒 [[roam:campusing]]\n"
-                                            "** 🏥 [[roam:injuries]]"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
 
