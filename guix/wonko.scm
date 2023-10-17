@@ -273,7 +273,7 @@
             (xset . "r rate 400 30")
             ,(if (ship-media-station? %ship)
                  `(xset . "s off -dpms")
-                 `(xset . "dpms 180 1200 0"))
+                 `(xset . "dpms 600 1200 0"))
             (xset . "dpms 180 1200 0")
             (xsetroot . "-cursor_name left_ptr")
             (setxkbmap . "dvorak")
