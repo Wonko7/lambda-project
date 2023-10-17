@@ -144,8 +144,8 @@
 
 (setq buffer-env-commands
       '((".env" . "set -a && >&2 . \"$0\" && env -0")
-        ("manifest.scm" . "guix shell -m \"$0\" --root=$(dirname \"$0\")/.guix-root -- env -0")
-        ("guix.scm" . "guix shell -D -f \"$0\" --root=$(dirname \"$0\")/.guix-root -- env -0")
+        ("manifest.scm" . "guix shell -m \"$0\" -- env -0")
+        ("guix.scm" . "guix shell -D -f \"$0\" -- env -0")
         ("*" . ">&2 . \"$0\" && env -0")))
 (add-hook 'utop-mode-hook #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
 (add-hook 'comint-mode-hook #'hack-dir-local-variables-non-file-buffer)
