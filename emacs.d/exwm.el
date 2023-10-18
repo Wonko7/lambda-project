@@ -364,7 +364,9 @@
           ((run-init-p 3)
            (projectile-switch-project))
           ((run-init-p 2)
-           (async-shell-command my/term-cmd))
+           (org-roam-node-open (org-roam-node-from-title-or-alias "Gotham"))
+           (evil-window-vsplit)
+           (project-shell))
           ((run-init-p 1)
            (shell)))))
 
