@@ -21,6 +21,7 @@
 (defun my/init-org ()
   (interactive)
   (org-roam-node-open (org-roam-node-from-title-or-alias "ssdd"))
+  (delete-other-windows)
   (evil-window-vsplit)
   (org-agenda nil "z")
   (other-window 1)

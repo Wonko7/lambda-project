@@ -365,6 +365,7 @@
            (projectile-switch-project))
           ((run-init-p 2)
            (org-roam-node-open (org-roam-node-from-title-or-alias "Gotham"))
+           (delete-other-windows)
            (evil-window-vsplit)
            (project-shell))
           ((run-init-p 1)

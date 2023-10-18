@@ -13,6 +13,7 @@
 (defun my/ement-home ()
   (interactive)
   (ement-notify-switch-to-notifications-buffer)
+  (delete-other-windows)
   (split-window-horizontally)
   (ement-tabulated-room-list))
 
