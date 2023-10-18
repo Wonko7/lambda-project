@@ -70,7 +70,6 @@
     `(orderless-literal . ,(substring pattern 0 -1))))
 
 (defun flex-if-quote (pattern _index _total)
-  ;; also on prefix.
   (when (string-suffix-p "'" pattern)
     `(orderless-flex . ,(substring pattern 0 -1))))
 
@@ -85,11 +84,17 @@
     `(orderless-without-literal . ,(substring pattern 1)))))
 
 
-(setq orderless-matching-styles '(char-fold-to-regexp)
-      orderless-style-dispatchers '(regex-if-twiddle
+(setq orderless-matching-styles '(orderless-literal
+                                  ;; char-fold-to-regexp
+                                  orderless-regexp)
+      orderless-style-dispatchers '(;; regex-if-twiddle
                                     flex-if-quote
-                                    without-if-bang))
+                                    literal-if-equal
+                                    without-if-bang)
+      orderless-smart-case t)
 
+
+(setq completion-ignore-case t)
 ;; will come in handy:
 
 ;; (orderless-define-completion-style orderless+initialism
