@@ -152,16 +152,4 @@
 
 (require 'inheritenv)
 
-(defun my/init-env ()
-  (interactive)
-  ;; (if (buffer-name))
-  ;; (tuareg-mode)
-  (buffer-env-update "/work/marge+/latrinapapirophile/guix.scm"))
-
-(defun my/init-pg-env ()
-  (interactive)
-  (buffer-env-update "/work/marge+/latrinapapirophile/guix.scm")
-  (setenv "PGDATABASE" "margeplus")
-  (setenv "PGHOST" "127.0.0.1"))
-
 (provide 'conf/dev)
