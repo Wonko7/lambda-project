@@ -519,7 +519,7 @@
         (provision '(picom))
         (start #~(make-forkexec-constructor
                   (list #$(file-append ibhagwan-picom "/bin/picom"))
-                  #:log-file "log/picom.log"))
+                  #:log-file "herd-logs/picom.log"))
         (stop #~(make-kill-destructor))
         (documentation "bling"))
        (shepherd-service
@@ -527,14 +527,14 @@
         (start #~(make-forkexec-constructor
                   (list #$(string-append %home %guix-extra-profiles-dir
                                          "/communication/bin/pantalaimon"))
-                  #:log-file "log/matrix.log"))
+                  #:log-file "herd-logs/matrix.log"))
         (stop #~(make-kill-destructor))
         (documentation "Crypto back-end server for ement.el"))
        (shepherd-service
         (provision '(dunst))
         (start #~(make-forkexec-constructor
                   (list #$(file-append dunst "/bin/dunst"))
-                  #:log-file "log/dunst.log"))
+                  #:log-file "herd-logs/dunst.log"))
         (stop #~(make-kill-destructor))
         (documentation "riced notifications"))
        (shepherd-service
@@ -544,7 +544,7 @@
                    (string-append #$%home "/.config/guix/current/bin/guix")
                    "repl" "--listen=tcp:37146")
                   #:environment-variables '("INSIDE_EMACS=1")
-                  #:log-file "log/guix-repl.log"))
+                  #:log-file "herd-logs/guix-repl.log"))
         (stop #~(make-kill-destructor))
         (documentation "REPL to me, like lovers do"))
        (shepherd-service
@@ -553,7 +553,7 @@
                   (cons* #$(file-append xss-lock "/bin/xss-lock")
                          "--"
                          '#$%lock-cmd)
-                  #:log-file "log/xss-lock.log"))
+                  #:log-file "herd-logs/xss-lock.log"))
         (stop #~(make-kill-destructor))
         (documentation "don't touch my stuff"))
        (shepherd-service
@@ -563,10 +563,10 @@
                    #~(make-forkexec-constructor
                       (list #$(file-append synergy "/bin/synergyc")
                              "-f" "yggdrasill.local")
-                      #:log-file "log/synergy.log")
+                      #:log-file "herd-logs/synergy.log")
                    #~(make-forkexec-constructor
                       (list #$(file-append synergy "/bin/synergy"))
-                      #:log-file "log/synergy.log")))
+                      #:log-file "herd-logs/synergy.log")))
         (stop #~(make-kill-destructor))
         (documentation "can't be arsed to move IRL"))
        (shepherd-service
@@ -574,6 +574,6 @@
         (auto-start? (not (ship-media-station? %ship)))
         (start #~(make-forkexec-constructor
                   (list #$(file-append oneko "/bin/oneko") "-dog")
-                  #:log-file "log/oneko.log"))
+                  #:log-file "herd-logs/oneko.log"))
         (stop #~(make-kill-destructor))
         (documentation "neko")))))))))
