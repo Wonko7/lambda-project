@@ -33,31 +33,6 @@
         (cdr args)))
 (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-(require 'corfu)
-(require 'corfu-doc)
-(require 'corfu-history)
-(require 'corfu-info)
-
-(global-corfu-mode 0) ;; i don't like popups
-
-;;(use-package corfu
-;; Optional customizations
-;; :custom
-(setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-(setq corfu-auto nil)               ;; Enable auto completion
-(setq corfu-separator ?\s)          ;; Orderless field separator
-(setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-(setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-(setq corfu-preview-current nil)    ;; Disable current candidate preview
-(setq corfu-preselect 'prompt)      ;; Preselect the prompt
-(setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
-(setq corfu-scroll-margin 5)        ;; Use scroll margin
-(setq corfu-preselect 'first)
-;; (setq corfu-doc-auto t)
-
-;; auto popup:
-;; (setq corfu-auto-delay 0)
-;; (setq corfu-auto-prefix 0)
 
 (setq completion-cycle-threshold nil)
 (setq tab-always-indent 'complete)
@@ -145,22 +120,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell / bash
 
-;; (add-hook 'shell-mode-hook
-;;           (lambda ()
-;;             (setq-local corfu-auto nil)
-;;             (corfu-mode)))
-
-;; When pressing RET while the Corfu popup is visible, the corfu-insert command will be invoked. This command does inserts the currently selected candidate, but it does not send the prompt input to Eshell or the comint process. Therefore you often have to press RET twice which feels like an unnecessary double confirmation. Fortunately it is easy to improve this! In my configuration I define the advice corfu-send-shell which sends the candidate after insertion.
-
-;; (defun corfu-send-shell (&rest _)
-;;   "Send completion candidate when inside comint/eshell."
-;;   (cond
-;;    ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-;;     (eshell-send-input))
-;;    ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-;;     (comint-send-input))))
-;;
-;; (advice-add #'corfu-insert :after #'corfu-send-shell)
 
 (require 'pcmpl-args-autoloads)
 (require 'pcmpl-unix)
