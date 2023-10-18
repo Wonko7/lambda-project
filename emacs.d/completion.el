@@ -145,10 +145,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell / bash
 
-(add-hook 'shell-mode-hook
-          (lambda ()
-            (setq-local corfu-auto nil)
-            (corfu-mode)))
+;; (add-hook 'shell-mode-hook
+;;           (lambda ()
+;;             (setq-local corfu-auto nil)
+;;             (corfu-mode)))
 
 ;; When pressing RET while the Corfu popup is visible, the corfu-insert command will be invoked. This command does inserts the currently selected candidate, but it does not send the prompt input to Eshell or the comint process. Therefore you often have to press RET twice which feels like an unnecessary double confirmation. Fortunately it is easy to improve this! In my configuration I define the advice corfu-send-shell which sends the candidate after insertion.
 
