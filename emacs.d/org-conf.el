@@ -349,6 +349,15 @@ space rather than before."
         ("ie" "third eye" entry "* 👁 [[roam:prying open my third eye]]\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("iM" "meditations" entry
+         ,(string-join '("* ☯ daily meditations\n%U\n"
+                         "** morning: set goals\n"
+                         "** in the present\n"
+                         "*** discipline of assent: suppress judgement\n"
+                         "*** discipline of desire\n"
+                         "** evening: judge your sorry arse\n"))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
         ("ii" "innerspace" entry "* ☯ %?\n%U"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
