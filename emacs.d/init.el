@@ -84,6 +84,7 @@
 ;; spelling
 
 (require 'flyspell-correct)
+
 ;; (global-spell-fu-mode 0)
 ;; (setenv "DICTIONARY" "en_GB-ise")
 (setq ispell-program-name "hunspell")
@@ -201,7 +202,6 @@
 
 (autoload 'wgrep-rg-setup "wgrep-rg")
 (add-hook 'rg-mode-hook #'wgrep-rg-setup)
-(setq char-fold-symmetric t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows

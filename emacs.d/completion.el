@@ -1,8 +1,10 @@
 ;; default config for orderless, vertico
 
 (require 'consult)
-
 (require 'vertico)
+(require 'vertico-repeat)
+(add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+
 ;; Different scroll margin
 ;; (setq vertico-scroll-margin 0)
 
@@ -33,7 +35,6 @@
         (cdr args)))
 (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-
 (setq completion-cycle-threshold nil)
 (setq tab-always-indent 'complete)
 
@@ -60,7 +61,7 @@
 (setq completion-ignore-case t)
 
 ;; orderless-style-dispatchers
-
+;; FIXME rewrite with orderless-affix-dispatch-alist on next release.
 (defun regex-if-twiddle (pattern _index _total)
   (when (string-suffix-p "~" pattern)
     `(orderless-regex . ,(substring pattern 0 -1))))
@@ -85,7 +86,7 @@
 
 
 (setq orderless-matching-styles '(orderless-literal
-                                  ;; char-fold-to-regexp
+                                  char-fold-to-regexp
                                   orderless-regexp)
       orderless-style-dispatchers '(;; regex-if-twiddle
                                     flex-if-quote
@@ -93,7 +94,7 @@
                                     without-if-bang)
       orderless-smart-case t)
 
-
+(setq char-fold-symmetric nil)
 (setq completion-ignore-case t)
 ;; will come in handy:
 

@@ -17,6 +17,8 @@
   ;; embark
   "e" #'embark-act
   "x" #'embark-export
+  ;; vertico / completion
+  "." #'vertico-repeat
 
   ;; emacs apps
   "ab"  #'ibuffer
