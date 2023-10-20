@@ -145,9 +145,8 @@
  "-" nil
  ;; :desc "trailing whitespace"
  "-d" #'delete-trailing-whitespace
- "z=" #'flyspell-correct-wrapper
+ "z=" #'flyspell-correct-at-point
  "Y"  #'evil-cp-yank-enclosing
- ;; FIXME: add something on shift= so this can exist "zX" #'flyspell-correct-at-point
  "/" #'consult-line)
 ;; TODO: sentence & paragraph motions.
 
