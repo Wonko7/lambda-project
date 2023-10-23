@@ -147,12 +147,14 @@
  "-d" #'delete-trailing-whitespace
  "z=" #'flyspell-correct-at-point
  "Y"  #'evil-cp-yank-enclosing
- "/" #'consult-line)
+ "/"  #'consult-line)
 ;; TODO: sentence & paragraph motions.
 
 (general-define-key
  :states 'insert
- "C-e" #'emojify-insert-emoji)
+ "C-e"   #'emojify-insert-emoji
+ "C-v"   #'evil-paste-after
+ "C-S-V" (lambda () (interactive) (message "lol") (evil-paste-after 1 ?\*)))
 
 (general-define-key
  :states '(normal emacs insert visual global motion)

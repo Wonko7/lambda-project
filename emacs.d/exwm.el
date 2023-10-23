@@ -43,6 +43,8 @@
         ?\s-I
         ;; ?\C-: ;; FIXME: I need to use these
         ?\C-\ ;; I want whitespace here ;; but this is also unused
+        ?\s-\S-J
+        ?\s-\S-K
         ?\s-J
         ?\s-K
         ?\s-l
@@ -55,7 +57,7 @@
         ?\A-\s-K
         ?\A-\s-l
         ?\A-\s-h
-        ?\A-\s-  ;; yep
+        ?\A-\s- ;; yep
         ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -214,8 +216,8 @@
 
         ;; Launch applications via shell command
         ([?\A-\s-:] . (lambda (command)
-                     (interactive (list (read-shell-command "$ ")))
-                     (start-process-shell-command command nil command)))
+                        (interactive (list (read-shell-command "$ ")))
+                        (start-process-shell-command command nil command)))
         ([?\A-\s-y] . ws/force-run-auto-start)
 
         ;; Switch workspace
