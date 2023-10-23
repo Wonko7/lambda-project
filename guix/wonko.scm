@@ -274,7 +274,6 @@
             ,(if (ship-media-station? %ship)
                  `(xset . "s off -dpms")
                  `(xset . "dpms 600 1200 0"))
-            (xset . "dpms 180 1200 0")
             (xsetroot . "-cursor_name left_ptr")
             (setxkbmap . "dvorak")
             (xmodmap . "~/.config/x-config/common.xmodmap")
