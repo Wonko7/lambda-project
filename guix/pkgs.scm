@@ -141,6 +141,7 @@
         emacs-evil-args
         emacs-evil-lion ;; (align)
         emacs-evil-multiedit
+        ;; emacs-multiple-cursors
         emacs-evil-mc
         emacs-evil-textobj-syntax
         emacs-evil-commentary
@@ -171,7 +172,6 @@
         emacs-diredfl
         emacs-dired-rsync
         emacs-dired-hacks
-        emacs-all-the-icons-dired
         emacs-dired-toggle-sudo
         ;; 🗺
         emacs-osm
@@ -235,6 +235,7 @@
         emacs-consult-yasnippet
         emacs-embark
         emacs-vertico
+        emacs-marginalia
         emacs-which-key
         emacs-yasnippet
         emacs-doom-snippets
@@ -255,7 +256,9 @@
         emacs-doom-themes
         emacs-all-the-icons
         emacs-all-the-icons-completion
+        emacs-all-the-icons-dired
         emacs-kind-icon
+        ;; emacs-nerd-icons
         ;; exwm
         emacs-exwm
         emacs-exwm-edit

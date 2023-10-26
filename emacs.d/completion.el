@@ -1,9 +1,13 @@
 ;; default config for orderless, vertico
 
+(require 'marginalia)
+(require 'orderless)
 (require 'consult)
 (require 'vertico)
 (require 'vertico-repeat)
 (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
+(marginalia-mode 1)
 
 ;; Different scroll margin
 ;; (setq vertico-scroll-margin 0)
@@ -54,8 +58,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; orderless
 
-(require 'orderless)
-(setq completion-styles '(orderless)
+(setq completion-styles '(orderless basic) ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
       completion-category-defaults nil
       completion-category-overrides nil)
 (setq completion-ignore-case t)
