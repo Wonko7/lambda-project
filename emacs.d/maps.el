@@ -11,14 +11,19 @@
   ":"      #'execute-extended-command ;;  "exec stuff"
   "<SPC>"  #'consult-buffer           ;;  "buffers"
   "/"      #'consult-ripgrep          ;;  "grep"
-  "'"      #'projectile-find-file     ;;  "proj buffers"
-  ;; "'" #'counsel-projectile-find-file
+  "'"      #'project-find-file        ;;  "proj buffers"
+   ;; "'" #'counsel-projectile-find-file
+
+  ;; files? "ff" to open up f?
+  "f" #'find-file
 
   ;; embark
   "e" #'embark-act
   "x" #'embark-export
-  ;; vertico / completion
+  ;; vertico
   "." #'vertico-repeat
+  "vG" #'vertico-grid-mode
+  "vu" #'vertico-unobtrusive-mode
 
   ;; emacs apps
   "ab"  #'ibuffer
@@ -27,6 +32,7 @@
   "aD"  #'dictionary-lookup-definition
   "as"  #'shell
   "ap"  #'proced
+  "aE"  #'eww-search-words
   ;; elfeed
   "aee" #'elfeed
   "aes" #'elfeed-update
@@ -80,18 +86,18 @@
   "rd-" #'org-roam-dailies-find-directory     ;;  :desc "Find directory"
 
   ;; projectile
-  "p'" #'projectile-find-file
-  "p`" #'projectile-find-file-dwim
-  "pp" #'projectile-switch-project
-  "pP" #'persp-switch
-  "pD" #'projectile-discover-projects-in-search-path
-  "pK" #'projectile-kill-buffers
-  "pS" #'projectile-save-project-buffers
-  "ps" #'projectile-run-shell
-  "pb" #'projectile-ibuffer
-  "pd" #'projectile-dired
-  "pm" #'persp-merge
-  "pu" #'persp-unmerge
+  "p'"  #'projectile-find-file
+  "pgf" #'projectile-find-file-dwim
+  "pp"  #'projectile-switch-project
+  "pP"  #'persp-switch
+  "pD"  #'projectile-discover-projects-in-search-path
+  "pK"  #'projectile-kill-buffers
+  "pS"  #'projectile-save-project-buffers
+  "ps"  #'projectile-run-shell
+  "pb"  #'projectile-ibuffer
+  "pd"  #'projectile-dired
+  "pm"  #'persp-merge
+  "pu"  #'persp-unmerge
 
   ;; password-store
   "P"  #'password-store-copy
@@ -131,7 +137,8 @@
   "wo" #'other-window
 
   ;; misc?
-  "zl" #'scroll-lock-mode
+  "zai" #'gptel-send
+  "zl"  #'scroll-lock-mode
   "z''" (lambda () (interactive) (async-shell-command "dunstctl set-paused toggle"))
   "z'c" (lambda () (interactive) (async-shell-command "dunstctl close"))
   "z'C" (lambda () (interactive) (async-shell-command "dunstctl close-all"))
@@ -142,19 +149,21 @@
 
 (general-define-key
  :states 'normal
- "-" nil
- ;; :desc "trailing whitespace"
- "-d" #'delete-trailing-whitespace
- "z=" #'flyspell-correct-at-point
- "Y"  #'evil-cp-yank-enclosing
- "/"  #'consult-line)
+ "-"    nil
+ "/"    #'consult-line
+ "C-/"  #'evil-search-forward
+ "-d"   #'delete-trailing-whitespace
+ "z="   #'flyspell-correct-at-point
+ "Y"    (lambda () (interactive) (execute-kbd-macro (kbd "y$"))))
+
 ;; TODO: sentence & paragraph motions.
 
 (general-define-key
  :states 'insert
  "C-e"   #'emojify-insert-emoji
+ "C-S-H" #'term-send-invisible
  "C-v"   #'evil-paste-after
- "C-S-V" (lambda () (interactive) (message "lol") (evil-paste-after 1 ?\*)))
+ "C-S-V" (lambda () (interactive) (evil-paste-after 1 ?\*)))
 
 (general-define-key
  :states '(normal emacs insert visual global motion)
@@ -218,8 +227,8 @@
 ;; magit
 
 (general-evil-define-key '(normal) magit-diff-mode-map
-  "("    #'diff-hunk-prev
-  ")"    #'diff-hunk-next
+  "("      #'diff-hunk-prev
+  ")"      #'diff-hunk-next
   "C-k"    #'diff-hunk-prev
   "C-j"    #'diff-hunk-next)
 
@@ -238,20 +247,22 @@
   "grj" #'smerge-next
   "C-k" #'smerge-prev
   "C-j" #'smerge-next
-  "(" #'smerge-prev
-  ")" #'smerge-next
-  "Ku" #'smerge-keep-upper
-  "Kl" #'smerge-keep-lower)
+  "("   #'smerge-prev
+  ")"   #'smerge-next
+  "Ku"  #'smerge-keep-upper
+  "Kl"  #'smerge-keep-lower)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
 
 (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
   "Y"     #'evil-cp-yank-enclosing
-  "("     #'evil-backward-paragraph
-  ")"     #'evil-forward-paragraph
-  ")"     #'evil-cp-next-closing
-  "("     #'sp-backward-up-sexp
+  "{"     #'evil-backward-paragraph
+  "}"     #'evil-forward-paragraph
+  ;;")"     #'evil-cp-next-closing
+  ;;"("     #'sp-backward-up-sexp
+  "("     #'backward-sexp
+  ")"     #'forward-sexp
   "é"     #'evil-cp-previous-opening ; FIXME put this in global map?
   "&"     #'evil-cp-next-opening
   "M-r"   #'paredit-raise-sexp
@@ -307,14 +318,12 @@
   "C-j"   #'org-next-visible-heading
   "("     #'org-previous-visible-heading
   ")"     #'org-next-visible-heading
-  "("     #'evil-backward-paragraph
-  ")"     #'evil-forward-paragraph
+  "{"     #'evil-backward-paragraph
+  "}"     #'evil-forward-paragraph
   "C-K"   #'org-move-subtree-up
   "C-J"   #'org-move-subtree-down
   "C-H"   #'org-promote-subtree
-  "C-L"   #'org-demote-subtree
-  "("     #'org-backward-element
-  ")"     #'org-forward-element)
+  "C-L"   #'org-demote-subtree)
 
 (define-key cfw:calendar-mode-map (kbd "SPC") nil)
 (define-key cfw:org-schedule-map (kbd "SPC") nil)
