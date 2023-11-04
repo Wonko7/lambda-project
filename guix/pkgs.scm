@@ -329,7 +329,7 @@
         xss-lock
 
         pamixer
-        pavucontrol-qt
+        pavucontrol
         brightnessctl
         scrot
         upower

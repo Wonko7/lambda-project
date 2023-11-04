@@ -39,7 +39,7 @@
   ;; external apps
   "aat" (lambda () (interactive) (async-shell-command my/term-cmd))
   "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
-  "aap" (lambda () (interactive) (async-shell-command "pavucontrol-qt"))
+  "aap" (lambda () (interactive) (async-shell-command "pavucontrol"))
   ;; browsers
   "aBf" (lambda () (interactive) (async-shell-command "firefox"))
   "aBc" (lambda () (interactive) (async-shell-command "chromium"))
