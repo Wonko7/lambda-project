@@ -124,6 +124,9 @@
         ;; emacs-orgit (link to magit)
         ;; emacs-org-modern
 
+        ;; I, for one, welcome our new ai overlords
+        emacs-gptel
+
         ;; evil
         emacs-evil
         emacs-evil-org

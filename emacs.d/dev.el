@@ -152,4 +152,11 @@
 
 (require 'inheritenv)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; I, for one, welcome our new ai overlords
+
+(require 'gptel)
+(setq gptel-api-key (lambda ()
+                      (auth-source-pass-get 'secret "web/openai/token/pandora")))
+
 (provide 'conf/dev)
