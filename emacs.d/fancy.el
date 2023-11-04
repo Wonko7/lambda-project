@@ -14,8 +14,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emoji & icons
 
-(when (display-graphic-p)
-  (require 'all-the-icons))
+(require 'all-the-icons)
+(require 'all-the-icons-completion)
+(all-the-icons-completion-mode)
+(add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+(require 'kind-icon)
 
 (with-eval-after-load 'emojify
   (progn

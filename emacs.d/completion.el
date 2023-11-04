@@ -7,10 +7,17 @@
 (require 'vertico-repeat)
 (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
 ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
+(require 'vertico-directory)
+
+(vertico-mode)
+(vertico-mouse-mode)
+
 (marginalia-mode 1)
+(setq marginalia-align 'right)
+(setq marginalia-max-relative-age 0)
 
 ;; Different scroll margin
-;; (setq vertico-scroll-margin 0)
+;; (setq vertico-scroll-margin 2)
 
 ;; Show more candidates
 (setq vertico-count 20)
@@ -20,7 +27,10 @@
 
 ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
 (setq vertico-cycle t)
-(vertico-mode)
+
+;; (vertico-multiform-mode)
+;; (setq vertico-multiform-categories '((file grid)
+;;                                      (consult-grep buffer)))
 
 ;; Use `consult-completion-in-region' if Vertico is enabled.
 ;; Otherwise use the default `completion--in-region' function.
