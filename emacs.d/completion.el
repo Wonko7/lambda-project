@@ -12,6 +12,12 @@
 (vertico-mode)
 (vertico-mouse-mode)
 
+(keymap-set vertico-map "RET" #'vertico-directory-enter)
+(keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
+(keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word)
+(keymap-set vertico-map "C-DEL" #'vertico-directory-up)
+(add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+
 (marginalia-mode 1)
 (setq marginalia-align 'right)
 (setq marginalia-max-relative-age 0)
