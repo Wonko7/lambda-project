@@ -166,5 +166,55 @@
                                                            #'cape-elisp-block
                                                            #'cape-file)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fancy
+
+;; Prefix the current candidate with “» ”. From
+;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
+;; (defvar +vertico-current-arrow t)
+;;
+;; (cl-defmethod vertico--format-candidate :around
+;;   (cand prefix suffix index start &context ((and +vertico-current-arrow
+;;                                                  (not (bound-and-true-p vertico-flat-mode)))
+;;                                             (eql t)))
+;;   (setq cand (cl-call-next-method cand prefix suffix index start))
+;;   (if (bound-and-true-p vertico-grid-mode)
+;;       (if (= vertico--index index)
+;;           (concat #("▶" 0 1 (face vertico-current)) cand)
+;;         (concat #("_" 0 1 (display " ")) cand))
+;;     (if (= vertico--index index)
+;;         (concat
+;;          #(" " 0 1 (display (left-fringe right-triangle vertico-current)))
+;;          cand)
+;;       cand)))
+
+;; Prefix the current candidate with “» ”. From
+;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
+(advice-add #'vertico--format-candidate :around
+            (lambda (orig cand prefix suffix index _start)
+              (setq cand (funcall orig cand prefix suffix index _start))
+              (concat
+               (if (= vertico--index index)
+                   (propertize "▶ " 'face 'vertico-current)
+                 "  ")
+               cand)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tramp
+
+;; Workaround for problem with `tramp' hostname completions. This overrides
+;; the completion style specifically for remote files! See
+;; https://github.com/minad/vertico#tramp-hostname-completion
+(defun kb/basic-remote-try-completion (string table pred point)
+  (and (vertico--remote-p string)
+       (completion-basic-try-completion string table pred point)))
+(defun kb/basic-remote-all-completions (string table pred point)
+  (and (vertico--remote-p string)
+       (completion-basic-all-completions string table pred point)))
+(add-to-list 'completion-styles-alist
+             '(basic-remote           ; Name of `completion-style'
+               kb/basic-remote-try-completion kb/basic-remote-all-completions nil))
+
+
 (provide 'conf/completion)
 ;;; completion.el ends here
