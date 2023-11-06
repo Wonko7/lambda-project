@@ -120,7 +120,8 @@
            (service tor-service-type)
            (service openssh-service-type (openssh-configuration
                                           (authorized-keys
-                                           `(("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
+                                           `(("wonko" ,(local-file "data/ssh/rocinante.pub"))
+                                             ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
                                              ("wonko" ,(local-file "data/ssh/enterprise.pub"))))
                                           (x11-forwarding? #t)
                                           (password-authentication? #f)))
@@ -180,7 +181,8 @@
                                     "https://substitutes.nonguix.org")
                                    %default-substitute-urls))
                                  (authorized-keys
-                                  (append (list (local-file "./data/substitutes/yggdrasill.pub")
+                                  (append (list (local-file "./data/substitutes/rocinante.pub")
+                                                (local-file "./data/substitutes/yggdrasill.pub")
                                                 (local-file "./data/substitutes/nonguix.pub"))
                                           %default-authorized-guix-keys))))
 
