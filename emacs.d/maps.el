@@ -12,10 +12,7 @@
   "<SPC>"  #'consult-buffer           ;;  "buffers"
   "/"      #'consult-ripgrep          ;;  "grep"
   "'"      #'project-find-file        ;;  "proj buffers"
-   ;; "'" #'counsel-projectile-find-file
-
-  ;; files? "ff" to open up f?
-  "f" #'find-file
+  ;; "'" #'counsel-projectile-find-file
 
   ;; embark
   "e" #'embark-act
@@ -79,7 +76,7 @@
   "rdm" #'org-roam-dailies-goto-tomorrow      ;;  :desc "Goto tomorrow"
   "rdM" #'org-roam-dailies-capture-tomorrow   ;;  :desc "Capture tomorrow"
   "rdn" #'org-roam-dailies-capture-today      ;;  :desc "Capture today"
-  "rdt" #'org-roam-dailies-goto-today         ;;  :desc "Goto today"
+  "rdt" #'org-roam-dailies-goto-today	      ;;  :desc "Goto today"
   "rdT" #'org-roam-dailies-capture-today      ;;  :desc "Capture today"
   "rdy" #'org-roam-dailies-goto-yesterday     ;;  :desc "Goto yesterday"
   "rdY" #'org-roam-dailies-capture-yesterday  ;;  :desc "Capture yesterday"
@@ -118,8 +115,9 @@
 
   ;; file stuff, dired, ibuffer
   "fr" #'consult-recent-file ;; :desc "file recent"
+  "ff" #'find-file
 
-  ;;
+  ;; use this for something else here
   "ss" #'consult-line ;; :desc "filter line"
 
   ;; code stuff
@@ -135,7 +133,8 @@
   "wX" #'buffer-expose
   "ws" #'switch-window-then-swap-buffer
   "wo" #'other-window
-
+  "oBD" (lambda () (interactive) (execute-kbd-macro (kbd "^wDSPC:url<return>SPCrI^w")))
+  ;; "oBD" (lambda () (interactive) (execute-kbd-macro (kbd "^wDSPC:org-web-tools-insert-link-for-url<return>SPCrI^w")))
   ;; misc?
   "zai" #'gptel-send
   "zl"  #'scroll-lock-mode
