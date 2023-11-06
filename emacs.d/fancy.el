@@ -76,17 +76,17 @@
 ;; (setq display-time-format "%a|%F|%R")
 (display-time-mode 1)
 
-(require 'doom-modeline)
-(setq doom-modeline-minor-modes t)
-(setq doom-modeline-column-zero-based t)
-(setq column-number-mode t)
-(setq doom-modeline-height my/modeline-height)
-(setq doom-modeline-project-detection 'projectile)
-(setq doom-modeline-buffer-encoding 'nondefault)
-(setq doom-modeline-persp-name nil)
-(setq doom-modeline-workspace-name t)
-(setq doom-modeline-persp-icon nil)
-(doom-modeline-mode)
+;; (require 'doom-modeline)
+;; (setq doom-modeline-minor-modes t)
+;; (setq doom-modeline-column-zero-based t)
+;; (setq column-number-mode t)
+;; (setq doom-modeline-height my/modeline-height)
+;; (setq doom-modeline-project-detection 'projectile)
+;; (setq doom-modeline-buffer-encoding 'nondefault)
+;; (setq doom-modeline-persp-name nil)
+;; (setq doom-modeline-workspace-name t)
+;; (setq doom-modeline-persp-icon nil)
+;; (doom-modeline-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; cursor
