@@ -106,8 +106,7 @@
 
   ;; roam
   ;; insert stuff
-  "ie" #'emojify-insert-emoji         ;;  :desc "Emoji"
-  "id" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
+  "ie" #'emojify-insert-emoji ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
   ;; rm stuff
@@ -133,7 +132,12 @@
   "wX" #'buffer-expose
   "ws" #'switch-window-then-swap-buffer
   "wo" #'other-window
-  "oBD" (lambda () (interactive) (execute-kbd-macro (kbd "^wDSPC:url<return>SPCrI^w")))
+  "oBD" (lambda ()
+          (interactive)
+          (execute-kbd-macro (kbd "^wD"))
+          (org-web-tools-insert-link-for-url (current-kill 0 t))
+          (org-id-get-create)
+          (evil-next-line 2))
   ;; "oBD" (lambda () (interactive) (execute-kbd-macro (kbd "^wDSPC:org-web-tools-insert-link-for-url<return>SPCrI^w")))
   ;; misc?
   "zai" #'gptel-send
@@ -215,6 +219,9 @@
   (kbd "C-r") #'consult-history
   (kbd "C-p") #'comint-previous-input
   (kbd "C-n") #'comint-next-input)
+
+(general-evil-define-key '(insert normal) shell-mode-map
+  "C-S-<return>" #'detached-shell-send-input)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired

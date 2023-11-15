@@ -617,7 +617,4 @@ space rather than before."
     (emojify-insert-emoji)))
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 
-;; register macro for bleau.info url
-;; [68 32 58 117 114 108 return 32 114 73 106 106 94 119]
-
 (provide 'conf/org)
