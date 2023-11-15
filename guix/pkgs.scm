@@ -83,11 +83,12 @@
   #:use-module (gnu packages ocaml)
   #:use-module (gnu packages libevent)
   #:use-module (gnu packages tls)
+  #:use-module (gnu packages code)
   ;; services
   #:use-module (gnu home services shepherd)
   #:use-module (gnu packages image-viewers)
   #:use-module (gnu packages matrix)
-  #:use-module (gnu packages dunst)
+  #:use-module (gnu packages wm)
   #:use-module (w7 packages jonaburg-picom)
   #:use-module (w7 packages emacs-xyz)
   ;; doc
@@ -162,10 +163,12 @@
         emacs-magit
         emacs-magit-annex
         emacs-magit-todos
+        emacs-git-link
         emacs-forge
         emacs-diff-hl
         emacs-dirvish
         emacs-coterm
+        emacs-detached
         ;; FIXME remove these?
         emacs-eshell-up
         emacs-eshell-syntax-highlighting
@@ -273,6 +276,9 @@
         emacs-ace-jump-mode ;; FIXME
         emacs-buffer-expose
         emacs-switch-window
+
+        ;; system
+        emacs-bluetooth
 
         ;; x stuff
         emacs-desktop-environment
@@ -463,6 +469,8 @@
         ;; compression
         p7zip
         unzip
+        ;; dev
+        sloccount
         ;; android
         adb
         ;; web

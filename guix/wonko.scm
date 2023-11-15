@@ -65,7 +65,7 @@
  (gnu home services shepherd)
  (gnu packages image-viewers)
  (gnu packages matrix)
- (gnu packages dunst)
+ (gnu packages wm)
  (w7 packages jonaburg-picom)
  (w7 packages emacs-xyz)
 
