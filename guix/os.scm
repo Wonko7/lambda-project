@@ -77,7 +77,8 @@
 
 (define (ship->services ship) ;; also depends on %fleet and %wonko
   (let* ((fleet-desktop-base (list
-                              (service bluetooth-service-type)
+                              (service bluetooth-service-type
+                                       (bluetooth-configuration (auto-enable? #t)))
                               (service
                                slim-service-type
                                (slim-configuration
@@ -252,13 +253,13 @@
          (let ((btrfs-vault-subvol (lambda (args)
                                      (let-values (((mount-p sv-name) (car+cdr args)))
                                        (file-system
-                                        (device "/dev/mapper/vault")
-                                        (mount-point mount-p)
-                                        (type "btrfs")
-                                        (options (string-append "subvol=_live/@"
-                                                                sv-name))
-                                        (needed-for-boot? (equal? "/" mount-p))
-                                        (dependencies mapped-devices))))))
+                                         (device "/dev/mapper/vault")
+                                         (mount-point mount-p)
+                                         (type "btrfs")
+                                         (options (string-append "subvol=_live/@"
+                                                                 sv-name))
+                                         (needed-for-boot? (equal? "/" mount-p))
+                                         (dependencies mapped-devices))))))
            (append
             (list (file-system
                     (mount-point "/boot")
