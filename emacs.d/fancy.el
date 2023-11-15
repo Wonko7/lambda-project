@@ -76,6 +76,7 @@
 ;; (setq display-time-format "%a|%F|%R")
 (display-time-mode 1)
 
+;; disabled because it was buggy and CPU intensive at some point...
 ;; (require 'doom-modeline)
 ;; (setq doom-modeline-minor-modes t)
 ;; (setq doom-modeline-column-zero-based t)

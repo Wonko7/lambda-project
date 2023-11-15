@@ -210,10 +210,21 @@
 (setq buffer-expose-rescale-factor 0.5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; mentor
+
+(setq mentor-rtorrent-download-directory "/mnt/trantor/media")
+(setq mentor-rtorrent-external-rpc "~/.pirate-radio.socket")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; midnight
 
-(require 'midnight)
-(setq clean-buffer-list-delay-general 3) ;; days
+;; (require 'midnight)
+;; (setq clean-buffer-list-delay-general 3) ;; days
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; system stuff
+
+(require 'bluetooth)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
