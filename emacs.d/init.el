@@ -226,6 +226,27 @@
 
 (require 'bluetooth)
 
+(defun my/brace-for-impact ()
+  (recentf-save-list)
+  (savehist-save)
+  (save-some-buffers)
+  (y-or-n-p "Fuck you Jonesy your mom shot cum straight across the room and killed my Siamese fighting fish threw off the ph levels in my aquarium"))
+
+(defun my/sudo (command)
+  (with-temp-buffer
+    (cd "/sudo::/")
+    (async-shell-command command)))
+
+(defun my/reboot ()
+  (interactive)
+  (if (my/brace-for-impact)
+      (my/sudo "reboot")))
+
+(defun my/halt ()
+  (interactive)
+  (if (my/brace-for-impact)
+      (my/sudo "halt")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
