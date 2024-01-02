@@ -147,6 +147,7 @@
 
 (require 'bash-completion)
 (bash-completion-setup)
+(add-hook 'shell-dynamic-complete-functions 'bash-completion-dynamic-complete)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
