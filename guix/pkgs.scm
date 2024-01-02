@@ -74,6 +74,7 @@
   #:use-module (gnu packages android)
   #:use-module (gnu packages haskell-apps)
   #:use-module (gnu packages compression)
+  #:use-module (nongnu packages compression)
   #:use-module (gnu packages commencement) ;; gcc
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages base)
@@ -95,7 +96,8 @@
   #:use-module (gnu packages man))
 
 (define-public %emacs-world
-  (list emacs ;; TODO: native compilation
+  (list ;; emacs ;; TODO: native compilation
+        emacs-next-pgtk
         ;; emacs-next
         ;; basic (bitches) stuff:
         emacs-general
@@ -354,8 +356,7 @@
         breeze breeze-gtk breeze-icons))
 
 (define-public %desktop-world
-  (list calibre
-        ;; img
+  (list ;; img
         scrot
         imagemagick
         ;; video
@@ -469,6 +470,7 @@
         ;; compression
         p7zip
         unzip
+        unrar
         ;; dev
         sloccount
         ;; android
