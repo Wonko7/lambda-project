@@ -45,12 +45,18 @@
         ?\C-\ ;; I want whitespace here ;; but this is also unused
         ?\s-\S-J
         ?\s-\S-K
+        ?\s-\S-j
+        ?\s-\S-k
         ?\s-J
         ?\s-K
         ?\s-l
         ?\s-h
         ?\s-\ ;; yep
         ?\M-:
+        ?\A-\s-\S-J
+        ?\A-\s-\S-K
+        ?\A-\s-\S-j
+        ?\A-\s-\S-k
         ?\A-\s-i
         ?\A-\s-I
         ?\A-\s-J
@@ -67,12 +73,12 @@
   "maximize buffer"
   (interactive)
   (if exwm-class-name
-      (exwm-layout-toggle-fullscreen exwm--id)
-    (if (= 1 (length (window-list)))
-        (jump-to-register '_)
-      (progn
-        (window-configuration-to-register '_)
-        (delete-other-windows)))))
+      (exwm-layout-toggle-fullscreen exwm--id))
+  (if (= 1 (length (window-list)))
+      (jump-to-register '_)
+    (progn
+      (window-configuration-to-register '_)
+      (delete-other-windows))))
 
 (defun my/tune-alpha (direction)
   (let* ((a (frame-parameter (selected-frame) 'alpha))
