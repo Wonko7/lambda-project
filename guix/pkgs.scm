@@ -328,7 +328,9 @@
         xprop
         xclip
         xinput
+        arandr
         xrandr
+        autorandr
         xdotool
         wmctrl
 
