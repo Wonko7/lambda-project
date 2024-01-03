@@ -160,11 +160,11 @@
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
 
 ;; (add-to-list completion-at-point-functions #'cape-symbol)
-(setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
-                                                           #'cape-keyword
-                                                           #'cape-dabbrev
-                                                           #'cape-elisp-block
-                                                           #'cape-file)))
+;; (setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
+;;                                                            #'cape-keyword
+;;                                                            #'cape-dabbrev
+;;                                                            #'cape-elisp-block
+;;                                                            #'cape-file)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fancy
