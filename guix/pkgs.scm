@@ -260,6 +260,7 @@
         emacs-beacon
         emacs-nyan-mode
         emacs-doom-modeline
+        emacs-svg-tag-mode
         emacs-diminish
         emacs-doom-themes
         emacs-all-the-icons

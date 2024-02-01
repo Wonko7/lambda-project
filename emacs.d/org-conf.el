@@ -77,6 +77,7 @@
       org-log-into-drawer                 t
       org-auto-align-tags                 t
       org-tags-column                     72
+      org-agenda-tags-column              82
       org-edit-timestamp-down-means-later t
       cfw:org-agenda-schedule-args        '(:timestamp))
 
@@ -303,10 +304,10 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         ("i" "innerspace")
         ("ic" "coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("ie" "third eye" entry "* 👁 [[roam:prying open my third eye]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("iM" "meditations" entry
          ,(string-join '("* ☯ daily meditations\n%U\n"
                          "** morning: set goals\n"
@@ -315,43 +316,43 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                          "*** discipline of desire\n"
                          "** evening: judge your sorry arse\n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
-        ("ii" "innerspace" entry "* ☯ %?\n%U"
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
+        ("ii" "innerspace   :is:" entry "* ☯ %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("if" "fam" entry "* ❤ %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("ih" "home" entry "* 🏡 [[roam:home]] %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("iH" "Health" entry "* 🏥 [[roam:health]] %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("iw" "weight" entry "* ⚖ [[roam:weight]] %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("im" "metta" entry "* ❤ metta\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("in" "neoplatonism" entry "* ☯ [[roam:neoplatonism]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("ip" "piracy" entry "* ☠ %?\n%U"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("iv" "vipassana" entry "* ☯ [[roam:vipassana]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("is" "sleep / dreams" entry "* 🌙 sleep / dreams\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
         ("it" "trees" entry "* 🌳 trees / [[roam:brocoli]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
 
         ("w" "witness the fitness")
-        ("wb" "bouldering" entry ,(string-join '("* ⛰ [[roam:bouldering]] %? :wtf:\n"
+        ("wb" "bouldering" entry ,(string-join '("* ⛰ [[roam:bouldering]] %? :wtf:cb:\n"
                                                  "%U\n"
                                                  "** ❤ with :innerspace:\n"
                                                  "** 🔥 topped\n"
@@ -359,10 +360,10 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                                  "** 🏥 [[roam:injuries]]\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-        ("ws" "sport climbing" entry "* ⛰ [[roam:sport climbing]] %? :wtf:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
+        ("ws" "sport climbing" entry "* ⛰ [[roam:sport climbing]] %? :wtf:cb:\n%U\n** ❤ with :innerspace:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
-        ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:\n"
+        ("ww" "woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:woody:\n"
                                             "%U\n"
                                             "** 🍚 [[roam:rice bucket]]\n"
                                             "- %?\n"
@@ -391,14 +392,14 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                          "** 🤸 [[roam:handstands]]\n"
                          "session max hold: \n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness  :wtf:")))
         ("wr" "rice bucket" entry "* 🍚 [[roam:rice bucket]] :wtf:\n%U%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness  :wtf:")))
         ("wH" "Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
                                             "%U\n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness  :wtf:")))
         ("wl" "leg day" entry ,(string-join '("* 💪 leg day :wtf:\n"
                                               "%U\n"
                                               "** 🍚 [[roam:rice bucket]]\n"
@@ -406,47 +407,47 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                               "** 💪 [[roam:cossak hip rotations]]\n"
                                               "** 💪 [[roam:pistol squats]]\n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness  :wtf:")))
         ("wB" "breath work" entry "* 🍃 [[roam:breath work]] :wtf:\n%U\n%?\n"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness  :wtf:")))
         ("wi" "injuries" entry "* 🏥 [[roam:injuries]] :wtf:inj:\n%U\n%?\n"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness :wtf:")))
 
         ("t" "tech")
         ("tg" "guix" entry "* 🐧 [[roam:guix]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("te" "emacs" entry "* 🐃 [[roam:emacs]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("tc" "clojure" entry "* ☯ [[roam:clojure]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("to" "ocaml" entry "* 🐫 [[roam:ocaml]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("tl" "linux" entry "* 🐧 [[roam:linux]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("tp" "physics" entry "* ⚛ [[roam:physics]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("ts" "ssh session" entry
          ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
                           "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/junkyard\n"
                           "  %?\n"
                           "#+end_src\n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("tS" "sudo ssh session" entry
          ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
                           "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
                           "  %?\n"
                           "#+end_src\n"))
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("tM" "ssh session" entry
          ,(string-join '("* ⚛ [[roam:ssh session]]\n"
                          "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/mnt/trantor/media\n"
@@ -455,15 +456,20 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                          "  %?\n"
                          "#+end_src\n"))
         :jump-to-captured t
-        :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+        :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech   :tech:")))
         ("W" "work")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
-        ("Wm" "marge+" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🍰 [[roam:marge+]] :work:"))
+        ("We" "ivehte enseignement" plain ""
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⏱ [[roam:ivehte enseignement]] :work:"))
+         :jump-to-captured t)
+        ("Wi" "ivehte" plain ""
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚑 [[roam:ivehte]] :work:"))
          :jump-to-captured t)
         ("Wr" "RDV marge+" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("RDV 🍰 [[roam:marge+]] :work:"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header
+                                ,(string-join  '("RDV 📅 [[roam:ivehte]] :work:"
+                                                 "\n<%<%Y-%m-%d>>\n")))
          :jump-to-captured t)))
 
 ;; FIXME review this:
@@ -574,5 +580,136 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
   (when (string= (my/magit-get-root) "Directory /data/org/")
     (emojify-insert-emoji)))
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; svg-tag-mode
+
+(require 'svg-tag-mode)
+(require 'powerline) ;; for face
+
+(defun my/mk-tag (tag face &optional &rest args)
+  (apply #'svg-tag-make tag
+                :beg 1
+                :end -1
+                :face face
+                :weight 'bold
+                :height 0.47
+                :font-size 4.9
+                :radius 6
+                :padding 4.0
+                :margin 0
+                args))
+
+
+(setq my/svg-tag-mode-on t)
+(defun my/toggle-svg-tag-mode ()
+  (interactive)
+  (setq my/svg-tag-mode-on (not my/svg-tag-mode-on)))
+
+(setq svg-tag-tags
+      '(("\\(:[0-9A-Za-z:]+:\\([0-9A-Za-z:]+:\\)*\\)" .
+         ((lambda (tags)
+            (when my/svg-tag-mode-on
+              (let ((tag (first (split-string tags ":" t))))
+                (flet ((eq-tag (t2)
+                               (string-equal tag t2)))
+                  (cond ((eq-tag "kl")
+                         (my/mk-tag tags 'epa-mark))
+                        ((some #'eq-tag '("work" "ivehte" "iv" "bs"))
+                         (my/mk-tag tags 'homoglyph))
+                        ((some #'eq-tag '("is" "innerspace" "neop" "3e"))
+                         (my/mk-tag tags 'compilation-error))
+                        ((some #'eq-tag '("wtf" "cb" "woody" "hs"))
+                         (my/mk-tag tags 'helm-ff-socket))
+                        ((some #'eq-tag '("tech" "linux" "guix" "gx" "tf"))
+                         (my/mk-tag tags 'vundo-saved))
+                        ((some #'eq-tag '("rdv" "ssdd" "tt" "lol"))
+                         (my/mk-tag tags 'vundo-saved))
+                        (t (my/mk-tag tags 'powerline-inactive2)))))))))))
+
+
+(defun svg-lib-tag (label &optional style &rest args)
+  "Create an image displaying LABEL in a rounded box using given STYLE
+and style elements ARGS."
+
+  (let* ((default svg-lib-style-default)
+         (style (if style (apply #'svg-lib-style nil style) default))
+         (style (if args  (apply #'svg-lib-style style args) style))
+
+         (foreground  (plist-get style :foreground))
+         (background  (plist-get style :background))
+
+         (crop-left   (plist-get style :crop-left))
+         (crop-right  (plist-get style :crop-right))
+
+         (alignment   (plist-get style :alignment))
+         (stroke      (plist-get style :stroke))
+         ;; (width       (plist-get style :width))
+         (height      (plist-get style :height))
+         (radius      (plist-get style :radius))
+         ;; (scale       (plist-get style :scale))
+         (margin      (plist-get style :margin))
+         (padding     (plist-get style :padding))
+         (font-size   (plist-get style :font-size))
+         (font-family (plist-get style :font-family))
+         (font-weight (plist-get style :font-weight))
+
+         (txt-char-width  (window-font-width))
+         (txt-char-height (window-font-height))
+         (txt-char-height (if line-spacing
+                              (+ txt-char-height line-spacing)
+                            txt-char-height))
+         (font-info       (font-info (format "%s-%d" font-family font-size)))
+         (font-size       (aref font-info 2)) ;; redefine font-size
+         (ascent          (aref font-info 8))
+         (tag-char-width  (aref font-info 11))
+         ;; (tag-char-height (aref font-info 3))
+         ;; this is my diff:
+         (tag-width       (/ (* (+ (length label) padding) txt-char-width) 2))
+         (tag-height      (* txt-char-height height))
+
+         (svg-width       (+ tag-width (* margin txt-char-width)))
+         (svg-height      tag-height)
+         (svg-ascent      (plist-get style :ascent))
+
+         (tag-x  (* (- svg-width tag-width)  alignment))
+         (text-x (+ tag-x (/ (- tag-width (* (length label) tag-char-width)) 2)))
+         (text-y ascent)
+
+         (tag-x      (if crop-left  (- tag-x     txt-char-width) tag-x))
+         (tag-width  (if crop-left  (+ tag-width txt-char-width) tag-width))
+         (text-x     (if crop-left  (- text-x (/ stroke 2)) text-x))
+         (tag-width  (if crop-right (+ tag-width txt-char-width) tag-width))
+         (text-x     (if crop-right (+ text-x (/ stroke 2)) text-x))
+
+         (svg (svg-create svg-width svg-height)))
+
+    (when (>= stroke 0.25)
+      (svg-rectangle svg tag-x 0 tag-width tag-height
+                     :fill foreground :rx radius))
+    (svg-rectangle svg (+ tag-x (/ stroke 2.0)) (/ stroke 2.0)
+                   (- tag-width stroke) (- tag-height stroke)
+                   :fill background :rx (- radius (/ stroke 2.0)))
+    (svg-text svg label
+              :font-family font-family :font-weight font-weight  :font-size font-size
+              :fill foreground :x text-x :y  text-y)
+    (svg-lib--image svg :ascent svg-ascent)))
+
+(add-hook 'org-mode-hook #'svg-tag-mode-on)
+
+;; org-agenda overlay fuckery (hack):
+(defun org-agenda-show-svg ()
+  (let* ((case-fold-search nil)
+         (keywords (mapcar #'svg-tag--build-keywords svg-tag--active-tags))
+         (keyword (car keywords)))
+    (while keyword
+      (save-excursion
+        (while (re-search-forward (nth 0 keyword) nil t)
+          (overlay-put (make-overlay
+                        (match-beginning 0) (match-end 0))
+                       'display  (nth 3 (eval (nth 2 keyword)))) ))
+      (pop keywords)
+      (setq keyword (car keywords)))))
+(add-hook 'org-agenda-finalize-hook #'org-agenda-show-svg)
 
 (provide 'conf/org)
