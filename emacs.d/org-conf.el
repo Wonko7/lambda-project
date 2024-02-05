@@ -608,18 +608,58 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (require 'svg-tag-mode)
 (require 'powerline) ;; for face
 
+(defface my/tag-kl
+  '((t :inherit epa-mark
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-is
+  '((t :inherit region
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-wtf
+  '((t :inherit helm-ff-socket
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-tech
+  '((t :inherit vundo-saved
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-work
+  '((t :inherit homoglyph
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-lol
+  '((t :inherit org-todo
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
+(defface my/tag-default
+  '((t :inherit powerline-inactive2
+      :background "#4e2e49"))
+  "tag face"
+  :group 'basic-bitches)
+
 (defun my/mk-tag (tag face &optional &rest args)
   (apply #'svg-tag-make tag
-                :beg 1
-                :end -1
-                :face face
-                :weight 'bold
-                :height 0.47
-                :font-size 4.9
-                :radius 6
-                :padding 4.0
-                :margin 0
-                args))
+         :face face
+         :weight 'bold
+         :height 0.47
+         :font-size 4.9
+         :radius 6
+         :padding 4.0
+         :margin 0
+         args))
 
 
 (setq my/svg-tag-mode-on t)
@@ -627,26 +667,58 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
   (interactive)
   (setq my/svg-tag-mode-on (not my/svg-tag-mode-on)))
 
+
+(defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
+(defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
+(defconst day-re "[A-Za-z]\\{3\\}")
+(defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+
 (setq svg-tag-tags
-      '(("\\(:[0-9A-Za-z:]+:\\([0-9A-Za-z:]+:\\)*\\)" .
+      `(("\\(:[0-9A-Za-z:]+:\\([0-9A-Za-z:]+:\\)*\\)" .
          ((lambda (tags)
             (when my/svg-tag-mode-on
               (let ((tag (first (split-string tags ":" t))))
-                (flet ((eq-tag (t2)
-                               (string-equal tag t2)))
+                (cl-flet ((eq-tag (t2)
+                                  (string-equal tag t2))
+                          (mk-tag (tags f)
+                                  (my/mk-tag tags f :beg 0 :end -1)))
                   (cond ((eq-tag "kl")
-                         (my/mk-tag tags 'epa-mark))
+                         (mk-tag tags 'my/tag-kl))
                         ((some #'eq-tag '("work" "ivehte" "iv" "bs"))
-                         (my/mk-tag tags 'homoglyph))
-                        ((some #'eq-tag '("is" "innerspace" "neop" "3e"))
-                         (my/mk-tag tags 'compilation-error))
+                         (mk-tag tags 'my/tag-work))
+                        ((some #'eq-tag '("is" "innerspace" "neop" "3e" "home"))
+                         (mk-tag tags 'my/tag-is))
                         ((some #'eq-tag '("wtf" "cb" "woody" "hs"))
-                         (my/mk-tag tags 'helm-ff-socket))
+                         (mk-tag tags 'my/tag-wtf))
                         ((some #'eq-tag '("tech" "linux" "guix" "gx" "tf"))
-                         (my/mk-tag tags 'vundo-saved))
+                         (mk-tag tags 'my/tag-tech))
                         ((some #'eq-tag '("rdv" "ssdd" "tt" "lol"))
-                         (my/mk-tag tags 'vundo-saved))
-                        (t (my/mk-tag tags 'powerline-inactive2)))))))))))
+                         (mk-tag tags 'my/tag-lol))
+                        (t (mk-tag tags 'my/tag-default)))))))))
+        ;; inactive timestamps
+        (,(format "\\(\\[%s\\]\\)" date-re) .
+         ((lambda (tag)
+            (my/mk-tag tag 'my/tag-kl :inverse t :beg 1 :end -1))))
+        (,(format   "\\(\\[%s \\)%s\\]" date-re day-time-re) .
+         ((lambda (date)
+            (when my/svg-tag-mode-on
+              (my/mk-tag date 'my/tag-kl :crop-right t :inverse t :end nil :beg 1)))))
+        (,(format "\\[%s\\( %s\\]\\)" date-re day-time-re) .
+          ((lambda (day-time)
+            (when my/svg-tag-mode-on
+              (my/mk-tag day-time 'my/tag-kl :crop-left t :end -1 :beg 0)))))
+        ;; active timestamps
+        (,(format "\\(<%s>\\)" date-re) .
+         ((lambda (tag)
+            (my/mk-tag tag 'my/tag-work :inverse t :beg 1 :end -1))))
+        (,(format "\\(<%s \\)%s>" date-re day-time-re) .
+         ((lambda (date)
+            (when my/svg-tag-mode-on
+              (my/mk-tag date 'my/tag-work :crop-right t :inverse t :end nil :beg 1)))))
+        (,(format "<%s \\(%s>\\)" date-re day-time-re) .
+         ((lambda (day-time)
+            (when my/svg-tag-mode-on
+              (my/mk-tag day-time 'my/tag-work :crop-left t :end -1 :beg 0)))))))
 
 
 (defun svg-lib-tag (label &optional style &rest args)
