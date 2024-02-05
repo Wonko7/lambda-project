@@ -484,12 +484,13 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⏱ [[roam:ivehte enseignement]] :work:"))
          :jump-to-captured t)
         ("Wi" "ivehte" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚑 [[roam:ivehte]] :work:"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚑 [[roam:ivehte]] :work:\n%U\n"))
          :jump-to-captured t)
-        ("Wr" "RDV marge+" plain ""
+        ("Wr" "RDV ivehte+" plain ""
          :if-new (file+head+olp ,my/daily-file ,my/daily-header
-                                ,(string-join  '("RDV 📅 [[roam:ivehte]] :work:"
-                                                 "\n<%<%Y-%m-%d>>\n")))
+                                (,(string-join  '("RDV 📅 [[roam:ivehte]] :work:"
+                                                 "\n<%<%Y-%m-%d>>\n"
+                                                 ))))
          :jump-to-captured t)))
 
 ;; FIXME review this:
