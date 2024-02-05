@@ -75,11 +75,31 @@
       org-agenda-start-on-weekday         1
       calendar-week-start-day             1
       org-log-into-drawer                 t
-      org-auto-align-tags                 t
+      org-auto-align-tags                 nil
       org-tags-column                     72
       org-agenda-tags-column              82
       org-edit-timestamp-down-means-later t
       cfw:org-agenda-schedule-args        '(:timestamp))
+
+(defun my/reset-tag-spacing-to-zero-org-tags ()
+  (interactive)
+  (message "%i %i" (point-min) (point-max))
+  (replace-regexp "^\\(\\*.*?\\)[[:blank:]]+\\(:[0-9A-Za-z:]+:\\)" "\\1 \\2" nil
+                  (point-min) (point-max)))
+
+(defun my/justify-right-org-tags ()
+  (interactive)
+  (message "%i %i" (point-min) (point-max))
+  (align-regexp (point-min) (point-max)
+                "^\\(\\*.*[[:blank:]]\\(:[0-9A-Za-z:]+:\\)\\)" -2 1))
+
+(defun my/align-org-tags ()
+  (interactive)
+  ;; highly annoying, why does this not work?
+  (my/reset-tag-spacing-to-zero-org-tags)
+  (my/justify-right-org-tags))
+
+;; (remove-hook 'org-after-tags-change-hook #'my/align-org-tags)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
