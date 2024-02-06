@@ -202,6 +202,7 @@
         emacs-emojify
 
         ;; code: ()
+        emacs-origami-el
         emacs-rainbow-mode
         emacs-rainbow-blocks
         emacs-rainbow-delimiters
@@ -257,6 +258,7 @@
         emacs-wgrep
 
         ;; simple gui
+        emacs-alert
         emacs-beacon
         emacs-nyan-mode
         emacs-doom-modeline
@@ -291,6 +293,7 @@
         ;; communication
         emacs-ement
         emacs-mastodon
+        emacs-slack
         ;; pantalaimon
 
         ;; ☠

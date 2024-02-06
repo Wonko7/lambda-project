@@ -134,6 +134,13 @@
 ;; (advice-add 'company-capf--candidates :around #'just-one-face)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; embark
+
+(require 'embark)
+(require 'embark-consult)
+(add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yasnippet
 
 (require 'yasnippet)
@@ -144,7 +151,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell / bash
-
 
 (require 'pcmpl-args-autoloads)
 (require 'pcmpl-unix)
