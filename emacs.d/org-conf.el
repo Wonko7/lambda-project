@@ -681,7 +681,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                 (cl-flet ((eq-tag (t2)
                                   (string-equal tag t2))
                           (mk-tag (tags f)
-                                  (my/mk-tag tags f :beg 0 :end -1)))
+                                  (my/mk-tag tags f :beg 1 :end -1)))
                   (cond ((eq-tag "kl")
                          (mk-tag tags 'my/tag-kl))
                         ((some #'eq-tag '("work" "ivehte" "iv" "bs"))
@@ -702,7 +702,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         (,(format   "\\(\\[%s \\)%s\\]" date-re day-time-re) .
          ((lambda (date)
             (when my/svg-tag-mode-on
-              (my/mk-tag date 'my/tag-kl :crop-right t :inverse t :end nil :beg 1)))))
+              (my/mk-tag date 'my/tag-kl :crop-right t :inverse t :beg 1)))))
         (,(format "\\[%s\\( %s\\]\\)" date-re day-time-re) .
           ((lambda (day-time)
             (when my/svg-tag-mode-on
@@ -714,7 +714,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         (,(format "\\(<%s \\)%s>" date-re day-time-re) .
          ((lambda (date)
             (when my/svg-tag-mode-on
-              (my/mk-tag date 'my/tag-work :crop-right t :inverse t :end nil :beg 1)))))
+              (my/mk-tag date 'my/tag-work :crop-right t :inverse t :beg 1)))))
         (,(format "<%s \\(%s>\\)" date-re day-time-re) .
          ((lambda (day-time)
             (when my/svg-tag-mode-on
