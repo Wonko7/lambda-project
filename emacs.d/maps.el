@@ -230,6 +230,14 @@
   "ï"    #'dired-up-directory)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; calc
+
+(general-evil-define-key '(normal) calc-mode-map
+  "i"    (lambda ()
+           (interactive) ;; avoid having info popping up all the time.
+           (message "beep boop - I'm a robot")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
 (general-evil-define-key '(normal) magit-diff-mode-map
