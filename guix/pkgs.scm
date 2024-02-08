@@ -97,7 +97,7 @@
 
 (define-public %emacs-world
   (list ;; emacs ;; TODO: native compilation
-        emacs-next-pgtk
+        emacs-next
         ;; emacs-next
         ;; basic (bitches) stuff:
         emacs-general
