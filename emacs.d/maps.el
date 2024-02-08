@@ -15,6 +15,7 @@
   ;; "'" #'counsel-projectile-find-file
 
   ;; embark
+  "C-e" #'embark-act
   "e" #'embark-act
   "x" #'embark-export
   ;; vertico
@@ -33,6 +34,8 @@
   ;; elfeed
   "aee" #'elfeed
   "aes" #'elfeed-update
+  ;; emacs but not that close to my heart
+  "aab" #'bluetooth-list-devices
   ;; external apps
   "aat" (lambda () (interactive) (async-shell-command my/term-cmd))
   "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
@@ -106,7 +109,7 @@
 
   ;; roam
   ;; insert stuff
-  "ie" #'emojify-insert-emoji ;;  :desc "Emoji"
+  "ie" #'emojify-insert-emoji         ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
   ;; rm stuff
@@ -152,6 +155,7 @@
 
 (general-define-key
  :states 'normal
+ "C-e"  #'embark-act
  "-"    nil
  "/"    #'consult-line
  "C-/"  #'evil-search-forward
