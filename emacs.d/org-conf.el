@@ -75,21 +75,19 @@
       org-agenda-start-on-weekday         1
       calendar-week-start-day             1
       org-log-into-drawer                 t
-      org-auto-align-tags                 nil
-      org-tags-column                     72
+      org-auto-align-tags                 t
+      org-tags-column                     -80
       org-agenda-tags-column              82
       org-edit-timestamp-down-means-later t
       cfw:org-agenda-schedule-args        '(:timestamp))
 
 (defun my/reset-tag-spacing-to-zero-org-tags ()
   (interactive)
-  (message "%i %i" (point-min) (point-max))
   (replace-regexp "^\\(\\*.*?\\)[[:blank:]]+\\(:[0-9A-Za-z:]+:\\)" "\\1 \\2" nil
                   (point-min) (point-max)))
 
 (defun my/justify-right-org-tags ()
   (interactive)
-  (message "%i %i" (point-min) (point-max))
   (align-regexp (point-min) (point-max)
                 "^\\(\\*.*[[:blank:]]\\(:[0-9A-Za-z:]+:\\)\\)" -2 1))
 
@@ -375,8 +373,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         ("wb" "bouldering" entry ,(string-join '("* ⛰ [[roam:bouldering]] %? :wtf:cb:\n"
                                                  "%U\n"
                                                  "** ❤ with :innerspace:\n"
-                                                 "** 🔥 topped\n"
                                                  "** 👷 projects\n"
+                                                 "** 🔥 topped\n"
                                                  "** 🏥 [[roam:injuries]]\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
@@ -387,8 +385,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                             "%U\n"
                                             "** 🍚 [[roam:rice bucket]]\n"
                                             "- %?\n"
-                                            "** 🔥 topped\n"
                                             "** 👷 projects\n"
+                                            "** 🔥 topped\n"
                                             "** 🐒 [[roam:campusing]]\n"
                                             "** 🏥 [[roam:injuries]]"))
          :jump-to-captured t
