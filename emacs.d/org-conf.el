@@ -191,25 +191,28 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                                    (org-super-agenda-groups
                                                     '((:name "🤸 wtf: focus"
                                                              :and (:tag "wtf" :tag "focus")
-                                                             :order 8)
+                                                             :order 80)
                                                       (:name "🌄 ssdd"
                                                              :and (:tag "ssdd" :tag "tt")
-                                                             :order 9)
+                                                             :order 90)
                                                       (:name "🍰 work ssdd"
                                                              :and (:tag "ssdd" :tag "work")
-                                                             :order 10)
+                                                             :order 100)
                                                       (:name "👑 king line hit list"
                                                              :tag ("kl")
-                                                             :order 11)
+                                                             :order 110)
+                                                      (:name "🌠 .*"
+                                                             :order 999
+                                                             :anything t)
                                                       ;; (:name "fun maximization"
                                                       ;;        :tag ("fun")
                                                       ;;        :order 40)
-                                                      (:name "wtf"
-                                                             :tag ("wtf")
-                                                             :order 52)
-                                                      (:name "innerspace"
-                                                             :tag ("is" "h" "habit" "focus")
-                                                             :order 60)
+                                                      ;; (:name "wtf"
+                                                      ;;        :tag ("wtf")
+                                                      ;;        :order 520)
+                                                      ;; (:name "innerspace"
+                                                      ;;        :tag ("is" "h" "habit" "focus")
+                                                      ;;        :order 600)
                                                       ;; (:name "review"
                                                       ;;        :tag ("review" "r")
                                                       ;;        :order 70)
@@ -515,6 +518,26 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (setq org-agenda-span 15)
 
 (require 'calfw-org)
+
+;; https://github.com/kiwanami/emacs-calfw/issues/111
+;; temporary fix:
+(defun cfw:org-get-timerange (text)
+  "Return a range object (begin end text).
+If TEXT does not have a range, return nil."
+  (let* ((dotime (cfw:org-tp text 'dotime)))
+    (and (stringp dotime) (string-match org-ts-regexp dotime)
+         (let* ((matches  (s-match-strings-all org-ts-regexp dotime))
+                (start-date (nth 1 (car matches)))
+                (end-date (nth 1 (nth 1 matches)))
+                (extra (cfw:org-tp text 'extra)))
+           (if (string-match "(\\([0-9]+\\)/\\([0-9]+\\)): " extra)
+               (list (calendar-gregorian-from-absolute
+                      (time-to-days
+                       (org-read-date nil t start-date)))
+                    (calendar-gregorian-from-absolute
+                     (time-to-days
+                      (org-read-date nil t end-date))) text))))))
+
 (require 'org-web-tools)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
