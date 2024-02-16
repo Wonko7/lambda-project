@@ -692,7 +692,9 @@ If TEXT does not have a range, return nil."
 (defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
 (defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
 (defconst day-re "[A-Za-z]\\{3\\}")
+(defconst repeat-re "[0-9a-z/+.]+")
 (defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+(defconst day-time-repeat-re (format "\\(%s\\)? ?\\(%s\\)? ?\\(%s\\)?" day-re time-re repeat-re))
 
 (setq svg-tag-tags
       `(("\\(:[0-9A-Za-z:]+:\\([0-9A-Za-z:]+:\\)*\\)" .
@@ -732,11 +734,11 @@ If TEXT does not have a range, return nil."
         (,(format "\\(<%s>\\)" date-re) .
          ((lambda (tag)
             (my/mk-tag tag 'my/tag-work :inverse t :beg 1 :end -1))))
-        (,(format "\\(<%s \\)%s>" date-re day-time-re) .
+        (,(format "\\(<%s \\)%s>" date-re day-time-repeat-re) .
          ((lambda (date)
             (when my/svg-tag-mode-on
               (my/mk-tag date 'my/tag-work :crop-right t :inverse t :beg 1)))))
-        (,(format "<%s \\(%s>\\)" date-re day-time-re) .
+        (,(format "<%s \\(%s>\\)" date-re day-time-repeat-re) .
          ((lambda (day-time)
             (when my/svg-tag-mode-on
               (my/mk-tag day-time 'my/tag-work :crop-left t :end -1 :beg 0)))))))
