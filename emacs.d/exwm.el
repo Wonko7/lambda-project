@@ -317,10 +317,32 @@
 ;; start exwm
 
 (exwm-systemtray-enable)
-(exwm-randr-enable) ;; revisit for multi-monitor
+(exwm-randr-enable)
 (sleep-for 10) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
 (exwm-enable)
 
+;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
+(setq exwm-randr-workspace-monitor-plist '(0 "HDMI-A-0"
+                                           10 "HDMI-A-0"
+                                           11 "HDMI-A-0"))
+(setq exwm-workspace-warp-cursor t
+      mouse-autoselect-window t
+      focus-follows-mouse t)
+
+;; autorandr
+
+;; autorandr --save tv
+;; autorandr --save work-monitor
+;; autorandr --save obama-s-elf
+
+(defun my/run-autorandr ()
+  (async-shell-command "autorandr --change --force")
+  ;; (message "autorandr config: %s" (shell-cmd-to-string "autorandr --current"))
+  ;; FIXME also feh background
+  (message "autorandr"))
+
+;; (add-hook 'exwm-randr-screen-change-hook #'my/run-autorandr)
+;; (my/run-autorandr)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lemon
