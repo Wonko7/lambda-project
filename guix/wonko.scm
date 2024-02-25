@@ -66,7 +66,7 @@
  (gnu packages image-viewers)
  (gnu packages matrix)
  (gnu packages wm)
- (w7 packages jonaburg-picom)
+ (gnu packages compton)
  (w7 packages emacs-xyz)
 
  ;; doc
@@ -145,7 +145,7 @@
    %vcs-world
    (list
     ;; services
-    ibhagwan-picom
+    picom
     synergy
     dunst
     ;; yes also man pages plz
@@ -328,7 +328,7 @@
       (".config/x-config/common.xmodmap"
        ,(local-file
          (string-append %lambda-project "/misc/common.xmodmap")))
-      (".config/picom.conf"
+      (".config/picom/picom.conf"
        ,(plain-file "picom.conf"
                     (picom-configuration
                      (ship-picom-radius %ship))))
@@ -517,7 +517,7 @@
        (shepherd-service
         (provision '(picom))
         (start #~(make-forkexec-constructor
-                  (list #$(file-append ibhagwan-picom "/bin/picom"))
+                  (list #$(file-append picom "/bin/picom"))
                   #:log-file "herd-logs/picom.log"))
         (stop #~(make-kill-destructor))
         (documentation "bling"))
