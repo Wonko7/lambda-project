@@ -490,16 +490,15 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
         ("We" "ivehte enseignement" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⏱ [[roam:ivehte enseignement]] :work:"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐝 [[roam:ivehte enseignement]] :work:iv:"))
          :jump-to-captured t)
         ("Wi" "ivehte" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚑 [[roam:ivehte]] :work:\n%U\n"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐝 [[roam:ivehte]] :work:iv:\n%U\n"))
          :jump-to-captured t)
         ("Wr" "RDV ivehte+" plain ""
          :if-new (file+head+olp ,my/daily-file ,my/daily-header
-                                (,(string-join  '("RDV 📅 [[roam:ivehte]] :work:"
-                                                 "\n<%<%Y-%m-%d>>\n"
-                                                 ))))
+                                (,(string-join  '("📅 [[roam:ivehte]] :work:iv:rdv:"
+                                                 "\n<%<%Y-%m-%d>>\n"))))
          :jump-to-captured t)))
 
 ;; FIXME review this:
