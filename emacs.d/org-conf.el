@@ -77,19 +77,19 @@
       org-log-into-drawer                 t
       org-auto-align-tags                 t
       org-tags-column                     -80
-      org-agenda-tags-column              82
+      org-agenda-tags-column              80
       org-edit-timestamp-down-means-later t
       cfw:org-agenda-schedule-args        '(:timestamp))
 
 (defun my/reset-tag-spacing-to-zero-org-tags ()
   (interactive)
-  (replace-regexp "^\\(\\*.*?\\)[[:blank:]]+\\(:[0-9A-Za-z:]+:\\)" "\\1 \\2" nil
+  (replace-regexp "^\\(\\*.*?\\)[[:blank:]]+\\(:[0-9A-Za-z:_-]+:\\)" "\\1 \\2" nil
                   (point-min) (point-max)))
 
 (defun my/justify-right-org-tags ()
   (interactive)
   (align-regexp (point-min) (point-max)
-                "^\\(\\*.*[[:blank:]]\\(:[0-9A-Za-z:]+:\\)\\)" -2 1))
+                "^\\(\\*.*[[:blank:]]\\(:[0-9A-Za-z:_-]+:\\)\\)" -2 1))
 
 (defun my/align-org-tags ()
   (interactive)
@@ -697,7 +697,7 @@ If TEXT does not have a range, return nil."
 (defconst day-time-repeat-re (format "\\(%s\\)? ?\\(%s\\)? ?\\(%s\\)?" day-re time-re repeat-re))
 
 (setq svg-tag-tags
-      `(("\\(:[0-9A-Za-z:]+:\\([0-9A-Za-z:]+:\\)*\\)" .
+      `(("\\(:[0-9A-Za-z:_-]+:\\([0-9A-Za-z:_-]+:\\)*\\)" .
          ((lambda (tags)
             (when my/svg-tag-mode-on
               (let ((tag (first (split-string tags ":" t))))
