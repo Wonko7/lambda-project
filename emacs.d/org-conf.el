@@ -241,7 +241,15 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (org-super-agenda-mode)
 
 (require 'org-habit)
-(setq org-habit-graph-column 60)
+(setq org-habit-graph-column 50
+      org-habit-preceding-days 35
+      org-habit-show-all-today t
+      org-habit-show-done-always-green t
+      ;; glyphs:
+      ;; │ | ⋮
+      ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙
+      org-habit-completed-glyph ?•
+      org-habit-today-glyph ?│)
 
 (require 'org-crypt)
 (setq epa-file-encrypt-to '("william@underage.wang")
