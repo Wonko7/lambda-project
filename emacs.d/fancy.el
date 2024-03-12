@@ -103,4 +103,11 @@
 (setq nyan-animate-nyancat nil) ;; FIXME doesn't like to animate with emacs 29.1
 (nyan-mode 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; windows
+
+(set-face-foreground 'vertical-border "#4e2e49")
+(setq window-divider-default-right-width my/window-divider-default-right-width)
+(window-divider-mode)
+
 (provide 'conf/fancy)

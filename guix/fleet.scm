@@ -25,6 +25,7 @@
             ship-dunst-width
             ship-dunst-font-size
             ship-emacs-font-size
+            ship-emacs-divider-width
             ship-emacs-modeline-height))
 
 (use-service-modules desktop networking ssh xorg)
@@ -54,6 +55,7 @@
   (dunst-width ship-dunst-width (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
   (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
+  (emacs-divider-width ship-emacs-divider-width (sanitize (check number?)))
   (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?))))
 
 (define-public %yggdrasill
@@ -71,6 +73,7 @@
    ;; home
    (wallpaper %wallpaper)
    (emacs-modeline-height 75)
+   (emacs-divider-width 5)
    (emacs-font-size 80)
    (rxvt-font-size 8)
    (feh-font-size 20)
@@ -99,6 +102,7 @@
             (efi . "918C-B182")))
    ;; home
    (emacs-font-size 120)
+   (emacs-divider-width 1)
    (emacs-modeline-height 40)
    (dunst-font-size 12)
    (dunst-width 300)

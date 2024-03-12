@@ -99,7 +99,8 @@
                           (concatenate
                            ((@ (srfi srfi-1) zip)
                             %lock-cmd
-                            (circular-list " ")))))
+                            (circular-list " "))))
+           my/window-divider-default-right-width #$(ship-emacs-divider-width %ship))
      (provide 'conf/generated-values)))
 
 (define %aliases
