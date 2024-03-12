@@ -38,6 +38,7 @@
   "aab" #'bluetooth-list-devices
   ;; external apps
   "aat" (lambda () (interactive) (async-shell-command my/term-cmd))
+  "aaT" (lambda () (interactive) (async-shell-command "transmission-gtk"))
   "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
   "aap" (lambda () (interactive) (async-shell-command "pavucontrol"))
   ;; browsers
@@ -175,6 +176,15 @@
 (general-define-key
  :states '(normal emacs insert visual global motion)
  (kbd "C-SPC") evil-leader--default-map)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; async shell command
+
+
+(general-evil-define-key '(normal insert visual) minibuffer-local-shell-command-map
+  "C-r"        #'consult-history
+  "C-k"        #'minibuffer-previous-prompt
+  "C-j"        #'minibuffer-next-prompt)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; eshell
