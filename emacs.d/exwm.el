@@ -72,13 +72,13 @@
 (defun my/toggle-fullscreen ()
   "maximize buffer"
   (interactive)
-  (if exwm-class-name
-      (exwm-layout-toggle-fullscreen exwm--id))
   (if (= 1 (length (window-list)))
       (jump-to-register '_)
     (progn
       (window-configuration-to-register '_)
-      (delete-other-windows))))
+      (delete-other-windows)))
+  (if exwm-class-name
+      (exwm-layout-toggle-fullscreen exwm--id)))
 
 (defun my/tune-alpha (direction)
   (let* ((a (frame-parameter (selected-frame) 'alpha))
