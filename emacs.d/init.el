@@ -191,9 +191,30 @@
 ;; apps
 
 (require 'osm)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; async-shell-command
+
 (setq async-shell-command-buffer 'new-buffer)
+
 (add-to-list 'display-buffer-alist
              '("*Async Shell Command*" display-buffer-no-window (nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; magit
+
+;; (add-to-list 'display-buffer-alist
+;;              '("*Magit Rev*" (display-buffer-reuse-window  display-buffer-in-side-window)
+;;                (nil)))
+;; (setq display-buffer-alist
+;;       '(
+;;         ("*Async Shell Command*"
+;;          display-buffer-no-window
+;;          (nil))
+;;         ("*Magit Rev*"
+;;          (display-buffer-reuse-window
+;;           display-buffer-in-side-window)
+;;          (nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search
