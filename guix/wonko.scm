@@ -90,9 +90,13 @@
 (define %emacs-values
   #~(progn
      (setq my/font #$%font
-           my/lambda-project #$%lambda-project
-           my/font-size #$(ship-emacs-font-size %ship)
-           my/modeline-height #$(ship-emacs-modeline-height %ship)
+           my/lambda-project   #$%lambda-project
+           my/font-size        #$(ship-emacs-font-size %ship)
+           my/modeline-height  #$(ship-emacs-modeline-height %ship)
+           my/tag-height       #$(ship-emacs-tag-height %ship)
+           my/tag-font-size    #$(ship-emacs-tag-font-size %ship)
+           my/tag-radius       #$(ship-emacs-tag-radius %ship)
+           my/tag-padding      #$(ship-emacs-tag-padding %ship)
            my/term-cmd #$%term-cmd
            my/lock-cmd #$(apply
                           string-append

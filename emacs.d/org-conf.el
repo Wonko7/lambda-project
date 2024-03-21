@@ -680,15 +680,14 @@ If TEXT does not have a range, return nil."
 
 (defun my/mk-tag (tag face &optional &rest args)
   (apply #'svg-tag-make tag
-         :face face
-         :weight 'bold
-         :height 0.47
-         :font-size 4.9
-         :radius 6
-         :padding 4.0
-         :margin 0
+         :face      face
+         :weight    'bold
+         :height    my/tag-height
+         :font-size my/tag-font-size
+         :radius    my/tag-radius
+         :padding   my/tag-padding
+         :margin    0
          args))
-
 
 (setq my/svg-tag-mode-on t)
 (defun my/toggle-svg-tag-mode ()

@@ -26,7 +26,11 @@
             ship-dunst-font-size
             ship-emacs-font-size
             ship-emacs-divider-width
-            ship-emacs-modeline-height))
+            ship-emacs-modeline-height
+            ship-emacs-tag-height
+            ship-emacs-tag-font-size
+            ship-emacs-tag-radius
+            ship-emacs-tag-padding))
 
 (use-service-modules desktop networking ssh xorg)
 
@@ -54,9 +58,14 @@
   (picom-radius ship-picom-radius (sanitize (check number?)))
   (dunst-width ship-dunst-width (sanitize (check number?)))
   (dunst-font-size ship-dunst-font-size (sanitize (check number?)))
-  (emacs-font-size ship-emacs-font-size (sanitize (check number?)))
-  (emacs-divider-width ship-emacs-divider-width (sanitize (check number?)))
-  (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?))))
+  ;; emacs
+  (emacs-font-size       ship-emacs-font-size       (sanitize (check number?)))
+  (emacs-divider-width   ship-emacs-divider-width   (sanitize (check number?)))
+  (emacs-modeline-height ship-emacs-modeline-height (sanitize (check number?)))
+  (emacs-tag-height      ship-emacs-tag-height      (sanitize (check number?)))
+  (emacs-tag-font-size   ship-emacs-tag-font-size   (sanitize (check number?)))
+  (emacs-tag-radius      ship-emacs-tag-radius      (sanitize (check number?)))
+  (emacs-tag-padding     ship-emacs-tag-padding     (sanitize (check number?))))
 
 (define-public %yggdrasill
   (ship
@@ -75,6 +84,10 @@
    (emacs-modeline-height 75)
    (emacs-divider-width 5)
    (emacs-font-size 80)
+   (emacs-tag-height 0.47)
+   (emacs-tag-font-size 4.9)
+   (emacs-tag-radius 6)
+   (emacs-tag-padding 4.0)
    (rxvt-font-size 8)
    (feh-font-size 20)
    (dunst-font-size 8)
@@ -102,8 +115,12 @@
             (efi . "918C-B182")))
    ;; home
    (emacs-font-size 120)
-   (emacs-divider-width 1)
+   (emacs-divider-width 2)
    (emacs-modeline-height 40)
+   (emacs-tag-height 0.95)
+   (emacs-tag-font-size 11)
+   (emacs-tag-radius 10)
+   (emacs-tag-padding 15)
    (dunst-font-size 12)
    (dunst-width 300)
    (picom-radius 10)
@@ -121,6 +138,7 @@
   (ship
    (inherit %rocinante)
    (name "enterprise")
+   (media-station #f) ;; hmm.
    (kb %dvorak-kb)
    (net `((wg42 . "10.42.0.6")
           (local . "192.168.1.6")))
