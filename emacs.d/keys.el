@@ -493,4 +493,4 @@
 ;;   "Keymap for `ement-room-list' buffers.
 ;; See also `ement-room-list-button-map'.")
 
-(provide 'conf/maps)
+(provide 'conf/keys)

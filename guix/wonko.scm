@@ -236,7 +236,7 @@
                       "early-init.el"
                       "init.el"
                       "lisp-config.el"
-                      "maps.el"
+                      "keys.el"
                       "misc.el"
                       "org-conf.el")))
 
