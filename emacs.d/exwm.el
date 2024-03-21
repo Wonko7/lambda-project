@@ -319,7 +319,6 @@
 
 (exwm-systemtray-enable)
 (exwm-randr-enable)
-(sleep-for 10) ;; lol fuck me: cl-no-applicable-method: No applicable method: xcb:-+request, nil, #s(xcb:SetInputFocus t 42 1 nil 0)
 (exwm-enable)
 
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
