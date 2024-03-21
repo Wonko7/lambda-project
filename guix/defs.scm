@@ -4,7 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; general defs:
 
-(define-public %lambda-project "/code/wonko-mono-conf")
+(define-public %lambda-project "/code/lambda-project")
 
 (define-public %guix-extra-profiles-dir "/.guix-extra-profiles")
 
