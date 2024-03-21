@@ -315,9 +315,9 @@
       (".config/Kvantum/kvantum.kvconfig"
        ,(local-file
          (string-append %lambda-project "/misc/kvantum.kvconfig")))
-      (".config/Kvantum/KvGnomish#/KvGnomish#.kvconfig"
-       ,(local-file
-         (string-append %lambda-project "/misc/kv_yggdrasill.kvconfig")))
+      ;; (".config/Kvantum/KvGnomish#/KvGnomish#.kvconfig"
+      ;;  ,(local-file
+      ;;    (string-append %lambda-project "/misc/kv_yggdrasill.kvconfig")))
       (".config/qt5ct/qt5ct.conf"
        ,(local-file
          (string-append %lambda-project "/misc/qt5ct.conf")))
