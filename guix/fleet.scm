@@ -30,7 +30,8 @@
             ship-emacs-tag-height
             ship-emacs-tag-font-size
             ship-emacs-tag-radius
-            ship-emacs-tag-padding))
+            ship-emacs-tag-padding
+            ship-emacs-org-agenda-tags-column))
 
 (use-service-modules desktop networking ssh xorg)
 
@@ -65,7 +66,10 @@
   (emacs-tag-height      ship-emacs-tag-height      (sanitize (check number?)))
   (emacs-tag-font-size   ship-emacs-tag-font-size   (sanitize (check number?)))
   (emacs-tag-radius      ship-emacs-tag-radius      (sanitize (check number?)))
-  (emacs-tag-padding     ship-emacs-tag-padding     (sanitize (check number?))))
+  (emacs-tag-padding     ship-emacs-tag-padding     (sanitize (check number?)))
+  (emacs-org-agenda-tags-column ship-emacs-org-agenda-tags-column
+                                (sanitize (check number?))))
+
 
 (define-public %yggdrasill
   (ship
@@ -81,6 +85,7 @@
             (efi . "77DE-0AE2")))
    ;; home
    (wallpaper %wallpaper)
+   (emacs-org-agenda-tags-column 80)
    (emacs-modeline-height 75)
    (emacs-divider-width 5)
    (emacs-font-size 80)
@@ -117,6 +122,7 @@
    (emacs-font-size 120)
    (emacs-divider-width 2)
    (emacs-modeline-height 40)
+   (emacs-org-agenda-tags-column 78)
    (emacs-tag-height 0.95)
    (emacs-tag-font-size 11)
    (emacs-tag-radius 10)

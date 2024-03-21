@@ -77,7 +77,7 @@
       org-log-into-drawer                 t
       org-auto-align-tags                 t
       org-tags-column                     -80
-      org-agenda-tags-column              80
+      org-agenda-tags-column              my/org-agenda-tags-column
       org-edit-timestamp-down-means-later t
       cfw:org-agenda-schedule-args        '(:timestamp))
 
