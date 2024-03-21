@@ -297,8 +297,9 @@
 
 (set-frame-parameter (selected-frame) 'alpha '(94 . 70))
 (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist  '(alpha . (94 . 70)))
-(add-to-list 'default-frame-alist  '(fullscreen . maximized))
+;; this is now set in early-init:
+;; (add-to-list 'default-frame-alist '(alpha . (94 . 70)))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; perspepctive

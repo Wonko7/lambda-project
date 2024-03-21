@@ -228,6 +228,7 @@
                       "elfeed.el"
                       "evil.el"
                       "fancy.el"
+                      "early-init.el"
                       "init.el"
                       "lisp-config.el"
                       "maps.el"
