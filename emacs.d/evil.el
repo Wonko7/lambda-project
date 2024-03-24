@@ -133,5 +133,18 @@
                        org-web-tools-insert-link-for-url
                        my/insert-inactive-timestamp)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fix G -> goto last line
+
+(evil-define-motion evil-goto-line (count)
+  "Go to line COUNT. By default the last line."
+  :jump t
+  :type line
+  (evil-ensure-column
+    (if (null count)
+        (goto-char (- (point-max) 1))
+      (goto-char (point-min))
+      (forward-line (1- count)))))
+
 (provide 'conf/evil)
 ;;; evil.el ends here
