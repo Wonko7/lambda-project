@@ -29,7 +29,7 @@
 ;; (exwm-init)
 ;; (exwm-workspace--init)
 
-(setq exwm-workspace-number 10)
+(setq exwm-workspace-number 12) ;; two extra for external monitors.
 (require 'exwm)
 (require 'exwm-randr)
 (require 'exwm-config)
@@ -37,7 +37,6 @@
 (require 'exwm-systemtray)
 ;; TODO checkout exwm-xim
 
-(setq exwm-workspace-number 10)
 (setq exwm-input-prefix-keys
       `(?\s-i
         ?\s-I
@@ -67,18 +66,32 @@
         ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; misc functions, should move this?
+;; fullscreen / toggle window config
+
+(setq my/worskpace-window-configs (-repeat exwm-workspace-number nil))
+
+(defun my/set-workspace-window-configuration ()
+  (setf (nth exwm-workspace-current-index my/worskpace-window-configs)
+        (list (current-window-configuration) (point-marker))))
+
+(defun my/get-workspace-window-configuration ()
+  (nth exwm-workspace-current-index my/worskpace-window-configs))
 
 (defun my/toggle-fullscreen ()
   "maximize buffer"
   (interactive)
-  (if (= 1 (length (window-list)))
-      (jump-to-register '_)
-    (progn
-      (window-configuration-to-register '_)
-      (delete-other-windows)))
   (if exwm-class-name
-      (exwm-layout-toggle-fullscreen exwm--id)))
+      (exwm-layout-toggle-fullscreen exwm--id)
+    (if (= 1 (length (window-list)))
+        (let ((wc (my/get-workspace-window-configuration)))
+          (when wc
+            (register-val-jump-to wc nil)))
+      (progn
+        (my/set-workspace-window-configuration)
+        (delete-other-windows)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; misc functions, should move this?
 
 (defun my/tune-alpha (direction)
   (let* ((a (frame-parameter (selected-frame) 'alpha))
@@ -368,7 +381,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto start workspaces:
 
-(defvar ws/auto-start-state '(t t t t t t t t t t))
+(defvar ws/auto-start-state (-repeat exwm-workspace-number t))
 
 (defun ws/check-and-mark-auto-start-state (i)
   (let ((state (nth i ws/auto-start-state)))
