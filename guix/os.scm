@@ -208,6 +208,12 @@
     (firmware (list linux-firmware))
     (bootloader
      (bootloader-configuration
+      ;; choose wisely:
+      ;; grub-efi-removable-bootloader => use when installing on external device: expects /mnt/boot/efi to exist & be mounted
+      ;; grub-efi-bootloader => for local machine
+      ;;
+      ;; (bootloader grub-efi-removable-bootloader)
+      ;; (targets '("/mnt/tmp-efi/"))
       (bootloader grub-efi-bootloader)
       (targets '("/boot"))
       (keyboard-layout keyboard-layout)))
