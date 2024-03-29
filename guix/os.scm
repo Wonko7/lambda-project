@@ -182,10 +182,16 @@
                                     "https://substitutes.nonguix.org")
                                    %default-substitute-urls))
                                  (authorized-keys
-                                  (append (list (local-file "./data/substitutes/rocinante.pub")
-                                                (local-file "./data/substitutes/yggdrasill.pub")
-                                                (local-file "./data/substitutes/nonguix.pub"))
-                                          %default-authorized-guix-keys))))
+                                  (append
+                                   (list (local-file "./data/substitutes/enterprise.pub")
+                                         (local-file "./data/substitutes/rocinante.pub")
+                                         (local-file "./data/substitutes/yggdrasill.pub")
+                                         (local-file "./data/substitutes/nonguix.pub"))
+                                   ;; (map local-file
+                                   ;;      (find-files (string-append %lambda-project
+                                   ;;                                 "/guix/data/substitutes")
+                                   ;;                  (file-name-predicate "pub$")))
+                                   %default-authorized-guix-keys))))
 
              (console-font-service-type
               config => (map (lambda (tty)
