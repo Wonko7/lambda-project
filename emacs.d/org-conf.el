@@ -36,7 +36,6 @@
       org-startup-indented t
       ;; FIXME fix this with guix magic:
       org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
-      org-extend-today-until 3
       org-startup-folded 'content
       org-todo-keywords
       '((sequence
@@ -72,6 +71,7 @@
       ;; (org-pretty-entities t)
 
       ;; agenda/cal dates:
+      org-extend-today-until              3
       org-agenda-start-on-weekday         1
       calendar-week-start-day             1
       org-log-into-drawer                 t
@@ -241,8 +241,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (org-super-agenda-mode)
 
 (require 'org-habit)
-(setq org-habit-graph-column 50
-      org-habit-preceding-days 35
+(setq org-habit-graph-column 40
+      org-habit-preceding-days 47
       org-habit-show-all-today t
       org-habit-show-done-always-green t
       ;; glyphs:
