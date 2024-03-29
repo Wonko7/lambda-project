@@ -185,6 +185,7 @@
         emacs-osm
         ;; desktop stuff?
         emacs-nov-el
+        emacs-auctex
 
         ;; spell
         emacs-flycheck-guile
