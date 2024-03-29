@@ -109,16 +109,9 @@
           (lambda ()
             (setq mode-name "🐫")
             (add-hook 'before-save-hook #'ocamlformat-before-save)
-            ;; (setq ff-other-file-alist '(("\\.mli\\'" (".ml")) ;; mll
-            ;;                             ("\\.ml\\'" (".mli"))
-            ;;                             ("\\.eliomi\\'" (".eliom"))
-            ;;                             ("\\.eliom\\'" (".eliomi"))))
             (setq-local comment-style 'indent)
             (setq-local tuareg-interactive-program
                         (concat tuareg-interactive-program " -nopromptcont"))
-            ;; (ignore-errors (let ((ext (file-name-extension buffer-file-name)))
-            ;;                  (when (member ext '("eliom" "eliomi"))
-            ;;                    (setq-local lsp-modeline-code-actions-enable nil))))
             (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
 
 (require 'diff-hl)
