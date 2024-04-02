@@ -48,7 +48,7 @@
 
 (set-face-attribute 'default nil :font my/font :height my/font-size)
 ;;(setq use-default-font-for-symbols t)
-(set-fontset-font t 'symbol "Symbols Nerd Font Mono" nil 'append)
+(set-fontset-font t 'emoji "Symbols Nerd Font Mono" nil 'append)
 
 ;; lol fuck me.
 ;; (defun my-emoji-fonts ()
