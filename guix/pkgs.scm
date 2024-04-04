@@ -113,6 +113,7 @@
         emacs-org-ql
         emacs-org-board
         emacs-org-books
+        emacs-org-noter
         emacs-enlive
         emacs-seq
         emacs-calfw
