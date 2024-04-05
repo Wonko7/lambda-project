@@ -144,7 +144,7 @@
   (ship
    (inherit %rocinante)
    (name "enterprise")
-   (media-station #f) ;; hmm.
+   (media-station #t)
    (kb %dvorak-kb)
    (net `((wg42 . "10.42.0.6")
           (local . "192.168.1.6")))
