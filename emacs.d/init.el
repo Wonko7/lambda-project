@@ -278,7 +278,7 @@
 (require 'conf/org           "~/.emacs.d/org-conf.el")
 (require 'conf/lisp          "~/.emacs.d/lisp-config.el")
 (require 'conf/doom          "~/.emacs.d/doom.el")
-(require 'conf/maps          "~/.emacs.d/maps.el")
+(require 'conf/keys          "~/.emacs.d/keys.el")
 (require 'conf/dev           "~/.emacs.d/dev.el")
 (require 'conf/communication "~/.emacs.d/communication.el")
 
