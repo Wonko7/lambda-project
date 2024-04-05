@@ -96,12 +96,10 @@
   #:use-module (gnu packages man))
 
 (define-public %emacs-world
-  (list ;; emacs ;; TODO: native compilation
-        emacs-next
-        ;; emacs-next
+  (list ;; TODO: native compilation
+        emacs
         ;; basic (bitches) stuff:
         emacs-general
-        ;; rm emacs-emacsql-sqlite3
         emacs-undo-fu
         emacs-vundo
 
@@ -172,11 +170,6 @@
         emacs-dirvish
         emacs-coterm
         emacs-detached
-        ;; FIXME remove these?
-        emacs-eshell-up
-        emacs-eshell-syntax-highlighting
-        emacs-esh-autosuggest
-        emacs-eshell-prompt-extras
         emacs-dired-du
         emacs-diredfl
         emacs-dired-rsync
@@ -184,7 +177,7 @@
         emacs-dired-toggle-sudo
         ;; 🗺
         emacs-osm
-        ;; desktop stuff?
+        ;; desktop stuff? FIXME: set these up:
         emacs-nov-el
         emacs-auctex
 
@@ -211,15 +204,7 @@
         emacs-rainbow-identifiers
         emacs-lsp-mode ;; FIXME
         emacs-lsp-ui
-        ;;emacs-company-lsp
-        ;;emacs-company
-        emacs-corfu
-        emacs-corfu-doc
-        emacs-pcmpl-args
-        emacs-cape
         emacs-eglot
-        emacs-consult-eglot
-        emacs-consult-org-roam
         emacs-eval-sexp-fu-el
         emacs-eval-in-repl-geiser
         emacs-gnuplot
@@ -239,11 +224,17 @@
         emacs-inheritenv
 
         ;; completion framework
+        emacs-corfu
+        emacs-corfu-doc
+        emacs-pcmpl-args
+        emacs-cape
         emacs-orderless
         emacs-consult
         emacs-consult-dir
         emacs-consult-lsp
         emacs-consult-yasnippet
+        emacs-consult-eglot
+        emacs-consult-org-roam
         emacs-embark
         emacs-vertico
         emacs-marginalia
