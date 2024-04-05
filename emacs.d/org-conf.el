@@ -242,7 +242,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 
 (require 'org-habit)
 (setq org-habit-graph-column 40
-      org-habit-preceding-days 47
+      org-habit-preceding-days my/org-habit-preceding-days
       org-habit-show-all-today t
       org-habit-show-done-always-green t
       ;; glyphs:

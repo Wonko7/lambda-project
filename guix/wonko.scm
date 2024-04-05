@@ -98,6 +98,7 @@
            my/tag-radius       #$(ship-emacs-tag-radius %ship)
            my/tag-padding      #$(ship-emacs-tag-padding %ship)
            my/org-agenda-tags-column #$(ship-emacs-org-agenda-tags-column %ship)
+           my/org-habit-preceding-days #$(ship-emacs-org-habit-preceding-days %ship)
            my/term-cmd #$%term-cmd
            my/lock-cmd #$(apply
                           string-append

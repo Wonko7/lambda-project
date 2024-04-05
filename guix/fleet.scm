@@ -31,6 +31,7 @@
             ship-emacs-tag-font-size
             ship-emacs-tag-radius
             ship-emacs-tag-padding
+            ship-emacs-org-habit-preceding-days
             ship-emacs-org-agenda-tags-column))
 
 (use-service-modules desktop networking ssh xorg)
@@ -68,7 +69,9 @@
   (emacs-tag-radius      ship-emacs-tag-radius      (sanitize (check number?)))
   (emacs-tag-padding     ship-emacs-tag-padding     (sanitize (check number?)))
   (emacs-org-agenda-tags-column ship-emacs-org-agenda-tags-column
-                                (sanitize (check number?))))
+                                (sanitize (check number?)))
+  (emacs-org-habit-preceding-days ship-emacs-org-habit-preceding-days
+                                  (sanitize (check number?))))
 
 
 (define-public %yggdrasill
@@ -85,6 +88,7 @@
             (efi . "77DE-0AE2")))
    ;; home
    (wallpaper %wallpaper)
+   (emacs-org-habit-preceding-days 47)
    (emacs-org-agenda-tags-column 80)
    (emacs-modeline-height 75)
    (emacs-divider-width 5)
@@ -123,6 +127,7 @@
    (emacs-divider-width 2)
    (emacs-modeline-height 40)
    (emacs-org-agenda-tags-column 78)
+   (emacs-org-habit-preceding-days 43)
    (emacs-tag-height 0.95)
    (emacs-tag-font-size 11)
    (emacs-tag-radius 10)
