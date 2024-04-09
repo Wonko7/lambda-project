@@ -333,17 +333,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         ("i" "innerspace")
         ("ic" "coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
          :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
-        ("ie" "third eye" entry "* 👁 [[roam:prying open my third eye]]\n%U\n%?"
-         :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace   :is:")))
-        ("iM" "meditations" entry
-         ,(string-join '("* ☯ daily meditations\n%U\n"
-                         "** morning: set goals\n"
-                         "** in the present\n"
-                         "*** discipline of assent: suppress judgement\n"
-                         "*** discipline of desire\n"
-                         "** evening: judge your sorry arse\n"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
+        ("ie" "third eye" entry "* 👁 [[roam:prying open my third eye]] :is:neop:3e:\n%U\n%?"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("☯ innerspace")))
         ("ii" "innerspace   :is:" entry "* ☯ %?\n%U"
