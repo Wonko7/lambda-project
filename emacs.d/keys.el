@@ -180,31 +180,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async shell command
 
-
 (general-evil-define-key '(normal insert visual) minibuffer-local-shell-command-map
   "C-r"        #'consult-history
   "C-k"        #'minibuffer-previous-prompt
   "C-j"        #'minibuffer-next-prompt)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; eshell
-
-(general-evil-define-key '(normal insert visual) eshell-mode-map
-  "C-r"        (lambda ()
-                 (interactive)
-                 (evil-append 1)
-                 (consult-history))
-  "C-k"        #'eshell-previous-prompt
-  "C-j"        #'eshell-next-prompt
-  "C-<return>" #'eshell-copy-old-input)
-
-(evil-collection-define-key 'normal 'eshell-mode-map
-  (kbd "ï")    #'my/cd-up ;; restrict this to eshell, or generalise map?
-  (kbd "-")    #'my/cd--
-  (kbd "A")    (lambda ()
-                 (interactive)
-                 (evil-goto-line)
-                 (evil-append 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
@@ -383,6 +362,9 @@
   "h" #'my/ement-home
   "l" #'ement-tabulated-room-list)
 
+(general-evil-define-key '(normal motion) ement-room-list-mode-map
+  "RET" nil)
+
 (general-evil-define-key '(normal) ement-room-list-mode-map
   :prefix "RET"
   "n" #'ement-tabulated-room-list-next-unread
@@ -400,6 +382,7 @@
 (general-evil-define-key '(normal) ement-room-mode-map
   ;; migrate stuff down to prefix-map as these get annoying:
   ;; Movement
+  "RET" nil
   "TAB" #'ement-room-goto-next
   "<backtab>" #'ement-room-goto-prev
   ;; "SPC" #'ement-room-scroll-up-mark-read
@@ -414,9 +397,9 @@
   "c-k" #'ement-room-goto-next
   "(" #'ement-room-goto-prev
   ")" #'ement-room-goto-next
-  "l" #'ement-tabulated-room-list
-  "L" #'ement-room-list-side-window
-  "h" #'my/ement-home
+  ;"l" #'ement-tabulated-room-list
+  "L" #'ement-tabulated-room-list
+  "H" #'my/ement-home
   ;; "y" #'my/ement-home
 
   ;; Switching
@@ -431,13 +414,26 @@
   "S-<return>" #'ement-room-write-reply
   "M-RET" #'ement-room-compose-message
   "<insert>" #'ement-room-edit-message
+  "c"   (lambda ()
+          (interactive)
+          (ement-room-compose-message ement-room ement-session)
+          (ement-room-compose-org))
+
   "x" #'ement-room-edit-message
   "X" #'ement-room-delete-message
   "s r" #'ement-room-send-reaction
   "s e" #'ement-room-send-emote
   "s f" #'ement-room-send-file
   "s i" #'ement-room-send-image
-  "v" #'ement-room-view-event
+  "V" #'ement-room-view-event
+
+  ;; go
+  "g m" #'ement-notify-switch-to-mentions-buffer
+  "g n" #'ement-notify-switch-to-notifications-buffer
+  "g l"   #'ement-tabulated-room-list
+  "g r"   #'ement-view-room
+  "g R"   #'ement-room-sync
+  "g y"   #'my/ement-home
 
   ;; Users
   "u RET" #'ement-send-direct-message
@@ -461,17 +457,19 @@
   "R F" #'ement-forget-room
   "R n" #'ement-room-set-display-name
   "R s" #'ement-room-toggle-space
-
   ;; Other
   )
 
+(general-evil-define-key '(normal motion) ement-room-mode-map
+  "RET" nil
+  "<return>" nil)
+
 (general-evil-define-key '(normal) ement-room-mode-map
   :prefix "RET"
- ;; "g l" #'ement-tabulated-room-list
- ;; "g r" #'ement-view-room
-  "g m" #'ement-notify-switch-to-mentions-buffer
-  "g n" #'ement-notify-switch-to-notifications-buffer
-
+  ;; "g l" #'ement-tabulated-room-list
+  ;; "g r" #'ement-view-room
+  "m" #'ement-notify-switch-to-mentions-buffer
+  "n" #'ement-notify-switch-to-notifications-buffer
   "l"   #'ement-tabulated-room-list
   "r"   #'ement-view-room
   "R"   #'ement-room-sync
