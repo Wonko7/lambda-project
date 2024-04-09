@@ -2,8 +2,10 @@
   #:use-module (srfi srfi-1)
   #:use-module (guix gexp)
   #:use-module (guix records)
-  #:use-module (gnu packages xorg)
   #:use-module (gnu)
+  #:use-module (gnu packages xorg)
+  #:use-module (gnu bootloader)
+  #:use-module (gnu bootloader grub)
   ;; my stuff
   #:use-module (defs)
   #:use-module (dotfiles)
@@ -14,6 +16,8 @@
             ship-media-station?
             ship-uuids
             ship-kb
+            ship-grub
+            ship-grub-target
             ship-font
             ship-wallpaper
             ship-x-config
@@ -48,6 +52,8 @@
   (uuids ship-uuids (sanitize (check list?)))
   (class ship-class (sanitize (check symbol?))) ;; FIXME?
   (kb ship-kb (sanitize (check keyboard-layout?)))
+  (grub ship-grub (sanitize (check bootloader?)))
+  (grub-target ship-grub-target (sanitize (check list?)))
   ;; home
   (font ship-font (sanitize (check string?)))
   (wallpaper ship-wallpaper (sanitize (check string?)))
@@ -86,6 +92,8 @@
           (local . "192.168.1.3")))
    (uuids `((vault . "077c1391-b290-4921-ae90-f8e3cec68113")
             (efi . "77DE-0AE2")))
+   (grub grub-efi-removable-bootloader)
+   (grub-target '("/boot"))
    ;; home
    (wallpaper %wallpaper)
    (emacs-org-habit-preceding-days 47)
@@ -122,6 +130,8 @@
           (local . "192.168.1.4")))
    (uuids `((vault . "ec7a9b12-4611-469c-8a6f-aadf4d525d5e")
             (efi . "918C-B182")))
+   (grub grub-efi-bootloader)
+   (grub-target '("/boot"))
    ;; home
    (emacs-font-size 120)
    (emacs-divider-width 2)
@@ -150,11 +160,15 @@
    (inherit %rocinante)
    (name "enterprise")
    (media-station #t)
+   ;; os
    (kb %dvorak-kb)
    (net `((wg42 . "10.42.0.6")
           (local . "192.168.1.6")))
    (uuids `((vault . "125bf330-ff27-45d1-9cce-1dd96cb14975")
             (efi . "6C21-E416")))
+   (grub grub-efi-bootloader)
+   (grub-target '("/boot"))
+   ;; home
    (x-config
     (cmd+arg->script
      `((xrandr . "--dpi 96")

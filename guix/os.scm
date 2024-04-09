@@ -18,10 +18,9 @@
              (gnu services networking)
              (gnu services ssh)
              (guix build utils)
-             (nongnu packages linux)
-             (nongnu system linux-initrd)
              (guix gexp)
              (ice-9 format)
+             (ice-9 match)
              (srfi srfi-1)
              (srfi srfi-11)
              (srfi srfi-88)
@@ -69,9 +68,6 @@
 (define (desktop? ship)
   (equal? (ship-class ship) 'desktop-laptop))
 
-(define (ephemeral? ship)
-  (equal? (ship-class ship) 'ephemeral))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services
 
@@ -104,10 +100,6 @@
                                                (port 1337)
                                                (advertise? #t)))))
 
-         (basic-networking-services (list
-                                     (service network-manager-service-type)
-                                     (service wpa-supplicant-service-type)))
-
          (lid-switch-action (if (ship-media-station? ship)
                                 'ignore
                                 'suspend))
@@ -127,35 +119,7 @@
                                           (x11-forwarding? #t)
                                           (password-authentication? #f)))
            (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
-           (extra-special-file
-            "/usr/local/bin/make-default-btrfs-subvols"
-            (program-file
-             "make-default-btrfs-subvols"
-             (with-imported-modules
-                 '((spock)
-                   ;;(guix utils)
-                   ;;(ice-9 match)
-                   (srfi srfi-1))
-               #~(begin
-                   (use-modules
-                    (spock)
-                    (ice-9 match))
-                   (display
-                    (spock-say "making BTRFS SUBVOLS on "))
-                   (newline)
-                   (let* ((args (program-arguments))
-                          (sdX  (second args))
-                          (subvols '("code" "data" "junkyard" "work"))
-                          (btrfs #$(file-append btrfs-progs "/bin/btrfs"))
-                          (mkdir #$(file-append coreutils "/bin/mkdir"))
-                          (mk-dirs (lambda (x)
-                                     x)))
-                     ;; (map mk-dirs subvols)
-                     ;; (map mk-subvols subvols)
-                     (display
-                      (format #t "~a\n" args))
-                     (display
-                      (format #t "~a\n" (second args))))))))
+
            (modify-services (if (desktop? ship)
                                 (modify-services %desktop-services
                                   (delete gdm-service-type)
@@ -168,19 +132,10 @@
                                 %base-services)
              (guix-service-type config =>
                                 (guix-configuration
-                                 (discover? (not (ephemeral? ship)))
+                                 (discover? #t)
                                  (substitute-urls
-                                  (append
-                                   (if (ephemeral? ship)
-                                       (map (lambda (s) ;; no discovery on discovery. heh.
-                                              (string-append "http://"
-                                                             (assoc-ref (ship-net s) 'local)
-                                                             ":1337"))
-                                            %fleet)
-                                       '())
-                                   (list
-                                    "https://substitutes.nonguix.org")
-                                   %default-substitute-urls))
+                                  (cons* "https://substitutes.nonguix.org"
+                                          %default-substitute-urls))
                                  (authorized-keys
                                   (append
                                    (list (local-file "./data/substitutes/enterprise.pub")
@@ -196,11 +151,11 @@
              (console-font-service-type
               config => (map (lambda (tty)
                                `(,tty
-                                 . ,(file-append font-terminus "/share/consolefonts/ter-132n")))
+                                 . ,(file-append font-terminus
+                                                 "/share/consolefonts/ter-132n")))
                              '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))))))
 
-    (cond ((desktop? ship)   (append fleet-base fleet-permanent-base fleet-desktop-base))
-          ((ephemeral? ship) (append fleet-base basic-networking-services)))))
+    (append fleet-base fleet-permanent-base fleet-desktop-base)))
 
 (define (ship->os ship);; also depends on %crew & %wonko
   (operating-system
@@ -215,13 +170,16 @@
     (bootloader
      (bootloader-configuration
       ;; choose wisely:
-      ;; grub-efi-removable-bootloader => use when installing on external device: expects /mnt/boot/efi to exist & be mounted
+      ;; grub-efi-removable-bootloader =>
+      ;;   use when installing on external device:
+      ;;   expects /mnt/boot/efi to exist & be mounted
       ;; grub-efi-bootloader => for local machine
       ;;
       ;; (bootloader grub-efi-removable-bootloader)
       ;; (targets '("/mnt/tmp-efi/"))
-      (bootloader grub-efi-bootloader)
-      (targets '("/boot"))
+      ;; (bootloader grub-efi-bootloader)
+      (bootloader (ship-grub ship))
+      (targets    (ship-grub-target ship))
       (keyboard-layout keyboard-layout)))
 
     (host-name (ship-name ship))
@@ -232,9 +190,7 @@
     (users (map crew->user-account %crew))
 
     (packages (append
-               (if (ephemeral? ship)
-                   '()
-                   %xfce-world) ;; FIXME put this in Tina's world
+               %xfce-world ;; FIXME put this in Tina's world
                %git-world
                %utils-world
                %os-disk-world
@@ -246,59 +202,52 @@
 
     (setuid-programs
      (cons*
-      ;; FIXME dumpcap? ping?
+      ;; FIXME dumpcap?
       (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl)
                                             "/bin/brightnessctl")))
       %setuid-programs))
 
     (mapped-devices
-     (if (ephemeral? ship)
-         '()
-         (list (mapped-device
-                (source (uuid (assoc-ref (ship-uuids ship) 'vault)))
-                (target "vault")
-                (type luks-device-mapping)))))
+     (list (mapped-device
+            (source (uuid (assoc-ref (ship-uuids ship) 'vault)))
+            (target "vault")
+            (type luks-device-mapping))))
 
     (file-systems
-     (if (ephemeral? ship)
-         %base-file-systems
-         (let ((btrfs-vault-subvol (lambda (args)
-                                     (let-values (((mount-p sv-name) (car+cdr args)))
-                                       (file-system
-                                         (device "/dev/mapper/vault")
-                                         (mount-point mount-p)
-                                         (type "btrfs")
-                                         (options (string-append "subvol=_live/@"
-                                                                 sv-name))
-                                         (needed-for-boot? (equal? "/" mount-p))
-                                         (dependencies mapped-devices))))))
-           (append
-            (list (file-system
-                    (mount-point "/boot")
-                    (device (uuid (assoc-ref (ship-uuids ship) 'efi)
-                                  'fat32))
-                    (type "vfat"))
-                  (file-system
-                    (mount-point "/mnt/vault")
-                    (device "/dev/mapper/vault")
-                    (type "btrfs")
-                    (dependencies mapped-devices)))
-            (map btrfs-vault-subvol
-                 `(("/" . "guix-root")
-                   ("/home" . "guix-home")
-                   ("/code" . "code")
-                   ("/data" . "data")
-                   ("/work" . "work")
-                   ("/junkyard" . "junkyard")))
-            %base-file-systems))))
+     (let ((btrfs-vault-subvol (lambda (args)
+                                 (let-values (((mount-p sv-name) (car+cdr args)))
+                                   (file-system
+                                     (device "/dev/mapper/vault")
+                                     (mount-point mount-p)
+                                     (type "btrfs")
+                                     (options (string-append "subvol=_live/@"
+                                                             sv-name))
+                                     (needed-for-boot? (equal? "/" mount-p))
+                                     (dependencies mapped-devices))))))
+       (append
+        (list (file-system
+                (mount-point "/boot")
+                (device (uuid (assoc-ref (ship-uuids ship) 'efi)
+                              'fat32))
+                (type "vfat"))
+              (file-system
+                (mount-point "/mnt/vault")
+                (device "/dev/mapper/vault")
+                (type "btrfs")
+                (dependencies mapped-devices)))
+        (map btrfs-vault-subvol
+             `(("/" . "guix-root")
+               ("/home" . "guix-home")
+               ("/code" . "code")
+               ("/data" . "data")
+               ("/work" . "work")
+               ("/junkyard" . "junkyard")))
+        %base-file-systems)))
 
-    ;; FIXME: take care of making this? idem @btrfs subvol
     (swap-devices
-     (if (ephemeral? ship)
-         '()
-         (list (swap-space
-                (target "/mnt/vault/swap/swapfile")
-                (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                      file-systems))))))))
+     (list (swap-space
+            (target "/mnt/vault/swap/swapfile")
+            (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                  file-systems)))))))
 
 (ship->os %ship)
