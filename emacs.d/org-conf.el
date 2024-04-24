@@ -612,16 +612,19 @@ If TEXT does not have a range, return nil."
 (require 'org-books) ;; never worked :(
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org commit
+;; org commit / magit
 
-(defun my/magit-get-root ()
-  (magit-with-toplevel (pwd)))
+(defun check-if-org ()
+  (string= (magit-with-toplevel (pwd)) "Directory /data/org/"))
 
-;; FIXME: pops up before quitting magit diff preview, which is a pity
+;; FIXME: fix this with git hook.
 (defun my/org-commit-msg-setup ()
-  (when (string= (my/magit-get-root) "Directory /data/org/")
+  (when (check-if-org)
     (emojify-insert-emoji)))
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
+
+(advice-add #'magit-todos--insert-todos :before-until #'check-if-org)
+(advice-add #'magit-todos--add-to-status-buffer-kill-hook :before-until #'check-if-org)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; svg-tag-mode

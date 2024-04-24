@@ -126,6 +126,8 @@
 (setq magit-todos-auto-group-items 'always)
 (magit-todos-mode)
 
+;; see org-conf where it is disabled.
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
