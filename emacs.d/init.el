@@ -151,6 +151,31 @@
 (bash-completion-setup)
 (add-hook 'shell-dynamic-complete-functions 'bash-completion-dynamic-complete)
 
+;; FIXME: fuck me: comint-watch-for-password-prompt
+;; run-at-time 0 nil => bug
+;; run-at-time 0.01 nil => no bug. wtf?
+(defun comint-watch-for-password-prompt (string)
+  "Prompt in the minibuffer for password and send without echoing.
+Looks for a match to `comint-password-prompt-regexp' in order
+to detect the need to (prompt and) send a password.  Ignores any
+carriage returns (\\r) in STRING.
+
+This function could be in the list `comint-output-filter-functions'."
+  (when (let ((case-fold-search t))
+	  (string-match comint-password-prompt-regexp
+                        (string-replace "\r" "" string)))
+    ;; Use `run-at-time' in order not to pause execution of the
+    ;; process filter with a minibuffer
+    ;; or don't use it so that there is no weird timeout bug.
+    (with-current-buffer (current-buffer)
+      (let ((comint--prompt-recursion-depth
+             (1+ comint--prompt-recursion-depth)))
+        (if (> comint--prompt-recursion-depth 10)
+            (message "Password prompt recursion too deep")
+          (when (get-buffer-process (current-buffer))
+            (comint-send-invisible
+             (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
 
