@@ -620,7 +620,7 @@ If TEXT does not have a range, return nil."
 ;; FIXME: fix this with git hook.
 (defun my/org-commit-msg-setup ()
   (when (check-if-org)
-    (emojify-insert-emoji)))
+    (emoji-search)))
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 
 (advice-add #'magit-todos--insert-todos :before-until #'check-if-org)

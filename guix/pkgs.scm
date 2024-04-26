@@ -194,7 +194,6 @@
         emacs-ibuffer-projectile
         emacs-projectile
         emacs-perspective
-        emacs-emojify
 
         ;; code: ()
         emacs-origami-el

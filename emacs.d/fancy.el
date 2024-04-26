@@ -20,14 +20,6 @@
 (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
 (require 'kind-icon)
 
-(with-eval-after-load 'emojify
-  (progn
-    (add-hook 'after-init-hook #'global-emojify-mode)
-    (setq emojify-styles (list 'unicode))
-    (emojify-set-emoji-styles emojify-styles)
-    (setq emojify-display-style 'unicode)
-    (setq emojify-emoji-styles '(unicode))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; theme
 

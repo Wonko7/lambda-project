@@ -110,7 +110,7 @@
 
   ;; roam
   ;; insert stuff
-  "ie" #'emojify-insert-emoji         ;;  :desc "Emoji"
+  "ie" #'emoji-search         ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
   ;; rm stuff
@@ -168,7 +168,7 @@
 
 (general-define-key
  :states 'insert
- "C-e"   #'emojify-insert-emoji
+ "C-e"   #'emoji-search
  "C-S-H" #'term-send-invisible
  "C-v"   #'evil-paste-after
  "C-S-V" (lambda () (interactive) (evil-paste-after 1 ?\*)))

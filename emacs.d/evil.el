@@ -129,7 +129,7 @@
         fs)))
 
 (my/insert-after-space org-roam-node-insert
-                       emojify-insert-emoji
+                       emoji-search
                        org-web-tools-insert-link-for-url
                        my/insert-inactive-timestamp)
 
