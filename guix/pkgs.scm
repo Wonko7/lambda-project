@@ -46,6 +46,7 @@
   #:use-module (gnu packages tor)
   #:use-module (gnu packages matrix)
   #:use-module (gnu packages irc)
+  #:use-module (gnu packages bittorrent)
   ;; tools
   #:use-module (gnu packages admin)
   #:use-module (gnu packages databases) ;; recutils
@@ -62,6 +63,7 @@
   #:use-module (gnu packages moreutils)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages disk)
+  #:use-module (gnu packages cpio)
   #:use-module (gnu packages rsync)
   #:use-module (gnu packages cryptsetup)
   #:use-module (gnu packages curl)
@@ -287,9 +289,8 @@
         emacs-mastodon
         emacs-slack
         ;; pantalaimon
-
         ;; ☠
-        rtorrent
+        emacs-transmission
         emacs-mentor))
 
 (define-public %xfce-world
@@ -380,8 +381,10 @@
         netcat-openbsd
         nmap
         youtube-dl
+        ;; ☠
         ;; onionshare
-        ))
+        ;; rtorrent
+        `(,transmission "gui")))
 
 (define-public %hack-the-world
   (list wireshark))
@@ -457,6 +460,7 @@
         tmux
         net-tools
         ;; disk
+        cpio
         parted
         ;; files
         coreutils
@@ -478,8 +482,7 @@
         jq))
 
 (define-public %os-net-world
-  (list nss-certs
-        wireguard-tools
+  (list wireguard-tools
         iproute
         iw))
 
