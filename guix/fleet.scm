@@ -177,9 +177,14 @@
 
 (define-public %discovery
   (ship
-   (inherit %enterprise)
+   (inherit %yggdrasill)
    (name "discovery")
-   (class 'ephemeral)))
+   (grub grub-efi-removable-bootloader)
+   (grub-target '("/boot")) ;; think this through if you're initialising from another system
+   (uuids `((vault . "f5b4b690-2701-4b25-b009-ae1af0d31b39")
+            (efi . "4ACA-0700")))
+   (net `((wg42 . "10.42.0.20") ;; should be ignored, not part of %fleet
+          (local . "192.168.1.20")))))
 
 (define-public %fleet (list %yggdrasill
                             %rocinante
