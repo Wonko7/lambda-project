@@ -80,19 +80,20 @@
                                (slim-configuration
                                 (display ":9")
                                 (vt "vt9")
-                                (auto-login? #t)
+                                (auto-login? (not (string= (ship-name ship) "discovery")))
                                 (default-user (crew-name %wonko))
                                 (xorg-configuration (xorg-configuration
                                                      (keyboard-layout (crew-kb %wonko))))))
-                              (service
-                               slim-service-type
-                               (slim-configuration
-                                (display ":10")
-                                (vt "vt10")
-                                (auto-login? #t) ;; FIXME
-                                (default-user (crew-name %tina))
-                                (xorg-configuration (xorg-configuration
-                                                     (keyboard-layout (crew-kb %tina))))))))
+                              ;; (service
+                              ;;  slim-service-type
+                              ;;  (slim-configuration
+                              ;;   (display ":10")
+                              ;;   (vt "vt10")
+                              ;;   (auto-login? #t) ;; FIXME
+                              ;;   (default-user (crew-name %tina))
+                              ;;   (xorg-configuration (xorg-configuration
+                              ;;                        (keyboard-layout (crew-kb %tina))))))
+                              ))
 
          (fleet-permanent-base (list (service guix-publish-service-type
                                               (guix-publish-configuration
@@ -191,7 +192,7 @@
     (users (map crew->user-account %crew))
 
     (packages (append
-               %xfce-world ;; FIXME put this in Tina's world
+               ;; %xfce-world ;; FIXME put this in Tina's world
                %git-world
                %utils-world
                %os-disk-world
