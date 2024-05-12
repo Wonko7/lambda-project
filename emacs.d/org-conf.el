@@ -623,9 +623,6 @@ If TEXT does not have a range, return nil."
     (emoji-search)))
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 
-(advice-add #'magit-todos--insert-todos :before-until #'check-if-org)
-(advice-add #'magit-todos--add-to-status-buffer-kill-hook :before-until #'check-if-org)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; svg-tag-mode
 

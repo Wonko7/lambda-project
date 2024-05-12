@@ -126,7 +126,16 @@
 (setq magit-todos-auto-group-items 'always)
 (magit-todos-mode)
 
-;; see org-conf where it is disabled.
+(defun check-if-todo-blacklisted ()
+  (let ((root (magit-with-toplevel (pwd))))
+    (or (string= root "Directory /data/org/")
+        (string= root "Directory /work/guix/guix")
+        (string= root "Directory /code/guix/guix"))))
+
+(advice-add #'magit-todos--insert-todos
+            :before-until #'check-if-todo-blacklisted)
+(advice-add #'magit-todos--add-to-status-buffer-kill-hook
+            :before-until #'check-if-todo-blacklisted)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
