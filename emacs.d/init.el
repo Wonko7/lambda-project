@@ -177,6 +177,11 @@ This function could be in the list `comint-output-filter-functions'."
              (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tramp
+
+(setq tramp-terminal-type "tramp")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
 
 (require 'diredfl)

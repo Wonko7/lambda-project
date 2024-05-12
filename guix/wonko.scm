@@ -209,6 +209,7 @@
                (mixed-text-file
                 "interactive-shell-bash-options"
                 "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
+                "[ x$TERM = xtramp ] && return\n"
                 "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
                 " \\A \\u@\\h "
                 "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
