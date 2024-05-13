@@ -160,6 +160,8 @@
 
  (services
   (list
+   (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
+                   (list (bash-profile-source-profiles (profiles->names %profiles))))
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #f)
