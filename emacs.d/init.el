@@ -188,7 +188,10 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
 
+(require 'tramp)
 (setq tramp-terminal-type "tramp")
+
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
