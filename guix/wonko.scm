@@ -197,9 +197,6 @@
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
                 ("QT_STYLE_OVERRIDE" . "kvantum")
                 ("XDG_CURRENT_DESKTOP" . "qt5ct")))
-             (bash-profile
-              (list
-               (bash-profile-source-profiles (profiles->names %profiles))))
              (bashrc
               (list
                (mixed-text-file
@@ -207,7 +204,6 @@
                 "shopt -s nocaseglob\n"
                 "# Source the system-wide file.\n"
                 "[ -f /etc/bashrc ] && source /etc/bashrc\n")
-               (bash-profile-source-profiles (profiles->names %profiles))
                (mixed-text-file
                 "interactive-shell-bash-options"
                 "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
