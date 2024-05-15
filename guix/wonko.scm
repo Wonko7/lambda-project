@@ -161,7 +161,14 @@
  (services
   (list
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
-                   (list (bash-profile-source-profiles (profiles->names %profiles))))
+                   (list
+                    ;; (mixed-text-file
+                    ;;  "force-tramp-shopt"
+                    ;;  "shopt -s autocd\n"
+                    ;;  "shopt -s extglob\n"
+                    ;;  "shopt -s globstar\n"
+                    ;;  "shopt -s nocaseglob\n")
+                    (bash-profile-source-profiles (profiles->names %profiles))))
    (service home-bash-service-type
             (home-bash-configuration
              (guix-defaults? #f)
@@ -201,20 +208,22 @@
               (list
                (mixed-text-file
                 "bash-options"
-                "shopt -s nocaseglob\n"
                 "# Source the system-wide file.\n"
                 "[ -f /etc/bashrc ] && source /etc/bashrc\n")
                (mixed-text-file
                 "interactive-shell-bash-options"
                 "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
+                "shopt -s autocd\n"
+                "shopt -s extglob\n"
+                "shopt -s globstar\n"
+                "shopt -s nocaseglob\n"
+                ;; this affects emacs' completion:
+                "bind 'set completion-ignore-case on' 2> /dev/null\n"
                 "[ x$TERM = xtramp ] && return\n"
                 "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
                 " \\A \\u@\\h "
                 "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
                 "\\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
-                "shopt -s autocd\n"
-                "shopt -s extglob\n"
-                "shopt -s globstar\n"
                 "set -o vi\n"
                 "bind '\"jj\":vi-movement-mode'\n")))))
 
