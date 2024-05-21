@@ -192,7 +192,6 @@
     (users (map crew->user-account %crew))
 
     (packages (append
-               ;; %xfce-world ;; FIXME put this in Tina's world
                %git-world
                %utils-world
                %os-disk-world

@@ -81,7 +81,7 @@
  (stateful-prelude))
 
 (display
- (spock-say (string-append "building HOME for " (ship-name %ship)))
+ (spock-say (string-append "wonko's HOME for " (ship-name %ship)))
  (current-error-port))
 (newline (current-error-port))
 
