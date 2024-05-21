@@ -15,7 +15,7 @@
 [column]
   ui = auto
 [branch]
-  sort = commiterdate
+  sort = -committerdate
 
 [core]
   attributesfile = ~/.config/git/attributes
