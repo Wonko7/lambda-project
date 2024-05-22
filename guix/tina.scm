@@ -47,6 +47,16 @@
 (newline (current-error-port))
 
 (home-environment
+ (services
+  (list
+   (simple-service 'guix-config-files
+                   home-files-service-type
+                   (map
+                    (lambda (file)
+                      `(,(string-append ".config/guix/" file)
+                        ,(local-file
+                          (string-append %lambda-project "/guix/config/" file))))
+                    '("channels.scm")))))
  (packages
   (append
    %fonts-world
