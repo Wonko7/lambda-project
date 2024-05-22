@@ -23,13 +23,7 @@
  (gnu packages xorg)
  (gnu packages toys)
  (gnu packages linux)
- (gnu packages xdisorg)
- (gnu packages suckless)
- (gnu packages music)
- (gnu packages lxde)
- (gnu packages gnome)
- (gnu packages kde-plasma)
- (gnu packages kde-frameworks)
+ (gnu packages xfce)
  ;; doc
  (gnu packages man)
 
@@ -56,12 +50,19 @@
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
                           (string-append %lambda-project "/guix/config/" file))))
-                    '("channels.scm")))))
+                    '("channels.scm")))
+   (simple-service 'x-config-files
+                   home-files-service-type
+                   `((".xsession"
+                      ,(program-file
+                        "xsession"
+                        #~(system #$(file-append xfce "/bin/startxfce4"))))))))
  (packages
   (append
    %fonts-world
    %xfce-world
    %web-world
    (list
+    pavucontrol
     ;; yes also man pages plz
     man-db))))
