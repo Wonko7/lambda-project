@@ -123,7 +123,7 @@
   (ship
    (inherit %yggdrasill)
    (name "rocinante")
-   (media-station #t)
+   (media-station #f)
    ;; os
    (kb %fr-kb)
    (net `((wg42 . "10.42.0.4")
@@ -179,6 +179,7 @@
   (ship
    (inherit %yggdrasill)
    (name "discovery")
+   (media-station #f)
    (grub grub-efi-removable-bootloader)
    (grub-target '("/boot")) ;; think this through if you're initialising from another system
    (uuids `((vault . "f5b4b690-2701-4b25-b009-ae1af0d31b39")
