@@ -12,6 +12,7 @@
              (gnu packages suckless)
              (gnu packages fonts)
              (gnu system setuid)
+             (gnu services shepherd)
              (gnu services desktop)
              (gnu services xorg)
              (gnu services sddm)
@@ -32,6 +33,7 @@
              (crew)
              (fleet)
              (pkgs)
+             (xorg)
              (stateful-prelude))
 
 (use-service-modules desktop networking ssh xorg)
