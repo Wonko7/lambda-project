@@ -15,13 +15,9 @@
          (respawn? #f))))
 
 (define noautostart-slim-service-type
-  (handle-xorg-configuration slim-configuration
-    (service-type (name 'slim)
-                  (extensions
-                   (list (service-extension shepherd-root-service-type
-                                            noautostart-slim-shepherd-service)
-                         (service-extension pam-root-service-type
-                                            (@@ (gnu services xorg) slim-pam-service))))
-                  (default-value (slim-configuration))
-                  (description
-                   "Run the SLiM graphical login manager for X11."))))
+  (service-type (inherit slim-service-type)
+                (extensions
+                 (list (service-extension shepherd-root-service-type
+                                          noautostart-slim-shepherd-service)
+                       (service-extension pam-root-service-type
+                                          (@@ (gnu services xorg) slim-pam-service))))))
