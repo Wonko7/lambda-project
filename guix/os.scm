@@ -74,23 +74,24 @@
 ;; services
 
 (define (ship->services ship) ;; also depends on %fleet and %wonko
-  (let* ((fleet-desktop-base
+  (let* ((wonko-slim-config (slim-configuration
+                             (display ":9")
+                             (vt "vt9")
+                             (auto-login? #t)
+                             (default-user (crew-name %wonko))
+                             (xorg-configuration (xorg-configuration
+                                                  (keyboard-layout (crew-kb %wonko))))))
+
+         (fleet-desktop-base
           (filter service?
                   (list
                    (service bluetooth-service-type
                             (bluetooth-configuration (auto-enable? #t)))
 
-                   (service
-                    slim-service-type
-                    (slim-configuration
-                     (display ":9")
-                     (vt "vt9")
-                     (auto-login?
-                      (and (not (string= (ship-name ship) "discovery"))
-                           (not (string= (ship-name ship) "rocinante"))))
-                     (default-user (crew-name %wonko))
-                     (xorg-configuration (xorg-configuration
-                                          (keyboard-layout (crew-kb %wonko))))))
+                   (if (or (string= (ship-name ship) "discovery")
+                           (string= (ship-name ship) "rocinante"))
+                       (service noautostart-slim-service-type wonko-slim-config)
+                       (service slim-service-type wonko-slim-config))
 
                    (when (string= (ship-name ship) "rocinante")
                      (service
