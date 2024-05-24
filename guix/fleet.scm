@@ -177,7 +177,7 @@
 
 (define-public %discovery
   (ship
-   (inherit %yggdrasill)
+   (inherit %enterprise)
    (name "discovery")
    (media-station #f)
    (grub grub-efi-removable-bootloader)
@@ -186,6 +186,18 @@
             (efi . "4ACA-0700")))
    (net `((wg42 . "10.42.0.20") ;; should be ignored, not part of %fleet
           (local . "192.168.1.20")))))
+
+(define-public %daban-urnud
+  (ship
+   (inherit %enterprise)
+   (name "daban-urnud")
+   (media-station #f)
+   (grub grub-efi-removable-bootloader) ;; FIXME: change this before updating
+   (grub-target '("/mnt/tmp-efi")) ;; think this through if you're initialising from another system
+   (uuids `((vault . "a55e2d24-631d-4409-8310-0b69706cf98d")
+            (efi . "802F-0358")))
+   (net `((wg42 . "10.42.1.33") ;; should be ignored, not part of %fleet
+          (local . "192.168.1.33")))))
 
 (define-public %fleet (list %yggdrasill
                             %rocinante

@@ -89,7 +89,8 @@
                             (bluetooth-configuration (auto-enable? #t)))
 
                    (if (or (string= (ship-name ship) "discovery")
-                           (string= (ship-name ship) "rocinante"))
+                           (string= (ship-name ship) "rocinante")
+                           (string= (ship-name ship) "daban-urnud"))
                        (service noautostart-slim-service-type wonko-slim-config)
                        (service slim-service-type wonko-slim-config))
 
