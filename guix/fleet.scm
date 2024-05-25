@@ -194,9 +194,9 @@
    (media-station #f)
    (grub grub-efi-removable-bootloader) ;; FIXME: change this before updating
    (grub-target '("/mnt/tmp-efi")) ;; think this through if you're initialising from another system
-   (uuids `((vault . "a55e2d24-631d-4409-8310-0b69706cf98d")
-            (efi . "802F-0358")))
-   (net `((wg42 . "10.42.1.33") ;; should be ignored, not part of %fleet
+   (uuids `((vault . "0a59dd11-43cf-4043-bcb6-932ad861fb2b")
+            (efi . "D4BC-780D")))
+   (net `((wg42 . "10.42.1.33")
           (local . "192.168.1.33")))))
 
 (define-public %fleet (list %yggdrasill
