@@ -462,6 +462,8 @@
         ;; disk
         cpio
         parted
+        smartmontools
+        gptfdisk
         ;; files
         coreutils
         recutils
