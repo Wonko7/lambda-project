@@ -87,6 +87,9 @@
   #:use-module (gnu packages libevent)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages code)
+  #:use-module (gnu packages node)
+  #:use-module (gnu packages multiprecision)
+  #:use-module (gnu packages sqlite)
   ;; services
   #:use-module (gnu home services shepherd)
   #:use-module (gnu packages image-viewers)
@@ -414,11 +417,25 @@
         pkg-config
         libev
         openssl
-        ))
+        ;; ocsigen dependencies:
+        gmp
+        postgresql
+        sqlite
+        node
+        sassc
+        unzip
+        gdb
+        gnuplot
+        m4
+        gnu-make
+        pkg-config
+        libev
+        openssl
+        zlib))
 
 (define-public %ocaml-mode-deps
   (list ocaml-utop
-	dune
+        dune
         ocamlformat))
 
 (define-public %ocaml5-world
