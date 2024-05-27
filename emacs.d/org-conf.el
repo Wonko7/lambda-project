@@ -302,27 +302,25 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                 "* RDV %?\n<%<%Y-%m-%d>>\n" t)
 
         ("m" "media")
-        ("mt" "tv" entry "* 📺 %?\n%U"
-         :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ;; ("mt" "tv" entry "* 📺 %?\n%U"
+        ;;  :jump-to-captured t
+        ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
         ("mb" "book" entry "%(let* ((url (substring-no-properties (current-kill 0)))
                                       (details (org-books-get-details url)))
                                  (when details (apply #'org-books-format 1 details)))"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-        ("mb" "bookmark" entry
-         ,(string-join '("* %? :bm:\n"
-                         "#+begin_src shell  :results value output :dir "
-                         "/ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
-                         "  export DISPLAY=:9\n"
-                         "  . $GUIX_EXTRA_PROFILES/desktop/etc/profile\n"
+        ("mt" "tv bookmark" entry
+         ,(string-join '("* 📺 %? :bm:tv:\n"
+                         "#+begin_src shell  :results output :dir "
+                         "/ssh:wonko@enterprise.local:/mnt/trantor/media\n"
                          "  ls -t\n"
                          "#+end_src\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-        ("mB" "book" entry "* 📚 %?\n%U"
-         :jump-to-captured t
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+        ;; ("mB" "book" entry "* 📚 %?\n%U"
+        ;;  :jump-to-captured t
+        ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
         ("mm" "music (is so nice)" entry "* 🎵 %?\n%U"
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
@@ -482,16 +480,15 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
         ("W" "work")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
-        ("We" "ivehte enseignement" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐝 [[roam:ivehte enseignement]] :work:iv:"))
+        ("Wo" "🐫 ocsigen labs" entry "* 🐫 [[roam:ocsigen labs]] :work:ol:\n%U\n%?"
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)
-        ("Wi" "ivehte" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🐝 [[roam:ivehte]] :work:iv:\n%U\n"))
+        ("Wi" "🐝 ivehte" entry "* 🐝 [[roam:ivehte]] :work:iv:\n%U\n%?"
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)
-        ("Wr" "RDV ivehte+" plain ""
-         :if-new (file+head+olp ,my/daily-file ,my/daily-header
-                                (,(string-join  '("📅 [[roam:ivehte]] :work:iv:rdv:"
-                                                 "\n<%<%Y-%m-%d>>\n"))))
+        ("WR" "📅 RDV" entry ,(string-join  '("* 📅 %? :work:rdv:"
+                                              "\n<%<%Y-%m-%d>>\n"))
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)))
 
 ;; FIXME review this:
@@ -706,7 +703,7 @@ If TEXT does not have a range, return nil."
                                   (my/mk-tag tags f :beg 1 :end -1)))
                   (cond ((eq-tag "kl")
                          (mk-tag tags 'my/tag-kl))
-                        ((some #'eq-tag '("work" "ivehte" "iv" "bs"))
+                        ((some #'eq-tag '("work" "ivehte" "iv" "bs" "ol"))
                          (mk-tag tags 'my/tag-work))
                         ((some #'eq-tag '("is" "innerspace" "neop" "3e" "home"))
                          (mk-tag tags 'my/tag-is))
