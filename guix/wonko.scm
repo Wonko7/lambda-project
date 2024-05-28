@@ -457,30 +457,37 @@
        ,(program-file
          "spock"
          (with-imported-modules
-             '((spock))
-           #~(begin
-               (use-modules
-                (spock))
-               (display
-                (spock-say "live long & prosper!"))
-               (newline)))))
-      ("local/bin/repos-deploy"
-       ,(program-file
-         "repos-deploy"
-         (with-imported-modules
-          '((spock)
-            (srfi srfi-1))
+             '((spock)
+               (srfi srfi-1))
            #~(begin
                (use-modules
                 (srfi srfi-1)
                 (spock))
-               (display
-                (spock-say "deploy REPOS"))
-               (newline)
-               (let ((args (drop (program-arguments) 1)))
-                 ;; (if (null? args) ...)
-                 (display
-                  (format #t "~a\n" args)))))))))
+               (let* ((args (drop (program-arguments) 1))
+                      (greeting (if (equal? args '())
+                                    "live long & prosper!"
+                                    (string-concatenate
+                                     (concatenate
+                                      (zip args
+                                           (circular-list " ")))))))
+                 (display (spock-say greeting))
+                 (newline))))))
+      ;; ("local/bin/git-add-remotes"
+      ;;  ,(program-file
+      ;;    "git-add-remotes"
+      ;;    (with-imported-modules
+      ;;        '((srfi srfi-1))
+      ;;      #~(begin
+      ;;          (use-modules
+      ;;           (srfi srfi-1))
+      ;;          (let* ((args (drop (program-arguments) 1))
+      ;;                 (lab? (member "--lab" args))
+      ;;                 (hub? (member "--hub" args))
+      ;;                 (push-remote (member "--push-remote=..." args))
+      ;;                 )
+      ;;            (display
+      ;;             (string-concatenate args)))))))
+      ))
 
    (simple-service
     'secrets-scripts
@@ -583,7 +590,7 @@
         (start (if (ship-media-station? %ship)
                    #~(make-forkexec-constructor
                       (list #$(file-append synergy "/bin/synergyc")
-                             "-f" "yggdrasill.local")
+                            "-f" "yggdrasill.local")
                       #:log-file "herd-logs/synergy.log")
                    #~(make-forkexec-constructor
                       (list #$(file-append synergy "/bin/synergy"))
