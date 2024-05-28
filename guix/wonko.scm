@@ -203,7 +203,12 @@
                                      (ship-gdk-dpi-scale %ship)))
                 ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
                 ("QT_STYLE_OVERRIDE" . "kvantum")
-                ("XDG_CURRENT_DESKTOP" . "qt5ct")))
+                ("XDG_CURRENT_DESKTOP" . "qt5ct")
+                ("FLEET" .
+                 ,(string-concatenate
+                   (concatenate ((@ (srfi srfi-1) zip)
+                                 (map ship-name %fleet)
+                                 (circular-list " ")))))))
              (bashrc
               (list
                (mixed-text-file
@@ -373,6 +378,7 @@
                     (xresources-configuration
                      (ship-font %ship)
                      (ship-rxvt-font-size %ship))))))
+
    (simple-service 'guix-config-files
                    home-files-service-type
                    (map
@@ -407,9 +413,9 @@
                             (guix build utils))
                (let ((guix #$(string-append %home "/.config/guix/current/bin/guix"))
                      (ps   (let ((args (drop (program-arguments) 1)))
-                            (if (null? args)
-                                '#$(profiles->names %profiles)
-                                args))))
+                             (if (null? args)
+                                 '#$(profiles->names %profiles)
+                                 args))))
                  (map (lambda (p)
                         (display (spock-say
                                   (string-append "build PROFILE " p))
