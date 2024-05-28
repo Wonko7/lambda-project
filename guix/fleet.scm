@@ -196,12 +196,13 @@
    (grub-target '("/mnt/tmp-efi")) ;; think this through if you're initialising from another system
    (uuids `((vault . "0a59dd11-43cf-4043-bcb6-932ad861fb2b")
             (efi . "D4BC-780D")))
-   (net `((wg42 . "10.42.1.33")
-          (local . "192.168.1.33")))))
+   (net `((wg42 . "10.42.1.1")
+          (local . "192.168.1.1")))))
 
 (define-public %fleet (list %yggdrasill
                             %rocinante
-                            %enterprise))
+                            %enterprise
+                            %daban-urnud))
 
 (define-public (hostname->ship hn)
   (if (not hn)
