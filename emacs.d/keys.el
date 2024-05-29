@@ -107,10 +107,23 @@
   "g." #'magit-file-dispatch
   "gg" #'magit-status
   "gb" #'magit-blame
+  "graa" (lambda () (interactive) (async-shell-command "git-add-remotes -lf"))
+  "graf" (lambda () (interactive) (async-shell-command "git-add-remotes -f"))
+  "gral" (lambda () (interactive) (async-shell-command "git-add-remotes -l"))
+  "grah" (lambda () (interactive) (async-shell-command "git-add-remotes -h"))
+  "grap" (lambda ()
+           (interactive)
+           (shell-command-to-string "git remote")
+           (let ((pr (consult--read
+                      (remove "" (string-split (shell-command-to-string "git remote") "\n"))
+                          :prompt "set push remote: "
+                          :sort nil
+                          :require-match t)))
+             (async-shell-command (concat "git-add-remotes --push-remote=" pr))))
 
   ;; roam
   ;; insert stuff
-  "ie" #'emoji-search         ;;  :desc "Emoji"
+  "ie" #'emoji-search                 ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
   ;; rm stuff
