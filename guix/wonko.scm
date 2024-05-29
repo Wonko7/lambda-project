@@ -475,55 +475,63 @@
       ("local/bin/git-add-remotes"
        ,(program-file
          "git-add-remotes"
-         (with-imported-modules
-             '((srfi srfi-1)
-               (srfi srfi-37))
-           #~(begin
-               (use-modules
-                (srfi srfi-1)
-                (srfi srfi-37))
-               (let* ((args (args-fold (cdr (program-arguments))
-                                       (let ((display-and-exit-proc
-                                              (lambda (msg)
-                                                (lambda (opt name arg loads)
-                                                  (display msg)
-                                                  (quit)))))
-                                         (list (option '(#\p "push_remote") #t #f
-                                                       (lambda (opt name arg acc)
-                                                         (alist-cons 'push-remote arg acc)))
-                                               (option '(#\f "fleet") #f #f
-                                                       (lambda (opt name arg acc)
-                                                         (alist-cons 'fleet #t acc)))
-                                               (option '(#\l "lab") #f #f
-                                                       (lambda (opt name arg acc)
-                                                         (alist-cons 'lab #t acc)))
-                                               (option '(#\h "hub") #f #f
-                                                       (lambda (opt name arg acc)
-                                                         (alist-cons 'hub #t acc)))
-                                               (option '(#\r "repo") #t #f
-                                                       (lambda (opt name arg acc)
-                                                         (alist-cons 'repo arg acc)))))
-                                       (lambda (opt name arg loads)
-                                         (error "Unrecognized option `~A'" name))
-                                       (lambda (op loads) (cons op loads))
-                                       '()))
-                      (repo (or (assoc-ref args 'repo)
-                                (getcwd)))
-                      (git #$(file-append git "/bin/git"))
-                      (fleet-remotes (list #$@(map (lambda (s) (ship-name s)) %fleet))))
-
-                 (display (assoc-ref args 'push-remote))
-                 (newline)
-                 (display (assoc-ref args 'fleet))
-                 (newline)
-                 (display repo)
-                 (newline)
-                 (display (basename repo))
-                 (newline)
-                 (display fleet-remotes)
-                 (newline)
-                 )))))
-      ))
+         #~(begin
+             (use-modules
+              (srfi srfi-1)
+              (srfi srfi-37)
+              (ice-9 popen)
+              (ice-9 textual-ports))
+             (let* ((args (args-fold (cdr (program-arguments))
+                                     (let ((display-and-exit-proc
+                                            (lambda (msg)
+                                              (lambda (opt name arg loads)
+                                                (display msg)
+                                                (quit)))))
+                                       (list (option '(#\p "push-remote") #t #f
+                                                     (lambda (opt name arg acc)
+                                                       (alist-cons 'push-remote arg acc)))
+                                             (option '(#\f "fleet") #f #f
+                                                     (lambda (opt name arg acc)
+                                                       (alist-cons 'fleet #t acc)))
+                                             (option '(#\l "lab") #f #f
+                                                     (lambda (opt name arg acc)
+                                                       (alist-cons 'lab #t acc)))
+                                             (option '(#\h "hub") #f #f
+                                                     (lambda (opt name arg acc)
+                                                       (alist-cons 'hub #t acc)))
+                                             (option '(#\r "repo") #t #f
+                                                     (lambda (opt name arg acc)
+                                                       (alist-cons 'repo arg acc)))))
+                                     (lambda (opt name arg loads)
+                                       (error "Unrecognized option `~A'" name))
+                                     (lambda (op loads) (cons op loads))
+                                     '()))
+                    (repo (or (assoc-ref args 'repo)
+                              (getcwd)))
+                    (name (basename repo))
+                    (git #$(file-append git "/bin/git"))
+                    (fleet-remotes (list #$@(map (lambda (s) (ship-name s)) %fleet))))
+               (chdir repo)
+               (when (assoc-ref args 'fleet)
+                 (map (lambda (rm)
+                        (system
+                         (string-append git " remote add " rm " " rm ".local:" repo))
+                        (newline))
+                      fleet-remotes))
+               (when (assoc-ref args 'lab)
+                 (system
+                  (string-append git " remote add lab git@gitlab.com:wonko7/" name)))
+               (when (assoc-ref args 'hub)
+                 (system
+                  (string-append git " remote add hub git@github.com:wonko7/" name)))
+               (when (assoc-ref args 'push-remote)
+                 (let* ((pipe (open-input-pipe
+                               (string-append git " branch --show-current")))
+                        (branch (string-drop-right (get-string-all pipe) 1))
+                        (remote (assoc-ref args 'push-remote)))
+                   (system
+                    (string-append git " push -u " remote " " branch ":inbox-"
+                                   #$(ship-name %ship) "-" branch))))))))))
 
    (simple-service
     'secrets-scripts
