@@ -472,21 +472,57 @@
                                            (circular-list " ")))))))
                  (display (spock-say greeting))
                  (newline))))))
-      ;; ("local/bin/git-add-remotes"
-      ;;  ,(program-file
-      ;;    "git-add-remotes"
-      ;;    (with-imported-modules
-      ;;        '((srfi srfi-1))
-      ;;      #~(begin
-      ;;          (use-modules
-      ;;           (srfi srfi-1))
-      ;;          (let* ((args (drop (program-arguments) 1))
-      ;;                 (lab? (member "--lab" args))
-      ;;                 (hub? (member "--hub" args))
-      ;;                 (push-remote (member "--push-remote=..." args))
-      ;;                 )
-      ;;            (display
-      ;;             (string-concatenate args)))))))
+      ("local/bin/git-add-remotes"
+       ,(program-file
+         "git-add-remotes"
+         (with-imported-modules
+             '((srfi srfi-1)
+               (srfi srfi-37))
+           #~(begin
+               (use-modules
+                (srfi srfi-1)
+                (srfi srfi-37))
+               (let* ((args (args-fold (cdr (program-arguments))
+                                       (let ((display-and-exit-proc
+                                              (lambda (msg)
+                                                (lambda (opt name arg loads)
+                                                  (display msg)
+                                                  (quit)))))
+                                         (list (option '(#\p "push_remote") #t #f
+                                                       (lambda (opt name arg acc)
+                                                         (alist-cons 'push-remote arg acc)))
+                                               (option '(#\f "fleet") #f #f
+                                                       (lambda (opt name arg acc)
+                                                         (alist-cons 'fleet #t acc)))
+                                               (option '(#\l "lab") #f #f
+                                                       (lambda (opt name arg acc)
+                                                         (alist-cons 'lab #t acc)))
+                                               (option '(#\h "hub") #f #f
+                                                       (lambda (opt name arg acc)
+                                                         (alist-cons 'hub #t acc)))
+                                               (option '(#\r "repo") #t #f
+                                                       (lambda (opt name arg acc)
+                                                         (alist-cons 'repo arg acc)))))
+                                       (lambda (opt name arg loads)
+                                         (error "Unrecognized option `~A'" name))
+                                       (lambda (op loads) (cons op loads))
+                                       '()))
+                      (repo (or (assoc-ref args 'repo)
+                                (getcwd)))
+                      (git #$(file-append git "/bin/git"))
+                      (fleet-remotes (list #$@(map (lambda (s) (ship-name s)) %fleet))))
+
+                 (display (assoc-ref args 'push-remote))
+                 (newline)
+                 (display (assoc-ref args 'fleet))
+                 (newline)
+                 (display repo)
+                 (newline)
+                 (display (basename repo))
+                 (newline)
+                 (display fleet-remotes)
+                 (newline)
+                 )))))
       ))
 
    (simple-service
