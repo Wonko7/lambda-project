@@ -517,7 +517,10 @@
                         (system
                          (string-append git " remote add " rm " " rm ".local:" repo))
                         (newline))
-                      fleet-remotes))
+                      fleet-remotes)
+                 (string-set! repo 0 #\@) ;; WARNING: don't use repo after this!
+                 (system
+                  (string-append git " remote add discovery-usb /mnt/discovery/_live/" repo)))
                (when (assoc-ref args 'lab)
                  (system
                   (string-append git " remote add lab git@gitlab.com:wonko7/" name)))
