@@ -160,4 +160,17 @@
 (setq gptel-api-key (lambda ()
                       (auth-source-pass-get 'secret "web/openai/token/pandora")))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sql
+
+(general-evil-define-key '(normal) sql-mode-map
+  :prefix "RET"
+  "RET" #'sql-send-paragraph)
+
+(setq sql-postgres-login-params '((user :default "wonko")
+                                  (database :default "maxi_passat")
+                                  (server :default "localhost")
+                                  (port :default 3000)))
+
 (provide 'conf/dev)
