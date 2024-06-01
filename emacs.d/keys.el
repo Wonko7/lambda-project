@@ -23,6 +23,9 @@
   "vG" #'vertico-grid-mode
   "vu" #'vertico-unobtrusive-mode
 
+  ;; yank
+  "yp" (lambda () (interactive) (kill-new (buffer-file-name)))
+
   ;; emacs apps
   "ab"  #'ibuffer
   "ac"  #'calc
@@ -87,6 +90,7 @@
   "rd-" #'org-roam-dailies-find-directory     ;;  :desc "Find directory"
 
   ;; projectile
+  "pa"  #'projectile-add-known-project
   "p'"  #'projectile-find-file
   "pgf" #'projectile-find-file-dwim
   "pp"  #'projectile-switch-project
