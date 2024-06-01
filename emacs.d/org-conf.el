@@ -32,31 +32,30 @@
   '((t (:inherit default :foreground "brown")))
   "active todo")
 
-(setq org-directory "/data/org/"
-      org-startup-indented t
+(setq org-startup-indented t
       ;; FIXME fix this with guix magic:
       org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
       org-startup-folded 'content
       org-todo-keywords
       '((sequence
-         "NEXT(n/!)"                ;; A task that recuring
-         "TODO(t)"                  ;; A task that needs doing & is ready to do
-         "PROJ(p)"                  ;; A project, which usually contains other tasks
-         "GOGO(g/!)"                ;; A task that is in progress
-         "WAIT(w/!)"                ;; Something external is holding up this task
-         "HOLD(h/!)"                ;; This task is paused/on hold because of me
-         "ADD(a)"                   ;; Add
-         "FIX(f)"                   ;; Fix
-         "BUG(b)"                   ;; Bug
+         "NEXT(n/!)" ;; A task that recuring
+         "TODO(t)"   ;; A task that needs doing & is ready to do
+         "PROJ(p)"   ;; A project, which usually contains other tasks
+         "GOGO(g/!)" ;; A task that is in progress
+         "WAIT(w/!)" ;; Something external is holding up this task
+         "HOLD(h/!)" ;; This task is paused/on hold because of me
+         "ADD(a)"    ;; Add
+         "FIX(f)"    ;; Fix
+         "BUG(b)"    ;; Bug
          "|"
-         "DONE(d/!)"                ;; Task successfully completed
-         "KILL(k)")                 ;; Task was cancelled, aborted or is no longer applicable
+         "DONE(d/!)" ;; Task successfully completed
+         "KILL(k)")  ;; Task was cancelled, aborted or is no longer applicable
         (sequence
-         "[ ](T)"                   ;; A task that needs doing
-         "[-](G)"                   ;; Task is in progress
-         "[?](W)"                   ;; Task is being held up or paused
+         "[ ](T)" ;; A task that needs doing
+         "[-](G)" ;; Task is in progress
+         "[?](W)" ;; Task is being held up or paused
          "|"
-         "[X](D)"))                 ;; Task was completed
+         "[X](D)")) ;; Task was completed
       org-todo-keyword-faces
       '(("[-]"  . +org-todo-active)
         ("NEXT" . +org-todo-active)
@@ -79,7 +78,7 @@
       org-tags-column                     -80
       org-agenda-tags-column              my/org-agenda-tags-column
       org-edit-timestamp-down-means-later t
-      cfw:org-agenda-schedule-args        '(:timestamp))
+      org-use-sub-superscripts            "{}")
 
 (defun my/reset-tag-spacing-to-zero-org-tags ()
   (interactive)
@@ -515,6 +514,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
 (setq org-agenda-span 15)
 
 (require 'calfw-org)
+
+(setq cfw:org-agenda-schedule-args '(:timestamp))
 
 ;; https://github.com/kiwanami/emacs-calfw/issues/111
 ;; temporary fix:
