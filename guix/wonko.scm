@@ -482,26 +482,21 @@
               (ice-9 popen)
               (ice-9 textual-ports))
              (let* ((args (args-fold (cdr (program-arguments))
-                                     (let ((display-and-exit-proc
-                                            (lambda (msg)
-                                              (lambda (opt name arg loads)
-                                                (display msg)
-                                                (quit)))))
-                                       (list (option '(#\p "push-remote") #t #f
-                                                     (lambda (opt name arg acc)
-                                                       (alist-cons 'push-remote arg acc)))
-                                             (option '(#\f "fleet") #f #f
-                                                     (lambda (opt name arg acc)
-                                                       (alist-cons 'fleet #t acc)))
-                                             (option '(#\l "lab") #f #f
-                                                     (lambda (opt name arg acc)
-                                                       (alist-cons 'lab #t acc)))
-                                             (option '(#\h "hub") #f #f
-                                                     (lambda (opt name arg acc)
-                                                       (alist-cons 'hub #t acc)))
-                                             (option '(#\r "repo") #t #f
-                                                     (lambda (opt name arg acc)
-                                                       (alist-cons 'repo arg acc)))))
+                                     (list (option '(#\p "push-remote") #t #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'push-remote arg acc)))
+                                           (option '(#\f "fleet") #f #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'fleet #t acc)))
+                                           (option '(#\l "lab") #f #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'lab #t acc)))
+                                           (option '(#\h "hub") #f #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'hub #t acc)))
+                                           (option '(#\r "repo") #t #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'repo arg acc))))
                                      (lambda (opt name arg loads)
                                        (error "Unrecognized option `~A'" name))
                                      (lambda (op loads) (cons op loads))
