@@ -51,13 +51,20 @@
   ;; utils
   "zz"  (lambda () (interactive) (async-shell-command my/lock-cmd))
 
-  ;; org
-  "oa" (lambda () (interactive) (org-agenda nil "z"))
-  "oc" #'cfw:open-org-calendar ;; FIXME use this as date picker?
   ;; buffers
   "br" #'rename-buffer
   "bk" #'kill-this-buffer
   "bn" #'evil-buffer-new
+
+  ;; org
+  "oa" (lambda () (interactive) (org-agenda nil "z"))
+  "oc" #'cfw:open-org-calendar ;; FIXME use this as date picker?
+  "oib" (lambda ()
+          (interactive)
+          (execute-kbd-macro (kbd "^wD"))
+          (org-web-tools-insert-link-for-url (current-kill 0 t))
+          (org-id-get-create)
+          (evil-next-line 2))
 
   ;; roam
   "rD" #'org-roam-demote-entire-buffer
@@ -120,12 +127,11 @@
            (shell-command-to-string "git remote")
            (let ((pr (consult--read
                       (remove "" (string-split (shell-command-to-string "git remote") "\n"))
-                          :prompt "set push remote: "
-                          :sort nil
-                          :require-match t)))
+                      :prompt "set push remote: "
+                      :sort nil
+                      :require-match t)))
              (async-shell-command (concat "git-add-remotes --push-remote=" pr))))
 
-  ;; roam
   ;; insert stuff
   "ie" #'emoji-search                 ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
@@ -153,14 +159,6 @@
   "wX" #'buffer-expose
   "ws" #'switch-window-then-swap-buffer
   "wo" #'other-window
-  "oBD" (lambda ()
-          (interactive)
-          (execute-kbd-macro (kbd "^wD"))
-          (org-web-tools-insert-link-for-url (current-kill 0 t))
-          (org-id-get-create)
-          (evil-next-line 2))
-  ;; "oBD" (lambda () (interactive) (execute-kbd-macro (kbd "^wDSPC:org-web-tools-insert-link-for-url<return>SPCrI^w")))
-  ;; misc?
   "zai" #'gptel-send
   "zl"  #'scroll-lock-mode
   "z''" (lambda () (interactive) (async-shell-command "dunstctl set-paused toggle"))
