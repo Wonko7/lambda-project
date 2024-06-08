@@ -40,6 +40,8 @@
         missing-newline-at-eof))
 (global-whitespace-mode 1)
 
+(setq help-enable-variable-value-editing t)
+
 ;; stop touching my stuff (see perfect window placement):
 (setq display-buffer-base-action
       '((display-buffer-reuse-window display-buffer-same-window)
