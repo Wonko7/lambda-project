@@ -161,9 +161,10 @@
         ;; emacs-vdiff-magit
 
         ;; apps
-        emacs-elfeed
-        emacs-elfeed-org
-        emacs-elfeed-goodies
+        ;; emacs-elfeed
+        ;; emacs-elfeed-org
+        ;; emacs-elfeed-goodies
+        emacs-powerline
         emacs-circe
         emacs-pass
         emacs-magit

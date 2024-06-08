@@ -506,4 +506,12 @@
 ;;   "Keymap for `ement-room-list' buffers.
 ;; See also `ement-room-list-button-map'.")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; gnus
+
+(general-evil-define-key '(normal) gnus-group-mode-map
+  "u" #'gnus-group-unsubscribe
+  "S" #'gnus-group-unsubscribe
+  "s" #'gnus-group-subscribe)
+
 (provide 'conf/keys)

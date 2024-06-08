@@ -40,5 +40,42 @@
 
 (require 'mastodon)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; email
+
+(require 'gnus)
+(require 'gnus-topic)
+
+(let ((gnus "/data/org/emacs/gnus.el"))
+ (if (f-file-p gnus)
+     (load-file gnus)))
+
+(setq gnus-use-cache t
+      gnus-save-newsrc-file nil
+      gnus-read-newsrc-file nil
+      ;; gnus-article-over-scroll t
+      ;; gnus-article-skip-boring t
+      gnus-asynchronous t)
+
+(setq gnus-select-method
+      '(nnimap "gmail"
+	       (nnimap-address "imap.gmail.com")  ; it could also be imap.googlemail.com if that's your server.
+	       (nnimap-server-port "imaps")
+	       (nnimap-stream ssl)))
+
+(setq smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+
+(add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
+
+(setq gnus-topic-topology '(("Gnus" visible)
+                            (("tech" visible))
+                            (("dev" visible))
+                            (("comics" visible))
+                            (("work" visible))
+                            (("gmail" visible nil nil))))
+
+(require 'evil-collection-gnus)
 
 (provide 'conf/communication)

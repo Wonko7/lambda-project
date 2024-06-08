@@ -304,7 +304,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; colors & transparency
 
-;; (set-frame-parameter nil 'alpha-background 50)
+;; (set-frame-parameter (selected-frame) 'alpha-background 50)
+;; (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
 ;; (frame-parameter nil alpha-background)
 (setq exwm-systemtray-background-color 'workspace-background)
 
@@ -382,6 +383,10 @@
 ;; auto start workspaces:
 
 (defvar ws/auto-start-state (-repeat exwm-workspace-number t))
+;; disable auto run for nameless projects:
+(setf (nth 5 ws/auto-start-state) nil)
+(setf (nth 3 ws/auto-start-state) nil)
+(setf (nth 0 ws/auto-start-state) nil)
 
 (defun ws/check-and-mark-auto-start-state (i)
   (let ((state (nth i ws/auto-start-state)))
@@ -400,19 +405,25 @@
           ((run-init-p 7)
            (my/init-org))
           ((run-init-p 6)
-           (require 'conf/elfeed "~/.emacs.d/elfeed.el")
-           (elfeed))
+           (gnus))
+          ((run-init-p 5)
+           (projectile-switch-project))
           ((run-init-p 4)
            (async-shell-command "firefox"))
           ((run-init-p 3)
            (projectile-switch-project))
           ((run-init-p 2)
-           (org-roam-node-open (org-roam-node-from-title-or-alias "Gotham"))
+           (org-roam-node-open
+            (org-roam-node-from-title-or-alias "3 body problem 2024? netflix us"))
            (delete-other-windows)
            (evil-window-vsplit)
            (project-shell))
           ((run-init-p 1)
-           (shell)))))
+           (delete-other-windows)
+           (evil-window-vsplit)
+           (shell)
+           (bluetooth-list-devices)
+           (other-window 1)))))
 
 (defun ws/force-run-auto-start ()
   (interactive)
