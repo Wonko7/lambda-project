@@ -136,18 +136,18 @@
                                 (modify-services %desktop-services
                                   (delete gdm-service-type)
                                   (elogind-service-type config =>
-                                   (elogind-configuration
-                                    (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                                    (handle-lid-switch lid-switch-action)
-                                    (handle-lid-switch-docked  lid-switch-action)
-                                    (handle-lid-switch-external-power lid-switch-action))))
+                                                        (elogind-configuration
+                                                         (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                                                         (handle-lid-switch lid-switch-action)
+                                                         (handle-lid-switch-docked  lid-switch-action)
+                                                         (handle-lid-switch-external-power lid-switch-action))))
                                 %base-services)
              (guix-service-type config =>
                                 (guix-configuration
                                  (discover? #t)
                                  (substitute-urls
                                   (cons* "https://substitutes.nonguix.org"
-                                          %default-substitute-urls))
+                                         %default-substitute-urls))
                                  (authorized-keys
                                   (append
                                    (list (local-file "./data/substitutes/enterprise.pub")
@@ -245,7 +245,11 @@
                 (mount-point "/mnt/vault")
                 (device "/dev/mapper/vault")
                 (type "btrfs")
-                (dependencies mapped-devices)))
+                (dependencies mapped-devices))
+              (file-system
+                (mount-point "/tmp")
+                (device "none")
+                (type "tmpfs")))
         (map btrfs-vault-subvol
              `(("/" . "guix-root")
                ("/home" . "guix-home")
@@ -257,8 +261,8 @@
 
     (swap-devices
      (list (swap-space
-            (target "/mnt/vault/swap/swapfile")
-            (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                  file-systems)))))))
+             (target "/mnt/vault/swap/swapfile")
+             (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                   file-systems)))))))
 
 (ship->os %ship)
