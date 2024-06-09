@@ -28,42 +28,20 @@
 
 (use-package-modules xorg)
 
-(define %rocinante-wonko-home
+(define %yggdrasill-wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (simple-service
-      'config-files
-      home-files-service-type
-      `((".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 96")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.7")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Enabled' 1")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Drag Lock Enabled' 1")))))))
-     %wonko-vanilla-services)))
+   (inherit %highdpi-wonko-home)))
 
 (operating-system
   (inherit %laptop-os)
   (host-name "rocinante")
-  (services (cons* (service slim-service-type
-                            (slim-configuration
-                             (display ":10")
-                             (vt "vt10")
-                             (auto-login? #t)
-                             (default-user (crew-name %tina))
-                             (xorg-configuration (xorg-configuration
-                                                  (keyboard-layout (crew-kb %tina))))))
-                   (service noautostart-slim-service-type wonko-slim-config)
+  (services (cons* (service slim-service-type wonko-slim-config)
                    (service guix-home-service-type
-                            `(("wonko" ,%rocinante-wonko-home)
-                              ("tina" ,%tina-home)))
+                            `(("wonko" ,%yggdrasill-wonko-home)))
                    %laptop-services))
   (mapped-devices
    (list (mapped-device
-          (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
+          (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
           (target "vault")
           (type luks-device-mapping))))
 
@@ -72,7 +50,7 @@
                   (cons*
                    (file-system
                      (mount-point "/boot")
-                     (device (uuid "918C-B182"
+                     (device (uuid "77DE-0AE2"
                                    'fat32))
                      (type "vfat"))
                    (file-system

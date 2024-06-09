@@ -629,8 +629,84 @@
       dunst
       ;; yes also man pages plz
       man-db)))
-
    (services %wonko-services)))
+
+(define-public %vanilla-wonko-services
+  (cons*
+   (service home-bash-service-type %wonko-bash-config)
+   (simple-service
+    'config-files
+    home-files-service-type
+    `(;; package this better;
+      (".config/feh/themes"
+       ,(let ((fsz "15"))
+          (mixed-text-file
+           "feh_symlink_name_is_theme_name"
+           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+           " --menu-font JetBrainsMono-Regular/" fsz
+           " --font JetBrainsMono-Regular/" fsz "\n")))
+      (".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/rocinante.xmodmap"))) ;; FIXME rename this too
+      (".Xresources"
+       ,(plain-file "Xresources" (xresources-configuration %font 10)))
+      (".config/picom/picom.conf"
+       ,(plain-file "picom.conf" (picom-configuration 10)))
+      (".config/dunst/dunstrc"
+       ,(plain-file "dunstrc"
+                    (dunst-configuration %font 12 300)))))
+   %wonko-services))
+
+(define-public %vanilla-wonko-home
+  (home-environment
+   (inherit %wonko-home)
+   (services %vanilla-wonko-services)))
+
+(define-public %highdpi-wonko-home
+  (home-environment
+   (inherit %wonko-home)
+   (services
+    (cons*
+     (service
+      home-bash-service-type
+      (home-bash-configuration
+       (inherit %wonko-bash-config)
+       (environment-variables
+        (cons*
+         '("GDK_SCALE" . "1")
+         '("GDK_DPI_SCALE" . "1.5")
+         %wonko-env))))
+     (simple-service
+      'config-files
+      home-files-service-type
+      `((".x-config"
+         ,(program-file
+           "x-config"
+           (cmd+arg->script
+            `((xrandr . "--dpi 288")
+              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
+              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0")))))
+        ;; package this better;
+        (".config/feh/themes"
+         ,(let ((fsz "20"))
+            (mixed-text-file
+             "feh_symlink_name_is_theme_name"
+             "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+             " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+             " --menu-font JetBrainsMono-Regular/" fsz
+             " --font JetBrainsMono-Regular/" fsz "\n")))
+        (".config/x-config/ship.xmodmap"
+         ,(local-file
+           (string-append %lambda-project "/misc/rocinante.xmodmap")))
+        (".Xresources"
+         ,(plain-file "Xresources" (xresources-configuration %font 20)))
+        (".config/picom/picom.conf"
+         ,(plain-file "picom.conf" (picom-configuration 25)))
+        (".config/dunst/dunstrc"
+         ,(plain-file "dunstrc"
+                      (dunst-configuration %font 12 300)))))
+     %wonko-services))))
 
 (define-public %tina-home
   (home-environment
