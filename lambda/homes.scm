@@ -73,17 +73,9 @@
  (gnu packages man)
 
  ;; my stuff
- (defs)
- (fleet)
- (spock)
- (dotfiles)
- (pkgs)
- (stateful-prelude))
-
-(display
- (spock-say (string-append "wonko's HOME for " (ship-name %ship)))
- (current-error-port))
-(newline (current-error-port))
+ (lambda spock)
+ (lambda dotfiles)
+ (lambda pkgs))
 
 (define %term-cmd "urxvt")
 
@@ -131,11 +123,10 @@
     ("ip" . "ip -c -h")))
 
 (define-public %profiles
-  `(("communication" . ,%communication-world) ;; 18786ae50272627a665a160bc5becc587957d8a3
+  `(("communication" . ,%communication-world)
     ("desktop" . ,%desktop-world)
     ("utils" . ,%utils-world)
     ("web" . ,%web-world)
-    ("zonked" . ,(list onionshare-cli)))) ;; --commit=0f0c1c66f4d0bb32f2f5c74cc15b472fbd30e6c1
 
 (define-public (profiles->names ps)
   (map car ps))
