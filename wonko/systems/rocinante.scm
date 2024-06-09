@@ -97,14 +97,7 @@
           (type luks-device-mapping))))
 
   (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                            (let-values (((mount-p sv-name) (car+cdr args)))
-                                              (file-system
-                                                (device "/dev/mapper/vault")
-                                                (mount-point mount-p)
-                                                (type "btrfs")
-                                                (options (string-append "subvol=_live/@"
-                                                                        sv-name))
-                                                (needed-for-boot? (equal? "/" mount-p)))))))
+                                            (make-vault-subvolume args mapped-devices))))
                   (cons*
                    (file-system
                      (mount-point "/boot")
@@ -122,11 +115,5 @@
                      (type "tmpfs")
                      (check? #f))
                    (append
-                    (map btrfs-vault-subvol
-                         `(("/" . "guix-root")
-                           ("/home" . "guix-home")
-                           ("/code" . "code")
-                           ("/data" . "data")
-                           ("/work" . "work")
-                           ("/junkyard" . "junkyard")))
+                    (make-vault-subvolumes mapped-devices)
                     %base-file-systems)))))

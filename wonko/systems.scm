@@ -50,17 +50,25 @@
                      %default-channels))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; fuck me
+;; vault subvolumes
 
-(define-public (make-vault-subvolume args)
-  (let-values (((mount-p sv-name) (car+cdr args)))
-    (file-system
-      (device "/dev/mapper/vault")
-      (mount-point mount-p)
-      (type "btrfs")
-      (options (string-append "subvol=_live/@"
-                              sv-name))
-      (needed-for-boot? (equal? "/" mount-p)))))
+(define-public (make-vault-subvolumes mapped-devices)
+  (map (lambda (args)
+         (let-values (((mount-p sv-name) (car+cdr args)))
+           (file-system
+             (device "/dev/mapper/vault")
+             (mount-point mount-p)
+             (type "btrfs")
+             (options (string-append "subvol=_live/@"
+                                     sv-name))
+             (needed-for-boot? (equal? "/" mount-p))
+             (dependencies mapped-devices))))
+       `(("/" . "guix-root")
+         ("/home" . "guix-home")
+         ("/code" . "code")
+         ("/data" . "data")
+         ("/work" . "work")
+         ("/junkyard" . "junkyard"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services
@@ -130,10 +138,10 @@
                                  %default-substitute-urls))
                          (authorized-keys
                           (append
-                           (list (local-file "./data/substitutes/enterprise.pub")
-                                 (local-file "./data/substitutes/rocinante.pub")
-                                 (local-file "./data/substitutes/yggdrasill.pub")
-                                 (local-file "./data/substitutes/nonguix.pub"))
+                           (list (local-file "data/substitutes/enterprise.pub")
+                                 (local-file "data/substitutes/rocinante.pub")
+                                 (local-file "data/substitutes/yggdrasill.pub")
+                                 (local-file "data/substitutes/nonguix.pub"))
                            %default-authorized-guix-keys)))))))
 
 (define-public %laptop-os
@@ -156,7 +164,6 @@
       ;;
       ;; (bootloader grub-efi-removable-bootloader)
       ;; (targets '("/mnt/tmp-efi/"))
-      ;; (bootloader grub-efi-bootloader)
       (bootloader grub-efi-bootloader)
       (targets    '("/boot"))
       (keyboard-layout keyboard-layout)))
