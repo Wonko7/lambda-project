@@ -65,7 +65,6 @@
         (".config/x-config/ship.xmodmap"
          ,(local-file
            (string-append %lambda-project "/misc/rocinante.xmodmap")))
-        FIXME
         (".Xresources"
          ,(plain-file "Xresources" (xresources-configuration %font 10)))
         (".config/picom/picom.conf"
