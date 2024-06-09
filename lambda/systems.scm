@@ -14,8 +14,11 @@
   #:use-modules (lambda crew)
   #:use-modules (lambda pkgs)
   #:use-modules (lambda xorg)
-  #:export (laptop-os
-            wonko-slim-config))
+  #:export (%laptop-os
+            wonko-slim-config
+            %channels
+            %laptop-services
+            %laptop-fstab))
 
 
 (use-service-modules shepherd xorg sddm desktop networking ssh xorg)
@@ -179,10 +182,7 @@
       (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
-    (issue (string-append (spock-say "live long & prosper!") "\n   o===8 ["
-                          (ship-name ship)
-                          "] project-lambda / GNU Guix / Fat Cock Enthusiaste 8===o\n\n"))
-
+    (issue (spock-say "live long & prosper!"))
     (users (map crew->user-account %crew))
 
     (packages (append
@@ -192,9 +192,7 @@
                %os-net-world
                %os-misc-world
                %base-packages))
-
     (services %laptop-services)
-
     (setuid-programs
      (cons*
       ;; FIXME dumpcap?
@@ -202,11 +200,11 @@
                                             "/bin/brightnessctl")))
       %setuid-programs))
 
-    (mapped-devices
-     (list (mapped-device
-            (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
-            (target "vault")
-            (type luks-device-mapping))))
+    ;; (mapped-devices
+    ;;  (list (mapped-device
+    ;;         (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
+    ;;         (target "vault")
+    ;;         (type luks-device-mapping))))
 
     (file-systems %laptop-fstab)
 

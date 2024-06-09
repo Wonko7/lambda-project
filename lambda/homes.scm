@@ -131,24 +131,76 @@
 (define-public (profiles->names ps)
   (map car ps))
 
-(home-environment
- (packages
-  (append
-   %emacs-world
-   %ocaml-with-opam-world
-   %ocaml-mode-deps
-   %crypto-world
-   %xorg-world
-   %fonts-world
-   %vcs-world
-   (list
-    ;; services
-    picom
-    synergy
-    dunst
-    ;; yes also man pages plz
-    man-db)))
+;;;;;;;;;;;;;
 
+(define-public %wonko-env
+  `(("HISTFILESIZE" . "100000")
+    ("HISTSIZE" . "100000")
+    ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
+    ("HISTCONTROL" . "ignorespace")
+    ("PAGER" . "")
+    ("DICTIONARY" . "en_GB-ise") ;; hunspell
+    ("DISPLAY" . ":9")
+    ("BLOCK_SIZE" . "human-readable")
+    ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-home/profile/lib")
+    ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
+    ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
+    ("PATH" . "$HOME/local/bin:$PATH")
+    ("PATH" . "./_opam/bin:$PATH")
+    ("GUIX_EXTRA_PROFILES" .
+     ,(string-append "$HOME" %guix-extra-profiles-dir))
+    ("GUILE_LOAD_PATH" .
+     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project))
+    ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
+    ("LANG" . "en_GB.utf8")
+    ("PASSWORD_STORE_DIR" . "/data/pass")
+    ("PASSWORD_STORE_GENERATED_LENGTH" . "33")
+    ;; ("PS1" . "is in bashrc because I want it after source /etc/bashrc")
+    ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
+    ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
+    ("QT_STYLE_OVERRIDE" . "kvantum")
+    ("XDG_CURRENT_DESKTOP" . "qt5ct")
+    ;; ("FLEET" .
+    ;;  ,(string-concatenate
+    ;;    (concatenate ((@ (srfi srfi-1) zip)
+    ;;                  (map ship-name %fleet)
+    ;;                  (circular-list " ")))))
+    ))
+
+(define-public %wonko-bash-config
+  (home-bash-configuration
+   (guix-defaults? #f)
+   (aliases %aliases)
+   (environment-variables %wonko-env)
+   (bashrc
+    (list
+     (mixed-text-file
+      "bash-options"
+      "# Source the system-wide file.\n"
+      "[ -f /etc/bashrc ] && source /etc/bashrc\n")
+     (mixed-text-file
+      "interactive-shell-bash-options"
+      "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
+      "shopt -s autocd\n"
+      "shopt -s extglob\n"
+      "shopt -s globstar\n"
+      "shopt -s nocaseglob\n"
+      ;; this affects emacs' completion:
+      "bind 'set completion-ignore-case on' 2> /dev/null\n"
+      "[ x$TERM = xtramp ] && return\n"
+      "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
+      " \\A \\u@\\h "
+      "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
+      "\\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+      "set -o vi\n"
+      "bind '\"jj\":vi-movement-mode'\n")))))
+
+(define-public (per-hostname-files hostname)
+      (".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/" hostname ".xmodmap"))))
+
+(define-public %wonko-services
  (services
   (list
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
@@ -160,68 +212,7 @@
                     ;;  "shopt -s globstar\n"
                     ;;  "shopt -s nocaseglob\n")
                     (bash-profile-source-profiles (profiles->names %profiles))))
-   (service home-bash-service-type
-            (home-bash-configuration
-             (guix-defaults? #f)
-             (aliases %aliases)
-             (environment-variables
-              `(("HISTFILESIZE" . "100000")
-                ("HISTSIZE" . "100000")
-                ("HISTFILE" . "$XDG_CACHE_HOME/.bash_history")
-                ("HISTCONTROL" . "ignorespace")
-                ("PAGER" . "")
-                ("DICTIONARY" . "en_GB-ise") ;; hunspell
-                ("DISPLAY" . ":9")
-                ("BLOCK_SIZE" . "human-readable")
-                ("LIBRARY_PATH" . "$LIBRARY_PATH:~/.guix-home/profile/lib")
-                ("C_INCLUDE_PATH" . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
-                ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
-                ("PATH" . "$HOME/local/bin:$PATH")
-                ("PATH" . "./_opam/bin:$PATH")
-                ("GUIX_EXTRA_PROFILES" .
-                 ,(string-append "$HOME" %guix-extra-profiles-dir))
-                ("GUILE_LOAD_PATH" .
-                 ,(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
-                ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
-                ("LANG" . "en_GB.utf8")
-                ("PASSWORD_STORE_DIR" . "/data/pass")
-                ("PASSWORD_STORE_GENERATED_LENGTH" . "33")
-                ;; ("PS1" . "is in bashrc because I want it after source /etc/bashrc")
-                ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
-                ("GDK_SCALE" . ,(number->string
-                                 (ship-gdk-scale %ship)))
-                ("GDK_DPI_SCALE" . ,(number->string
-                                     (ship-gdk-dpi-scale %ship)))
-                ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
-                ("QT_STYLE_OVERRIDE" . "kvantum")
-                ("XDG_CURRENT_DESKTOP" . "qt5ct")
-                ("FLEET" .
-                 ,(string-concatenate
-                   (concatenate ((@ (srfi srfi-1) zip)
-                                 (map ship-name %fleet)
-                                 (circular-list " ")))))))
-             (bashrc
-              (list
-               (mixed-text-file
-                "bash-options"
-                "# Source the system-wide file.\n"
-                "[ -f /etc/bashrc ] && source /etc/bashrc\n")
-               (mixed-text-file
-                "interactive-shell-bash-options"
-                "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
-                "shopt -s autocd\n"
-                "shopt -s extglob\n"
-                "shopt -s globstar\n"
-                "shopt -s nocaseglob\n"
-                ;; this affects emacs' completion:
-                "bind 'set completion-ignore-case on' 2> /dev/null\n"
-                "[ x$TERM = xtramp ] && return\n"
-                "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
-                " \\A \\u@\\h "
-                "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
-                "\\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
-                "set -o vi\n"
-                "bind '\"jj\":vi-movement-mode'\n")))))
+
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
@@ -272,9 +263,9 @@
       (".emacs.d/aliases"
        ,(plain-file "aliases"
                     (emacs-eshell-aliases-configuration %aliases)))
-      (".x-config"
-       ,(program-file "x-config"
-                      (ship-x-config %ship)))
+      ;; (".x-config"
+      ;;  ,(program-file "x-config"
+      ;;                 (ship-x-config %ship)))
       (".xsession"
        ,(program-file
          "xsession"
@@ -283,18 +274,16 @@
             (xhost . "+SI:localuser:$USER")
             (xset . "b 0 0 0")
             (xset . "r rate 400 30")
-            ,(if (ship-media-station? %ship)
-                 `(xset . "s off -dpms")
-                 `(xset . "dpms 600 1200 0"))
+            (xset . "dpms 600 1200 0")
+            ;; FIXME
+            ;; ,(if (ship-media-station? %ship)
+            ;;      `(xset . "s off -dpms")
+            ;;      `(xset . "dpms 600 1200 0"))
             (xsetroot . "-cursor_name left_ptr")
             (setxkbmap . "dvorak")
             (xmodmap . "~/.config/x-config/common.xmodmap")
-            (xmodmap . ,(string-append ".config/x-config/"
-                                       (ship-name %ship)
-                                       ".xmodmap"))
-            (feh . ,(string-append "--bg-scale '"
-                                   (ship-wallpaper %ship)
-                                   "'"))
+            (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
+            (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
             (xrdb  . "-load ~/.Xresources")
             ("~/.x-config" . "")
             (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
@@ -330,45 +319,24 @@
       (".XCompose"
        ,(local-file
          (string-append %lambda-project "/misc/XCompose")))
-      (,(string-append ".config/x-config/"
-                       (ship-name %ship)
-                       ".xmodmap")
-       ,(local-file
-         (string-append %lambda-project "/misc/"
-                        (ship-name %ship)
-                        ".xmodmap")))
       (".config/x-config/common.xmodmap"
        ,(local-file
          (string-append %lambda-project "/misc/common.xmodmap")))
-      (".config/picom/picom.conf"
-       ,(plain-file "picom.conf"
-                    (picom-configuration
-                     (ship-picom-radius %ship))))
-      (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc"
-                    (dunst-configuration
-                     (ship-font %ship)
-                     (ship-dunst-font-size %ship)
-                     (ship-dunst-width %ship))))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file
          (string-append %lambda-project "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
          (string-append %lambda-project "/misc/Synergy.conf")))
-      (".config/feh/themes"
-       ,(let ((fsz (number->string (ship-feh-font-size %ship))))
-          (mixed-text-file
-           "feh_symlink_name_is_theme_name"
-           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-           " --fontpath " %home "/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font JetBrainsMono-Regular/" fsz
-           " --font JetBrainsMono-Regular/" fsz "\n")))
-      (".Xresources"
-       ,(plain-file "Xresources"
-                    (xresources-configuration
-                     (ship-font %ship)
-                     (ship-rxvt-font-size %ship))))))
+      ;; (".config/feh/themes"
+      ;;  ,(let ((fsz (number->string (ship-feh-font-size %ship))))
+      ;;     (mixed-text-file
+      ;;      "feh_symlink_name_is_theme_name"
+      ;;      "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+      ;;      " --fontpath " %home "/.guix-home/profile/share/fonts/truetype/"
+      ;;      " --menu-font JetBrainsMono-Regular/" fsz
+      ;;      " --font JetBrainsMono-Regular/" fsz "\n")))
+      ))
 
    (simple-service 'guix-config-files
                    home-files-service-type
@@ -436,7 +404,8 @@
                  (with-environment-variables
                      '(("GUILE_LOAD_PATH"
                         #$(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
-                       ("SHIP" #$(ship-name %ship)))
+                       ;; FIXME ("SHIP" #$(ship-name %ship))
+                       )
                    (system
                     (string-append guix " system reconfigure "
                                    #$%lambda-project "/guix/os.scm"))))))))))
@@ -490,13 +459,17 @@
                                                      (alist-cons 'repo arg acc))))
                                      (lambda (opt name arg loads)
                                        (error "Unrecognized option `~A'" name))
-                                     (lambda (op loads) (cons op loads))
+                                     (lambda (op loads)
+                                       (cons op loads))
                                      '()))
                     (repo (or (assoc-ref args 'repo)
                               (getcwd)))
                     (name (basename repo))
                     (git #$(file-append git "/bin/git"))
-                    (fleet-remotes (list #$@(map (lambda (s) (ship-name s)) %fleet))))
+                    (fleet-remotes (list #$@(map (lambda (s)
+                                                   ;; (ship-name s)
+                                                   "FIXME"
+                                                   ) %fleet))))
                (chdir repo)
                (when (assoc-ref args 'fleet)
                  (map (lambda (rm)
@@ -637,4 +610,52 @@
                   (list #$(file-append oneko "/bin/oneko") "-dog")
                   #:log-file "herd-logs/oneko.log"))
         (stop #~(make-kill-destructor))
-        (documentation "neko")))))))))
+        (documentation "neko")))))))) )
+
+(define-public %wonko-home
+  (home-environment
+   (packages
+    (append
+     %emacs-world
+     %ocaml-with-opam-world
+     %ocaml-mode-deps
+     %crypto-world
+     %xorg-world
+     %fonts-world
+     %vcs-world
+     (list
+      ;; services
+      picom
+      synergy
+      dunst
+      ;; yes also man pages plz
+      man-db)))
+
+   (services %wonko-services)))
+
+(define-public %tina-home
+  (home-environment
+   (services
+    (list
+     (simple-service 'guix-config-files
+                     home-files-service-type
+                     (map
+                      (lambda (file)
+                        `(,(string-append ".config/guix/" file)
+                          ,(local-file
+                            (string-append %lambda-project "/guix/config/" file))))
+                      '("channels.scm")))
+     (simple-service 'x-config-files
+                     home-files-service-type
+                     `((".xsession"
+                        ,(program-file
+                          "xsession"
+                          #~(system #$(file-append xfce "/bin/startxfce4"))))))))
+   (packages
+    (append
+     %fonts-world
+     %xfce-world
+     %web-world
+     (list
+      pavucontrol
+      man-db)))))
