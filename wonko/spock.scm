@@ -1,4 +1,4 @@
-(define-module (spock)
+(define-module (wonko spock)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 format))

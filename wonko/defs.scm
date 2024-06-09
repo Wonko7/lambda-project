@@ -1,4 +1,4 @@
-(define-module (defs)
+(define-module (wonko defs)
   #:use-module (gnu system keyboard))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -6,7 +6,7 @@
 
 (define-public %lambda-project "/code/lambda-project")
 
-(define-public %guix-extra-profiles-dir "/.guix-extra-profiles")
+(define-public %guix-extra-profiles-dir "/.guix-extra-profiles") ;; FIXME
 
 (define-public %font "JetBrains Mono")
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")

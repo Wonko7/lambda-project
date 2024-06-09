@@ -1,9 +1,11 @@
-(use-modules (gnu services shepherd)
+(use-modules ;; (gnu services)
+             (gnu services shepherd)
              (gnu services desktop)
              (gnu services xorg)
              (gnu services sddm)
              (gnu services networking)
              (gnu services ssh)
+             (gnu home services)
              (guix build utils)
              (guix gexp)
              (ice-9 format)
@@ -12,8 +14,11 @@
              (srfi srfi-11)
              (srfi srfi-88)
              ;; my stuff
-             (lambda homes)
-             (lambda systems))
+             (wonko defs)
+             (wonko crew)
+             (wonko fleet)
+             (wonko homes)
+             (wonko systems))
 
 (define %rocinante-wonko-home
   (home-environment
@@ -49,6 +54,9 @@
              " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
              " --menu-font JetBrainsMono-Regular/" fsz
              " --font JetBrainsMono-Regular/" fsz "\n")))
+        (".config/x-config/ship.xmodmap"
+         ,(local-file
+           (string-append %lambda-project "/misc/rocinante.xmodmap"))) ;; FIXME
         (".Xresources"
          ,(plain-file "Xresources" (xresources-configuration %font 10)))
         (".config/picom/picom.conf"

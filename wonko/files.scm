@@ -1,4 +1,4 @@
-(define-module (files)
+(define-module (wonko files)
   #:use-module (ice-9 textual-ports)
   #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)

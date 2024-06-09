@@ -1,4 +1,4 @@
-(define-module (crew)
+(define-module (wonko crew)
   #:use-module (srfi srfi-1)
   #:use-module (guix gexp)
   #:use-module (guix records)

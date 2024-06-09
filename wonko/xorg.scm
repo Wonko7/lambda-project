@@ -1,4 +1,4 @@
-(define-module (xorg)
+(define-module (wonko xorg)
   #:use-module (gnu services)
   #:use-module (gnu services xorg)
   #:use-module (gnu services shepherd)

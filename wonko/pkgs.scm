@@ -1,4 +1,4 @@
-(define-module (pkgs)
+(define-module (wonko pkgs)
   #:use-module (guix gexp)
   #:use-module (gnu packages)
   ;; fonts

@@ -1,81 +1,82 @@
-(use-modules
- (guix gexp)
- (guix modules)
- (gnu home)
- (gnu home services)
- (gnu home services shells)
- (gnu system shadow)
- (gnu services)
- (guix profiles)
- (srfi srfi-1)
- (srfi srfi-11)
+(define-module (wonko homes)
+ #:use-module (guix gexp)
+ #:use-module (guix modules)
+ #:use-module (gnu home)
+ #:use-module (gnu home services)
+ #:use-module (gnu home services shells)
+ #:use-module (gnu system shadow)
+ #:use-module (gnu services)
+ #:use-module (guix profiles)
+ #:use-module (srfi srfi-1)
+ #:use-module (srfi srfi-11)
 
  ;; fonts
- (w7 packages fonts)
- (gnu packages fonts)
- (gnu packages fontutils)
- (gnu packages unicode)
+ #:use-module (w7 packages fonts)
+ #:use-module (gnu packages fonts)
+ #:use-module (gnu packages fontutils)
+ #:use-module (gnu packages unicode)
 
  ;; emacs
- (gnu packages emacs)
- (gnu packages emacs-xyz)
- (gnu packages aspell)
- (gnu packages hunspell)
- (gnu packages libreoffice)
+ #:use-module (gnu packages emacs)
+ #:use-module (gnu packages emacs-xyz)
+ #:use-module (gnu packages aspell)
+ #:use-module (gnu packages hunspell)
+ #:use-module (gnu packages libreoffice)
 
  ;; desktop stuff
- (gnu packages glib)
- (gnu packages pulseaudio)
- (gnu packages synergy)
- (gnu packages xorg)
- (gnu packages toys)
- (gnu packages linux)
- (gnu packages xdisorg)
- (gnu packages suckless)
- (gnu packages music)
- (gnu packages lxde)
- (gnu packages gnome)
- (gnu packages kde-plasma)
- (gnu packages kde-frameworks)
+ #:use-module (gnu packages glib)
+ #:use-module (gnu packages pulseaudio)
+ #:use-module (gnu packages synergy)
+ #:use-module (gnu packages xorg)
+ #:use-module (gnu packages toys)
+ #:use-module (gnu packages linux)
+ #:use-module (gnu packages xdisorg)
+ #:use-module (gnu packages suckless)
+ #:use-module (gnu packages music)
+ #:use-module (gnu packages lxde)
+ #:use-module (gnu packages gnome)
+ #:use-module (gnu packages kde-plasma)
+ #:use-module (gnu packages kde-frameworks)
 
  ;; tools
- (gnu packages admin)
- (gnu packages databases) ;; recutils
- (gnu packages version-control)
- (gnu packages tmux)
- (gnu packages ssh)
- (gnu packages bittorrent)
- (gnu packages rust-apps) ;; fd rg
- (gnu packages gnupg)
- (gnu packages password-utils)
- (gnu packages bash)
- (gnu packages tor)
+ #:use-module (gnu packages admin)
+ #:use-module (gnu packages databases) ;; recutils
+ #:use-module (gnu packages version-control)
+ #:use-module (gnu packages tmux)
+ #:use-module (gnu packages ssh)
+ #:use-module (gnu packages bittorrent)
+ #:use-module (gnu packages rust-apps) ;; fd rg
+ #:use-module (gnu packages gnupg)
+ #:use-module (gnu packages password-utils)
+ #:use-module (gnu packages bash)
+ #:use-module (gnu packages tor)
 
  ;; dev
- (gnu packages haskell-apps)
- (gnu packages compression)
- (gnu packages commencement) ;; gcc
- (gnu packages pkg-config)
- (gnu packages base)
- (gnu packages gdb)
- (gnu packages m4)
- (gnu packages maths)
+ #:use-module (gnu packages haskell-apps)
+ #:use-module (gnu packages compression)
+ #:use-module (gnu packages commencement) ;; gcc
+ #:use-module (gnu packages pkg-config)
+ #:use-module (gnu packages base)
+ #:use-module (gnu packages gdb)
+ #:use-module (gnu packages m4)
+ #:use-module (gnu packages maths)
 
  ;; services
- (gnu home services shepherd)
- (gnu packages image-viewers)
- (gnu packages matrix)
- (gnu packages wm)
- (gnu packages compton)
- (w7 packages emacs-xyz)
+ #:use-module (gnu home services shepherd)
+ #:use-module (gnu packages image-viewers)
+ #:use-module (gnu packages matrix)
+ #:use-module (gnu packages wm)
+ #:use-module (gnu packages compton)
+ #:use-module (w7 packages emacs-xyz)
 
  ;; doc
- (gnu packages man)
+ #:use-module (gnu packages man)
 
  ;; my stuff
- (lambda spock)
- (lambda dotfiles)
- (lambda pkgs))
+ #:use-module (wonko defs)
+ #:use-module (wonko fleet)
+ #:use-module (wonko dotfiles)
+ #:use-module (wonko pkgs))
 
 (define %term-cmd "urxvt")
 
@@ -83,22 +84,22 @@
   #~(progn
      (setq my/font #$%font
            my/lambda-project   #$%lambda-project
-           my/font-size        #$(ship-emacs-font-size %ship)
-           my/modeline-height  #$(ship-emacs-modeline-height %ship)
-           my/tag-height       #$(ship-emacs-tag-height %ship)
-           my/tag-font-size    #$(ship-emacs-tag-font-size %ship)
-           my/tag-radius       #$(ship-emacs-tag-radius %ship)
-           my/tag-padding      #$(ship-emacs-tag-padding %ship)
-           my/org-agenda-tags-column #$(ship-emacs-org-agenda-tags-column %ship)
-           my/org-habit-preceding-days #$(ship-emacs-org-habit-preceding-days %ship)
+           my/font-size        120
+           my/modeline-height  40
+           my/tag-height       0.95
+           my/tag-font-size    11
+           my/tag-radius       300
+           my/tag-padding      15
+           my/org-agenda-tags-column 78
+           my/org-habit-preceding-days 43
+           my/window-divider-default-right-width 2
            my/term-cmd #$%term-cmd
            my/lock-cmd #$(apply
                           string-append
                           (concatenate
                            ((@ (srfi srfi-1) zip)
                             %lock-cmd
-                            (circular-list " "))))
-           my/window-divider-default-right-width #$(ship-emacs-divider-width %ship))
+                            (circular-list " ")))))
      (provide 'conf/generated-values)))
 
 (define %aliases
@@ -126,7 +127,7 @@
   `(("communication" . ,%communication-world)
     ("desktop" . ,%desktop-world)
     ("utils" . ,%utils-world)
-    ("web" . ,%web-world)
+    ("web" . ,%web-world)))
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -195,13 +196,10 @@
       "set -o vi\n"
       "bind '\"jj\":vi-movement-mode'\n")))))
 
-(define-public (per-hostname-files hostname)
-      (".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/" hostname ".xmodmap"))))
+;; (define-public (per-hostname-files hostname)
+;;   )
 
 (define-public %wonko-services
- (services
   (list
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
@@ -363,14 +361,14 @@
        ,(program-file
          "_"
          (with-imported-modules
-             '((spock)
+             '((wonko spock)
                (srfi srfi-1)
                (guix build utils))
            #~(begin
-               (use-modules (spock)
+               (use-modules (wonko spock)
                             (srfi srfi-1)
                             (guix build utils))
-               (let ((guix #$(string-append %home "/.config/guix/current/bin/guix"))
+               (let ((guix "~/.config/guix/current/bin/guix")
                      (ps   (let ((args (drop (program-arguments) 1)))
                              (if (null? args)
                                  '#$(profiles->names %profiles)
@@ -400,7 +398,7 @@
                (guix utils))
            #~(begin
                (use-modules (guix utils))
-               (let ((guix #$(string-append %home "/.config/guix/current/bin/guix")))
+               (let ((guix "~/.config/guix/current/bin/guix"))
                  (with-environment-variables
                      '(("GUILE_LOAD_PATH"
                         #$(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
@@ -417,12 +415,12 @@
        ,(program-file
          "spock"
          (with-imported-modules
-             '((spock)
+             '((wonko spock)
                (srfi srfi-1))
            #~(begin
                (use-modules
                 (srfi srfi-1)
-                (spock))
+                (wonko spock))
                (let* ((args (drop (program-arguments) 1))
                       (greeting (if (equal? args '())
                                     "live long & prosper!"
@@ -468,8 +466,8 @@
                     (git #$(file-append git "/bin/git"))
                     (fleet-remotes (list #$@(map (lambda (s)
                                                    ;; (ship-name s)
-                                                   "FIXME"
-                                                   ) %fleet))))
+                                                   s
+                                                   ) %fleet-names))))
                (chdir repo)
                (when (assoc-ref args 'fleet)
                  (map (lambda (rm)
@@ -493,7 +491,8 @@
                         (remote (assoc-ref args 'push-remote)))
                    (system
                     (string-append git " push -u " remote " " branch ":inbox-"
-                                   #$(ship-name %ship) "-" branch))))))))))
+                                   "$HOSTNAME" ;; test this.
+                                   "-" branch))))))))))
 
    (simple-service
     'secrets-scripts
@@ -502,10 +501,10 @@
        ,(program-file
          "_"
          (with-imported-modules
-             '((spock)
+             '((wonko spock)
                (guix build utils))
            #~(begin
-               (use-modules (spock)
+               (use-modules (wonko spock)
                             (guix build utils))
                (display (spock-say
                          (string-append "backup SECRETS for " #$(ship-name %ship)))
@@ -517,21 +516,21 @@
                      (base64 #$(file-append coreutils "/bin/base64"))
                      (tar    #$(file-append tar "/bin/tar")))
                  (system
-                  (string-append "cd " #$%home " && " tar " czf - .ssh/id_ed25519* | "
+                  (string-append "cd && " tar " czf - .ssh/id_ed25519* | "
                                  base64 " | "
                                  pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
                  (system
-                  (string-append cp " " #$%home "/.ssh/id_ed25519.pub "
+                  (string-append cp " ~/.ssh/id_ed25519.pub "
                                  ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
                                  ".pub")))))))
       ("local/bin/secrets-deploy"
        ,(program-file
          "_"
          (with-imported-modules
-             '((spock)
+             '((wonko spock)
                (guix build utils))
            #~(begin
-               (use-modules (spock)
+               (use-modules (wonko spock)
                             (guix build utils))
                (display (spock-say
                          (string-append "deploy SECRETS for " #$(ship-name %ship)))
@@ -559,7 +558,7 @@
        (shepherd-service
         (provision '(pantalaimon))
         (start #~(make-forkexec-constructor
-                  (list #$(string-append %home %guix-extra-profiles-dir
+                  (list #$(string-append "~" %guix-extra-profiles-dir
                                          "/communication/bin/pantalaimon"))
                   #:log-file "herd-logs/matrix.log"))
         (stop #~(make-kill-destructor))
@@ -575,7 +574,7 @@
         (provision '(guix-repl))
         (start #~(make-forkexec-constructor
                   (list
-                   (string-append #$%home "/.config/guix/current/bin/guix")
+                   "~/.config/guix/current/bin/guix"
                    "repl" "--listen=tcp:37146")
                   #:environment-variables '("INSIDE_EMACS=1")
                   #:log-file "herd-logs/guix-repl.log"))
@@ -610,7 +609,7 @@
                   (list #$(file-append oneko "/bin/oneko") "-dog")
                   #:log-file "herd-logs/oneko.log"))
         (stop #~(make-kill-destructor))
-        (documentation "neko")))))))) )
+        (documentation "neko"))))))) )
 
 (define-public %wonko-home
   (home-environment

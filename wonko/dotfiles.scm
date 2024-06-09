@@ -1,4 +1,4 @@
-(define-module (lambda dotfiles)
+(define-module (wonko dotfiles)
   #:use-module (guix gexp)
   #:use-module (guix modules)
   #:use-module (guix profiles)
