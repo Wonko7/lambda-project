@@ -1,11 +1,15 @@
-(use-modules ;; (gnu services)
+(use-modules (gnu)
              (gnu services shepherd)
              (gnu services desktop)
              (gnu services xorg)
              (gnu services sddm)
              (gnu services networking)
              (gnu services ssh)
+             (gnu services guix)
+             (gnu home)
              (gnu home services)
+             (gnu home services shepherd)
+             (gnu home services shells)
              (guix build utils)
              (guix gexp)
              (ice-9 format)
@@ -17,8 +21,12 @@
              (wonko defs)
              (wonko crew)
              (wonko fleet)
+             (wonko dotfiles)
+             (wonko xorg)
              (wonko homes)
              (wonko systems))
+
+(use-package-modules xorg)
 
 (define %rocinante-wonko-home
   (home-environment
@@ -31,8 +39,8 @@
        (inherit %wonko-bash-config)
        (environment-variables
         (cons*
-         ("GDK_SCALE" . "1")
-         ("GDK_DPI_SCALE" . "1")
+         '("GDK_SCALE" . "1")
+         '("GDK_DPI_SCALE" . "1")
          %wonko-env))))
      (simple-service
       'config-files
@@ -56,17 +64,15 @@
              " --font JetBrainsMono-Regular/" fsz "\n")))
         (".config/x-config/ship.xmodmap"
          ,(local-file
-           (string-append %lambda-project "/misc/rocinante.xmodmap"))) ;; FIXME
+           (string-append %lambda-project "/misc/rocinante.xmodmap")))
+        FIXME
         (".Xresources"
          ,(plain-file "Xresources" (xresources-configuration %font 10)))
         (".config/picom/picom.conf"
          ,(plain-file "picom.conf" (picom-configuration 10)))
         (".config/dunst/dunstrc"
          ,(plain-file "dunstrc"
-                      (dunst-configuration
-                       %font
-                       12)))))
-
+                      (dunst-configuration %font 12 300)))))
      %wonko-services))))
 
 (operating-system
@@ -81,21 +87,47 @@
                              (xorg-configuration (xorg-configuration
                                                   (keyboard-layout (crew-kb %tina))))))
                    (service noautostart-slim-service-type wonko-slim-config)
-                   (list
-                    (service guix-home-service-type
-                             `(("wonko" ,%rocinante-wonko-home)
-                               ("tina" ,%tina-home)))
-                    %laptop-services))
-
+                   (service guix-home-service-type
+                            `(("wonko" ,%rocinante-wonko-home)
+                              ("tina" ,%tina-home)))
+                   %laptop-services))
   (mapped-devices
    (list (mapped-device
-          (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
+          (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
           (target "vault")
           (type luks-device-mapping))))
-  (file-systems
-   (cons* (file-system
-            (mount-point "/boot")
-            (device (uuid (assoc-ref (ship-uuids ship) 'efi)
-                          'fat32))
-            (type "vfat"))
-          %laptop-fstab)))
+
+  (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                            (let-values (((mount-p sv-name) (car+cdr args)))
+                                              (file-system
+                                                (device "/dev/mapper/vault")
+                                                (mount-point mount-p)
+                                                (type "btrfs")
+                                                (options (string-append "subvol=_live/@"
+                                                                        sv-name))
+                                                (needed-for-boot? (equal? "/" mount-p)))))))
+                  (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "918C-B182"
+                                   'fat32))
+                     (type "vfat"))
+                   (file-system
+                     (mount-point "/mnt/vault")
+                     (device "/dev/mapper/vault")
+                     (type "btrfs")
+                     (dependencies mapped-devices))
+                   (file-system
+                     (mount-point "/tmp")
+                     (device "none")
+                     (type "tmpfs")
+                     (check? #f))
+                   (append
+                    (map btrfs-vault-subvol
+                         `(("/" . "guix-root")
+                           ("/home" . "guix-home")
+                           ("/code" . "code")
+                           ("/data" . "data")
+                           ("/work" . "work")
+                           ("/junkyard" . "junkyard")))
+                    %base-file-systems)))))

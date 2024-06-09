@@ -1,4 +1,5 @@
 (define-module (wonko systems)
+  #:use-module (gnu)
   #:use-module (guix build utils)
   #:use-module (guix gexp)
   #:use-module (ice-9 format)
@@ -8,10 +9,12 @@
   #:use-module (srfi srfi-88)
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
-  #:use-module ;; my stuff
+  #:use-module (gnu system setuid)
+  ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko spock)
   #:use-module (wonko crew)
+  #:use-module (wonko fleet)
   #:use-module (wonko pkgs)
   #:use-module (wonko xorg)
   #:export (%laptop-os
@@ -47,15 +50,29 @@
                      %default-channels))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fuck me
+
+(define-public (make-vault-subvolume args)
+  (let-values (((mount-p sv-name) (car+cdr args)))
+    (file-system
+      (device "/dev/mapper/vault")
+      (mount-point mount-p)
+      (type "btrfs")
+      (options (string-append "subvol=_live/@"
+                              sv-name))
+      (needed-for-boot? (equal? "/" mount-p)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services
 
-(define wonko-slim-config (slim-configuration
-                           (display ":9")
-                           (vt "vt9")
-                           (auto-login? #t)
-                           (default-user (crew-name %wonko))
-                           (xorg-configuration (xorg-configuration
-                                                (keyboard-layout (crew-kb %wonko))))))
+(define-public wonko-slim-config
+  (slim-configuration
+   (display ":9")
+   (vt "vt9")
+   (auto-login? #t)
+   (default-user (crew-name %wonko))
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout (crew-kb %wonko))))))
 ;; (service noautostart-slim-service-type wonko-slim-config)
 ;; (service slim-service-type wonko-slim-config)
 ;; (service
@@ -68,7 +85,7 @@
 ;;      (xorg-configuration (xorg-configuration
 ;;                           (keyboard-layout (crew-kb %tina))))))
 
-(define %laptop-services
+(define-public %laptop-services
   (cons*
    (service bluetooth-service-type
             (bluetooth-configuration (auto-enable? #t)))
@@ -119,43 +136,6 @@
                                  (local-file "./data/substitutes/nonguix.pub"))
                            %default-authorized-guix-keys)))))))
 
-(define-public %laptop-fstab
-  ;; missing /boot !
-  (let ((btrfs-vault-subvol (lambda (args)
-                                 (let-values (((mount-p sv-name) (car+cdr args)))
-                                   (file-system
-                                     (device "/dev/mapper/vault")
-                                     (mount-point mount-p)
-                                     (type "btrfs")
-                                     (options (string-append "subvol=_live/@"
-                                                             sv-name))
-                                     (needed-for-boot? (equal? "/" mount-p))
-                                     (dependencies mapped-devices))))))
-       (append
-        (list ;; (file-system
-              ;;   (mount-point "/boot")
-              ;;   (device (uuid (assoc-ref (ship-uuids ship) 'efi)
-              ;;                 'fat32))
-              ;;   (type "vfat"))
-              (file-system
-                (mount-point "/mnt/vault")
-                (device "/dev/mapper/vault")
-                (type "btrfs")
-                (dependencies mapped-devices))
-              (file-system
-                (mount-point "/tmp")
-                (device "none")
-                (type "tmpfs")
-                (check? #f)))
-        (map btrfs-vault-subvol
-             `(("/" . "guix-root")
-               ("/home" . "guix-home")
-               ("/code" . "code")
-               ("/data" . "data")
-               ("/work" . "work")
-               ("/junkyard" . "junkyard")))
-        %base-file-systems)))
-
 (define-public %laptop-os
   (operating-system
     (locale "en_GB.utf8")
@@ -192,7 +172,9 @@
                %os-net-world
                %os-misc-world
                %base-packages))
+
     (services %laptop-services)
+
     (setuid-programs
      (cons*
       ;; FIXME dumpcap?
@@ -200,13 +182,7 @@
                                             "/bin/brightnessctl")))
       %setuid-programs))
 
-    ;; (mapped-devices
-    ;;  (list (mapped-device
-    ;;         (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
-    ;;         (target "vault")
-    ;;         (type luks-device-mapping))))
-
-    (file-systems %laptop-fstab)
+    (file-systems '())
 
     (swap-devices
      (list (swap-space

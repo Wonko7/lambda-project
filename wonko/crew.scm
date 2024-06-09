@@ -4,7 +4,7 @@
   #:use-module (guix records)
   #:use-module (gnu packages bash)
   #:use-module (gnu)
-  #:use-module (defs)
+  #:use-module (wonko defs)
   #:export (crew-name
             crew-uid
             crew-kb))

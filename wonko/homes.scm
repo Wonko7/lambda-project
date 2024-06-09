@@ -33,6 +33,7 @@
  #:use-module (gnu packages xdisorg)
  #:use-module (gnu packages suckless)
  #:use-module (gnu packages music)
+ #:use-module (gnu packages xfce)
  #:use-module (gnu packages lxde)
  #:use-module (gnu packages gnome)
  #:use-module (gnu packages kde-plasma)
@@ -507,7 +508,8 @@
                (use-modules (wonko spock)
                             (guix build utils))
                (display (spock-say
-                         (string-append "backup SECRETS for " #$(ship-name %ship)))
+                         (string-append "backup SECRETS for ";; FIXME #$(ship-name %ship)
+                                        ))
                         (current-error-port))
                (newline (current-error-port))
                (let ((pass   #$(file-append password-store "/bin/pass"))
@@ -518,7 +520,8 @@
                  (system
                   (string-append "cd && " tar " czf - .ssh/id_ed25519* | "
                                  base64 " | "
-                                 pass " insert -m fleet/" #$(ship-name %ship) "/backup-ssh"))
+                                 pass " insert -m fleet/" ;; #$(ship-name %ship) FIXME
+                                 "/backup-ssh"))
                  (system
                   (string-append cp " ~/.ssh/id_ed25519.pub "
                                  ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
@@ -533,14 +536,16 @@
                (use-modules (wonko spock)
                             (guix build utils))
                (display (spock-say
-                         (string-append "deploy SECRETS for " #$(ship-name %ship)))
+                         (string-append "deploy SECRETS for "
+                                        ;; #$(ship-name %ship)
+                                        ))
                         (current-error-port))
                (newline (current-error-port))
                (let ((pass   #$(file-append password-store "/bin/pass"))
                      (base64 #$(file-append coreutils "/bin/base64"))
                      (tar    #$(file-append tar "/bin/tar")))
                  (system
-                  (string-append pass " show fleet/" #$(ship-name %ship) "/ssh | "
+                  (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
                                  base64 " -d | " tar " xz ")))))))))
 
    (service
@@ -592,19 +597,14 @@
        (shepherd-service
         (provision '(synergy))
         ;; (auto-start? #f)
-        (start (if (ship-media-station? %ship)
-                   #~(make-forkexec-constructor
-                      (list #$(file-append synergy "/bin/synergyc")
-                            "-f" "yggdrasill.local")
-                      #:log-file "herd-logs/synergy.log")
-                   #~(make-forkexec-constructor
-                      (list #$(file-append synergy "/bin/synergy"))
-                      #:log-file "herd-logs/synergy.log")))
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append synergy "/bin/synergy"))
+                  #:log-file "herd-logs/synergy.log"))
         (stop #~(make-kill-destructor))
         (documentation "can't be arsed to move IRL"))
        (shepherd-service
         (provision '(neko))
-        (auto-start? (not (ship-media-station? %ship)))
+        (auto-start? #t)
         (start #~(make-forkexec-constructor
                   (list #$(file-append oneko "/bin/oneko") "-dog")
                   #:log-file "herd-logs/oneko.log"))

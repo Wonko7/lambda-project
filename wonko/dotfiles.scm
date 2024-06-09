@@ -17,7 +17,7 @@
                             'post))
 
 (define-public (dunst-configuration ship-font ship-dunst-font-size ship-dunst-width)
-  (let ((file (call-with-input-file "../misc/dunstrc" get-string-all)))
+  (let ((file (call-with-input-file "misc/dunstrc" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
               (field-replace k v file)))
@@ -27,7 +27,7 @@
             ("=WIDTH=" . ,ship-dunst-width)))))
 
 (define-public (picom-configuration ship-picom-radius)
-  (let ((file (call-with-input-file "../misc/picom.conf" get-string-all)))
+  (let ((file (call-with-input-file "misc/picom.conf" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
               (field-replace k v file)))
@@ -80,7 +80,7 @@
      )))
 
 (define-public (xresources-configuration font rxvt-font-size)
-  (let ((file (call-with-input-file "../misc/Xresources" get-string-all)))
+  (let ((file (call-with-input-file "misc/Xresources" get-string-all)))
     (fold (lambda (l file)
             (let-values (((k v) (car+cdr l)))
               (field-replace k v file)))
