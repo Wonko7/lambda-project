@@ -98,6 +98,7 @@
    (service bluetooth-service-type
             (bluetooth-configuration (auto-enable? #t)))
 
+   ;; FIXME
    (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
    (service guix-publish-service-type
             (guix-publish-configuration
@@ -113,14 +114,16 @@
                     (host "192.168.1.6" "enterprise.local")
                     (host "192.168.1.9" "nispe.local")))
    (service tor-service-type)
-   (service openssh-service-type (openssh-configuration
-                                  (authorized-keys
-                                   `(("wonko" ,(local-file "data/ssh/rocinante.pub"))
-                                     ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
-                                     ("wonko" ,(local-file "data/ssh/enterprise.pub"))
-                                     ("wonko" ,(local-file "data/ssh/discovery.pub"))))
-                                  (x11-forwarding? #t)
-                                  (password-authentication? #f)))
+   (service openssh-service-type
+            (openssh-configuration
+             (authorized-keys
+              `(("wonko" ,(local-file "data/ssh/rocinante.pub"))
+                ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
+                ("wonko" ,(local-file "data/ssh/enterprise.pub"))
+                ("wonko" ,(local-file "data/ssh/discovery.pub"))
+                ("root"  ,(local-file "data/ssh/one-ring-to-rule-them-all.pub"))))
+             (x11-forwarding? #t)
+             (password-authentication? #f)))
 
    (modify-services %desktop-services
      (delete gdm-service-type)
