@@ -30,7 +30,20 @@
 
 (define %yggdrasill-wonko-home
   (home-environment
-   (inherit %highdpi-wonko-home)))
+   (inherit %highdpi-wonko-home)
+   (services
+    (cons*
+     (simple-service
+      'config-files
+      home-files-service-type
+      `((".x-config"
+         ,(program-file
+           "x-config"
+           (cmd+arg->script
+            `((xrandr . "--dpi 288")
+              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
+              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0")))))))
+     %highdpi-wonko-services))))
 
 (operating-system
   (inherit %laptop-os)

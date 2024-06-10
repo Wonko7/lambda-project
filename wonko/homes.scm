@@ -79,29 +79,65 @@
  #:use-module (wonko dotfiles)
  #:use-module (wonko pkgs))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; home components
+
 (define %term-cmd "urxvt")
 
-(define %emacs-values
-  #~(progn
-     (setq my/font #$%font
-           my/lambda-project   #$%lambda-project
-           my/font-size        120
-           my/modeline-height  40
-           my/tag-height       0.95
-           my/tag-font-size    11
-           my/tag-radius       300
-           my/tag-padding      15
-           my/org-agenda-tags-column 78
-           my/org-habit-preceding-days 43
-           my/window-divider-default-right-width 2
-           my/term-cmd #$%term-cmd
-           my/lock-cmd #$(apply
-                          string-append
-                          (concatenate
-                           ((@ (srfi srfi-1) zip)
-                            %lock-cmd
-                            (circular-list " ")))))
-     (provide 'conf/generated-values)))
+(define* (make-emacs-values-service #:key
+                                    (font-size                          120)
+                                    (modeline-height                    40)
+                                    (tag-height                         0.95)
+                                    (tag-font-size                      11)
+                                    (tag-radius                         10)
+                                    (tag-padding                        15)
+                                    (org-agenda-tags-column             78)
+                                    (org-habit-preceding-days           43)
+                                    (window-divider-default-right-width 2))
+   (simple-service
+    'emacsd-generated-config-files
+    home-files-service-type
+    (list
+     `(".emacs.d/generated-values.el"
+       ,(scheme-file
+         "emacs_values_el"
+         #~(progn
+            (setq
+             my/font-size                            font-size
+             my/modeline-height                      modeline-height
+             my/tag-height                           tag-height
+             my/tag-font-size                        tag-font-size
+             my/tag-radius                           tag-radius
+             my/tag-padding                          tag-padding
+             my/org-agenda-tags-column               org-agenda-tags-column
+             my/org-habit-preceding-days             org-habit-preceding-days
+             my/window-divider-default-right-width   window-divider-default-right-width
+             my/font           #$%font
+             my/lambda-project #$%lambda-project
+             my/term-cmd       #$%term-cmd
+             my/lock-cmd       #$(apply
+                                  string-append
+                                  (concatenate
+                                   ((@ (srfi srfi-1) zip)
+                                    %lock-cmd
+                                    (circular-list " ")))))
+            (provide 'conf/generated-values)))))))
+
+(define-public %vanilla-emacs-values-service
+  (make-emacs-values-service))
+
+(define-public %highdpi-emacs-values-service
+  (make-emacs-values-service
+   #:font-size                          80
+   #:modeline-height                    75
+   #:tag-height                         0.47
+   #:tag-font-size                      4.9
+   #:tag-radius                         6
+   #:tag-padding                        4.0
+   #:org-agenda-tags-column             80
+   #:org-habit-preceding-days           47
+   #:window-divider-default-right-width 5))
 
 (define %aliases
   `(("g" . "git")
@@ -133,7 +169,8 @@
 (define-public (profiles->names ps)
   (map car ps))
 
-;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; bash
 
 (define-public %wonko-env
   `(("HISTFILESIZE" . "100000")
@@ -197,10 +234,10 @@
       "set -o vi\n"
       "bind '\"jj\":vi-movement-mode'\n")))))
 
-;; (define-public (per-hostname-files hostname)
-;;   )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; skeleton config: needs emacs-values & x-config before being used
 
-(define-public %wonko-services
+(define-public %skeleton-wonko-services
   (list
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
@@ -246,11 +283,11 @@
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
 
-   (simple-service 'emacsd-generated-config-files
-                   home-files-service-type
-                   (list
-                    `(".emacs.d/generated-values.el"
-                      ,(scheme-file "_" %emacs-values))))
+   ;; (simple-service 'emacsd-generated-config-files
+   ;;                 home-files-service-type
+   ;;                 (list
+   ;;                  `(".emacs.d/generated-values.el"
+   ;;                    ,(scheme-file "_" %emacs-values))))
 
    (simple-service
     'config-files
@@ -548,6 +585,7 @@
                   (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
                                  base64 " -d | " tar " xz ")))))))))
 
+   ;; TODO; separate these
    (service
     home-shepherd-service-type
     (home-shepherd-configuration
@@ -611,7 +649,7 @@
         (stop #~(make-kill-destructor))
         (documentation "neko"))))))) )
 
-(define-public %wonko-home
+(define-public %skeleton-wonko-home
   (home-environment
    (packages
     (append
@@ -629,10 +667,14 @@
       dunst
       ;; yes also man pages plz
       man-db)))
-   (services %wonko-services)))
+   (services %skeleton-wonko-services)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; vanilla config: just needs x-config
 
 (define-public %vanilla-wonko-services
   (cons*
+   %vanilla-emacs-values-service
    (service home-bash-service-type %wonko-bash-config)
    (simple-service
     'config-files
@@ -656,57 +698,58 @@
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 12 300)))))
-   %wonko-services))
+   %skeleton-wonko-services))
 
 (define-public %vanilla-wonko-home
   (home-environment
-   (inherit %wonko-home)
+   (inherit %skeleton-wonko-home)
    (services %vanilla-wonko-services)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; highdpi config: just needs x-config
+
+(define-public %highdpi-wonko-services
+  (cons*
+   %highdpi-emacs-values-service
+   (service
+    home-bash-service-type
+    (home-bash-configuration
+     (inherit %wonko-bash-config)
+     (environment-variables
+      (cons*
+       '("GDK_SCALE" . "1")
+       '("GDK_DPI_SCALE" . "1.5")
+       %wonko-env))))
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".config/feh/themes"
+       ,(let ((fsz "20"))
+          (mixed-text-file
+           "feh_symlink_name_is_theme_name"
+           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+           " --menu-font JetBrainsMono-Regular/" fsz
+           " --font JetBrainsMono-Regular/" fsz "\n")))
+      (".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/rocinante.xmodmap")))
+      (".Xresources"
+       ,(plain-file "Xresources" (xresources-configuration %font 20)))
+      (".config/picom/picom.conf"
+       ,(plain-file "picom.conf" (picom-configuration 25)))
+      (".config/dunst/dunstrc"
+       ,(plain-file "dunstrc"
+                    (dunst-configuration %font 12 300)))))
+   %skeleton-wonko-services))
 
 (define-public %highdpi-wonko-home
   (home-environment
-   (inherit %wonko-home)
-   (services
-    (cons*
-     (service
-      home-bash-service-type
-      (home-bash-configuration
-       (inherit %wonko-bash-config)
-       (environment-variables
-        (cons*
-         '("GDK_SCALE" . "1")
-         '("GDK_DPI_SCALE" . "1.5")
-         %wonko-env))))
-     (simple-service
-      'config-files
-      home-files-service-type
-      `((".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 288")
-              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
-              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0")))))
-        ;; package this better;
-        (".config/feh/themes"
-         ,(let ((fsz "20"))
-            (mixed-text-file
-             "feh_symlink_name_is_theme_name"
-             "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-             " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-             " --menu-font JetBrainsMono-Regular/" fsz
-             " --font JetBrainsMono-Regular/" fsz "\n")))
-        (".config/x-config/ship.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/rocinante.xmodmap")))
-        (".Xresources"
-         ,(plain-file "Xresources" (xresources-configuration %font 20)))
-        (".config/picom/picom.conf"
-         ,(plain-file "picom.conf" (picom-configuration 25)))
-        (".config/dunst/dunstrc"
-         ,(plain-file "dunstrc"
-                      (dunst-configuration %font 12 300)))))
-     %wonko-services))))
+   (inherit %skeleton-wonko-home)
+   (services %highdpi-wonko-services)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tina
 
 (define-public %tina-home
   (home-environment
