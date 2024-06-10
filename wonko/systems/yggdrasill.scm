@@ -46,8 +46,8 @@
      %highdpi-wonko-services))))
 
 (operating-system
-  (inherit %laptop-os)
-  (host-name "rocinante")
+  (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
+  (host-name "yggdrasill")
   (services (cons* (service slim-service-type wonko-slim-config)
                    (service guix-home-service-type
                             `(("wonko" ,%yggdrasill-wonko-home)))

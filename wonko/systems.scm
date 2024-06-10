@@ -196,3 +196,23 @@
              (target "/mnt/vault/swap/swapfile")
              (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
                                    file-systems)))))))
+
+(define-public %removable-laptop-os
+  (operating-system
+    (inherit %laptop-os)
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-efi-removable-bootloader)
+      (targets    '("/boot"))
+      (keyboard-layout keyboard-layout)))))
+
+(define-public %removable-laptop-os-init-from-external
+  (operating-system
+    (inherit %laptop-os)
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-efi-removable-bootloader)
+      (targets '("/mnt/tmp-efi/"))
+      (keyboard-layout keyboard-layout)))))
+
+;; FIXME: add media station stuff.
