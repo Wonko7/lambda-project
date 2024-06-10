@@ -18,7 +18,6 @@
              (srfi srfi-11)
              (srfi srfi-88)
              ;; my stuff
-             (wonko systems rocinante)
              (wonko defs)
              (wonko crew)
              (wonko fleet)

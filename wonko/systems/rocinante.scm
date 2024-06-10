@@ -32,7 +32,8 @@
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
-    (simple-service
+    (cons*
+     (simple-service
       'config-files
       home-files-service-type
       `((".x-config"
@@ -43,7 +44,7 @@
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.7")
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Enabled' 1")
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Drag Lock Enabled' 1")))))))
-     %wonko-vanilla-services)))
+     %vanilla-wonko-services))))
 
 (operating-system
   (inherit %laptop-os)
