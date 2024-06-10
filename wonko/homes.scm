@@ -1,9 +1,8 @@
 (define-module (wonko homes)
  #:use-module (guix gexp)
  #:use-module (guix modules)
+ #:use-module (gnu)
  #:use-module (gnu home)
- #:use-module (gnu home services)
- #:use-module (gnu home services shells)
  #:use-module (gnu system shadow)
  #:use-module (gnu services)
  #:use-module (guix profiles)
@@ -12,72 +11,30 @@
 
  ;; fonts
  #:use-module (w7 packages fonts)
- #:use-module (gnu packages fonts)
- #:use-module (gnu packages fontutils)
- #:use-module (gnu packages unicode)
-
- ;; emacs
- #:use-module (gnu packages emacs)
- #:use-module (gnu packages emacs-xyz)
- #:use-module (gnu packages aspell)
- #:use-module (gnu packages hunspell)
- #:use-module (gnu packages libreoffice)
-
- ;; desktop stuff
- #:use-module (gnu packages glib)
- #:use-module (gnu packages pulseaudio)
- #:use-module (gnu packages synergy)
- #:use-module (gnu packages xorg)
- #:use-module (gnu packages toys)
- #:use-module (gnu packages linux)
- #:use-module (gnu packages xdisorg)
- #:use-module (gnu packages suckless)
- #:use-module (gnu packages music)
- #:use-module (gnu packages xfce)
- #:use-module (gnu packages lxde)
- #:use-module (gnu packages gnome)
- #:use-module (gnu packages kde-plasma)
- #:use-module (gnu packages kde-frameworks)
-
- ;; tools
- #:use-module (gnu packages admin)
- #:use-module (gnu packages databases) ;; recutils
- #:use-module (gnu packages version-control)
- #:use-module (gnu packages tmux)
- #:use-module (gnu packages ssh)
- #:use-module (gnu packages bittorrent)
- #:use-module (gnu packages rust-apps) ;; fd rg
- #:use-module (gnu packages gnupg)
- #:use-module (gnu packages password-utils)
- #:use-module (gnu packages bash)
- #:use-module (gnu packages tor)
-
- ;; dev
- #:use-module (gnu packages haskell-apps)
- #:use-module (gnu packages compression)
- #:use-module (gnu packages commencement) ;; gcc
- #:use-module (gnu packages pkg-config)
- #:use-module (gnu packages base)
- #:use-module (gnu packages gdb)
- #:use-module (gnu packages m4)
- #:use-module (gnu packages maths)
 
  ;; services
+ #:use-module (gnu home services)
  #:use-module (gnu home services shepherd)
- #:use-module (gnu packages image-viewers)
- #:use-module (gnu packages matrix)
- #:use-module (gnu packages wm)
- #:use-module (gnu packages compton)
+ #:use-module (gnu home services shells)
  #:use-module (w7 packages emacs-xyz)
-
- ;; doc
- #:use-module (gnu packages man)
 
  ;; my stuff
  #:use-module (wonko defs)
  #:use-module (wonko fleet)
  #:use-module (wonko dotfiles)
  #:use-module (wonko pkgs))
+
+(use-package-modules
+ fonts fontutils unicode
+ emacs emacs-xyz
+ aspell hunspell libreoffice
+ glib pulseaudio synergy xorg toys linux xdisorg suckless music image-viewers
+ xfce lxde gnome kde-plasma kde-frameworks
+ admin databases version-control tmux ssh rust-apps gnupg password-utils bash
+ bittorrent tor
+ haskell-apps compression commencement pkg-config base gdb m4 maths man
+ ;; services
+ matrix wm compton)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
