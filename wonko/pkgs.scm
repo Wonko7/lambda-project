@@ -1,104 +1,32 @@
 (define-module (wonko pkgs)
-  #:use-module (guix gexp)
+  #:use-module (gnu)
   #:use-module (gnu packages)
+  #:use-module (guix gexp)
   ;; fonts
   #:use-module (w7 packages fonts)
-  #:use-module (gnu packages fonts)
-  #:use-module (gnu packages fontutils)
-  #:use-module (gnu packages unicode)
   ;; emacs
-  #:use-module (gnu packages emacs)
-  #:use-module (gnu packages emacs-xyz)
-  #:use-module (gnu packages aspell)
-  #:use-module (gnu packages hunspell)
-  #:use-module (gnu packages libreoffice)
-  #:use-module (gnu packages ocaml)
-  #:use-module (gnu packages java)
-  #:use-module (gnu packages clojure)
   #:use-module (nongnu packages clojure)
-  #:use-module (gnu packages uml)
-  ;; desktop stuff
-  #:use-module (gnu packages pulseaudio)
-  #:use-module (gnu packages synergy)
-  #:use-module (gnu packages xorg) ;; xinit
-  #:use-module (gnu packages toys)
-  #:use-module (gnu packages linux)
-  #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages suckless)
-  #:use-module (gnu packages music)
-  #:use-module (gnu packages lxde)
-  #:use-module (gnu packages xfce)
-  #:use-module (gnu packages gnome)
-  #:use-module (gnu packages kde-plasma)
-  #:use-module (gnu packages kde-frameworks)
-  #:use-module (gnu packages lxqt)
-  #:use-module (gnu packages qt)
-  #:use-module (gnu packages terminals)
-  #:use-module (gnu packages ebook)
-  #:use-module (gnu packages video)
-  #:use-module (gnu packages imagemagick)
-  #:use-module (gnu packages gimp)
-  #:use-module (gnu packages pdf)
-  #:use-module (gnu packages kde)
   ;; web
   #:use-module (nongnu packages mozilla)
-  #:use-module (gnu packages chromium)
-  #:use-module (gnu packages tor)
-  #:use-module (gnu packages matrix)
-  #:use-module (gnu packages irc)
-  #:use-module (gnu packages bittorrent)
-  ;; tools
-  #:use-module (gnu packages admin)
-  #:use-module (gnu packages databases) ;; recutils
-  #:use-module (gnu packages version-control)
-  #:use-module (gnu packages file)
-  #:use-module (gnu packages lsof)
-  #:use-module (gnu packages tmux)
-  #:use-module (gnu packages ssh)
-  #:use-module (gnu packages vim)
-  #:use-module (gnu packages bittorrent)
-  #:use-module (gnu packages rust-apps) ;; fd rg
-  #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages password-utils)
-  #:use-module (gnu packages moreutils)
-  #:use-module (gnu packages bash)
-  #:use-module (gnu packages disk)
-  #:use-module (gnu packages cpio)
-  #:use-module (gnu packages rsync)
-  #:use-module (gnu packages cryptsetup)
-  #:use-module (gnu packages curl)
-  #:use-module (gnu packages web)
-  #:use-module (gnu packages networking)
-  #:use-module (gnu packages vpn)
-  #:use-module (gnu packages hardware) ;; ddcutil
-  #:use-module (gnu packages certs)
   ;; dev
-  #:use-module (gnu packages android)
-  #:use-module (gnu packages haskell-apps)
-  #:use-module (gnu packages compression)
   #:use-module (nongnu packages compression)
-  #:use-module (gnu packages commencement) ;; gcc
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages base)
-  #:use-module (gnu packages gdb)
-  #:use-module (gnu packages m4)
-  #:use-module (gnu packages maths)
-  #:use-module (gnu packages ocaml)
-  #:use-module (gnu packages libevent)
-  #:use-module (gnu packages tls)
-  #:use-module (gnu packages code)
-  #:use-module (gnu packages node)
-  #:use-module (gnu packages multiprecision)
-  #:use-module (gnu packages sqlite)
   ;; services
   #:use-module (gnu home services shepherd)
-  #:use-module (gnu packages image-viewers)
-  #:use-module (gnu packages matrix)
-  #:use-module (gnu packages wm)
   #:use-module (w7 packages jonaburg-picom)
-  #:use-module (w7 packages emacs-xyz)
-  ;; doc
-  #:use-module (gnu packages man))
+  #:use-module (w7 packages emacs-xyz))
+
+(use-package-modules
+  fonts fontutils unicode
+  ;; emacs
+  emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml
+  ;; desktop stuff
+  pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde
+  ;; web
+  chromium tor matrix irc bittorrent
+  ;; tools
+  admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs
+  ;; dev
+  android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
 (define-public %emacs-world
   (list ;; TODO: native compilation
