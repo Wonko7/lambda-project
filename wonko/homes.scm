@@ -642,9 +642,6 @@
            " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
            " --menu-font JetBrainsMono-Regular/" fsz
            " --font JetBrainsMono-Regular/" fsz "\n")))
-      (".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/rocinante.xmodmap"))) ;; FIXME rename this too
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 10)))
       (".config/picom/picom.conf"
@@ -685,9 +682,6 @@
            " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
            " --menu-font JetBrainsMono-Regular/" fsz
            " --font JetBrainsMono-Regular/" fsz "\n")))
-      (".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/rocinante.xmodmap")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 20)))
       (".config/picom/picom.conf"

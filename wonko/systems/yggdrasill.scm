@@ -36,7 +36,10 @@
      (simple-service
       'config-files
       home-files-service-type
-      `((".x-config"
+      `((".config/x-config/ship.xmodmap"
+         ,(local-file
+           (string-append %lambda-project "/misc/yggdrasill.xmodmap")))
+        (".x-config"
          ,(program-file
            "x-config"
            (cmd+arg->script
