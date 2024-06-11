@@ -514,4 +514,12 @@
   "S" #'gnus-group-unsubscribe
   "s" #'gnus-group-subscribe)
 
+(general-evil-define-key '(normal) gnus-summary-mode-map
+  "K" #'gnus-summary-prev-article
+  "J" #'gnus-summary-next-article)
+
+(general-evil-define-key '(normal) gnus-article-mode-map
+  "K" #'gnus-summary-prev-article
+  "J" #'gnus-summary-next-article)
+
 (provide 'conf/keys)
