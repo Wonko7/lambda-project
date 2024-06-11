@@ -127,6 +127,12 @@
 
    (modify-services %desktop-services
      (delete gdm-service-type)
+     (console-font-service-type config => ;; TODO: separate services for highdpi?
+                                (map (lambda (tty)
+                                       `(,tty
+                                         . ,(file-append font-terminus
+                                                         "/share/consolefonts/ter-132n")))
+                                     '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (elogind-service-type config =>
                            (elogind-configuration
                             (handle-power-key 'ignore) ;; FIXME: 'hibernate?
@@ -172,7 +178,7 @@
       (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
-    (issue (spock-say "live long & prosper!"))
+    (issue (string-append (spock-say "live long & prosper!") "\n\n"))
     (users (map crew->user-account %crew))
 
     (packages (append
