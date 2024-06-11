@@ -688,7 +688,7 @@
        ,(plain-file "picom.conf" (picom-configuration 25)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
-                    (dunst-configuration %font 12 300)))))
+                    (dunst-configuration %font 8 175)))))
    %skeleton-wonko-services))
 
 (define-public %highdpi-wonko-home
