@@ -58,15 +58,15 @@
          "emacs_values_el"
          #~(progn
             (setq
-             my/font-size                            font-size
-             my/modeline-height                      modeline-height
-             my/tag-height                           tag-height
-             my/tag-font-size                        tag-font-size
-             my/tag-radius                           tag-radius
-             my/tag-padding                          tag-padding
-             my/org-agenda-tags-column               org-agenda-tags-column
-             my/org-habit-preceding-days             org-habit-preceding-days
-             my/window-divider-default-right-width   window-divider-default-right-width
+             my/font-size                            #$font-size
+             my/modeline-height                      #$modeline-height
+             my/tag-height                           #$tag-height
+             my/tag-font-size                        #$tag-font-size
+             my/tag-radius                           #$tag-radius
+             my/tag-padding                          #$tag-padding
+             my/org-agenda-tags-column               #$org-agenda-tags-column
+             my/org-habit-preceding-days             #$org-habit-preceding-days
+             my/window-divider-default-right-width   #$window-divider-default-right-width
              my/font           #$%font
              my/lambda-project #$%lambda-project
              my/term-cmd       #$%term-cmd
