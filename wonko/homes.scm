@@ -140,10 +140,9 @@
     ("LD_LIBRARY_PATH" . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
     ("PATH" . "$HOME/local/bin:$PATH")
     ("PATH" . "./_opam/bin:$PATH")
-    ("GUIX_EXTRA_PROFILES" .
-     ,(string-append "$HOME" %guix-extra-profiles-dir))
+    ("GUIX_EXTRA_PROFILES" . ,%guix-extra-profiles-dir)
     ("GUILE_LOAD_PATH" .
-     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project))
+     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project ":/code/w7-channel"))
     ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
     ("LANG" . "en_GB.utf8")
     ("PASSWORD_STORE_DIR" . "/data/pass")
@@ -555,7 +554,7 @@
        (shepherd-service
         (provision '(pantalaimon))
         (start #~(make-forkexec-constructor
-                  (list #$(string-append "~" %guix-extra-profiles-dir
+                  (list #$(string-append %guix-extra-profiles-dir
                                          "/communication/bin/pantalaimon"))
                   #:log-file "herd-logs/matrix.log"))
         (stop #~(make-kill-destructor))
