@@ -207,7 +207,7 @@
      (bootloader-configuration
       (bootloader grub-efi-removable-bootloader)
       (targets    '("/boot"))
-      (keyboard-layout keyboard-layout)))))
+      (keyboard-layout %dvorak-kb)))))
 
 (define-public %removable-laptop-os-init-from-external
   (operating-system
@@ -216,6 +216,6 @@
      (bootloader-configuration
       (bootloader grub-efi-removable-bootloader)
       (targets '("/mnt/tmp-efi/"))
-      (keyboard-layout keyboard-layout)))))
+      (keyboard-layout %dvorak-kb)))))
 
 ;; FIXME: add media station stuff.
