@@ -72,9 +72,11 @@
 (setq gnus-topic-topology '(("Gnus" visible)
                             (("tech" visible))
                             (("dev" visible))
-                            (("comics" visible))
                             (("work" visible))
+                            (("comics" visible))
                             (("gmail" visible nil nil))))
+
+(add-hook 'gnus-group-mode-hook #'gnus-topic-mode)
 
 (require 'evil-collection-gnus)
 
