@@ -141,8 +141,13 @@
     ("PATH" . "$HOME/local/bin:$PATH")
     ("PATH" . "./_opam/bin:$PATH")
     ("GUIX_EXTRA_PROFILES" . ,%guix-extra-profiles-dir)
+    ;; ("GUILE_LOAD_COMPILED_PATH" .
+    ;;  ,(string-append %lambda-project ":/code/w7-guix-channel:/code/nonguix"))
     ("GUILE_LOAD_PATH" .
-     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project ":/code/w7-channel"))
+     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project
+                     ":/code/w7-guix-channel"
+                     ":/code/nonguix"
+                     ":/code/guix"))
     ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
     ("LANG" . "en_GB.utf8")
     ("PASSWORD_STORE_DIR" . "/data/pass")
@@ -151,13 +156,7 @@
     ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
     ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
     ("QT_STYLE_OVERRIDE" . "kvantum")
-    ("XDG_CURRENT_DESKTOP" . "qt5ct")
-    ;; ("FLEET" .
-    ;;  ,(string-concatenate
-    ;;    (concatenate ((@ (srfi srfi-1) zip)
-    ;;                  (map ship-name %fleet)
-    ;;                  (circular-list " ")))))
-    ))
+    ("XDG_CURRENT_DESKTOP" . "qt5ct")))
 
 (define-public %wonko-bash-config
   (home-bash-configuration
