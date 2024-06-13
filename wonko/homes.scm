@@ -189,7 +189,127 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used
 
-(define-public %skeleton-wonko-services
+(define-public %common-shepherd-wonko-services
+  (list
+   (shepherd-service
+    (provision '(picom))
+    (start #~(make-forkexec-constructor
+              (list #$(file-append picom "/bin/picom"))
+              #:log-file "herd-logs/picom.log"))
+    (stop #~(make-kill-destructor))
+    (documentation "bling"))
+   (shepherd-service
+    (provision '(pantalaimon))
+    (start #~(make-forkexec-constructor
+              (list #$(string-append %guix-extra-profiles-dir
+                                     "/communication/bin/pantalaimon"))
+              #:log-file "herd-logs/matrix.log"))
+    (stop #~(make-kill-destructor))
+    (documentation "Crypto back-end server for ement.el"))
+   (shepherd-service
+    (provision '(dunst))
+    (start #~(make-forkexec-constructor
+              (list #$(file-append dunst "/bin/dunst"))
+              #:log-file "herd-logs/dunst.log"))
+    (stop #~(make-kill-destructor))
+    (documentation "riced notifications"))
+   (shepherd-service
+    (provision '(guix-repl))
+    (start #~(make-forkexec-constructor
+              (list
+               "/home/wonko/.config/guix/current/bin/guix" "repl"
+               "-L/code/guix"
+               "-L/code/nonguix"
+               "-L/code/w7-guix-channel"
+               "--listen=tcp:37146")
+              #:environment-variables '("INSIDE_EMACS=1")
+              #:log-file "herd-logs/guix-repl.log"))
+    (stop #~(make-kill-destructor))
+    (documentation "REPL to me, like lovers do"))))
+
+(define-public %vanilla-shepherd-wonko-service
+  (service
+   home-shepherd-service-type
+   (home-shepherd-configuration
+    (services
+     (cons*
+      (shepherd-service
+       (provision '(xss-lock))
+       (start #~(make-forkexec-constructor
+                 (cons* #$(file-append xss-lock "/bin/xss-lock")
+                        "--"
+                        '#$%lock-cmd)
+                 #:log-file "herd-logs/xss-lock.log"))
+       (stop #~(make-kill-destructor))
+       (documentation "don't touch my stuff"))
+      (shepherd-service
+       (provision '(synergy))
+       (start #~(make-forkexec-constructor
+                 (list #$(file-append synergy "/bin/synergy"))
+                 #:log-file "herd-logs/synergy.log"))
+       (stop #~(make-kill-destructor))
+       (documentation "can't be arsed to move IRL"))
+      (shepherd-service
+       (provision '(neko))
+       (start #~(make-forkexec-constructor
+                 (list #$(file-append oneko "/bin/oneko") "-dog")
+                 #:log-file "herd-logs/oneko.log"))
+       (stop #~(make-kill-destructor))
+       (documentation "neko"))
+      %common-shepherd-services)))))
+
+(define-public %media-station-shepherd-wonko-service
+  (service
+   home-shepherd-service-type
+   (home-shepherd-configuration
+    (services
+     (cons*
+      (shepherd-service
+       (provision '(xss-lock))
+       (auto-start? #f)
+       (start #~(make-forkexec-constructor
+                 (cons* #$(file-append xss-lock "/bin/xss-lock")
+                        "--"
+                        '#$%lock-cmd)
+                 #:log-file "herd-logs/xss-lock.log"))
+       (stop #~(make-kill-destructor))
+       (documentation "don't touch my stuff"))
+      (shepherd-service
+       (provision '(synergy))
+       (start #~(make-forkexec-constructor
+                 (list #$(file-append synergy "/bin/synergyc")
+                       "-f" "yggdrasill.local")
+                 #:log-file "herd-logs/synergy.log"))
+       (stop #~(make-kill-destructor))
+       (documentation "can't be arsed to move IRL"))
+      %common-shepherd-services)))))
+
+(define-public (make-xsession #:key disable-dpms?)
+  (simple-service
+   'config-files
+   home-files-service-type
+   (".xsession"
+    ,(program-file
+      "xsession"
+      (cmd+arg->script
+       `(("source" . "~/.bash_profile")
+         (xhost . "+SI:localuser:$USER")
+         (xset . "b 0 0 0")
+         (xset . "r rate 400 30")
+         ,(if (disable-dpms?)
+              `(xset . "s off -dpms")
+              `(xset . "dpms 600 1200 0"))
+         (xsetroot . "-cursor_name left_ptr")
+         (setxkbmap . "dvorak")
+         (xmodmap . "~/.config/x-config/common.xmodmap")
+         (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
+         (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
+         (xrdb  . "-load ~/.Xresources")
+         ("~/.x-config" . "")
+         (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
+             . #$(file-append emacs-exwm "/bin/exwm"))))))))
+
+(define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
@@ -200,7 +320,6 @@
                     ;;  "shopt -s globstar\n"
                     ;;  "shopt -s nocaseglob\n")
                     (bash-profile-source-profiles (profiles->names %profiles))))
-
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
@@ -235,12 +354,6 @@
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
 
-   ;; (simple-service 'emacsd-generated-config-files
-   ;;                 home-files-service-type
-   ;;                 (list
-   ;;                  `(".emacs.d/generated-values.el"
-   ;;                    ,(scheme-file "_" %emacs-values))))
-
    (simple-service
     'config-files
     home-files-service-type
@@ -251,32 +364,6 @@
       (".emacs.d/aliases"
        ,(plain-file "aliases"
                     (emacs-eshell-aliases-configuration %aliases)))
-      ;; (".x-config"
-      ;;  ,(program-file "x-config"
-      ;;                 (ship-x-config %ship)))
-      (".xsession"
-       ,(program-file
-         "xsession"
-         (cmd+arg->script
-          `(("source" . "~/.bash_profile")
-            (xhost . "+SI:localuser:$USER")
-            (xset . "b 0 0 0")
-            (xset . "r rate 400 30")
-            (xset . "dpms 600 1200 0")
-            ;; FIXME
-            ;; ,(if (ship-media-station? %ship)
-            ;;      `(xset . "s off -dpms")
-            ;;      `(xset . "dpms 600 1200 0"))
-            (xsetroot . "-cursor_name left_ptr")
-            (setxkbmap . "dvorak")
-            (xmodmap . "~/.config/x-config/common.xmodmap")
-            (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
-            (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
-            (xrdb  . "-load ~/.Xresources")
-            ("~/.x-config" . "")
-            (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
-             . #$(file-append emacs-exwm "/bin/exwm"))))))
-
       ;; utils:
       (".config/git/config"
        ,(local-file
@@ -315,16 +402,7 @@
          (string-append %lambda-project "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
-         (string-append %lambda-project "/misc/Synergy.conf")))
-      ;; (".config/feh/themes"
-      ;;  ,(let ((fsz (number->string (ship-feh-font-size %ship))))
-      ;;     (mixed-text-file
-      ;;      "feh_symlink_name_is_theme_name"
-      ;;      "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-      ;;      " --fontpath " %home "/.guix-home/profile/share/fonts/truetype/"
-      ;;      " --menu-font JetBrainsMono-Regular/" fsz
-      ;;      " --font JetBrainsMono-Regular/" fsz "\n")))
-      ))
+         (string-append %lambda-project "/misc/Synergy.conf")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
@@ -535,71 +613,12 @@
                      (tar    #$(file-append tar "/bin/tar")))
                  (system
                   (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
-                                 base64 " -d | " tar " xz ")))))))))
+                                 base64 " -d | " tar " xz ")))))))))))
 
-   ;; TODO; separate these
-   (service
-    home-shepherd-service-type
-    (home-shepherd-configuration
-     (services
-      (list
-       (shepherd-service
-        (provision '(picom))
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append picom "/bin/picom"))
-                  #:log-file "herd-logs/picom.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "bling"))
-       (shepherd-service
-        (provision '(pantalaimon))
-        (start #~(make-forkexec-constructor
-                  (list #$(string-append %guix-extra-profiles-dir
-                                         "/communication/bin/pantalaimon"))
-                  #:log-file "herd-logs/matrix.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "Crypto back-end server for ement.el"))
-       (shepherd-service
-        (provision '(dunst))
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append dunst "/bin/dunst"))
-                  #:log-file "herd-logs/dunst.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "riced notifications"))
-       (shepherd-service
-        (provision '(guix-repl))
-        (start #~(make-forkexec-constructor
-                  (list
-                   "~/.config/guix/current/bin/guix"
-                   "repl" "--listen=tcp:37146")
-                  #:environment-variables '("INSIDE_EMACS=1")
-                  #:log-file "herd-logs/guix-repl.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "REPL to me, like lovers do"))
-       (shepherd-service
-        (provision '(xss-lock))
-        (start #~(make-forkexec-constructor
-                  (cons* #$(file-append xss-lock "/bin/xss-lock")
-                         "--"
-                         '#$%lock-cmd)
-                  #:log-file "herd-logs/xss-lock.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "don't touch my stuff"))
-       (shepherd-service
-        (provision '(synergy))
-        ;; (auto-start? #f)
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append synergy "/bin/synergy"))
-                  #:log-file "herd-logs/synergy.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "can't be arsed to move IRL"))
-       (shepherd-service
-        (provision '(neko))
-        (auto-start? #t)
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append oneko "/bin/oneko") "-dog")
-                  #:log-file "herd-logs/oneko.log"))
-        (stop #~(make-kill-destructor))
-        (documentation "neko"))))))) )
+(define-public %skeleton-wonko-services
+  (cons*
+   (make-xsession #:disable-dpms? #f)
+   %bare-skeleton-wonko-services))
 
 (define-public %skeleton-wonko-home
   (home-environment
@@ -624,8 +643,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vanilla config: just needs x-config
 
-(define-public %vanilla-wonko-services
-  (cons*
+(define %just-vanilla-wonko-services
+  (list
    %vanilla-emacs-values-service
    (service home-bash-service-type %wonko-bash-config)
    (simple-service
@@ -646,8 +665,14 @@
        ,(plain-file "picom.conf" (picom-configuration 10)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
-                    (dunst-configuration %font 12 300)))))
-   %skeleton-wonko-services))
+                    (dunst-configuration %font 12 300)))))))
+
+(define-public %vanilla-wonko-services
+  (cons*
+   (append
+    %just-vanilla-wonko-services
+    %skeleton-wonko-services
+    %vanilla-shepherd-wonko-service)))
 
 (define-public %vanilla-wonko-home
   (home-environment
@@ -687,12 +712,30 @@
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 8 175)))))
-   %skeleton-wonko-services))
+   (append
+    %skeleton-wonko-services
+    %vanilla-shepherd-wonko-service)))
 
 (define-public %highdpi-wonko-home
   (home-environment
    (inherit %skeleton-wonko-home)
    (services %highdpi-wonko-services)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; media-station config: just needs x-config
+
+(define-public %media-station-wonko-services
+  (cons*
+   (make-xsession #:disable-dpms? #t)
+   (append
+    %bare-skeleton-wonko-services
+    %just-vanilla-wonko-services
+    %media-station-shepherd-wonko-service)))
+
+(define-public %highdpi-wonko-home
+  (home-environment
+   (inherit %skeleton-wonko-home)
+   (services %media-station-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina

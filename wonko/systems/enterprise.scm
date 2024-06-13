@@ -30,7 +30,7 @@
 
 (define %enterprise-wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
+   (inherit %media-station-wonko-home)
    (services
     (cons*
      (simple-service
@@ -46,10 +46,10 @@
             `((xrandr . "--dpi 96")
               (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
               (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
-     %vanilla-wonko-services))))
+     %media-station-wonko-services))))
 
 (operating-system
-  (inherit %laptop-os)
+  (inherit %media-station-os)
   (host-name "enterprise")
   (services (cons* (service slim-service-type wonko-slim-config)
                    (service guix-home-service-type

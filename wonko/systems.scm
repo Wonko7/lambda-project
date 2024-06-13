@@ -224,4 +224,17 @@
       (targets '("/mnt/tmp-efi/"))
       (keyboard-layout %dvorak-kb)))))
 
+(define-public %media-station-os
+  (operating-system
+   (inherit %laptop-os)
+   (services
+    (modify-services
+     (elogind-service-type config =>
+                           (elogind-configuration
+                            (handle-power-key 'ignore)
+                            (handle-lid-switch 'ignore)
+                            (handle-lid-switch-docked  'ignore)
+                            (handle-lid-switch-external-power 'ignore)))
+     %laptop-services))))
+
 ;; FIXME: add media station stuff.
