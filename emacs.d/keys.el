@@ -8,18 +8,19 @@
 ;; leader actions
 
 (evil-leader/set-key
-  ":"      #'execute-extended-command ;;  "exec stuff"
-  "<SPC>"  #'consult-buffer           ;;  "buffers"
-  "/"      #'consult-ripgrep          ;;  "grep"
-  "'"      #'project-find-file        ;;  "proj buffers"
+  ":"       #'execute-extended-command ;;  "exec stuff"
+  "<SPC>"   #'consult-buffer           ;;  "buffers"
+  "C-<SPC>" #'consult-buffer           ;;  "buffers"
+  "/"       #'consult-ripgrep          ;;  "grep"
+  "'"       #'project-find-file        ;;  "proj buffers"
   ;; "'" #'counsel-projectile-find-file
 
   ;; embark
   "C-e" #'embark-act
-  "e" #'embark-act
-  "x" #'embark-export
+  "e"   #'embark-act
+  "x"   #'embark-export
   ;; vertico
-  "." #'vertico-repeat
+  "."  #'vertico-repeat
   "vG" #'vertico-grid-mode
   "vu" #'vertico-unobtrusive-mode
 
@@ -57,8 +58,8 @@
   "bn" #'evil-buffer-new
 
   ;; org
-  "oa" (lambda () (interactive) (org-agenda nil "z"))
-  "oc" #'cfw:open-org-calendar ;; FIXME use this as date picker?
+  "oa"  (lambda () (interactive) (org-agenda nil "z"))
+  "oc"  #'cfw:open-org-calendar ;; FIXME use this as date picker?
   "oib" (lambda ()
           (interactive)
           (execute-kbd-macro (kbd "^wD"))
