@@ -278,6 +278,7 @@
        (provision '(synergy))
        (start #~(make-forkexec-constructor
                  (list #$(file-append synergy "/bin/synergyc")
+                       "-n" "media-station"
                        "-f" "yggdrasill.local")
                  #:log-file "herd-logs/synergy.log"))
        (stop #~(make-kill-destructor))
