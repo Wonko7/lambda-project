@@ -29,7 +29,7 @@
 ;; (exwm-init)
 ;; (exwm-workspace--init)
 
-(setq exwm-workspace-number 12) ;; two extra for external monitors.
+(setq exwm-workspace-number 20) ;; 10-20 for external monitors.
 (require 'exwm)
 (require 'exwm-randr)
 (require 'exwm-config)
@@ -200,6 +200,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; global key bindings
 
+(defun go-to-external-screen (i)
+  (pcase (system-name)
+    ("yggdrasill"
+     (async-shell-command "xdotool mousemove 1920 1000; xdotool mousemove_relative 0 3000")
+     (async-shell-command (concat "DIPLAY=:9 ssh rocinante.local /home/wonko/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
+    (_ (exwm-workspace-switch-create i))))
+
 (setq exwm-input-global-keys
       `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x, sometimes \s-x
         ;; https://emacs.stackexchange.com/questions/78135/why-does-emacs-29-translates-meta-to-metahyper-m-somekey-to-h-m-somekey
@@ -227,7 +234,7 @@
         ([?\A-\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
         ([?\A-\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
         ([?\A-\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
-        ([?\A-\s-&] . async-shell-command)
+        ([?\A-\s-\C-&] . async-shell-command)
 
         ([?\A-\s-f] . my/toggle-fullscreen)
         ([?\A-\s-F] . exwm-layout-toggle-fullscreen)
@@ -249,6 +256,12 @@
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))
+        ,@(-map-indexed (lambda (i c)
+                    `(,(kbd (format "A-s-%s" c)) .
+                      (lambda ()
+                        (interactive)
+                        (go-to-external-screen ,i))))
+                  (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))
 
         ([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
@@ -272,7 +285,7 @@
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
         ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
         ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
-        ([?\s-&] . async-shell-command)
+        ([?\s-\C-&] . async-shell-command)
 
         ([?\s-f] . my/toggle-fullscreen)
         ([?\s-F] . exwm-layout-toggle-fullscreen)
@@ -294,7 +307,12 @@
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))
-        ))
+        ,@(-map-indexed (lambda (i c)
+                    `(,(kbd (format "s-%s" c)) .
+                      (lambda ()
+                        (interactive)
+                        (go-to-external-screen ,i))))
+                  (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exwm settings
@@ -336,9 +354,11 @@
 (exwm-enable)
 
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
-(setq exwm-randr-workspace-monitor-plist '(0 "HDMI-A-0"
-                                           10 "HDMI-A-0"
-                                           11 "HDMI-A-0"))
+(setq exwm-randr-workspace-monitor-plist
+      (mapcar (lambda (i)
+                (list i "HDMI-A-0"))
+              (number-sequence 10 20)))
+
 (setq exwm-workspace-warp-cursor t
       mouse-autoselect-window t
       focus-follows-mouse t)
