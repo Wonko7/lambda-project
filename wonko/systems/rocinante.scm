@@ -30,7 +30,7 @@
 
 (define %rocinante-wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
+   (inherit %media-station-wonko-home)
    (services
     (cons*
      (simple-service
@@ -47,10 +47,10 @@
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.7")
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Enabled' 1")
               (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Drag Lock Enabled' 1")))))))
-     %vanilla-wonko-services))))
+     %media-station-wonko-services))))
 
 (operating-system
-  (inherit %laptop-os)
+  (inherit %media-station-os)
   (host-name "rocinante")
   (services (cons* (service slim-service-type
                             (slim-configuration
