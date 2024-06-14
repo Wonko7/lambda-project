@@ -64,7 +64,7 @@
                    (service guix-home-service-type
                             `(("wonko" ,%rocinante-wonko-home)
                               ("tina" ,%tina-home)))
-                   %laptop-services))
+                   %media-station-services))
   (mapped-devices
    (list (mapped-device
           (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
