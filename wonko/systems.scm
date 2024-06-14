@@ -228,13 +228,12 @@
   (operating-system
    (inherit %laptop-os)
    (services
-    (modify-services
+    (modify-services %laptop-services
      (elogind-service-type config =>
                            (elogind-configuration
-                            (handle-power-key 'ignore)
-                            (handle-lid-switch 'ignore)
-                            (handle-lid-switch-docked  'ignore)
-                            (handle-lid-switch-external-power 'ignore)))
-     %laptop-services))))
+                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                            (handle-lid-switch 'suspend)
+                            (handle-lid-switch-docked  'suspend)
+                            (handle-lid-switch-external-power 'suspend)))))))
 
 ;; FIXME: add media station stuff.

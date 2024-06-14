@@ -256,7 +256,7 @@
                  #:log-file "herd-logs/oneko.log"))
        (stop #~(make-kill-destructor))
        (documentation "neko"))
-      %common-shepherd-services)))))
+      %common-shepherd-wonko-services)))))
 
 (define-public %media-station-shepherd-wonko-service
   (service
@@ -282,32 +282,33 @@
                  #:log-file "herd-logs/synergy.log"))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
-      %common-shepherd-services)))))
+      %common-shepherd-wonko-services)))))
 
-(define-public (make-xsession #:key disable-dpms?)
+(define* (make-xsession #:key (disable-dpms #f))
   (simple-service
-   'config-files
+   'xsession
    home-files-service-type
-   (".xsession"
-    ,(program-file
-      "xsession"
-      (cmd+arg->script
-       `(("source" . "~/.bash_profile")
-         (xhost . "+SI:localuser:$USER")
-         (xset . "b 0 0 0")
-         (xset . "r rate 400 30")
-         ,(if (disable-dpms?)
-              `(xset . "s off -dpms")
-              `(xset . "dpms 600 1200 0"))
-         (xsetroot . "-cursor_name left_ptr")
-         (setxkbmap . "dvorak")
-         (xmodmap . "~/.config/x-config/common.xmodmap")
-         (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
-         (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
-         (xrdb  . "-load ~/.Xresources")
-         ("~/.x-config" . "")
-         (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
-             . #$(file-append emacs-exwm "/bin/exwm"))))))))
+   `((".xsession"
+      ,(program-file
+        "xsession"
+        (cmd+arg->script
+         `(("source" . "~/.bash_profile")
+           (xhost . "+SI:localuser:$USER")
+           (xset . "b 0 0 0")
+           (xset . "r rate 400 30")
+           ,(if #t
+                ;;disable-dpms
+                `(xset . "s off -dpms")
+                `(xset . "dpms 600 1200 0"))
+           (xsetroot . "-cursor_name left_ptr")
+           (setxkbmap . "dvorak")
+           (xmodmap . "~/.config/x-config/common.xmodmap")
+           (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
+           (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
+           (xrdb  . "-load ~/.Xresources")
+           ("~/.x-config" . "")
+           (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
+               . #$(file-append emacs-exwm "/bin/exwm")))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
@@ -617,7 +618,7 @@
 
 (define-public %skeleton-wonko-services
   (cons*
-   (make-xsession #:disable-dpms? #f)
+   (make-xsession)
    %bare-skeleton-wonko-services))
 
 (define-public %skeleton-wonko-home
@@ -669,10 +670,10 @@
 
 (define-public %vanilla-wonko-services
   (cons*
+   %vanilla-shepherd-wonko-service
    (append
     %just-vanilla-wonko-services
-    %skeleton-wonko-services
-    %vanilla-shepherd-wonko-service)))
+    %skeleton-wonko-services)))
 
 (define-public %vanilla-wonko-home
   (home-environment
@@ -712,9 +713,8 @@
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 8 175)))))
-   (append
-    %skeleton-wonko-services
-    %vanilla-shepherd-wonko-service)))
+   %vanilla-shepherd-wonko-service
+   %skeleton-wonko-services))
 
 (define-public %highdpi-wonko-home
   (home-environment
@@ -726,13 +726,14 @@
 
 (define-public %media-station-wonko-services
   (cons*
-   (make-xsession #:disable-dpms? #t)
+   ;(make-xsession #:disable-dpms? #t)
+   (make-xsession #:disable-dpms #t)
+   %media-station-shepherd-wonko-service
    (append
     %bare-skeleton-wonko-services
-    %just-vanilla-wonko-services
-    %media-station-shepherd-wonko-service)))
+    %just-vanilla-wonko-services)))
 
-(define-public %highdpi-wonko-home
+(define-public %media-station-wonko-home
   (home-environment
    (inherit %skeleton-wonko-home)
    (services %media-station-wonko-services)))
