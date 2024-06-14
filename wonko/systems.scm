@@ -232,8 +232,8 @@
      (elogind-service-type config =>
                            (elogind-configuration
                             (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                            (handle-lid-switch 'suspend)
-                            (handle-lid-switch-docked  'suspend)
-                            (handle-lid-switch-external-power 'suspend)))))))
+                            (handle-lid-switch 'ignore)
+                            (handle-lid-switch-docked 'ignore)
+                            (handle-lid-switch-external-power 'ignore)))))))
 
 ;; FIXME: add media station stuff.
