@@ -558,8 +558,16 @@ If TEXT does not have a range, return nil."
                         (list "the-road-so-far"
                               "the-road-so-far/_archive/"))))
 
+(defun my/recent-dailies ()
+  (org-ql-search-directories-files
+   :directories (list (concat org-roam-directory "the-road-so-far"))))
+
 (setq org-ql-views
       (list
+       (cons "ts-active"
+             (list :buffers-files #'my/recent-dailies
+                   :query '(ts-active :from "2024-06-12")
+                   :sort #'my/sort-by-filename-date))
        (cons "ALL >7a"
              (list :buffers-files #'my/all-dailies
                    :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7-9][a-c][+]? -"))
