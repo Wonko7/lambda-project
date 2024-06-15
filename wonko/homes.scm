@@ -366,6 +366,10 @@
       (".emacs.d/aliases"
        ,(plain-file "aliases"
                     (emacs-eshell-aliases-configuration %aliases)))
+      ;; ssh:
+      (".ssh/config"
+       ,(local-file
+         (string-append %lambda-project "/misc/ssh.config")))
       ;; utils:
       (".config/git/config"
        ,(local-file

@@ -196,6 +196,11 @@ This function could be in the list `comint-output-filter-functions'."
 
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
+(setq tramp-ssh-controlmaster-options
+ (concat
+   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+   "-o ControlMaster=auto -o ControlPersist=yes"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
 
