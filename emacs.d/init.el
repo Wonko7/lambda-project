@@ -322,9 +322,9 @@ This function could be in the list `comint-output-filter-functions'."
 (require 'conf/misc          "~/.emacs.d/misc.el")
 (require 'conf/completion    "~/.emacs.d/completion.el")
 (require 'conf/org           "~/.emacs.d/org-conf.el")
-(require 'conf/lisp          "~/.emacs.d/lisp-config.el")
-(require 'conf/doom          "~/.emacs.d/doom.el")
+(require 'conf/lisp          "~/.emacs.d/lisp-dev.el")
 (require 'conf/dev           "~/.emacs.d/dev.el")
+(require 'conf/doom          "~/.emacs.d/doom.el")
 (require 'conf/communication "~/.emacs.d/communication.el")
 (require 'conf/keys          "~/.emacs.d/keys.el")
 

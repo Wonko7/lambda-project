@@ -279,15 +279,16 @@
 ;; lisps
 
 (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
-  "Y"     #'evil-cp-yank-enclosing
+  ;;"Y"     #'evil-cp-yank-enclosing
   "{"     #'evil-backward-paragraph
   "}"     #'evil-forward-paragraph
-  ;;")"     #'evil-cp-next-closing
-  ;;"("     #'sp-backward-up-sexp
-  "("     #'backward-sexp
-  ")"     #'forward-sexp
-  "é"     #'evil-cp-previous-opening ; FIXME put this in global map?
-  "&"     #'evil-cp-next-opening
+  "("     #'evil-cp-previous-opening
+  ")"     #'evil-cp-next-opening
+  "é"     #'sp-backward-sexp
+  "&"     #'sp-next-sexp
+  "C-k"   #'sp-backward-sexp
+  "C-j"   #'sp-next-sexp
+  "ï"     #'sp-backward-up-sexp    ; FIXME put this in global map?
   "M-r"   #'paredit-raise-sexp
   "M-t"   #'sp-transpose-sexp
   "M-T"   (lambda() (interactive) (sp-transpose-sexp -1))

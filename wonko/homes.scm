@@ -338,7 +338,7 @@
                       "fancy.el"
                       "early-init.el"
                       "init.el"
-                      "lisp-config.el"
+                      "lisp-dev.el"
                       "keys.el"
                       "misc.el"
                       "org-conf.el")))
