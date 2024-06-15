@@ -300,7 +300,7 @@
   "&"     #'sp-next-sexp
   "C-k"   #'sp-backward-sexp
   "C-j"   #'sp-next-sexp
-  "ï"     #'sp-backward-up-sexp    ; FIXME put this in global map?
+  "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
   "M-r"   #'paredit-raise-sexp
   "M-t"   #'sp-transpose-sexp
   "M-T"   (lambda() (interactive) (sp-transpose-sexp -1))
@@ -320,12 +320,13 @@
   "t"   #'sp-transpose-sexp
   "T"   (lambda() (interactive) (sp-transpose-sexp -1))
   "M-T" (lambda() (interactive) (sp-transpose-sexp -1))
-  "gp"  #'evil-cp-wrap-next-round
-  "gP"  #'evil-cp-wrap-previous-round
-  "gc"  #'evil-cp-wrap-next-curly
-  "gC"  #'evil-cp-wrap-previous-curly
-  "gs"  #'evil-cp-wrap-next-square
-  "gS"  #'evil-cp-wrap-previous-square
+  "@"  #'sp-splice-sexp
+  "p"  #'evil-cp-wrap-next-round
+  "P"  #'evil-cp-wrap-previous-round
+  "c"  #'evil-cp-wrap-next-curly
+  "C"  #'evil-cp-wrap-previous-curly
+  "s"  #'evil-cp-wrap-next-square
+  "S"  #'evil-cp-wrap-previous-square
   "RET" #'eval-defun)
 
 (general-evil-define-key '(normal) geiser-mode-map
