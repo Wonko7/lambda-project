@@ -69,11 +69,11 @@
 
 (add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
 
-(setq gnus-topic-topology '(("Gnus" visible)
-                            (("tech" visible))
-                            (("dev" visible))
-                            (("work" visible))
-                            (("comics" visible))
+(setq gnus-topic-topology '(("Gnus" visible nil nil)
+                            (("tech" visible nil nil))
+                            (("dev" visible nil nil))
+                            (("work" visible nil nil))
+                            (("comics" visible nil nil))
                             (("gmail" visible nil nil))))
 
 (add-hook 'gnus-group-mode-hook #'gnus-topic-mode)
