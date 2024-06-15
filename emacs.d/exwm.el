@@ -257,11 +257,11 @@
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))
         ,@(-map-indexed (lambda (i c)
-                    `(,(kbd (format "A-s-%s" c)) .
-                      (lambda ()
-                        (interactive)
-                        (go-to-external-screen ,i))))
-                  (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))
+                          `(,(kbd (format "A-s-%s" c)) .
+                            (lambda ()
+                              (interactive)
+                              (go-to-external-screen ,i))))
+                        (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))
 
         ([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
@@ -308,11 +308,11 @@
                         (exwm-workspace-switch-create ,i))))
                   (number-sequence 0 9))
         ,@(-map-indexed (lambda (i c)
-                    `(,(kbd (format "s-%s" c)) .
-                      (lambda ()
-                        (interactive)
-                        (go-to-external-screen ,i))))
-                  (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
+                          `(,(kbd (format "s-%s" c)) .
+                            (lambda ()
+                              (interactive)
+                              (go-to-external-screen ,i))))
+                        (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exwm settings
@@ -355,7 +355,7 @@
 
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
 (setq exwm-randr-workspace-monitor-plist
-      (mapcar (lambda (i)
+      (mapcan (lambda (i)
                 (list i "HDMI-A-0"))
               (number-sequence 10 20)))
 
@@ -443,7 +443,10 @@
            (evil-window-vsplit)
            (shell)
            (bluetooth-list-devices)
-           (other-window 1)))))
+           (other-window 1))
+          ;; external monitor
+          ((run-init-p 14)
+           (async-shell-command "GDK_SCALE=1 GDK_DPI_SCALE=3 firefox")))))
 
 (defun ws/force-run-auto-start ()
   (interactive)
