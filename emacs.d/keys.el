@@ -361,8 +361,10 @@
   "C-H"   #'org-promote-subtree
   "C-L"   #'org-demote-subtree)
 
-(define-key cfw:calendar-mode-map (kbd "SPC") nil)
-(define-key cfw:org-schedule-map (kbd "SPC") nil)
+(define-key cfw:calendar-mode-map (kbd "<SPC>") nil)
+(general-evil-define-key '(normal insert emacs motion) cfw:calendar-mode-map
+  "SPC" evil-leader--default-map)
+(define-key cfw:calendar-mode-map (kbd "<SPC>") evil-leader--default-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed
