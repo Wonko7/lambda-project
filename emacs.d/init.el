@@ -129,10 +129,11 @@
 (magit-todos-mode)
 
 (defun check-if-todo-blacklisted ()
-  (let ((root (magit-with-toplevel (pwd))))
-    (or (string= root "Directory /data/org/")
-        (string= root "Directory /work/guix/guix")
-        (string= root "Directory /code/guix/guix"))))
+  (let ((root (magit-with-toplevel default-directory)))
+    (or (string= (substring root 0 5) "/ssh:")
+        (string= root "/data/org/")
+        (string= root "/work/guix/guix")
+        (string= root "/code/guix/guix"))))
 
 (advice-add #'magit-todos--insert-todos
             :before-until #'check-if-todo-blacklisted)
