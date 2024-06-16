@@ -201,11 +201,15 @@
 ;; global key bindings
 
 (defun go-to-external-screen (i)
-  (pcase (system-name)
-    ("yggdrasill"
-     (async-shell-command "xdotool mousemove 1920 1000; xdotool mousemove_relative 0 3000")
-     (async-shell-command (concat "DIPLAY=:9 ssh rocinante.local /home/wonko/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
-    (_ (exwm-workspace-switch-create i))))
+  (let ((i (+ 11 i)))
+    (pcase (system-name)
+      ("yggdrasill"
+       (async-shell-command
+        "xdotool mousemove 1920 1000; xdotool mousemove_relative 0 3000")
+       (async-shell-command
+        (concat "ssh rocinante.local DISPLAY=:9 "
+                "/home/wonko/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
+      (_ (exwm-workspace-switch-create i)))))
 
 (setq exwm-input-global-keys
       `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x, sometimes \s-x
