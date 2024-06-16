@@ -28,8 +28,7 @@
  android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
 (define-public %emacs-world
-  (list ;; TODO: native compilation
-        emacs
+  (list emacs
         ;; basic (bitches) stuff:
         emacs-general
         emacs-undo-fu
@@ -286,24 +285,25 @@
         breeze breeze-gtk breeze-icons))
 
 (define-public %desktop-world
-  (list ;; img
-        scrot
-        imagemagick
-        ;; video
-        mpv
-        vlc
-        ;; webcam
-        guvcview
-        ;; ebooks & pdf
-        calibre
-        ;;okular ;; 280Mb
-        zathura ;; FIXME config this
-        zathura-ps
-        zathura-pdf-mupdf
-        xournal ;; oldschool pdf editor
-        ;; desktop stuff
-        ddcutil ;; monitor settings
-        ))
+  (list
+   ;; img
+   scrot
+   imagemagick
+   ;; video
+   mpv
+   vlc
+   ;; webcam
+   guvcview
+   ;; ebooks & pdf
+   calibre
+   ;;okular ;; 280Mb
+   zathura ;; FIXME config this
+   zathura-ps
+   zathura-pdf-mupdf
+   xournal ;; oldschool pdf editor
+   ;; desktop stuff
+   ddcutil ;; monitor settings
+   ))
 
 (define-public %web-world
   (list firefox
