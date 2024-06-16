@@ -63,7 +63,7 @@
     (home-page "https://github.com/emacsorphanage/popwin")
     (synopsis "popwin: manage windows")
     (description "popwin: manage windows")
-    (license license:gpl3+)))
+    (license (@ (guix licenses) gpl3+))))
 
 (define-public emacs-elfeed-goodies
   (package
@@ -84,7 +84,7 @@
    (home-page "https://github.com/jeetelongname/elfeed-goodies")
    (synopsis "elfeed goodies")
    (description "elfeed goodies")
-   (license license:gpl3+)))
+   (license (@ (guix licenses) gpl3+))))
 
 (define-public emacs-buffer-expose
   (package
@@ -107,4 +107,4 @@
     (synopsis "Expose: show buffers on a grid")
     (description
      "Visual buffer switching using a window grid")
-    (license license:gpl3+)))
+    (license (@ (guix licenses) gpl3+))))

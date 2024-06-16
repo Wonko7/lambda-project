@@ -278,12 +278,6 @@ This function could be in the list `comint-output-filter-functions'."
 (add-hook 'rg-mode-hook #'wgrep-rg-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; windows
-
-(require 'buffer-expose)
-(setq buffer-expose-rescale-factor 0.5)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mentor
 
 (setq mentor-rtorrent-download-directory "/mnt/trantor/media")

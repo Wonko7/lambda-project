@@ -146,9 +146,10 @@
     ;;  ,(string-append %lambda-project ":/code/w7-guix-channel:/code/nonguix"))
     ("GUILE_LOAD_PATH" .
      ,(string-append "$GUILE_LOAD_PATH:" %lambda-project
-                     ":/code/w7-guix-channel"
-                     ":/code/nonguix"
-                     ":/code/guix"))
+                     ;; ":/code/w7-guix-channel"
+                     ;; ":/code/nonguix"
+                     ;; ":/code/guix"
+                     ))
     ("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")
     ("LANG" . "en_GB.utf8")
     ("PASSWORD_STORE_DIR" . "/data/pass")
@@ -219,9 +220,6 @@
     (start #~(make-forkexec-constructor
               (list
                "/home/wonko/.config/guix/current/bin/guix" "repl"
-               "-L/code/guix"
-               "-L/code/nonguix"
-               "-L/code/w7-guix-channel"
                "--listen=tcp:37146")
               #:environment-variables '("INSIDE_EMACS=1")
               #:log-file "herd-logs/guix-repl.log"))

@@ -2,6 +2,7 @@
   #:use-module (gnu)
   #:use-module (guix build utils)
   #:use-module (guix gexp)
+  #:use-module (guix channels)
   #:use-module (ice-9 format)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)

@@ -3,30 +3,29 @@
   #:use-module (gnu packages)
   #:use-module (guix gexp)
   ;; fonts
+  #:use-module (wonko packages fonts)
   ;; emacs
   #:use-module (nongnu packages clojure)
+  #:use-module (wonko packages emacs-xyz)
   ;; web
   #:use-module (nongnu packages mozilla)
   ;; dev
   #:use-module (nongnu packages compression)
   ;; services
-  #:use-module (gnu home services shepherd)
- #:use-module (wonko packages fonts)
- #:use-module (gnu home services shepherd)
- #:use-module (wonko packages emacs-xyz)
+  #:use-module (gnu home services shepherd))
 
 (use-package-modules
-  fonts fontutils unicode
-  ;; emacs
-  emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml
-  ;; desktop stuff
-  pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde
-  ;; web
-  chromium tor matrix irc bittorrent
-  ;; tools
-  admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs
-  ;; dev
-  android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
+ fonts fontutils unicode
+ ;; emacs
+ emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml
+ ;; desktop stuff
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde
+ ;; web
+ chromium tor matrix irc bittorrent
+ ;; tools
+ admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs
+ ;; dev
+ android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
 (define-public %emacs-world
   (list ;; TODO: native compilation
@@ -328,7 +327,7 @@
 
 (define-public %fonts-world
   (list font-jetbrains-mono
-        font-nerd-noto
+        ;; font-nerd-noto
         font-nerd-symbols
         font-goog-noto-emoji))
 
