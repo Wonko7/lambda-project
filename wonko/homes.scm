@@ -9,12 +9,13 @@
  #:use-module (srfi srfi-1)
  #:use-module (srfi srfi-11)
  ;; fonts
- #:use-module (w7 packages fonts)
+ #:use-module (wonko packages fonts)
  ;; services
  #:use-module (gnu home services)
  #:use-module (gnu home services shepherd)
  #:use-module (gnu home services shells)
- #:use-module (w7 packages emacs-xyz)
+ #:use-module (gnu services shepherd)
+ #:use-module (wonko packages emacs-xyz)
  ;; my stuff
  #:use-module (wonko defs)
  #:use-module (wonko fleet)

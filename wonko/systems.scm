@@ -10,6 +10,8 @@
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
   #:use-module (gnu system setuid)
+  #:use-module (gnu packages package-management)
+  #:use-module (guix channels)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko spock)

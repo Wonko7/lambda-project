@@ -23,6 +23,7 @@
              (wonko fleet)
              (wonko dotfiles)
              (wonko xorg)
+             (wonko pkgs)
              (wonko homes)
              (wonko systems))
 

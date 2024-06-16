@@ -3,7 +3,6 @@
   #:use-module (gnu packages)
   #:use-module (guix gexp)
   ;; fonts
-  #:use-module (w7 packages fonts)
   ;; emacs
   #:use-module (nongnu packages clojure)
   ;; web
@@ -12,8 +11,9 @@
   #:use-module (nongnu packages compression)
   ;; services
   #:use-module (gnu home services shepherd)
-  #:use-module (w7 packages jonaburg-picom)
-  #:use-module (w7 packages emacs-xyz))
+ #:use-module (wonko packages fonts)
+ #:use-module (gnu home services shepherd)
+ #:use-module (wonko packages emacs-xyz)
 
 (use-package-modules
   fonts fontutils unicode
@@ -195,7 +195,7 @@
         emacs-all-the-icons-completion
         emacs-all-the-icons-dired
         emacs-kind-icon
-        ;; emacs-nerd-icons
+        emacs-default-text-scale
         ;; exwm
         emacs-exwm
         emacs-exwm-edit
@@ -205,7 +205,7 @@
         emacs-ace-window    ;; FIXME
         emacs-ace-link      ;; FIXME
         emacs-ace-jump-mode ;; FIXME
-        emacs-buffer-expose
+        ;; emacs-buffer-expose
         emacs-switch-window
 
         ;; system
