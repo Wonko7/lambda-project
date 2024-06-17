@@ -326,12 +326,20 @@
   "c"  #'evil-cp-wrap-next-curly
   "C"  #'evil-cp-wrap-previous-curly
   "s"  #'evil-cp-wrap-next-square
-  "S"  #'evil-cp-wrap-previous-square
+  "S"  #'evil-cp-wrap-previous-square)
+
+;; (general-evil-define-key '(normal) geiser-mode-map
+;;   :prefix "RET"
+;;   "RET" #'geiser-eval-definition)
+
+(general-evil-define-key '(normal) emacs-lisp-mode-map
+  :prefix "RET"
   "RET" #'eval-defun)
 
-(general-evil-define-key '(normal) geiser-mode-map
+(general-evil-define-key '(normal) scheme-mode-map
   :prefix "RET"
-  "RET" #'geiser-eval-definition)
+  "RET" #'geiser-eval-definition
+  "b"   #'geiser-eval-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
