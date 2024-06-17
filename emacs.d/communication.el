@@ -46,7 +46,7 @@
 (require 'gnus)
 (require 'gnus-topic)
 
-(let ((gnus "/data/org/emacs/gnus.el"))
+(let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
  (if (f-file-p gnus)
      (load-file gnus)))
 
@@ -69,12 +69,32 @@
 
 (add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
 
-(setq gnus-topic-topology '(("Gnus" visible nil nil)
-                            (("tech" visible nil nil))
-                            (("dev" visible nil nil))
-                            (("work" visible nil nil))
-                            (("comics" visible nil nil))
-                            (("gmail" visible nil nil))))
+(setq my/gnus-topic-topology '(("Gnus" visible)
+                               (("tech" visible))
+                               (("dev" visible))
+                               (("work" visible))
+                               (("comics" visible))
+                               (("gmail" visible))))
+
+(setq gnus-topic-alist my/gnus-topic-alist)
+(setq gnus-topic-topology my/gnus-topic-topology)
+
+(defun my/gnus-subscribe-to-my-stuff ()
+  ;; check or force gnus-topic-topology & gnus-topic-alist before calling this.
+  (interactive)
+  (setq gnus-topic-alist my/gnus-topic-alist)
+  (setq gnus-topic-topology my/gnus-topic-topology)
+  (mapcar (lambda (topic)
+            (message "topic: %s\n" (car topic))
+            (mapcar
+             (lambda (s)
+               (when (and (> (length s) 7)
+                          (or (string= "nntp+" (substring s 0 5))
+                              (string= "nnimap+" (substring s 0 7))))
+                 (message "subscribing to: %s\n" s)
+                 (gnus-subscribe-group s)))
+             topic))
+         gnus-topic-alist))
 
 (add-hook 'gnus-group-mode-hook #'gnus-topic-mode)
 

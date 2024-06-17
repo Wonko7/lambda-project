@@ -220,7 +220,9 @@
     (start #~(make-forkexec-constructor
               (list
                "/home/wonko/.config/guix/current/bin/guix" "repl"
-               "--listen=tcp:37146")
+               "--listen=tcp:37146"
+               "-L/code/nonguix"
+               "-L/code/w7-guix-channel")
               #:environment-variables '("INSIDE_EMACS=1")
               #:log-file "herd-logs/guix-repl.log"))
     (stop #~(make-kill-destructor))
