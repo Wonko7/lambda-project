@@ -43,68 +43,71 @@
      "It provides 2-character motions for quickly (and more accurately) jumping around text, compared to evil's built-in f/F/t/T motions, incrementally highlighting candidate targets as you type.")
     (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-popwin ;; elfeed goodies dep
+(define-public emacs-zathura-sync-theme
   (package
-    (name "emacs-popwin")
-    (version "1.0.2")
-    (source
-     (origin
-       (method git-fetch)
-       (uri
-        (git-reference
-         (url "https://github.com/emacsorphanage/popwin")
-         (commit (string-append version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1x1iimzbwb5izbia6aj6xv49jybzln2qxm5ybcrcq7xync5swiv1"))))
-    (inputs
-     (list emacs-evil))
-    (build-system emacs-build-system)
-    (home-page "https://github.com/emacsorphanage/popwin")
-    (synopsis "popwin: manage windows")
-    (description "popwin: manage windows")
-    (license (@ (guix licenses) gpl3+))))
-
-(define-public emacs-elfeed-goodies
-  (package
-   (name "emacs-elfeed-goodies")
-   (version "0.0.1")
-   (source
-    (origin
-     (method git-fetch)
-     (uri (git-reference
-           (url "https://github.com/jeetelongname/elfeed-goodies")
-           (commit "544ef42ead011d960a0ad1c1d34df5d222461a6b")))
-     ;; (file-name (git-file-name name version))
-     (sha256
-      (base32 "147pwqx2maf430qhigzfd6lqk7a5sbrydf9a4c5bvsw8jv7wzb6l"))))
-   (propagated-inputs
-    (list emacs-elfeed emacs-powerline emacs-link-hint emacs-popwin))
-   (build-system emacs-build-system)
-   (home-page "https://github.com/jeetelongname/elfeed-goodies")
-   (synopsis "elfeed goodies")
-   (description "elfeed goodies")
-   (license (@ (guix licenses) gpl3+))))
-
-(define-public emacs-buffer-expose
-  (package
-    (name "emacs-buffer-expose")
+    (name "emacs-zathura-sync-theme")
     (version "0.0.1")
     (source
      (origin
        (method git-fetch)
        (uri
         (git-reference
-         (url "https://github.com/clemera/buffer-expose")
-         (commit "c4a1c745123b86c15ba7bb4858255b5252e8440a")))
+         (url "https://github.com/amolv06/zathura-sync-theme")
+         (commit "master")))
+       (sha256
+        (base32 "1l6aaqm5617yq3wyri6f7a2jqh6pzkjpv221k97n3yyavxzq85wk"))))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/amolv06/zathura-sync-theme")
+    (synopsis "synchronize Zathura’s theme with Emacs")
+    (description "synchronize Zathura’s theme with Emacs")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-org-ml
+  (package
+    (name "emacs-org-ml")
+    (version "5.8.8")
+    (source
+     (origin
+       (method git-fetch)
+       (uri
+        (git-reference
+         (url "https://github.com/ndwarshuis/org-ml")
+         (commit (string-append "v" version))
+         ;; (commit version)
+         ))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "09vj418hrg5759fild8y7f7n1ybgx20s1ip46pmh8fa1ss9yg7cr"))))
+        (base32 "16j03fdikha5hwg8ifj0shsn4prbgf7dsggy3ksidpl63w3g05h4"))))
     (inputs
-     (list emacs-evil))
+     (list emacs-s
+           emacs-dash))
     (build-system emacs-build-system)
-    (home-page "https://github.com/clemera/buffer-expose")
-    (synopsis "Expose: show buffers on a grid")
-    (description
-     "Visual buffer switching using a window grid")
+    (home-page "https://github.com/ndwarshuis/org-ml")
+    (synopsis "A functional API for org-mode")
+    (description "A functional API for org-mode")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-org-sql ;; replace with my fork?
+  (package
+    (name "emacs-org-sql")
+    (version "3.0.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri
+        (git-reference
+         (url "https://github.com/ndwarshuis/org-sql")
+         (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0v2bbwxblzpkf57p6d5i0isia90jxw17p9aaslizpcybqsp3c3ha"))))
+    (inputs
+     (list emacs-f
+           emacs-s
+           emacs-dash
+           emacs-org-ml))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/ndwarshuis/org-sql")
+    (synopsis "converts org-mode files to Structured Query Language")
+    (description "converts org-mode files to Structured Query Language")
     (license (@ (guix licenses) gpl3+))))

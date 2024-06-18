@@ -153,6 +153,8 @@
         ;; guix / dev env:
         emacs-buffer-env
         emacs-inheritenv
+        ;; maxi passat:
+        emacs-org-sql
 
         ;; completion framework
         emacs-corfu
@@ -211,6 +213,7 @@
 
         ;; x stuff
         emacs-desktop-environment
+        emacs-zathura-sync-theme
         ;; locale
         glibc-locales
 
@@ -219,6 +222,7 @@
         emacs-mastodon
         emacs-slack
         ;; pantalaimon
+
         ;; ☠
         emacs-transmission
         emacs-mentor))
