@@ -85,12 +85,24 @@
                          :port 3000
                          :username "wonko"
                          :schema "org"
-                         :database "maxi_passat"
-                         ))
-
-(setq org-sql-files
-      '("/data/org/here-be-dragons/20210825151927-mont_ussy.org"
-        "/data/org/here-be-dragons/the-road-so-far/2024-05-28.org"))
+                         :database "maxi_passat"))
 
 (org-sql-user-init)
+
+(defun my/tmp-files ()
+  (org-ql-search-directories-files
+   :recurse t
+   :directories (list org-roam-directory)
+   ))
+
+(setq org-sql-async nil)
+(setq org-sql-debug t)
+(setq org-sql-files
+      '("/data/org/here-be-dragons/20210825151927-mont_ussy.org"
+        "/data/org/here-be-dragons/the-road-so-far/_archive/2024-05-28.org"
+        "/data/org/here-be-dragons/test.org"
+        "/data/org/here-be-dragons/20211031184333-gorges_du_houx.org"
+        ))
+
+(setq org-sql-files (my/tmp-files ))
 (org-sql-user-push)
