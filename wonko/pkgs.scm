@@ -126,6 +126,7 @@
         emacs-ibuffer-projectile
         emacs-projectile
         emacs-perspective
+        emacs-no-littering
 
         ;; code: ()
         emacs-origami-el
