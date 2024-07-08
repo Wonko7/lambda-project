@@ -128,6 +128,7 @@
   "P"  #'password-store-copy
 
   ;; magit
+  "g/" #'consult-git-grep
   "g." #'magit-file-dispatch
   "gg" #'magit-status
   "gb" #'magit-blame
