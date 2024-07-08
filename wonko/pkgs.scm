@@ -17,7 +17,7 @@
 (use-package-modules
  fonts fontutils unicode
  ;; emacs
- emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml
+ emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
  pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde
  ;; web
@@ -46,6 +46,7 @@
         emacs-enlive
         emacs-seq
         emacs-calfw
+        pandoc
         ;; emacs-org-download (images)
         ;;"emacs-org-ref"
         ;;"emacs-org-static-blog"
