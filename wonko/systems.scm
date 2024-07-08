@@ -126,7 +126,8 @@
                 ("wonko" ,(local-file "data/ssh/discovery.pub"))
                 ("root"  ,(local-file "data/ssh/one-ring-to-rule-them-all.pub"))))
              (x11-forwarding? #t)
-             (password-authentication? #f)))
+             (password-authentication? #f)
+             (permit-root-login #t)))
 
    (modify-services %desktop-services
      (delete gdm-service-type)
