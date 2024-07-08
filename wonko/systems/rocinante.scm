@@ -84,11 +84,6 @@
                      (device "/dev/mapper/vault")
                      (type "btrfs")
                      (dependencies mapped-devices))
-                   (file-system
-                     (mount-point "/tmp")
-                     (device "none")
-                     (type "tmpfs")
-                     (check? #f))
                    (append
                     (make-vault-subvolumes mapped-devices)
                     %base-file-systems)))))
