@@ -16,6 +16,7 @@
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages)
   #:use-module (gnu packages emacs-xyz)
+  #:use-module (wonko packages office)
   #:use-module (guix utils)
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 match))
@@ -110,4 +111,21 @@
     (home-page "https://github.com/ndwarshuis/org-sql")
     (synopsis "converts org-mode files to Structured Query Language")
     (description "converts org-mode files to Structured Query Language")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-verbiste
+  (package
+    (name "emacs-verbiste")
+    (version "0.1")
+    (source (origin
+              (method url-fetch)
+              (uri "https://salsa.debian.org/debian/verbiste/-/raw/master/debian/verbiste.el")
+              (sha256
+               (base32
+                "0vrbhmv2pp9k3d3rh3kkag96jb2ncnp1hn580ipyphrx46jq9nby"))))
+    (inputs (list verbiste))
+    (build-system emacs-build-system)
+    (home-page "https://salsa.debian.org/debian/verbiste/")
+    (synopsis "verbiste for emacs")
+    (description "verbiste for emacs")
     (license (@ (guix licenses) gpl3+))))

@@ -46,7 +46,6 @@
         emacs-enlive
         emacs-seq
         emacs-calfw
-        pandoc
         ;; emacs-org-download (images)
         ;;"emacs-org-ref"
         ;;"emacs-org-static-blog"
@@ -56,7 +55,12 @@
         ;; emacs-org-auto-expand
         ;; emacs-org-appear
         ;; emacs-orgit (link to magit)
-        ;; emacs-org-modern
+
+        ;; desktop stuff? FIXME: set these up:
+        emacs-nov-el
+        emacs-auctex
+        pandoc
+        emacs-verbiste
 
         ;; I, for one, welcome our new ai overlords
         emacs-gptel
@@ -110,9 +114,6 @@
         emacs-dired-toggle-sudo
         ;; 🗺
         emacs-osm
-        ;; desktop stuff? FIXME: set these up:
-        emacs-nov-el
-        emacs-auctex
 
         ;; spell
         emacs-flycheck-guile
