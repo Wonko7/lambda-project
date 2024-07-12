@@ -62,6 +62,9 @@
         pandoc
         emacs-verbiste
 
+        ;; office stuff
+        emacs-org-jira
+
         ;; I, for one, welcome our new ai overlords
         emacs-gptel
 

@@ -78,3 +78,5 @@
                    (append
                     (make-vault-subvolumes mapped-devices)
                     %base-file-systems)))))
+
+;; %yggdrasill-wonko-home
