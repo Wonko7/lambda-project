@@ -47,8 +47,20 @@
 (require 'gnus-topic)
 
 (let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
- (if (f-file-p gnus)
-     (load-file gnus)))
+  (if (f-file-p gnus)
+      (load-file gnus)
+    (setq my/gnus-topic-alist '(("tech" ;; the key of topic
+                                 "nntp+news.gwene.org:gwene.com.schneier"
+                                 "nntp+news.gwene.org:gwene.org.slashdot"
+                                 "nntp+news.gwene.org:gwene.cat.sizeof")
+                                ("dev"
+                                 "nntp+news.gwene.org:gwene.org.ocsigen.news")
+                                ("work"
+                                 "nntp+news.gwene.org:gwene.fr.linuxjobs")
+                                ("comics"
+                                 "nntp+news.gwene.org:gwene.com.smbc-comics"
+                                 "nntp+news.gwene.org:gwene.com.xkcd")
+                                ("Feeds")))))
 
 (setq gnus-use-cache t
       gnus-save-newsrc-file nil
