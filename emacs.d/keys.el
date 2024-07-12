@@ -207,10 +207,27 @@
  "C-e"  #'embark-act
  (kbd "C-SPC") evil-leader--default-map)
 
+(general-evil-define-key '(normal insert visual) minibuffer-mode-map ;; not sure about best place for this
+  "C-b"        #'embark-become)
+
 ;; (general-evil-define-key '(normal insert visual) embark-collect-mode-map
 ;;   "C-k"        #'next line + embark default live buffer action
 ;;   "C-j"        #'minibuffer-next-prompt
 ;;   )
+;; (general-evil-define-key '(normal) my/embark-become-line-map
+;;   "l"        #'consult-line
+;;   "i"        #'consult-imenu
+;;   "o"        #'consult-outline
+;;   "s"        #'consult-outline)
+
+(defvar-keymap my/embark-become-line-map
+  :doc "Embark become keymap for search."
+  :parent embark-meta-map
+  "l"        #'consult-line
+  "i"        #'consult-imenu
+  "o"        #'consult-outline
+  "s"        #'consult-outline)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async shell command
