@@ -204,7 +204,13 @@
 
 (general-define-key
  :states '(normal emacs insert visual global motion)
+ "C-e"  #'embark-act
  (kbd "C-SPC") evil-leader--default-map)
+
+;; (general-evil-define-key '(normal insert visual) embark-collect-mode-map
+;;   "C-k"        #'next line + embark default live buffer action
+;;   "C-j"        #'minibuffer-next-prompt
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async shell command

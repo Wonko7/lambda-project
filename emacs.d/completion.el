@@ -141,6 +141,13 @@
 (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)
 (setq embark-prompter 'embark-completing-read-prompter)
 
+(defun my/embark-toggle-prompter ()
+  (interactive)
+  (setq embark-prompter
+        (if (equal embark-prompter #'embark-completing-read-prompter)
+            #'embark-keymap-prompter
+          #'embark-completing-read-prompter)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yasnippet
 
