@@ -322,7 +322,7 @@
   ")"     #'evil-cp-next-opening
   "é"     #'sp-backward-sexp
   "&"     #'sp-next-sexp
-  "C-k"   #'sp-backward-sexp
+  "C-k"   #'sp-backward-up-sexp
   "C-j"   #'sp-next-sexp
   "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
   "M-r"   #'paredit-raise-sexp
