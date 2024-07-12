@@ -205,6 +205,9 @@
         ;; exwm
         emacs-exwm
         emacs-exwm-edit
+        emacs-exwm-modeline
+        emacs-exwm-firefox
+        emacs-exwm-mff
         emacs-perspective
         emacs-persp-mode
         emacs-lemon

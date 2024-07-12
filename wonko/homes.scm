@@ -158,7 +158,11 @@
     ("RIPGREP_CONFIG_PATH" . "$HOME/.config/ripgrep/ripgreprc")
     ("QT_QPA_PLATFORM_PLUGIN_PATH" . "$HOME/.guix-home/profile/lib/qt5/plugins")
     ("QT_STYLE_OVERRIDE" . "kvantum")
-    ("XDG_CURRENT_DESKTOP" . "qt5ct")))
+    ("XDG_CURRENT_DESKTOP" . "qt5ct")
+    ("XMODIFIERS" . "@im=exwm-xim")
+    ("GTK_IM_MODULE" . "xim")
+    ("QT_IM_MODULE" . "xim")
+    ("CLUTTER_IM_MODULE" . "xim")))
 
 (define-public %wonko-bash-config
   (home-bash-configuration

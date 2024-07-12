@@ -32,16 +32,21 @@
 (setq exwm-workspace-number 20) ;; 10-20 for external monitors.
 (require 'exwm)
 (require 'exwm-randr)
+(require 'exwm-xim)
 (require 'exwm-config)
 (require 'exwm-workspace)
 (require 'exwm-systemtray)
-;; TODO checkout exwm-xim
+(require 'exwm-edit)
+;; (require 'exwm-modeline)
+;; (require 'exwm-firefox)
+(require 'exwm-mff)
 
 (setq exwm-input-prefix-keys
       `(?\s-i
         ?\s-I
         ;; ?\C-: ;; FIXME: I need to use these
         ?\C-\ ;; I want whitespace here ;; but this is also unused
+        ?\C-\\ ;; xim
         ?\s-\S-J
         ?\s-\S-K
         ?\s-\S-j
@@ -351,11 +356,18 @@
 (add-to-list 'consult-buffer-sources persp-consult-source)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exwm edit
+
+(setq exwm-edit-split 'left)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; start exwm
 
 (exwm-systemtray-enable)
 (exwm-randr-enable)
+(exwm-xim-enable)
 (exwm-enable)
+;; (exwm-mff-mode nil) ;; useful for media station?
 
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
 (setq exwm-randr-workspace-monitor-plist
