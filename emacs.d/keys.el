@@ -204,8 +204,11 @@
 
 (general-define-key
  :states '(normal emacs insert visual global motion)
- "C-e"  #'embark-act
  (kbd "C-SPC") evil-leader--default-map)
+
+(general-define-key
+ :states '(normal emacs visual global motion)
+ "C-e"  #'embark-act)
 
 (general-evil-define-key '(normal insert visual) minibuffer-mode-map ;; not sure about best place for this
   "C-b"        #'embark-become)
@@ -366,6 +369,12 @@
   "b"   #'geiser-eval-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; info
+
+(general-evil-define-key '(normal) Info-mode-map
+  "s"   #'consult-info)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
 (general-evil-define-key '(insert) org-mode-map
@@ -375,9 +384,13 @@
   ;; "S-TAB" #'org-shiftab
   )
 
+(defun my/kill-src-block-at-point ()
+  (interactive)
+  (org-element-at-point))
 
 (general-evil-define-key '(normal) org-mode-map
   :prefix "RET"
+  "y"     #'my/kill-src-block-at-point
   "RET"   #'+org/dwim-at-point)
 
 (general-evil-define-key '(normal) org-mode-map
