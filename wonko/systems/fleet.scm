@@ -6,16 +6,30 @@
   #:use-module (gnu machine)
   #:use-module (gnu machine ssh)
   #:use-module (gnu services base)
+  #:use-module (ice-9 match)
+  #:use-module (wonko fleet)
+  #:use-module (wonko systems daban-urnud)
+  #:use-module (wonko systems discovery)
+  #:use-module (wonko systems yggdrasill)
+  #:use-module (wonko systems rocinante)
   #:use-module (wonko systems enterprise))
 
 (use-package-modules bootloaders)
 
-(list (machine
-       (operating-system %enterprise-os)
-       (environment managed-host-environment-type)
-       (configuration (machine-ssh-configuration
-                       (host-name "enterprise.local")
-                       (system "x86_64-linux")
-                       (user "root")
-                       (identity "/root/.ssh/id_guix")
-                       (port 22)))))
+(map
+ (match-lambda ((hostname . os)
+                (machine
+                 (operating-system os)
+                 (environment managed-host-environment-type)
+                 (configuration (machine-ssh-configuration
+                                 (host-name (string-append hostname ".local"))
+                                 (system "x86_64-linux")
+                                 (user "root")
+                                 (identity "/root/.ssh/id_guix")
+                                 (port 22))))))
+ `(;; ("192.168.1.8" . ,%discovery-os)
+   ("daban-urnud" . ,%daban-urnud-os)
+   ("enterprise" . ,%enterprise-os)
+   ("rocinante" . ,%rocinante-os)
+   ("yggdrasill" . ,%yggdrasill-os)
+   ))

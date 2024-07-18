@@ -1,31 +1,33 @@
-(use-modules (gnu)
-             (gnu services shepherd)
-             (gnu services desktop)
-             (gnu services xorg)
-             (gnu services sddm)
-             (gnu services networking)
-             (gnu services ssh)
-             (gnu services guix)
-             (gnu home)
-             (gnu home services)
-             (gnu home services shepherd)
-             (gnu home services shells)
-             (guix build utils)
-             (guix gexp)
-             (ice-9 format)
-             (ice-9 match)
-             (srfi srfi-1)
-             (srfi srfi-11)
-             (srfi srfi-88)
-             ;; my stuff
-             (wonko defs)
-             (wonko crew)
-             (wonko fleet)
-             (wonko dotfiles)
-             (wonko xorg)
-             (wonko pkgs)
-             (wonko homes)
-             (wonko systems))
+(define-module (wonko systems yggdrasill)
+  #:use-module (gnu)
+  #:use-module (gnu services shepherd)
+  #:use-module (gnu services desktop)
+  #:use-module (gnu services xorg)
+  #:use-module (gnu services sddm)
+  #:use-module (gnu services networking)
+  #:use-module (gnu services ssh)
+  #:use-module (gnu services guix)
+  #:use-module (gnu home)
+  #:use-module (gnu home services)
+  #:use-module (gnu home services shepherd)
+  #:use-module (gnu home services shells)
+  #:use-module (guix build utils)
+  #:use-module (guix gexp)
+  #:use-module (ice-9 format)
+  #:use-module (ice-9 match)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-11)
+  #:use-module (srfi srfi-88)
+  ;; my stuff
+  #:use-module (wonko defs)
+  #:use-module (wonko crew)
+  #:use-module (wonko fleet)
+  #:use-module (wonko dotfiles)
+  #:use-module (wonko xorg)
+  #:use-module (wonko homes)
+  #:use-module (wonko systems)
+  #:export (%yggdrasill-wonko-home
+            %yggdrasill-os))
 
 (use-package-modules xorg)
 
@@ -49,34 +51,35 @@
               (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0")))))))
      %highdpi-wonko-services))))
 
-(operating-system
-  (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
-  (host-name "yggdrasill")
-  (services (cons* (service slim-service-type wonko-slim-config)
-                   (service guix-home-service-type
-                            `(("wonko" ,%yggdrasill-wonko-home)))
-                   %laptop-services))
-  (mapped-devices
-   (list (mapped-device
-          (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
-          (target "vault")
-          (type luks-device-mapping))))
+(define %yggdrasill-os
+  (operating-system
+    (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
+    (host-name "yggdrasill")
+    (services (cons* (service slim-service-type wonko-slim-config)
+                     (service guix-home-service-type
+                              `(("wonko" ,%yggdrasill-wonko-home)))
+                     %laptop-services))
+    (mapped-devices
+     (list (mapped-device
+            (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
+            (target "vault")
+            (type luks-device-mapping))))
 
-  (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                            (make-vault-subvolume args mapped-devices))))
-                  (cons*
-                   (file-system
-                     (mount-point "/boot")
-                     (device (uuid "77DE-0AE2"
-                                   'fat32))
-                     (type "vfat"))
-                   (file-system
-                     (mount-point "/mnt/vault")
-                     (device "/dev/mapper/vault")
-                     (type "btrfs")
-                     (dependencies mapped-devices))
-                   (append
-                    (make-vault-subvolumes mapped-devices)
-                    %base-file-systems)))))
+    (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                              (make-vault-subvolume args mapped-devices))))
+                    (cons*
+                     (file-system
+                       (mount-point "/boot")
+                       (device (uuid "77DE-0AE2"
+                                     'fat32))
+                       (type "vfat"))
+                     (file-system
+                       (mount-point "/mnt/vault")
+                       (device "/dev/mapper/vault")
+                       (type "btrfs")
+                       (dependencies mapped-devices))
+                     (append
+                      (make-vault-subvolumes mapped-devices)
+                      %base-file-systems))))))
 
-;; %yggdrasill-wonko-home
+%yggdrasill-wonko-home
