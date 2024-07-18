@@ -69,7 +69,32 @@
 ;;       #'command-completion-default-include-p)
 
 ;; Enable recursive minibuffers
+;; inspired from prot's conf: https://github.com/protesilaos/dotfiles
+(require 'mb-depth)
 (setq enable-recursive-minibuffers t)
+(setq read-minibuffer-restore-windows nil)
+(setq minibuffer-default-prompt-format " [%s]")
+
+(add-hook 'after-init-hook #'minibuffer-depth-indicate-mode)
+(require 'minibuf-eldef)
+(setq read-buffer-completion-ignore-case t)
+
+(setq completion-ignore-case t)
+(setq-default case-fold-search t)
+(setq read-file-name-completion-ignore-case t)
+
+(require 'rfn-eshadow) ;; FIXME: testing
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+(setq resize-mini-windows t) ;; FIXME: testing
+
+(setq read-answer-short t)
+(setq use-short-answers t)
+(setq echo-keystrokes 0.25)
+(setq minibuffer-prompt-properties ;; FIXME: testing
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+(file-name-shadow-mode 1)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; orderless
