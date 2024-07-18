@@ -7,6 +7,7 @@
   ;; emacs
   #:use-module (nongnu packages clojure)
   #:use-module (wonko packages emacs-xyz)
+  #:use-module (wonko packages office)
   ;; web
   #:use-module (nongnu packages mozilla)
   ;; dev
@@ -61,6 +62,7 @@
         emacs-auctex
         pandoc
         emacs-verbiste
+        verbiste
 
         ;; office stuff
         emacs-org-jira
