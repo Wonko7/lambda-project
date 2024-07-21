@@ -169,8 +169,9 @@
   "cr" #'eglot-rename ;; :desc "lsp "
 
   ;; windows
-  "wx" #'buffer-expose-current-mode
-  "wX" #'buffer-expose
+  ;; TODO: use W for other windows mirror of this map.
+  "wg" #'ace-select-window
+  "wx" #'ace-swap-window
   "ws" #'switch-window-then-swap-buffer
   "wo" #'other-window
   "zai" #'gptel-send

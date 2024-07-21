@@ -75,6 +75,20 @@
 (setq custom-file "~/.emacs.d/custom-cache.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; windows
+
+(require 'ace-window)
+
+(setq aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
+(setq aw-dispatch-when-more-than 2)
+(setq aw-dispatch-always nil)
+(setq aw-leading-char-style 'path)
+(setq aw-char-position 'top-left)
+(setq aw-scope 'frame)
+
+(require 'ace-link)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
 
 (require 'pass)
