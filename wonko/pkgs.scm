@@ -165,20 +165,21 @@
         emacs-org-sql
 
         ;; completion framework
+        emacs-embark
+        emacs-vertico
+        emacs-marginalia
+        emacs-orderless
         emacs-corfu
         emacs-corfu-doc
         emacs-pcmpl-args
         emacs-cape
-        emacs-orderless
         emacs-consult
         emacs-consult-dir
         emacs-consult-lsp
         emacs-consult-yasnippet
         emacs-consult-eglot
         emacs-consult-org-roam
-        emacs-embark
-        emacs-vertico
-        emacs-marginalia
+        emacs-consult-omni
         emacs-which-key
         emacs-yasnippet
         emacs-doom-snippets
@@ -208,12 +209,13 @@
         emacs-exwm
         emacs-exwm-edit
         emacs-exwm-modeline
-        emacs-exwm-firefox
+        emacs-exwm-firefox-core
+        emacs-exwm-firefox-evil
         emacs-exwm-mff
         emacs-perspective
         emacs-persp-mode
         emacs-lemon
-        emacs-ace-window    ;; FIXME
+        emacs-ace-window
         emacs-ace-link      ;; FIXME
         emacs-ace-jump-mode ;; FIXME
         ;; emacs-buffer-expose

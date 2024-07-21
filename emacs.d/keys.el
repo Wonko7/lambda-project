@@ -587,4 +587,66 @@
   "K" #'gnus-summary-prev-article
   "J" #'gnus-summary-next-article)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; firefox
+
+(general-evil-define-key '(normal) exwm-firefox-evil-mode-map
+  "h" #'exwm-firefox-core-tab-previous
+  "l" #'exwm-firefox-core-tab-next
+  "," #'exwm-firefox-core-history-back
+  "." #'exwm-firefox-core-history-forward
+  "d" #'exwm-firefox-core-tab-close
+  "g^" #'exwm-firefox-core-tab-first
+  "g$" #'exwm-firefox-core-tab-last
+  "<" #'exwm-firefox-core-tab-move-left
+  ">" #'exwm-firefox-core-tab-move-right
+  "O" #'exwm-firefox-core-window-new
+  "P" #'exwm-firefox-core-window-new-private
+  ;; undo redo/redo
+  ;; map H goPrevious
+  ;; map L goNext
+  ;; map b Vomnibar.activateTabSelection
+
+  ;; map u restoreTab
+  ;; map d removeTab
+  ;; map , goBack
+  ;; map . goForward
+  ;; map <c-space> visitPreviousTab
+  ;; map g^ firstTab
+  ;; map g$ lastTab
+
+  ;; map j scrollDown
+  ;; map k scrollUp
+  ;; map gg scrollToTop
+  ;; map G scrollToBottom
+  ;; map   <    moveTabLeft
+  ;; map   >    moveTabRight
+
+  ;; map r reload
+  ;; map R reload hard
+
+  ;; map P openCopiedUrlInCurrentTab
+  ;; map p openCopiedUrlInNewTab
+  ;; map t createTab
+  ;; map o Vomnibar.activate
+  ;; map O Vomnibar.activateEditUrl
+  ;; map yy copyCurrentUrl
+  ;; map gu goUp
+  ;; map gU goToRoot
+  ;; map f LinkHints.activateMode
+  ;; map F LinkHints.activateModeToOpenInNewTab
+  ;; map yf LinkHints.activateModeToCopyLinkUrl
+
+  ;; map / enterFindMode
+  ;; map n performFind
+  ;; map N performBackwardsFind
+
+  ;; map i enterInsertMode
+  ;; map v enterVisualMode
+  ;; map \ passNextKey normal
+  ;; map gi focusInput
+  ;; map m Marks.activateCreateMode
+  ;; map ` Marks.activateGotoMode
+  )
+
 (provide 'conf/keys)

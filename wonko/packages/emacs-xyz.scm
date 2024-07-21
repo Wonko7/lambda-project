@@ -129,3 +129,25 @@
     (synopsis "verbiste for emacs")
     (description "verbiste for emacs")
     (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-exwm-firefox-evil
+  (package
+    (name "emacs-exwm-firefox-evil")
+    (version "v0.1")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/walseb/exwm-firefox-evil")
+                (commit "master")))
+              (sha256
+               (base32
+                "1fbxll1ylkrkk6jm4mwcdvpix23dxvfsgl2zs10lr823ndydk1b6"))))
+    (inputs (list emacs-evil
+                  emacs-exwm-firefox-core
+                  emacs-exwm))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/walseb/exwm-firefox-evil")
+    (synopsis "")
+    (description "")
+    (license (@ (guix licenses) gpl3+))))

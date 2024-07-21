@@ -300,6 +300,12 @@ This function could be in the list `comint-output-filter-functions'."
 (setq mentor-rtorrent-external-rpc "~/.pirate-radio.socket")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; firefox
+
+(require 'exwm-firefox-evil)
+(add-hook 'exwm-manage-finish-hook 'exwm-firefox-evil-activate-if-firefox)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; midnight
 
 ;; (require 'midnight)

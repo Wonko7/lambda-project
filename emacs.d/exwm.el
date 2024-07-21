@@ -45,7 +45,7 @@
       `(?\s-i
         ?\s-I
         ;; ?\C-: ;; FIXME: I need to use these
-        ?\C-\ ;; I want whitespace here ;; but this is also unused
+        ?\C-\  ;; I want whitespace here ;; but this is also unused
         ?\C-\\ ;; xim
         ?\s-\S-J
         ?\s-\S-K
@@ -68,6 +68,7 @@
         ?\A-\s-l
         ?\A-\s-h
         ?\A-\s- ;; yep
+        ,(kbd "<escape>")
         ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
