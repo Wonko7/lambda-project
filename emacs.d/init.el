@@ -350,9 +350,6 @@ This function could be in the list `comint-output-filter-functions'."
 (require 'conf/communication "~/.emacs.d/communication.el")
 (require 'conf/keys          "~/.emacs.d/keys.el")
 
-;; FIXME: powerline errors, could that break exwm init?
-;; (require 'conf/elfeed "~/.emacs.d/elfeed.el")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; end of config stuff:
 

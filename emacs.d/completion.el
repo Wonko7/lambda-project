@@ -255,5 +255,35 @@
                kb/basic-remote-try-completion kb/basic-remote-all-completions nil))
 
 
+(require 'consult-omni)
+(require 'consult-omni-sources)
+(require 'consult-omni-embark)
+
+(setq consult-omni-show-preview t) ;;; show previews
+
+;; (setq consult-omni-preview-key "C-o")
+(setq consult-omni-multi-sources '("calc"
+                                   ;; "File"
+                                   ;; "Buffer"
+                                   ;; "Bookmark"
+                                   "Apps" ;; ??
+                                   ;; "gptel"
+                                   ;; "Brave"
+                                   "Dictionary"
+                                   "DuckDuckGo"
+                                   "Wikipedia"
+                                   ;; "PubMed"
+                                   ;; "buffers text search"
+                                   ;; "Notes Search"
+                                   ;; "Org Agenda"
+                                   "GitHub"
+                                   ;; "StackOverflow"
+                                   ;; "YouTube"
+                                   ;; "Invidious"
+                                   ))
+
+(consult-omni-sources-load-modules)
+
+
 (provide 'conf/completion)
 ;;; completion.el ends here

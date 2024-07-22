@@ -73,9 +73,7 @@
        (uri
         (git-reference
          (url "https://github.com/ndwarshuis/org-ml")
-         (commit (string-append "v" version))
-         ;; (commit version)
-         ))
+         (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
         (base32 "16j03fdikha5hwg8ifj0shsn4prbgf7dsggy3ksidpl63w3g05h4"))))
@@ -128,6 +126,113 @@
     (home-page "https://salsa.debian.org/debian/verbiste/")
     (synopsis "verbiste for emacs")
     (description "verbiste for emacs")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-consult-gh
+  (package
+    (name "emacs-consult-gh")
+    (version "v0.1")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/armindarvish/consult-gh")
+                (commit "main")))
+              (sha256
+               (base32
+                "1nimy1mfnm3p8ikn0hcv4sq1nrw4ryivx7q08yv30hvfjhdni685"))))
+    (inputs (list emacs-embark))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/armindarvish/consult-gh")
+    (synopsis "Consult-GH - A GitHub CLI client inside GNU Emacs using Consult")
+    (description "Consult-GH provides an interface to interact with GitHub repositories (search, view files and issues, clone, fork, …) from inside Emacs. It uses the awesome package consult by Daniel Mendler and GitHub CLI and optionally Embark by Omar Antolín Camarena, and provides an intuitive UI using minibuffer completion familiar to Emacs users.")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-browser-hist
+  (package
+    (name "emacs-browser-hist")
+    (version "v0.1")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/agzam/browser-hist.el")
+                (commit "main")))
+              (sha256
+               (base32
+                "0s19gglc9jwapy7a9mf4i97a7r5q9lpm2ivvn0zjhqxcmzj3295j"))))
+    (inputs (list emacs-embark))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/agzam/browser-hist.el")
+    (synopsis "Search through the Browser history, in Emacs")
+    (description "Browsers usually keep their history in a sqlite database, and it’s trivial to extract it. This package allows you to search through your browser history by URL and the Page Title.")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-consult-notes
+  (package
+    (name "emacs-consult-notes")
+    (version "v0.1")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/mclear-tools/consult-notes")
+                (commit "main")))
+              (sha256
+               (base32
+                "0kv5hdc3cl7vkr06llyd6dcbddd55rmhhsfr8hzjpmvgw0h317kg"))))
+    (inputs (list emacs-s
+                  emacs-dash
+                  emacs-consult))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/mclear-tools/consult-notes")
+    (synopsis "for easily selecting notes via consult")
+    (description "consult-notes can be used with any directory (or directories) of note files. It easily integrates with note systems like zk, denote, or org-roam. Additionally, it may also search org headings in a set of specified files.")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-consult-omni
+  (package
+    (name "emacs-consult-omni")
+    (version "v0.1")
+    (source (origin
+              (method git-fetch)
+              (uri
+               (git-reference
+                (url "https://github.com/armindarvish/consult-omni")
+                (commit "main")))
+              (sha256
+               (base32
+                "1nmhbskypdyh09ygbb7dlq6rjlgw7x0n81m47267n37707szzh3d"))))
+    (inputs (list emacs-browser-hist
+                  emacs-consult-gh
+                  emacs-gptel
+                  emacs-embark))
+    (build-system emacs-build-system)
+    (arguments
+     (list
+      #:include #~(cons "sources/.*\\.el$" %default-include)
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'move-sources
+            (lambda _
+              (for-each (lambda (f)
+                          (let ((b (basename f)))
+                            (if (not (or (string= b "consult-omni-mu4e.el")
+                                         (string= b "consult-omni-notmuch.el")
+                                         (string= b "consult-omni-brave.el")
+                                         (string= b "consult-omni-brave-autosuggest.el")
+                                         (string= b "consult-omni-gptel.el")
+                                         (string= b "consult-omni-elfeed.el")))
+                                (rename-file f b)
+                                (delete-file f))))
+                        (find-files "./sources" ".*\\.el$")))))))
+    (home-page "https://github.com/armindarvish/consult-omni")
+    (synopsis "consult-omni - a powerful versatile omni search inside Emacs")
+    (description "consult-omni is a package for getting search results from one or several custom sources (web search engines, AI assistants, elfeed database, org notes, local files, desktop applications, mail servers, …) directly in Emacs minibuffer. It is a successor of consult-web, with expanded features and functionalities.
+
+consult-omni provides wrappers and macros around consult, to make it easier for users to get results from different sources and combine local and web sources in an omni-style search. In other words, consult-omni enables getting consult-style multi-source or dynamically completed results in minibuffer for a wide range of sources including Emacs functions/packages (e.g. Emacs buffers, org files, elfeed,…), command-line programs (grep, find, gh, …), or web search engines (Google, Brave, Bing, …).
+
+consult-omni can be an open-source free alternative to other omni-search tools such as Alfred or MacOS spotlight. It provides a range of default sources as examples, but the main idea here is to remain agnostic of the source and provide the toolset for the users to define their own sources/workflows (a.k.a plugins).")
     (license (@ (guix licenses) gpl3+))))
 
 (define-public emacs-exwm-firefox-evil
