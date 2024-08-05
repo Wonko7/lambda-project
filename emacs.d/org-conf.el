@@ -323,9 +323,10 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
         ("mt" "tv bookmark" entry
          ,(string-join '("* 📺 %? :bm:tv:\n"
-                         "#+begin_src shell  :results output :dir "
-                         "/ssh:wonko@enterprise.local:/mnt/trantor/media\n"
-                         "  ls -t\n"
+                         "#+begin_src shell :dir "
+                         "/ssh:wonko@rocinante.local:/mnt/trantor/media " ;; FIXME: media-center.local?
+                         ":results value output\n"
+                         "  (mpv --slang=eng */*s01e01* &)\n"
                          "#+end_src\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
