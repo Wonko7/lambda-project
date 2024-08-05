@@ -191,6 +191,7 @@
                %os-disk-world
                %os-net-world
                %os-misc-world
+               %os-nonfree
                %base-packages))
 
     (services %laptop-services)

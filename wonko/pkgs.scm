@@ -13,7 +13,9 @@
   ;; dev
   #:use-module (nongnu packages compression)
   ;; services
-  #:use-module (gnu home services shepherd))
+  #:use-module (gnu home services shepherd)
+  ;; non free firmware
+  #:use-module (nongnu packages firmware))
 
 (use-package-modules
  fonts fontutils unicode
@@ -128,6 +130,7 @@
         hunspell-dict-fr-toutes-variantes
         hunspell-dict-en-us
         hunspell-dict-en-gb
+        ;; emacs-jinx
 
         ;; transverse:
         emacs-ibuffer-projectile
@@ -466,6 +469,9 @@
         btrfs-progs
         dosfstools
         util-linux+udev))
+
+(define-public %os-nonfree
+  (list fwupd-nonfree))
 
 (define-public %communication-world
   (list pantalaimon
