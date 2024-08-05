@@ -643,5 +643,21 @@ If TEXT does not have a range, return nil."
 (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; html export
+
+(setq org-html-postamble nil)
+(setq org-footnote-section nil)
+(setq org-html-footnotes-section
+      "<div id=\"footnotes\">
+<!--
+<h2 class=\"footnotes\">%s: </h2>
+-->
+<br><br>
+<div id=\"text-footnotes\">
+%s
+</div>
+</div>")
+
+
 
 (provide 'conf/org)
