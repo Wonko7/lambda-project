@@ -131,17 +131,18 @@
 (define-public emacs-consult-gh
   (package
     (name "emacs-consult-gh")
-    (version "v0.1")
+    (version "1.0")
     (source (origin
               (method git-fetch)
               (uri
                (git-reference
                 (url "https://github.com/armindarvish/consult-gh")
-                (commit "main")))
+                (commit "306053a25fbcdb07cf902644668cc55510125e10" )))
               (sha256
                (base32
-                "1nimy1mfnm3p8ikn0hcv4sq1nrw4ryivx7q08yv30hvfjhdni685"))))
-    (inputs (list emacs-embark))
+                "1c4nmzf0nbzc8g1rzs30af00nd4scl5rap330y26fllrw1mdwfbs"))))
+    (inputs (list emacs-embark
+                  emacs-transient))
     (build-system emacs-build-system)
     (home-page "https://github.com/armindarvish/consult-gh")
     (synopsis "Consult-GH - A GitHub CLI client inside GNU Emacs using Consult")
@@ -157,7 +158,7 @@
               (uri
                (git-reference
                 (url "https://github.com/agzam/browser-hist.el")
-                (commit "main")))
+                (commit "0372c6d984ca194d9454b14eba6eadec480ec3ff")))
               (sha256
                (base32
                 "0s19gglc9jwapy7a9mf4i97a7r5q9lpm2ivvn0zjhqxcmzj3295j"))))
@@ -177,7 +178,7 @@
               (uri
                (git-reference
                 (url "https://github.com/mclear-tools/consult-notes")
-                (commit "main")))
+                (commit "9858bb13b54934ea0a95df45947ff40ffde4553b")))
               (sha256
                (base32
                 "0kv5hdc3cl7vkr06llyd6dcbddd55rmhhsfr8hzjpmvgw0h317kg"))))
@@ -199,10 +200,10 @@
               (uri
                (git-reference
                 (url "https://github.com/armindarvish/consult-omni")
-                (commit "main")))
+                (commit version)))
               (sha256
                (base32
-                "1nmhbskypdyh09ygbb7dlq6rjlgw7x0n81m47267n37707szzh3d"))))
+                "09a7jvmg2zkzci1b6vzlsjmlfcramfkfa24mv5hjmc20zc6sdnnf"))))
     (inputs (list emacs-browser-hist
                   emacs-consult-gh
                   emacs-gptel
@@ -244,7 +245,7 @@ consult-omni can be an open-source free alternative to other omni-search tools s
               (uri
                (git-reference
                 (url "https://github.com/walseb/exwm-firefox-evil")
-                (commit "master")))
+                (commit "ec9e14eca25aea9b7c7169be23843898f46696e7")))
               (sha256
                (base32
                 "1fbxll1ylkrkk6jm4mwcdvpix23dxvfsgl2zs10lr823ndydk1b6"))))
