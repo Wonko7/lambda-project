@@ -188,15 +188,27 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                                     ((agenda "" )
                                      (alltodo "=" ((org-agenda-overriding-header "")
                                                    (org-super-agenda-groups
-                                                    '((:name "🤸 wtf: focus"
+                                                    '((:name "🤸 [wtf] focus"
                                                              :and (:tag "wtf" :tag "focus")
                                                              :order 80)
+                                                      (:name "❤️ fam"
+                                                             :and (:tag "ssdd" :tag "fam")
+                                                             :order 90)
                                                       (:name "🌄 ssdd"
                                                              :and (:tag "ssdd" :tag "tt")
                                                              :order 90)
-                                                      (:name "🍰 work ssdd"
-                                                             :and (:tag "ssdd" :tag "work")
+                                                      (:name "🐫 [ssdd][work] ocsigen labs"
+                                                             :and (:tag "ssdd" :tag "work" :tag "ol")
                                                              :order 100)
+                                                      (:name "☮️ [ssdd][work] ivehte"
+                                                             :and (:tag "ssdd" :tag "work" :tag "iv")
+                                                             :order 101)
+                                                      (:name "☮️ [ssdd][work] kimesuis"
+                                                             :and (:tag "ssdd" :tag "work" :tag "ks")
+                                                             :order 102)
+                                                      (:name "☮️ [ssdd][work] entreprise individuelle"
+                                                             :and (:tag "ssdd" :tag "work" :tag "ei")
+                                                             :order 103)
                                                       (:name "👑 king line hit list"
                                                              :tag ("kl")
                                                              :order 110)
