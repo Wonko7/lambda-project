@@ -12,73 +12,148 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; directories
 
-(setq org-directory "/data/org/")
-(setq org-roam-directory (concat org-directory "here-be-dragons/"))
-(setq org-agenda-files (mapcar
-                        (lambda (d)
-                          (concat org-roam-directory d))
-                        '("wip/" "work/" "wtf/" "the-road-so-far/")))
-(setq org-roam-dailies-directory "the-road-so-far")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
-(require 'org)
+(use-package org
+  ;; :defer t
+  :commands (org-roam-node-open)
+  :init
+  (progn
+    (setq org-directory "/data/org/")
+    (setq org-roam-directory (concat org-directory "here-be-dragons/"))
+    (setq org-agenda-files (mapcar
+                            (lambda (d)
+                              (concat org-roam-directory d))
+                            '("wip/" "work/" "wtf/" "the-road-so-far/")))
+    (setq org-roam-dailies-directory "the-road-so-far"))
+  :config
+  (progn
 
-(defface +org-todo-active
-  '((t (:inherit link :underline nil)))
-  "active todo")
-(defface +org-todo-onhold
-  '((t (:inherit default :foreground "brown")))
-  "active todo")
+    ;; FIXME review this:
+    (setq
+     org-catch-invisible-edits 'show-and-error
+     ;; org-special-ctrl-a/e t
+     org-insert-heading-respect-content t
+     org-indent-mode t
 
-(setq org-startup-indented t
-      ;; FIXME fix this with guix magic:
-      org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
-      org-startup-folded 'content
-      org-todo-keywords
-      '((sequence
-         "NEXT(n/!)" ;; A task that recuring
-         "TODO(t)"   ;; A task that needs doing & is ready to do
-         "PROJ(p)"   ;; A project, which usually contains other tasks
-         "GOGO(g/!)" ;; A task that is in progress
-         "WAIT(w/!)" ;; Something external is holding up this task
-         "HOLD(h/!)" ;; This task is paused/on hold because of me
-         "ADD(a)"    ;; Add
-         "FIX(f)"    ;; Fix
-         "BUG(b)"    ;; Bug
-         "|"
-         "DONE(d/!)" ;; Task successfully completed
-         "KILL(k)")  ;; Task was cancelled, aborted or is no longer applicable
-        (sequence
-         "[ ](T)" ;; A task that needs doing
-         "[-](G)" ;; Task is in progress
-         "[?](W)" ;; Task is being held up or paused
-         "|"
-         "[X](D)")) ;; Task was completed
-      org-todo-keyword-faces
-      '(("[-]"  . +org-todo-active)
-        ("NEXT" . +org-todo-active)
-        ("GOGO" . +org-todo-active)
-        ("[?]"  . +org-todo-onhold)
-        ("WAIT" . +org-todo-onhold)
-        ("HOLD" . +org-todo-onhold)
-        ("PROJ" . +org-todo-project))
-      ;; (org-confirm-babel-evaluate nil)
-      ;; (org-special-ctrl-a/e t)
-      ;; (org-hide-emphasis-markers t)
-      ;; (org-pretty-entities t)
+     ;; org styling, hide markup etc.
+     org-hide-emphasis-markers t
+     org-pretty-entities t
+     org-ellipsis "…")
+    (defface +org-todo-active
+      '((t (:inherit link :underline nil)))
+      "active todo")
+    (defface +org-todo-onhold
+      '((t (:inherit default :foreground "brown")))
+      "active todo")
+    (setq org-startup-indented t
+          ;; FIXME fix this with guix magic:
+          org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
+          org-startup-folded 'content
+          org-todo-keywords
+          '((sequence
+             "NEXT(n/!)" ;; A task that recuring
+             "TODO(t)"   ;; A task that needs doing & is ready to do
+             "PROJ(p)"   ;; A project, which usually contains other tasks
+             "GOGO(g/!)" ;; A task that is in progress
+             "WAIT(w/!)" ;; Something external is holding up this task
+             "HOLD(h/!)" ;; This task is paused/on hold because of me
+             "ADD(a)"    ;; Add
+             "FIX(f)"    ;; Fix
+             "BUG(b)"    ;; Bug
+             "|"
+             "DONE(d/!)" ;; Task successfully completed
+             "KILL(k)") ;; Task was cancelled, aborted or is no longer applicable
+            (sequence
+             "[ ](T)" ;; A task that needs doing
+             "[-](G)" ;; Task is in progress
+             "[?](W)" ;; Task is being held up or paused
+             "|"
+             "[X](D)")) ;; Task was completed
+          org-todo-keyword-faces
+          '(("[-]"  . +org-todo-active)
+            ("NEXT" . +org-todo-active)
+            ("GOGO" . +org-todo-active)
+            ("[?]"  . +org-todo-onhold)
+            ("WAIT" . +org-todo-onhold)
+            ("HOLD" . +org-todo-onhold)
+            ("PROJ" . +org-todo-project))
 
-      ;; agenda/cal dates:
-      org-extend-today-until              3
-      org-agenda-start-on-weekday         1
-      calendar-week-start-day             1
-      org-log-into-drawer                 t
-      org-auto-align-tags                 t
-      org-tags-column                     -80
-      org-agenda-tags-column              my/org-agenda-tags-column
-      org-edit-timestamp-down-means-later t
-      org-use-sub-superscripts            "{}")
+          ;; agenda/cal dates:
+          org-extend-today-until              3
+          org-agenda-start-on-weekday         1
+          calendar-week-start-day             1
+          org-log-into-drawer                 t
+          org-auto-align-tags                 t
+          org-tags-column                     -80
+          org-edit-timestamp-down-means-later t
+          org-use-sub-superscripts            "{}")
+    (general-evil-define-key '(insert) org-mode-map
+      "TAB"   #'completion-at-point
+      "C-l"   #'org-demote-subtree
+      ;; "C-i"   #'org-roam-node-insert
+      ;; "S-TAB" #'org-shiftab
+      )
+
+    (defun my/kill-src-block-at-point ()
+      (interactive)
+      (org-element-at-point))
+
+    (general-evil-define-key '(normal) org-mode-map
+      :prefix "RET"
+      "y"     #'my/kill-src-block-at-point
+      "RET"   #'+org/dwim-at-point)
+
+    (general-evil-define-key '(normal) org-mode-map
+      "zD"    #'org-decrypt-entries
+      "zq"    (lambda() (interactive) (org-show-branches-buffer))
+      "C-k"   #'org-previous-visible-heading
+      "C-j"   #'org-next-visible-heading
+      "("     #'org-previous-visible-heading
+      ")"     #'org-next-visible-heading
+      "{"     #'evil-backward-paragraph
+      "}"     #'evil-forward-paragraph
+      "C-K"   #'org-move-subtree-up
+      "C-J"   #'org-move-subtree-down
+      "C-H"   #'org-promote-subtree
+      "C-L"   #'org-demote-subtree)
+
+    ;; babel
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((clojure . t)
+       (css . t)
+       (dot . t)
+       (emacs-lisp . t)
+       (gnuplot . t)
+       (latex . t)
+       ;; (matlab . t)
+       (sass . t)
+       (scheme . t)
+       (sed . t)
+       (shell . t)
+       (sql . t)
+       (ocaml . t)
+       (org . t)))
+    (setq org-confirm-babel-evaluate nil)
+
+    ;; html export
+    (setq org-html-postamble nil)
+    (setq org-footnote-section nil)
+    (setq org-html-footnotes-section
+          "<div id=\"footnotes\">
+<!--
+<h2 class=\"footnotes\">%s: </h2>
+-->
+<br><br>
+<div id=\"text-footnotes\">
+%s
+</div>
+</div>")
+
+    ))
 
 (defun my/reset-tag-spacing-to-zero-org-tags ()
   (interactive)
@@ -101,178 +176,173 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
 
-(require 'org-roam)
-(require 'consult-org-roam)
-(consult-org-roam-mode 1)
+(use-package org-roam
+  :after org
+  ;; :defer t
+  :config
+  (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (setq org-roam-directory (concat org-directory "here-be-dragons/"))
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-autosync-mode))
 
-;; FIXME <start https://github.com/org-roam/org-roam/issues/2198
-(defalias 'org-font-lock-ensure
-  (if (fboundp 'font-lock-ensure)
-      #'font-lock-ensure
-    (lambda (&optional _beg _end)
-      (with-no-warnings (font-lock-fontify-buffer)))))
+(use-package consult-org-roam
+  ;; :defer t
+  :after org-roam
+  :config
+  (consult-org-roam-mode 1)) ;; meh.
 
-(defun org-roam-fontify-like-in-org-mode (s)
-  "Fontify string S like in Org mode.
-Like `org-fontify-like-in-org-mode', but supports `org-ref'."
-  ;; NOTE: pretend that the temporary buffer created by `org-fontify-like-in-org-mode' to
-  ;; fontify a `cite:' reference has been hacked by org-ref, whatever that means;
-  ;;
-  ;; `org-ref-cite-link-face-fn', which is used to supply a face for `cite:' links, calls
-  ;; `hack-dir-local-variables' rationalizing that `bibtex-completion' would throw some warnings
-  ;; otherwise.  This doesn't seem to be the case and calling this function just before
-  ;; `org-font-lock-ensure' (alias of `font-lock-ensure') actually instead of fixing the alleged
-  ;; warnings messes the things so badly that `font-lock-ensure' crashes with error and doesn't let
-  ;; org-roam to proceed further. I don't know what's happening there exactly but disabling this hackery
-  ;; fixes the crashing.  Fortunately, org-ref provides the `org-ref-buffer-hacked' switch, which we use
-  ;; here to make it believe that the buffer was hacked.
-  ;;
-  ;; This is a workaround for `cite:' links and does not have any effect on other ref types.
-  ;;
-  ;; `org-ref-buffer-hacked' is a buffer-local variable, therefore we inline
-  ;; `org-fontify-like-in-org-mode' here
-  (with-temp-buffer
-    (insert s)
-    (let ((org-ref-buffer-hacked t))
-      (org-mode)
-      (org-font-lock-ensure)
-      (if org-link-descriptive
-          (org-link-display-format (buffer-string))
-        (buffer-string)))))
-;; FIXME end>
-
-(setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
-(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-(org-roam-db-autosync-mode)
-(require 'org-roam-protocol)
-(setq org-roam-directory (concat org-directory "here-be-dragons/"))
-(setq org-roam-completion-everywhere t)
+(use-package org-roam-protocol
+  ;; :defer t
+  :after org-roam)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; super agenda
 
-(require 'org-agenda)
-(setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
-      org-agenda-prefix-format (quote
-                                ((agenda . "%-21c%?-12t% s")
-                                 (timeline . "% s")
-                                 (todo . "%-21c")
-                                 (tags . "%-12c")
-                                 (search . "%-12c")))
-      org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
-      org-agenda-scheduled-leaders (quote ("" "S%3d: "))
-      ;; fixes fucky binding on jk on an agenda header:
-      ;; https://github.com/alphapapa/org-super-agenda/issues/50
-      org-super-agenda-header-map (make-sparse-keymap)
+(use-package org-agenda
+  ;; :defer t
+  :after org
+  :config
+  (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
+        org-agenda-prefix-format (quote
+                                  ((agenda . "%-21c%?-12t% s")
+                                   (timeline . "% s")
+                                   (todo . "%-21c")
+                                   (tags . "%-12c")
+                                   (search . "%-12c")))
+        org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
+        org-agenda-scheduled-leaders (quote ("" "S%3d: "))
+        org-agenda-compact-blocks t
+        ;; agenda styling
+        org-agenda-block-separator ?─
+        ;; org-agenda-time-grid
+        ;; '((daily today require-timed)
+        ;;   (800 1000 1200 1400 1600 1800 2000)
+        ;;   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+        ;; org-agenda-current-time-string
+        ;; "⭠ now ─────────────────────────────────────────────────"
+        org-agenda-span 15
+        ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
+        ;;       org-agenda-skip-scheduled-if-done t
+        ;;       org-agenda-skip-deadline-if-done t
+        ;;       org-agenda-include-deadlines t
+        ;;       org-agenda-block-separator nil
+        ;;       org-agenda-compact-blocks t
+        ;;       org-agenda-start-with-log-mode t)
+        ;;
 
-      ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
-      ;;       org-agenda-skip-scheduled-if-done t
-      ;;       org-agenda-skip-deadline-if-done t
-      ;;       org-agenda-include-deadlines t
-      ;;       org-agenda-block-separator nil
-      ;;       org-agenda-compact-blocks t
-      ;;       org-agenda-start-with-log-mode t)
-      ;;
+        ;;       org-agenda-start-with-log-mode t)
+        org-agenda-start-with-log-mode t
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done t
+        org-agenda-include-deadlines t
+        org-agenda-tags-column       my/org-agenda-tags-column
 
-      ;;       org-agenda-start-with-log-mode t)
-      org-agenda-start-with-log-mode t
-      org-habit-show-habits t
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-include-deadlines t
+        org-agenda-custom-commands '(("c" "Simple agenda view"
+                                      ((agenda "")
+                                       (alltodo "" )))
+                                     ("z" "Super zaen view"
+                                      ((agenda "" )
+                                       (alltodo "=" ((org-agenda-overriding-header "")
+                                                     (org-super-agenda-groups
+                                                      '((:name "🤸 [wtf] focus"
+                                                               :and (:tag "wtf" :tag "focus")
+                                                               :order 80)
+                                                        (:name "❤️ fam"
+                                                               :and (:tag "ssdd" :tag "fam")
+                                                               :order 90)
+                                                        (:name "🌄 ssdd"
+                                                               :and (:tag "ssdd" :tag "tt")
+                                                               :order 90)
+                                                        (:name "🐫 [ssdd][work] ocsigen labs"
+                                                               :and (:tag "ssdd" :tag "work" :tag "ol")
+                                                               :order 100)
+                                                        (:name "☮️ [ssdd][work] ivehte"
+                                                               :and (:tag "ssdd" :tag "work" :tag "iv")
+                                                               :order 101)
+                                                        (:name "☮️ [ssdd][work] kimesuis"
+                                                               :and (:tag "ssdd" :tag "work" :tag "ks")
+                                                               :order 102)
+                                                        (:name "☮️ [ssdd][work] entreprise individuelle"
+                                                               :and (:tag "ssdd" :tag "work" :tag "ei")
+                                                               :order 103)
+                                                        (:name "👑 king line hit list"
+                                                               :tag ("kl")
+                                                               :order 110)
+                                                        (:name "🌠 .*"
+                                                               :order 999
+                                                               :anything t)
+                                                        ;; (:name "fun maximization"
+                                                        ;;        :tag ("fun")
+                                                        ;;        :order 40)
+                                                        ;; (:name "wtf"
+                                                        ;;        :tag ("wtf")
+                                                        ;;        :order 520)
+                                                        ;; (:name "innerspace"
+                                                        ;;        :tag ("is" "h" "habit" "focus")
+                                                        ;;        :order 600)
+                                                        ;; (:name "review"
+                                                        ;;        :tag ("review" "r")
+                                                        ;;        :order 70)
+                                                        ;; (:name "next steps"
+                                                        ;;        :tag "next"
+                                                        ;;        :order 80)
+                                                        ;; (:name "Projects"
+                                                        ;;        :todo "PROJ"
+                                                        ;;        :order 90)
+                                                        ;; ;;(:name "don't be a cunt"
+                                                        ;; ;;       :tag "dbac"
+                                                        ;; ;;       :order 100)
+                                                        ;; (:name "repeat after me"
+                                                        ;;  :order 9
+                                                        ;;  :habit t
+                                                        ;;  )
+                                                        ;;(:name ".*"
+                                                        ;;       :order 999
+                                                        ;;       :anything t)
+                                                        )))))))))
 
-      org-agenda-custom-commands '(("c" "Simple agenda view"
-                                    ((agenda "")
-                                     (alltodo "" )))
-                                   ("z" "Super zaen view"
-                                    ((agenda "" )
-                                     (alltodo "=" ((org-agenda-overriding-header "")
-                                                   (org-super-agenda-groups
-                                                    '((:name "🤸 [wtf] focus"
-                                                             :and (:tag "wtf" :tag "focus")
-                                                             :order 80)
-                                                      (:name "❤️ fam"
-                                                             :and (:tag "ssdd" :tag "fam")
-                                                             :order 90)
-                                                      (:name "🌄 ssdd"
-                                                             :and (:tag "ssdd" :tag "tt")
-                                                             :order 90)
-                                                      (:name "🐫 [ssdd][work] ocsigen labs"
-                                                             :and (:tag "ssdd" :tag "work" :tag "ol")
-                                                             :order 100)
-                                                      (:name "☮️ [ssdd][work] ivehte"
-                                                             :and (:tag "ssdd" :tag "work" :tag "iv")
-                                                             :order 101)
-                                                      (:name "☮️ [ssdd][work] kimesuis"
-                                                             :and (:tag "ssdd" :tag "work" :tag "ks")
-                                                             :order 102)
-                                                      (:name "☮️ [ssdd][work] entreprise individuelle"
-                                                             :and (:tag "ssdd" :tag "work" :tag "ei")
-                                                             :order 103)
-                                                      (:name "👑 king line hit list"
-                                                             :tag ("kl")
-                                                             :order 110)
-                                                      (:name "🌠 .*"
-                                                             :order 999
-                                                             :anything t)
-                                                      ;; (:name "fun maximization"
-                                                      ;;        :tag ("fun")
-                                                      ;;        :order 40)
-                                                      ;; (:name "wtf"
-                                                      ;;        :tag ("wtf")
-                                                      ;;        :order 520)
-                                                      ;; (:name "innerspace"
-                                                      ;;        :tag ("is" "h" "habit" "focus")
-                                                      ;;        :order 600)
-                                                      ;; (:name "review"
-                                                      ;;        :tag ("review" "r")
-                                                      ;;        :order 70)
-                                                      ;; (:name "next steps"
-                                                      ;;        :tag "next"
-                                                      ;;        :order 80)
-                                                      ;; (:name "Projects"
-                                                      ;;        :todo "PROJ"
-                                                      ;;        :order 90)
-                                                      ;; ;;(:name "don't be a cunt"
-                                                      ;; ;;       :tag "dbac"
-                                                      ;; ;;       :order 100)
-                                                      ;; (:name "repeat after me"
-                                                      ;;  :order 9
-                                                      ;;  :habit t
-                                                      ;;  )
-                                                      ;;(:name ".*"
-                                                      ;;       :order 999
-                                                      ;;       :anything t)
-                                                      ))))))))
-(setq org-agenda-compact-blocks t
-      ;;org-agenda-start-with-follow-mode t
-      org-super-agenda-header-separator "\n")
+(use-package org-super-agenda
+  ;; :defer t
+  :after org-agenda
+  :config
+  ;; fixes fucky binding on jk on an agenda header:
+  ;; https://github.com/alphapapa/org-super-agenda/issues/50
+  (setq org-super-agenda-header-separator "\n")
+  (setq org-super-agenda-header-map (make-sparse-keymap))
+  (org-super-agenda-mode))
 
-(require 'org-super-agenda)
-(org-super-agenda-mode)
+(use-package org-habit
+  ;; :defer t
+  :after org-agenda
+  :config
+  (setq org-habit-graph-column 40
+        org-habit-preceding-days my/org-habit-preceding-days
+        org-habit-show-all-today t
+        org-habit-show-done-always-green t
+        ;; glyphs:
+        ;; │ | ⋮
+        ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙
+        org-habit-completed-glyph ?•
+        org-habit-today-glyph ?│))
 
-(require 'org-habit)
-(setq org-habit-graph-column 40
-      org-habit-preceding-days my/org-habit-preceding-days
-      org-habit-show-all-today t
-      org-habit-show-done-always-green t
-      ;; glyphs:
-      ;; │ | ⋮
-      ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙
-      org-habit-completed-glyph ?•
-      org-habit-today-glyph ?│)
+(use-package org-crypt
+  ;; :defer t
+  :after org
+  :config
+  (setq epa-file-encrypt-to '("william@underage.wang")
+        org-tags-exclude-from-inheritance (quote ("crypt"))
+        org-crypt-disable-auto-save "encrypt"
+        org-crypt-key "william@underage.wang")
 
-(require 'org-crypt)
-(setq epa-file-encrypt-to '("william@underage.wang")
-      org-tags-exclude-from-inheritance (quote ("crypt"))
-      org-crypt-disable-auto-save "encrypt"
-      org-crypt-key "william@underage.wang")
-(org-crypt-use-before-save-magic)
+  (org-crypt-use-before-save-magic))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; capture
 
-(require 'org-capture)
+(use-package org-capture
+  ;; :defer t
+  :after org)
 
 ;; firefox integration
 (defun transform-square-brackets-to-round-ones (string-to-transform)
@@ -426,7 +496,7 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wH" "Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
-                                            "%U\n"))
+                                             "%U\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⛰ witness the fitness")))
         ("wl" "leg day" entry ,(string-join '("* 💪 leg day :wtf:brutus:\n"
@@ -487,8 +557,8 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
                          "  . $GUIX_EXTRA_PROFILES/desktop/etc/profile\n"
                          "  %?\n"
                          "#+end_src\n"))
-        :jump-to-captured t
-        :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
+         :jump-to-captured t
+         :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
         ("W" "work")
         ("j" "Journal" entry (file+datetree "~/org/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
@@ -503,65 +573,51 @@ Like `org-fontify-like-in-org-mode', but supports `org-ref'."
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)))
 
-;; FIXME review this:
-(setq
- org-catch-invisible-edits 'show-and-error
- ;; org-special-ctrl-a/e t
- org-insert-heading-respect-content t
- org-indent-mode t
 
- ;; org styling, hide markup etc.
- org-hide-emphasis-markers t
- org-pretty-entities t
- org-ellipsis "…"
+(use-package calfw-org
+  :config
+  (setq cfw:org-agenda-schedule-args '(:timestamp))
+  (define-key cfw:calendar-mode-map (kbd "<SPC>") nil)
+  (general-evil-define-key '(normal insert emacs motion) cfw:calendar-mode-map
+    "SPC" evil-leader--default-map)
+  (define-key cfw:calendar-mode-map (kbd "<SPC>") evil-leader--default-map))
 
- ;; agenda styling
- org-agenda-block-separator ?─
- ;; org-agenda-time-grid
- ;; '((daily today require-timed)
- ;;   (800 1000 1200 1400 1600 1800 2000)
- ;;   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
- ;; org-agenda-current-time-string
- ;; "⭠ now ─────────────────────────────────────────────────"
- )
-(setq org-agenda-span 15)
-
-(require 'calfw-org)
-
-(setq cfw:org-agenda-schedule-args '(:timestamp))
 
 ;; https://github.com/kiwanami/emacs-calfw/issues/111
 ;; temporary fix:
-(defun cfw:org-get-timerange (text)
-  "Return a range object (begin end text).
-If TEXT does not have a range, return nil."
-  (let* ((dotime (cfw:org-tp text 'dotime)))
-    (and (stringp dotime) (string-match org-ts-regexp dotime)
-         (let* ((matches  (s-match-strings-all org-ts-regexp dotime))
-                (start-date (nth 1 (car matches)))
-                (end-date (nth 1 (nth 1 matches)))
-                (extra (cfw:org-tp text 'extra)))
-           (if (string-match "(\\([0-9]+\\)/\\([0-9]+\\)): " extra)
-               (list (calendar-gregorian-from-absolute
-                      (time-to-days
-                       (org-read-date nil t start-date)))
-                    (calendar-gregorian-from-absolute
-                     (time-to-days
-                      (org-read-date nil t end-date))) text))))))
+;; (defun cfw:org-get-timerange (text)
+;;   "Return a range object (begin end text).
+;; If TEXT does not have a range, return nil."
+;;   (let* ((dotime (cfw:org-tp text 'dotime)))
+;;     (and (stringp dotime) (string-match org-ts-regexp dotime)
+;;          (let* ((matches  (s-match-strings-all org-ts-regexp dotime))
+;;                 (start-date (nth 1 (car matches)))
+;;                 (end-date (nth 1 (nth 1 matches)))
+;;                 (extra (cfw:org-tp text 'extra)))
+;;            (if (string-match "(\\([0-9]+\\)/\\([0-9]+\\)): " extra)
+;;                (list (calendar-gregorian-from-absolute
+;;                       (time-to-days
+;;                        (org-read-date nil t start-date)))
+;;                      (calendar-gregorian-from-absolute
+;;                       (time-to-days
+;;                        (org-read-date nil t end-date))) text))))))
 
-(require 'org-web-tools)
+(use-package org-web-tools
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-ql
 
-(require 'org-ql)
-(require 'org-ql-search)
+(use-package org-ql
+  :defer t)
+(use-package org-ql-search
+  :defer t)
 
 (defun my/sort-by-filename-date (a b)
   (cl-flet* ((get-fn (e)
-                     (buffer-name (marker-buffer (org-element-property :org-marker e))))
+               (buffer-name (marker-buffer (org-element-property :org-marker e))))
              (to-ts (e)
-                    (file-name-sans-extension (get-fn e))))
+               (file-name-sans-extension (get-fn e))))
     (string> (to-ts a) (to-ts b))))
 
 (defun my/all-dailies ()
@@ -601,34 +657,17 @@ If TEXT does not have a range, return nil."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; babel
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((clojure . t)
-   (css . t)
-   (dot . t)
-   (emacs-lisp . t)
-   (gnuplot . t)
-   (latex . t)
-   ;; (matlab . t)
-   (sass . t)
-   (scheme . t)
-   (sed . t)
-   (shell . t)
-   (sql . t)
-   (ocaml . t)
-   (org . t)))
-
-(setq org-confirm-babel-evaluate nil)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
 
-(require 'org-board)
+(use-package org-board
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; books
 
-(require 'org-books) ;; never worked :(
+(use-package org-books
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org commit / magit
@@ -640,23 +679,7 @@ If TEXT does not have a range, return nil."
 (defun my/org-commit-msg-setup ()
   (when (check-if-org)
     (emoji-search)))
-(add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; html export
-
-(setq org-html-postamble nil)
-(setq org-footnote-section nil)
-(setq org-html-footnotes-section
-      "<div id=\"footnotes\">
-<!--
-<h2 class=\"footnotes\">%s: </h2>
--->
-<br><br>
-<div id=\"text-footnotes\">
-%s
-</div>
-</div>")
 
 
 

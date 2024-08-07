@@ -35,9 +35,6 @@
   "as"  #'shell
   "ap"  #'proced
   "aE"  #'eww-search-words
-  ;; elfeed
-  "aee" #'elfeed
-  "aes" #'elfeed-update
   ;; emacs but not that close to my heart
   "aab" #'bluetooth-list-devices
   ;; external apps
@@ -224,14 +221,6 @@
 ;;   "o"        #'consult-outline
 ;;   "s"        #'consult-outline)
 
-(defvar-keymap my/embark-become-line-map
-  :doc "Embark become keymap for search."
-  :parent embark-meta-map
-  "l"        #'consult-line
-  "i"        #'consult-imenu
-  "o"        #'consult-outline
-  "s"        #'consult-outline)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async shell command
@@ -289,72 +278,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
-(general-evil-define-key '(normal) magit-diff-mode-map
-  "("      #'diff-hunk-prev
-  ")"      #'diff-hunk-next
-  "C-k"    #'diff-hunk-prev
-  "C-j"    #'diff-hunk-next)
-
-(general-evil-define-key '(normal) magit-mode-map
-  "("    #'magit-section-backward-sibling
-  ")"    #'magit-section-forward-sibling
-  "C-k"    #'magit-section-backward-sibling
-  "C-j"    #'magit-section-backward-sibling)
-
-(general-evil-define-key '(normal) git-rebase-mode-map
-  "K"    #'git-rebase-move-line-up
-  "J"    #'git-rebase-move-line-down)
-
-(general-evil-define-key '(normal) smerge-mode-map
-  "grk" #'smerge-prev
-  "grj" #'smerge-next
-  "C-k" #'smerge-prev
-  "C-j" #'smerge-next
-  "("   #'smerge-prev
-  ")"   #'smerge-next
-  "Ku"  #'smerge-keep-upper
-  "Kl"  #'smerge-keep-lower)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisps
 
-(general-evil-define-key '(normal visual) evil-cleverparens-mode-map
-  ;;"Y"     #'evil-cp-yank-enclosing
-  "{"     #'evil-backward-paragraph
-  "}"     #'evil-forward-paragraph
-  "("     #'evil-cp-previous-opening
-  ")"     #'evil-cp-next-opening
-  "é"     #'sp-backward-sexp
-  "&"     #'sp-next-sexp
-  "C-k"   #'sp-backward-up-sexp
-  "C-j"   #'sp-next-sexp
-  "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
-  "M-r"   #'paredit-raise-sexp
-  "M-t"   #'sp-transpose-sexp
-  "M-T"   (lambda() (interactive) (sp-transpose-sexp -1))
-  "M-g p" #'evil-cp-wrap-next-round
-  "M-g P" #'evil-cp-wrap-previous-round
-  "M-g c" #'evil-cp-wrap-next-curly
-  "M-g C" #'evil-cp-wrap-previous-curly
-  "M-g s" #'evil-cp-wrap-next-square
-  "M-g S" #'evil-cp-wrap-previous-square)
-
-(general-evil-define-key '(normal) evil-cleverparens-mode-map
-  :prefix "RET"
-  "r"   #'paredit-raise-sexp
-  "R"   #'evil-cp-raise-form
-  ">"   #'sp-transpose-sexp
-  "<"   (lambda() (interactive) (sp-transpose-sexp -1))
-  "t"   #'sp-transpose-sexp
-  "T"   (lambda() (interactive) (sp-transpose-sexp -1))
-  "M-T" (lambda() (interactive) (sp-transpose-sexp -1))
-  "@"  #'sp-splice-sexp
-  "p"  #'evil-cp-wrap-next-round
-  "P"  #'evil-cp-wrap-previous-round
-  "c"  #'evil-cp-wrap-next-curly
-  "C"  #'evil-cp-wrap-previous-curly
-  "s"  #'evil-cp-wrap-next-square
-  "S"  #'evil-cp-wrap-previous-square)
 
 ;; (general-evil-define-key '(normal) geiser-mode-map
 ;;   :prefix "RET"
@@ -372,220 +298,32 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; info
 
-(general-evil-define-key '(normal) Info-mode-map
+(general-evil-define-key '(normal) Info-mode-map ;; this is not working anymore :(
   "s"   #'consult-info)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org
 
-(general-evil-define-key '(insert) org-mode-map
-  "TAB"   #'completion-at-point
-  "C-l"   #'org-demote-subtree
-  ;; "C-i"   #'org-roam-node-insert
-  ;; "S-TAB" #'org-shiftab
-  )
 
-(defun my/kill-src-block-at-point ()
-  (interactive)
-  (org-element-at-point))
-
-(general-evil-define-key '(normal) org-mode-map
-  :prefix "RET"
-  "y"     #'my/kill-src-block-at-point
-  "RET"   #'+org/dwim-at-point)
-
-(general-evil-define-key '(normal) org-mode-map
-  "zD"    #'org-decrypt-entries
-  "zq"    (lambda() (interactive) (org-show-branches-buffer))
-  "C-k"   #'org-previous-visible-heading
-  "C-j"   #'org-next-visible-heading
-  "("     #'org-previous-visible-heading
-  ")"     #'org-next-visible-heading
-  "{"     #'evil-backward-paragraph
-  "}"     #'evil-forward-paragraph
-  "C-K"   #'org-move-subtree-up
-  "C-J"   #'org-move-subtree-down
-  "C-H"   #'org-promote-subtree
-  "C-L"   #'org-demote-subtree)
-
-(define-key cfw:calendar-mode-map (kbd "<SPC>") nil)
-(general-evil-define-key '(normal insert emacs motion) cfw:calendar-mode-map
-  "SPC" evil-leader--default-map)
-(define-key cfw:calendar-mode-map (kbd "<SPC>") evil-leader--default-map)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed
 
-(general-evil-define-key '(normal) elfeed-search-mode-map
-  "RET" #'elfeed-search-show-entry)
-
-(general-evil-define-key '(normal) elfeed-show-mode-map
-  "J" #'elfeed-show-next
-  "K" #'elfeed-show-prev
-  "U" #'elfeed-show-tag--unread
-  "u" #'elfeed-show-tag--read)
+;; (general-evil-define-key '(normal) elfeed-search-mode-map
+;;   "RET" #'elfeed-search-show-entry)
+;;
+;; (general-evil-define-key '(normal) elfeed-show-mode-map
+;;   "J" #'elfeed-show-next
+;;   "K" #'elfeed-show-prev
+;;   "U" #'elfeed-show-tag--unread
+;;   "u" #'elfeed-show-tag--read)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ement
 
-(general-evil-define-key '(normal) ement-room-list-mode-map
-  "u" #'ement-tabulated-room-list-next-unread
-  "X"  #'ement-room-list-kill-buffer
-  "h" #'my/ement-home
-  "l" #'ement-tabulated-room-list)
-
-(general-evil-define-key '(normal) ement-tabulated-room-list-mode-map
-  "u" #'ement-tabulated-room-list-next-unread
-  "X"  #'ement-room-list-kill-buffer
-  "h" #'my/ement-home
-  "l" #'ement-tabulated-room-list)
-
-(general-evil-define-key '(normal motion) ement-room-list-mode-map
-  "RET" nil)
-
-(general-evil-define-key '(normal) ement-room-list-mode-map
-  :prefix "RET"
-  "n" #'ement-tabulated-room-list-next-unread
-  "RET" #'ement-room-list-RET)
-
-(general-evil-define-key '(normal) ement-tabulated-room-list-mode-map
-  :prefix "RET"
-  "n" #'ement-tabulated-room-list-next-unread
-  "RET" #'ement-room-list-RET)
-
-(general-evil-define-key '(normal) ement-directory-mode-map
-  :prefix "RET"
-  "RET" #'ement-directory-RET)
-
-(general-evil-define-key '(normal) ement-room-mode-map
-  ;; migrate stuff down to prefix-map as these get annoying:
-  ;; Movement
-  "RET" nil
-  "TAB" #'ement-room-goto-next
-  "<backtab>" #'ement-room-goto-prev
-  ;; "SPC" #'ement-room-scroll-up-mark-read
-  "S-SPC" #'ement-room-scroll-down-command
-  "M-SPC" #'ement-room-goto-fully-read-marker
-  "m" #'ement-room-mark-read
-  ;; (define-key map [remap scroll-down-command] #'ement-room-scroll-down-command)
-  ;; (define-key map [remap mwheel-scroll] #'ement-room-mwheel-scroll)
-  "c-p" #'ement-room-goto-prev
-  "c-n" #'ement-room-goto-next
-  "c-j" #'ement-room-goto-prev
-  "c-k" #'ement-room-goto-next
-  "(" #'ement-room-goto-prev
-  ")" #'ement-room-goto-next
-  ;"l" #'ement-tabulated-room-list
-  "L" #'ement-tabulated-room-list
-  "H" #'my/ement-home
-  ;; "y" #'my/ement-home
-
-  ;; Switching
-  ;; "g l" #'ement-tabulated-room-list
-  ;; "g r" #'ement-view-room
-  ;; "g m" #'ement-notify-switch-to-mentions-buffer
-  ;; "g n" #'ement-notify-switch-to-notifications-buffer
-  "q" #'quit-window
-
-  ;; Messages
-  ;; "RET" #'ement-room-send-message
-  "S-<return>" #'ement-room-write-reply
-  "M-RET" #'ement-room-compose-message
-  "<insert>" #'ement-room-edit-message
-  "c"   (lambda ()
-          (interactive)
-          (ement-room-compose-message ement-room ement-session)
-          (ement-room-compose-org))
-
-  "x" #'ement-room-edit-message
-  "X" #'ement-room-delete-message
-  "s r" #'ement-room-send-reaction
-  "s e" #'ement-room-send-emote
-  "s f" #'ement-room-send-file
-  "s i" #'ement-room-send-image
-  "V" #'ement-room-view-event
-
-  ;; go
-  "g m" #'ement-notify-switch-to-mentions-buffer
-  "g n" #'ement-notify-switch-to-notifications-buffer
-  "g l"   #'ement-tabulated-room-list
-  "g r"   #'ement-view-room
-  "g R"   #'ement-room-sync
-  "g y"   #'my/ement-home
-
-  ;; Users
-  "u RET" #'ement-send-direct-message
-  "u i" #'ement-invite-user
-  "u I" #'ement-ignore-user
-
-  ;; Room
-  "r o" #'ement-room-occur
-  "r d" #'ement-describe-room
-  "r m" #'ement-list-members
-  "r t" #'ement-room-set-topic
-  "r f" #'ement-room-set-message-format
-  "r n" #'ement-room-set-notification-state
-  "r N" #'ement-room-override-name
-  "r T" #'ement-tag-room
-
-  ;; Room membership
-  "R c" #'ement-create-room
-  "R j" #'ement-join-room
-  "R l" #'ement-leave-room
-  "R F" #'ement-forget-room
-  "R n" #'ement-room-set-display-name
-  "R s" #'ement-room-toggle-space
-  ;; Other
-  )
-
-(general-evil-define-key '(normal motion) ement-room-mode-map
-  "RET" nil
-  "<return>" nil)
-
-(general-evil-define-key '(normal) ement-room-mode-map
-  :prefix "RET"
-  ;; "g l" #'ement-tabulated-room-list
-  ;; "g r" #'ement-view-room
-  "m" #'ement-notify-switch-to-mentions-buffer
-  "n" #'ement-notify-switch-to-notifications-buffer
-  "l"   #'ement-tabulated-room-list
-  "r"   #'ement-view-room
-  "R"   #'ement-room-sync
-  "y"   #'my/ement-home
-
-  "RET" #'ement-room-send-message
-  "c"   (lambda ()
-          (interactive)
-          (ement-room-compose-message ement-room ement-session)
-          (ement-room-compose-org)))
-
-;; room-list
-;; (defvar ement-room-list-mode-map
-;;   (let ((map (make-sparse-keymap)))
-;;     #'ement-room-list-RET
-;;     #'ement-room-list-next-unread
-;;     #'ement-room-list-section-toggle
-;;     #'ement-room-toggle-space)
-;;   "Keymap for `ement-room-list' buffers.
-;; See also `ement-room-list-button-map'.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gnus
-
-(general-evil-define-key '(normal) gnus-group-mode-map
-  "u" #'gnus-group-unsubscribe
-  "S" #'gnus-group-unsubscribe
-  "s" #'gnus-group-subscribe)
-
-(general-evil-define-key '(normal) gnus-summary-mode-map
-  "U" #'gnus-summary-put-mark-as-unread
-  "K" #'gnus-summary-prev-article
-  "J" #'gnus-summary-next-article)
-
-(general-evil-define-key '(normal) gnus-article-mode-map
-  "U" #'gnus-summary-put-mark-as-unread
-  "K" #'gnus-summary-prev-article
-  "J" #'gnus-summary-next-article)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; firefox

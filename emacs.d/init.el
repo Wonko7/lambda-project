@@ -12,6 +12,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emacs general config:
 
+(setq use-package-hook-name-suffix nil)
+
 (require 'savehist)
 (savehist-mode)
 
@@ -30,15 +32,16 @@
 (add-hook 'org-agenda-mode-hook (lambda () ;; only disable in agenda.
                                   (setq truncate-lines t))) ;; and yet you shit in my mouth, why? t?
 
-(require 'whitespace)
-(setq whitespace-action '(auto-cleanup))
-(setq whitespace-style
-      '(face
-        tabs trailing
-        empty
-        tab-mark
-        missing-newline-at-eof))
-(global-whitespace-mode 1)
+(use-package whitespace
+  :config
+  (setq whitespace-action '(auto-cleanup))
+  (setq whitespace-style
+        '(face
+          tabs trailing
+          empty
+          tab-mark
+          missing-newline-at-eof))
+  (global-whitespace-mode 1))
 
 (setq help-enable-variable-value-editing t)
 
@@ -77,90 +80,138 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows
 
-(require 'ace-window)
+(use-package ace-window
+  :defer t
+  :config
+  (setq aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
+  (setq aw-dispatch-when-more-than 2)
+  (setq aw-dispatch-always nil)
+  (setq aw-leading-char-style 'path)
+  (setq aw-char-position 'top-left)
+  (setq aw-scope 'frame))
 
-(setq aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
-(setq aw-dispatch-when-more-than 2)
-(setq aw-dispatch-always nil)
-(setq aw-leading-char-style 'path)
-(setq aw-char-position 'top-left)
-(setq aw-scope 'frame)
 
-(require 'ace-link)
+;; (require 'ace-link)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
 
-(require 'pass)
-(require 'pinentry)
-(setq epg-pinentry-mode 'loopback)
-(pinentry-start)
+(use-package pass
+  :defer t)
+(use-package pinentry
+  :config
+  (setq epg-pinentry-mode 'loopback)
+  (pinentry-start))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spelling
 
-(require 'flyspell-correct)
+(use-package flyspell-correct
+  :defer t
+  :config
+  ;; (global-spell-fu-mode 0)
+  ;; (setenv "DICTIONARY" "en_GB-ise")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-dictionary "en_GB-ise,en_US,fr-toutesvariantes")
+  (setq ispell-local-dictionary-alist `(("en_GB-ise,en_US,fr-toutesvariantes"
+                                         "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
+                                         ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
+                                         nil utf-8))))
 
-;; (global-spell-fu-mode 0)
-;; (setenv "DICTIONARY" "en_GB-ise")
-(setq ispell-program-name "hunspell")
-(setq ispell-dictionary "en_GB-ise,en_US,fr-toutesvariantes")
-(setq ispell-local-dictionary-alist `(("en_GB-ise,en_US,fr-toutesvariantes"
-                                       "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
-                                       ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
-                                       nil utf-8)))
+(use-package flyspell
+  :defer t
+  :after magit
+  :hook
+  ((git-commit-mode-hook . (lambda () (flyspell-mode 1)))
+   (org-mode-hook  . (lambda () (flyspell-mode 1))))
+  :config
+  (setq flyspell-mark-duplications-flag nil))
 
-(with-eval-after-load 'flyspell
-  (setq flyspell-mark-duplications-flag nil)
-  (add-hook 'git-commit-mode-hook
-	    (lambda () (flyspell-mode 1)))
-  (add-hook 'org-mode-hook
-	    (lambda () (flyspell-mode 1))))
-
-(require 'verbiste)
+(use-package verbiste
+  :defer nil)
+;; (require 'verbiste)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
 
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-project-search-path '(( "/code" . 3) ( "/work" . 3) ("/data" . 1)))
-(setq projectile-sort-order 'recently-active)
-(setq projectile-enable-caching t)
+(use-package projectile
+  :config
+  (setq projectile-project-search-path '(( "/code" . 3) ( "/work" . 3) ("/data" . 1)))
+  (setq projectile-sort-order 'recently-active)
+  (setq projectile-enable-caching t)
+  (projectile-global-mode))
 ;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
-(require 'magit)
-(setq magit-status-initial-section '(((unstaged) (status))
-                                     ((staged) (status))
-                                     ((TODOs) (status))))
-(add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
+;;(require 'magit)
+;;evil-state-property
+(use-package magit
+  :defer t
+  ;; :hook
+  ;; ((magit-diff-mode-hook . #'scroll-lock-mode)
+  ;;  (git-commit-setup-hook . #'my/org-commit-msg-setup 100))
+  ;; (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
+  ;; (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
+  :config
+  (setq magit-status-initial-section '(((unstaged) (status))
+				       ((staged) (status))
+				       ((TODOs) (status))))
 
-(require 'magit-todos)
-(setq magit-todos-ignore-case t)
-(setq magit-todos-max-items 1000)
-(setq magit-todos-auto-group-items 'always)
-(magit-todos-mode)
+  (general-evil-define-key '(normal) magit-diff-mode-map
+    "("      #'diff-hunk-prev
+    ")"      #'diff-hunk-next
+    "C-k"    #'diff-hunk-prev
+    "C-j"    #'diff-hunk-next)
+
+  (general-evil-define-key '(normal) magit-mode-map
+    "("    #'magit-section-backward-sibling
+    ")"    #'magit-section-forward-sibling
+    "C-k"    #'magit-section-backward-sibling
+    "C-j"    #'magit-section-backward-sibling)
+
+  (general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
+    "K"    #'git-rebase-move-line-up
+    "J"    #'git-rebase-move-line-down)
+
+  (general-evil-define-key '(normal) smerge-mode-map ;; FIXME
+    "grk" #'smerge-prev
+    "grj" #'smerge-next
+    "C-k" #'smerge-prev
+    "C-j" #'smerge-next
+    "("   #'smerge-prev
+    ")"   #'smerge-next
+    "Ku"  #'smerge-keep-upper
+    "Kl"  #'smerge-keep-lower) )
+
+
+(use-package magit-todos
+  ;;:defer t
+  :config
+  (setq magit-todos-ignore-case t)
+  (setq magit-todos-max-items 1000)
+  (setq magit-todos-auto-group-items 'always)
+  (advice-add #'magit-todos--insert-todos
+	      :before-until #'check-if-todo-blacklisted)
+  (advice-add #'magit-todos--add-to-status-buffer-kill-hook
+	      :before-until #'check-if-todo-blacklisted)
+  (magit-todos-mode))
 
 (defun check-if-todo-blacklisted ()
   (let ((root (magit-with-toplevel default-directory)))
     (or (string= (substring root 0 5) "/ssh:")
-        (string= root "/data/org/")
-        (string= root "/work/guix/guix")
-        (string= root "/code/guix/guix"))))
+	(string= root "/data/org/")
+	(string= root "/work/guix/guix")
+	(string= root "/code/guix/guix"))))
 
-(advice-add #'magit-todos--insert-todos
-            :before-until #'check-if-todo-blacklisted)
-(advice-add #'magit-todos--add-to-status-buffer-kill-hook
-            :before-until #'check-if-todo-blacklisted)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
-(require 'coterm)
-(coterm-mode)
+(use-package coterm
+  :config
+  (coterm-mode))
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
@@ -171,13 +222,18 @@
 (defun toggle-scroll-to-bottom-on-output ()
   (interactive)
   (setq-local comint-scroll-to-bottom-on-output
-              (not comint-scroll-to-bottom-on-output)))
+	      (not comint-scroll-to-bottom-on-output)))
 
 (setq history-length 100000)
 
+;; (use-package bash-completion
+;;   :config
+;;   (bash-completion-setup)
+;;   :hook
+;;   (shell-dynamic-complete-functions . #'bash-completion-dynamic-complete))
 (require 'bash-completion)
 (bash-completion-setup)
-(add-hook 'shell-dynamic-complete-functions 'bash-completion-dynamic-complete)
+(add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete)
 
 ;; FIXME: fuck me: comint-watch-for-password-prompt
 ;; run-at-time 0 nil => bug
@@ -191,47 +247,52 @@ carriage returns (\\r) in STRING.
 This function could be in the list `comint-output-filter-functions'."
   (when (let ((case-fold-search t))
 	  (string-match comint-password-prompt-regexp
-                        (string-replace "\r" "" string)))
+			(string-replace "\r" "" string)))
     ;; Use `run-at-time' in order not to pause execution of the
     ;; process filter with a minibuffer
     ;; or don't use it so that there is no weird timeout bug.
     (with-current-buffer (current-buffer)
       (let ((comint--prompt-recursion-depth
-             (1+ comint--prompt-recursion-depth)))
-        (if (> comint--prompt-recursion-depth 10)
-            (message "Password prompt recursion too deep")
-          (when (get-buffer-process (current-buffer))
-            (comint-send-invisible
-             (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
+	     (1+ comint--prompt-recursion-depth)))
+	(if (> comint--prompt-recursion-depth 10)
+	    (message "Password prompt recursion too deep")
+	  (when (get-buffer-process (current-buffer))
+	    (comint-send-invisible
+	     (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
 
-(require 'tramp)
-(setq tramp-terminal-type "tramp")
-
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-
-(setq tramp-ssh-controlmaster-options
- (concat
-   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-   "-o ControlMaster=auto -o ControlPersist=yes"))
+(use-package tramp
+  :defer t
+  :config
+  (setq tramp-terminal-type "tramp")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (setq tramp-ssh-controlmaster-options
+	(concat
+	 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+	 "-o ControlMaster=auto -o ControlPersist=yes")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
 
-(require 'diredfl)
-(require 'all-the-icons-dired) ;; and after that try all icons init
-(require 'dired-toggle-sudo)
-(require 'dired-rsync)
-(require 'dired-open)
-;; (require 'dired-ranger)
-(require 'dired-collapse)
-(setq dired-dwim-target t)
+(use-package diredfl
+  :defer t
+  :hook (dired-mode-hook . #'diredfl-mode))
+(use-package all-the-icons-dired
+  :defer t
+  :hook
+  (dired-mode-hook . #'all-the-icons-dired-mode))
+(use-package dired-toggle-sudo
+  :defer t)
+(use-package dired-rsync
+  :defer t)
+(use-package dired-open
+  :defer t)
+(use-package dired-collapse
+  :defer t)
 
-(add-hook 'dired-mode-hook #'all-the-icons-dired-mode)
-(add-hook 'dired-mode-hook #'diredfl-mode)
-;; Auto-refresh dired on file change
+(setq dired-dwim-target t)
 (add-hook 'dired-mode-hook #'auto-revert-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -240,25 +301,26 @@ This function could be in the list `comint-output-filter-functions'."
 (setq ibuffer-save-with-custom nil
       ibuffer-saved-filter-groups
       '(("default"
-         ("code"     (and (or (derived-mode . prog-mode)
-                              (mode . yaml-mode))
-                          (not (name . "^\\*scratch\\*$"))))
-         ("exwm"     (mode . exwm-mode))
-         ("dired"    (mode . dired-mode))
-         ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
-         ("org"      (derived-mode . org-mode))
-         ("ement"    (derived-mode . ement-room-mode))
-         ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
-         ("scratch"  (name . "^\\*scratch\\*$")))))
+	 ("code"     (and (or (derived-mode . prog-mode)
+			      (mode . yaml-mode))
+			  (not (name . "^\\*scratch\\*$"))))
+	 ("exwm"     (mode . exwm-mode))
+	 ("dired"    (mode . dired-mode))
+	 ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
+	 ("org"      (derived-mode . org-mode))
+	 ("ement"    (derived-mode . ement-room-mode))
+	 ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
+	 ("scratch"  (name . "^\\*scratch\\*$")))))
 
 (add-hook 'ibuffer-mode-hook
-          (lambda ()
-            (ibuffer-switch-to-saved-filter-groups "default")))
+	  (lambda ()
+	    (ibuffer-switch-to-saved-filter-groups "default")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; apps
 
-(require 'osm)
+(use-package osm
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async-shell-command
@@ -266,7 +328,7 @@ This function could be in the list `comint-output-filter-functions'."
 (setq async-shell-command-buffer 'new-buffer)
 
 (add-to-list 'display-buffer-alist
-             '("*Async Shell Command*" display-buffer-no-window (nil)))
+	     '("*Async Shell Command*" display-buffer-no-window (nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
@@ -287,11 +349,15 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search
 
-(require 'rg)
-(require 'wgrep)
+(use-package rg
+  :defer t)
 
-(autoload 'wgrep-rg-setup "wgrep-rg")
-(add-hook 'rg-mode-hook #'wgrep-rg-setup)
+(use-package wgrep
+  :defer t
+  :hook
+  (rg-mode-hook . #'wgrep-rg-setup)
+  :config
+  (autoload 'wgrep-rg-setup "wgrep-rg"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mentor
@@ -302,8 +368,10 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; firefox
 
-(require 'exwm-firefox-evil)
-(add-hook 'exwm-manage-finish-hook 'exwm-firefox-evil-activate-if-firefox)
+(use-package exwm-firefox-evil
+  :defer t
+  :hook
+  (exwm-manage-finish-hook . #'exwm-firefox-evil-activate-if-firefox))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; midnight
@@ -314,7 +382,7 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
 
-(require 'bluetooth)
+(use-package bluetooth)
 
 (defun my/brace-for-impact ()
   (recentf-save-list)
@@ -353,14 +421,15 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; end of config stuff:
 
-(require 'diminish)
-(diminish 'projectile-mode)
-(diminish 'org-indent-mode)
-(diminish 'snipe-mode)
-(diminish 'evil-org-mode)
-(diminish 'evil-snipe-local-mode)
-(diminish 'evil-snipe-mode)
-(diminish 'evil-escape-mode)
-(diminish 'evil-owl-mode)
+(use-package diminish
+  :config
+  (diminish 'projectile-mode)
+  (diminish 'org-indent-mode)
+  (diminish 'snipe-mode)
+  (diminish 'evil-org-mode)
+  (diminish 'evil-snipe-local-mode)
+  (diminish 'evil-snipe-mode)
+  (diminish 'evil-escape-mode)
+  (diminish 'evil-owl-mode))
 
 (provide 'init)

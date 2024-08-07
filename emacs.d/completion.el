@@ -45,7 +45,7 @@
         (apply #'consult-completion-in-region args)))
 
 
-(require 'emacs)
+(require 'emacs) ;; hmmm what?
 (defun crm-indicator (args)
   (cons (format "[CRM%s] %s"
                 (replace-regexp-in-string
@@ -161,8 +161,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; embark
 
-(require 'embark)
-(require 'embark-consult)
+(use-package embark
+  :defer t
+  :config
+  (defvar-keymap my/embark-become-line-map
+    :doc "Embark become keymap for search."
+    :parent embark-meta-map
+    "l"        #'consult-line
+    "i"        #'consult-imenu
+    "o"        #'consult-outline
+    "s"        #'consult-outline))
+
+(use-package embark-consult
+  :defer t
+  :after embark)
 (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)
 (setq embark-prompter 'embark-completing-read-prompter)
 
@@ -176,11 +188,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yasnippet
 
-(require 'yasnippet)
-(require 'consult-yasnippet)
+(use-package yasnippet
+  :defer t
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
 
-(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-(yas-global-mode 1)
+(use-package consult-yasnippet
+  :after yasnippet
+  :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell / bash
@@ -251,38 +267,44 @@
   (and (vertico--remote-p string)
        (completion-basic-all-completions string table pred point)))
 (add-to-list 'completion-styles-alist
-             '(basic-remote           ; Name of `completion-style'
+             '(basic-remote           ; Name of `completion-style
                kb/basic-remote-try-completion kb/basic-remote-all-completions nil))
 
 
-(require 'consult-omni)
-(require 'consult-omni-sources)
-(require 'consult-omni-embark)
+(use-package consult-omni
+  :defer t
+  :config
+  (setq consult-omni-show-preview t) ;;; show previews
+  ;; (setq consult-omni-preview-key "C-o")
+  (setq consult-omni-multi-sources '("calc"
+                                     ;; "File"
+                                     ;; "Buffer"
+                                     ;; "Bookmark"
+                                     "Apps" ;; ??
+                                     ;; "gptel"
+                                     ;; "Brave"
+                                     "Dictionary"
+                                     "DuckDuckGo"
+                                     "Wikipedia"
+                                     ;; "PubMed"
+                                     ;; "buffers text search"
+                                     ;; "Notes Search"
+                                     ;; "Org Agenda"
+                                     "GitHub"
+                                     ;; "StackOverflow"
+                                     ;; "YouTube"
+                                     ;; "Invidious"
+                                     )))
 
-(setq consult-omni-show-preview t) ;;; show previews
+(use-package consult-omni-sources
+  :defer t
+  :after consult-omni
+  :config
+  (consult-omni-sources-load-modules))
 
-;; (setq consult-omni-preview-key "C-o")
-(setq consult-omni-multi-sources '("calc"
-                                   ;; "File"
-                                   ;; "Buffer"
-                                   ;; "Bookmark"
-                                   "Apps" ;; ??
-                                   ;; "gptel"
-                                   ;; "Brave"
-                                   "Dictionary"
-                                   "DuckDuckGo"
-                                   "Wikipedia"
-                                   ;; "PubMed"
-                                   ;; "buffers text search"
-                                   ;; "Notes Search"
-                                   ;; "Org Agenda"
-                                   "GitHub"
-                                   ;; "StackOverflow"
-                                   ;; "YouTube"
-                                   ;; "Invidious"
-                                   ))
-
-(consult-omni-sources-load-modules)
+(use-package consult-omni-embark
+  :after consult-omni
+  :defer t)
 
 
 (provide 'conf/completion)

@@ -1,5 +1,8 @@
 (add-hook 'prog-mode-hook #'rainbow-identifiers-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(general-evil-define-key '(normal) prog-mode-map
+  "zj"  #'flymake-goto-next-error
+  "zk"  #'flymake-goto-prev-error)
 
 ;; ocaml + sane defaults
 ;; (require 'lsp)
@@ -25,13 +28,52 @@
 
 
 
-(require 'tuareg)
-(require 'ocamlformat)
-(require 'utop)
-
-(setq utop-command "dune utop . -- -emacs")
-(autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-(add-hook 'tuareg-mode-hook 'utop-minor-mode)
+(use-package tuareg
+  :defer t
+  :hook
+  (tuareg-mode-hook . (lambda ()
+                        (setq mode-name "🐫")
+                        (add-hook 'before-save-hook #'ocamlformat-before-save)
+                        (setq-local comment-style 'indent)
+                        (setq-local tuareg-interactive-program
+                                    (concat tuareg-interactive-program " -nopromptcont"))
+                        (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
+  :config
+  (setq tuareg-interactive-read-only-input t)
+  (general-evil-define-key '(normal) tuareg-mode-map
+    :prefix "RET"
+    "ge"  #'merlin-error-next
+    "o"   #'merlin-pop-stack
+    "RET" #'tuareg-eval-phrase
+    "b"   #'tuareg-eval-buffer
+    "TAB" #'tuareg-complete
+    "K"   #'tuareg-kill-ocaml
+    "a"   #'ff-get-other-file)
+  (add-hook 'tuareg-mode-hook
+            (lambda ()
+              (setq mode-name "🐫")
+              (add-hook 'before-save-hook #'ocamlformat-before-save)
+              (setq-local comment-style 'indent)
+              (setq-local tuareg-interactive-program
+                          (concat tuareg-interactive-program " -nopromptcont"))
+              (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
+  ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
+  )
+(use-package ocamlformat
+  :defer t)
+(use-package utop
+  :defer t
+  :hook
+  (tuareg-mode-hook . #'utop-minor-mode)
+  :config
+  (setq utop-command "dune utop . -- -emacs")
+  (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+  (general-evil-define-key '(normal) utop-minor-mode-map
+    :prefix "RET"
+    "RET" #'utop-eval-phrase
+    "b"   #'utop-eval-buffer
+    "K"   #'utop-kill)
+  )
 
 ;; (use-package tuareg :ensure t)
 
@@ -51,7 +93,6 @@
       disabled-command-function nil
       sql-product 'postgres
       track-eol t
-      tuareg-interactive-read-only-input t
       view-read-only t
       vc-follow-symlinks t)
 
@@ -84,66 +125,62 @@
   ;; :nvm  "gd" #'+lookup/definition
 ;;       "a"   #'ff-get-other-file)
 
-(general-evil-define-key '(normal) tuareg-mode-map
-  :prefix "RET"
-  "ge"  #'merlin-error-next
-  "o"   #'merlin-pop-stack
-  "RET" #'tuareg-eval-phrase
-  "b"   #'tuareg-eval-buffer
-  "TAB" #'tuareg-complete
-  "K"   #'tuareg-kill-ocaml
-  "a"   #'ff-get-other-file)
 
-(general-evil-define-key '(normal) utop-minor-mode-map
-  :prefix "RET"
-  "RET" #'utop-eval-phrase
-  "b"   #'utop-eval-buffer
-  "K"   #'utop-kill)
+(use-package diff-hl
+  ;; :after magit
+  :config
+  (global-diff-hl-mode)
+  (setq diff-hl-draw-borders nil)
+  (setq diff-hl-side 'right))
 
-(general-evil-define-key '(normal) prog-mode-map
-  "zj"  #'flymake-goto-next-error
-  "zk"  #'flymake-goto-prev-error)
-
-;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
-(add-hook 'tuareg-mode-hook
-          (lambda ()
-            (setq mode-name "🐫")
-            (add-hook 'before-save-hook #'ocamlformat-before-save)
-            (setq-local comment-style 'indent)
-            (setq-local tuareg-interactive-program
-                        (concat tuareg-interactive-program " -nopromptcont"))
-            (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
-
-(require 'diff-hl)
-(global-diff-hl-mode)
-
-(setq diff-hl-draw-borders nil)
-(setq diff-hl-side 'right)
+;;(global-diff-hl-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; buffer-env
 
 ;; use guix shell automagically <3
-(require 'buffer-env)
-(setq buffer-env-script-name "guix.scm")
-(add-hook 'hack-local-variables-hook #'buffer-env-update)
 
+;; (use-package buffer-env
+;;   ;; :defer t
+;;   :demand t
+;;   :hook
+;;   ((hack-local-variables-hook . #'buffer-env-update)
+;;    (utop-mode-hook . #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
+;;    (comint-mode-hook . #'hack-dir-local-variables-non-file-buffer))
+;;   :config
+;;   (setq buffer-env-script-name "guix.scm")
+;;   (setq buffer-env-commands
+;;           '((".env" . "set -a && >&2 . \"$0\" && env -0")
+;;             ("manifest.scm" . "guix shell -m \"$0\" -- env -0")
+;;             ("guix.scm" . "guix shell -D -f \"$0\" -- env -0")
+;;             ("*" . ">&2 . \"$0\" && env -0")))
+;;   )
+
+(require 'buffer-env)
+(add-hook 'hack-local-variables-hook #'buffer-env-update)
+(add-hook 'utop-mode-hook #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
+(add-hook 'comint-mode-hook #'hack-dir-local-variables-non-file-buffer)
+(setq buffer-env-script-name "guix.scm")
 (setq buffer-env-commands
       '((".env" . "set -a && >&2 . \"$0\" && env -0")
         ("manifest.scm" . "guix shell -m \"$0\" -- env -0")
         ("guix.scm" . "guix shell -D -f \"$0\" -- env -0")
         ("*" . ">&2 . \"$0\" && env -0")))
-(add-hook 'utop-mode-hook #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
-(add-hook 'comint-mode-hook #'hack-dir-local-variables-non-file-buffer)
 
-(require 'inheritenv)
+
+(use-package inheritenv
+  :demand t
+  ;;:defer t
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; I, for one, welcome our new ai overlords
 
-(require 'gptel)
-(setq gptel-api-key (lambda ()
-                      (auth-source-pass-get 'secret "web/openai/token/pandora")))
+(use-package gptel
+  :defer t
+  :config
+  (setq gptel-api-key (lambda ()
+                        (auth-source-pass-get 'secret "web/openai/token/pandora"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
