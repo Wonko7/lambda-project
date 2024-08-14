@@ -702,7 +702,7 @@
      (inherit %wonko-bash-config)
      (environment-variables
       (cons*
-       '("GDK_SCALE" . "1")
+       '("GDK_SCALE" . "2")
        '("GDK_DPI_SCALE" . "1.5")
        %wonko-env))))
    (simple-service
