@@ -26,6 +26,7 @@
 
   ;; yank
   "yp" (lambda () (interactive) (kill-new (buffer-file-name)))
+  "yP" #'consult-yank-pop
 
   ;; emacs apps
   "ab"  #'ibuffer
@@ -53,6 +54,8 @@
   "br" #'rename-buffer
   "bk" #'kill-this-buffer
   "bn" #'evil-buffer-new
+  "bo" #'consult-outline
+  "bg" #'consult-focus-lines
 
   ;; org
   "oa"  (lambda () (interactive) (org-agenda nil "z"))
@@ -147,6 +150,7 @@
   "ie" #'emoji-search                 ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'consult-yasnippet
+  "ic" #'my/insert-shell-line
   ;; rm stuff
   "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
@@ -234,6 +238,7 @@
 ;; shell
 
 (general-evil-define-key '(normal visual) comint-mode-map
+  "|"           #'my/insert-shell-line
   "ï"           #'my/cd-up
   "-"           #'my/cd--
   "("           #'comint-previous-prompt
@@ -254,6 +259,7 @@
   "RET"         #'comint-send-input)
 
 (evil-collection-define-key 'insert 'comint-mode-map
+  (kbd "C-s") #'my/insert-shell-line
   (kbd "C-r") #'consult-history
   (kbd "C-p") #'comint-previous-input
   (kbd "C-n") #'comint-next-input)

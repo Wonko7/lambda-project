@@ -103,6 +103,7 @@
 
     (general-evil-define-key '(normal) org-mode-map
       :prefix "RET"
+      "o"     #'consult-outline
       "y"     #'my/kill-src-block-at-point
       "RET"   #'+org/dwim-at-point)
 

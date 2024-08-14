@@ -68,4 +68,27 @@
 ;;                 (string-lessp (replace-regexp-in-string "^http\\(s\\)*://" "" l1)
 ;;                               (replace-regexp-in-string "^http\\(s\\)*://" "" l2))))))
 
+(defun my/set-date ()
+  (interactive)
+  (pcase-let ((`(,m ,d ,y) (cfw:org-read-date-command)))
+    (my/sudo (format "date %02d%i1300%i" m d y))))
+
+(defun my/insert-shell-line ()
+  (interactive)
+  (let* ((f "/data/org/here-be-dragons/20230412204446-shell.org")
+         (buf-content (split-string
+                       (with-temp-buffer
+                         (insert-file-contents f)
+                         (buffer-string))
+                       "\n"))
+         (cmds (seq-filter
+                (lambda (x)
+                  (not (string-match-p "^[*:#]" x)))
+                (remove "" buf-content)))
+         (cmd (consult--read cmds
+                             :prompt "choose command: "
+                             :sort nil
+                             :require-match t)))
+    (insert cmd)))
+
 (provide 'conf/misc)
