@@ -119,7 +119,9 @@
   `(("communication" . ,%communication-world)
     ("desktop" . ,%desktop-world)
     ("utils" . ,%utils-world)
-    ("web" . ,%web-world)))
+    ("web" . ,%web-world)
+    ("borked" . ,%borked-world)
+    ))
 
 (define-public (profiles->names ps)
   (map car ps))
