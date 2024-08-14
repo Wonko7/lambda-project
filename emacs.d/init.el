@@ -98,16 +98,20 @@
 
 (use-package pass
   :defer t)
-(use-package pinentry
-  :config
-  (setq epg-pinentry-mode 'loopback)
-  (pinentry-start))
+
+(require 'pinentry)
+(setq epg-pinentry-mode 'loopback)
+(pinentry-start)
+;; (use-package pinentry
+;;   :config
+;;   (setq epg-pinentry-mode 'loopback)
+;;   (pinentry-start))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spelling
 
 (use-package flyspell-correct
-  :defer t
+  ;;:defer t
   :config
   ;; (global-spell-fu-mode 0)
   ;; (setenv "DICTIONARY" "en_GB-ise")
@@ -119,8 +123,7 @@
                                          nil utf-8))))
 
 (use-package flyspell
-  :defer t
-  :after magit
+  ;; :defer t
   :hook
   ((git-commit-mode-hook . (lambda () (flyspell-mode 1)))
    (org-mode-hook  . (lambda () (flyspell-mode 1))))
@@ -145,45 +148,46 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
-;;(require 'magit)
+(require 'magit)
 ;;evil-state-property
-(use-package magit
-  :defer t
-  ;; :hook
-  ;; ((magit-diff-mode-hook . #'scroll-lock-mode)
-  ;;  (git-commit-setup-hook . #'my/org-commit-msg-setup 100))
-  ;; (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
-  ;; (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
-  :config
-  (setq magit-status-initial-section '(((unstaged) (status))
-				       ((staged) (status))
-				       ((TODOs) (status))))
+;; (use-package magit
+;;   ;; :defer t
+;;   ;; :hook
+;;   ;; ((magit-diff-mode-hook . #'scroll-lock-mode)
+;;   ;;  (git-commit-setup-hook . #'my/org-commit-msg-setup 100))
+;;   ;; (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
+;;   ;; (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
+;;   :config
+(setq magit-status-initial-section '(((unstaged) (status))
+			       ((staged) (status))
+			       ((TODOs) (status))))
 
-  (general-evil-define-key '(normal) magit-diff-mode-map
-    "("      #'diff-hunk-prev
-    ")"      #'diff-hunk-next
-    "C-k"    #'diff-hunk-prev
-    "C-j"    #'diff-hunk-next)
+(general-evil-define-key '(normal) magit-diff-mode-map
+  "("      #'diff-hunk-prev
+  ")"      #'diff-hunk-next
+  "C-k"    #'diff-hunk-prev
+  "C-j"    #'diff-hunk-next)
 
-  (general-evil-define-key '(normal) magit-mode-map
-    "("    #'magit-section-backward-sibling
-    ")"    #'magit-section-forward-sibling
-    "C-k"    #'magit-section-backward-sibling
-    "C-j"    #'magit-section-backward-sibling)
+(general-evil-define-key '(normal) magit-mode-map
+  "("    #'magit-section-backward-sibling
+  ")"    #'magit-section-forward-sibling
+  "C-k"    #'magit-section-backward-sibling
+  "C-j"    #'magit-section-backward-sibling)
 
-  (general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
-    "K"    #'git-rebase-move-line-up
-    "J"    #'git-rebase-move-line-down)
+(general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
+  "K"    #'git-rebase-move-line-up
+  "J"    #'git-rebase-move-line-down)
 
-  (general-evil-define-key '(normal) smerge-mode-map ;; FIXME
-    "grk" #'smerge-prev
-    "grj" #'smerge-next
-    "C-k" #'smerge-prev
-    "C-j" #'smerge-next
-    "("   #'smerge-prev
-    ")"   #'smerge-next
-    "Ku"  #'smerge-keep-upper
-    "Kl"  #'smerge-keep-lower) )
+(general-evil-define-key '(normal) smerge-mode-map ;; FIXME
+  "grk" #'smerge-prev
+  "grj" #'smerge-next
+  "C-k" #'smerge-prev
+  "C-j" #'smerge-next
+  "("   #'smerge-prev
+  ")"   #'smerge-next
+  "Ku"  #'smerge-keep-upper
+  "Kl"  #'smerge-keep-lower)
+;;   )
 
 
 (use-package magit-todos

@@ -248,7 +248,7 @@
 
         ([?\A-\s-f] . my/toggle-fullscreen)
         ([?\A-\s-F] . exwm-layout-toggle-fullscreen)
-        ([?\A-\s-d] . my/set-window-dedicated)
+        ;; ([?\A-\s-d] . my/set-window-dedicated)
 
         ;; Launch applications via shell command
         ([?\A-\s-:] . (lambda (command)
@@ -299,7 +299,7 @@
 
         ([?\s-f] . my/toggle-fullscreen)
         ([?\s-F] . exwm-layout-toggle-fullscreen)
-        ([?\s-d] . my/set-window-dedicated)
+        ;; ([?\s-d] . my/set-window-dedicated)
 
         ;; Launch applications via shell command
         ([?\s-:] . (lambda (command)
