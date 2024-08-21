@@ -39,41 +39,44 @@
                                     (concat tuareg-interactive-program " -nopromptcont"))
                         (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
   :config
-  (setq tuareg-interactive-read-only-input t)
-  (general-evil-define-key '(normal) tuareg-mode-map
-    :prefix "RET"
-    "ge"  #'merlin-error-next
-    "o"   #'merlin-pop-stack
-    "RET" #'tuareg-eval-phrase
-    "b"   #'tuareg-eval-buffer
-    "TAB" #'tuareg-complete
-    "K"   #'tuareg-kill-ocaml
-    "a"   #'ff-get-other-file)
-  (add-hook 'tuareg-mode-hook
-            (lambda ()
-              (setq mode-name "🐫")
-              (add-hook 'before-save-hook #'ocamlformat-before-save)
-              (setq-local comment-style 'indent)
-              (setq-local tuareg-interactive-program
-                          (concat tuareg-interactive-program " -nopromptcont"))
-              (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
+  (progn
+    (setq tuareg-interactive-read-only-input t)
+    (general-evil-define-key '(normal) tuareg-mode-map
+      :prefix "RET"
+      "ge"  #'merlin-error-next
+      "o"   #'merlin-pop-stack
+      "RET" #'tuareg-eval-phrase
+      "b"   #'tuareg-eval-buffer
+      "TAB" #'tuareg-complete
+      "K"   #'tuareg-kill-ocaml
+      "a"   #'ff-get-other-file))
+  ;; (add-hook 'tuareg-mode-hook
+  ;;           (lambda ()
+  ;;             (setq mode-name "🐫")
+  ;;             (add-hook 'before-save-hook #'ocamlformat-before-save)
+  ;;             (setq-local comment-style 'indent)
+  ;;             (setq-local tuareg-interactive-program
+  ;;                         (concat tuareg-interactive-program " -nopromptcont"))
+  ;;             (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
   ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
   )
+
 (use-package ocamlformat
   :defer t)
-(use-package utop
-  :defer t
-  :hook
-  (tuareg-mode-hook . #'utop-minor-mode)
-  :config
-  (setq utop-command "dune utop . -- -emacs")
-  (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-  (general-evil-define-key '(normal) utop-minor-mode-map
-    :prefix "RET"
-    "RET" #'utop-eval-phrase
-    "b"   #'utop-eval-buffer
-    "K"   #'utop-kill)
-  )
+
+;; (use-package utop
+;;   :defer t
+;;   :hook
+;;   (tuareg-mode-hook . #'utop-minor-mode)
+;;   :config
+;;   (progn
+;;     (setq utop-command "dune utop . -- -emacs")
+;;     (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+;;     (general-evil-define-key '(normal) utop-minor-mode-map
+;;       :prefix "RET"
+;;       "RET" #'utop-eval-phrase
+;;       "b"   #'utop-eval-buffer
+;;       "K"   #'utop-kill)))
 
 ;; (use-package tuareg :ensure t)
 
