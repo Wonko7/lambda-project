@@ -43,6 +43,7 @@
         emacs-org-super-agenda
         emacs-org-web-tools
         emacs-org-ql
+        emacs-org-appear
         emacs-org-board
         emacs-org-books
         emacs-org-noter

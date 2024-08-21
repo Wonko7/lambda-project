@@ -671,7 +671,7 @@
   :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org commit / magit
+;; org commit / magit FIXME
 
 (defun check-if-org ()
   (string= (magit-with-toplevel (pwd)) "Directory /data/org/"))
@@ -682,6 +682,19 @@
     (emoji-search)))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; org appear
 
+;; see: https://github.com/awth13/org-appear/issues/58
+
+;; (use-package org-appear
+;;   :defer t
+;;   :after org
+;;   :hook
+;;   (org-mode-hook . #'org-appear-mode)
+;;   :config
+;;   (progn
+;;     (setq org-appear-autokeywords t)
+;;     (setq org-appear-autolinks t)))
 
 (provide 'conf/org)
