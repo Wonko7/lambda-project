@@ -39,8 +39,8 @@
   ;; emacs but not that close to my heart
   "aab" #'bluetooth-list-devices
   ;; external apps
-  "aat" (lambda () (interactive) (async-shell-command my/term-cmd))
-  "aaT" (lambda () (interactive) (async-shell-command "transmission-gtk"))
+  "aaT" (lambda () (interactive) (async-shell-command my/term-cmd))
+  "aat" (lambda () (interactive) (async-shell-command "transmission-gtk"))
   "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
   "aap" (lambda () (interactive) (async-shell-command "pavucontrol"))
   ;; browsers
@@ -149,8 +149,8 @@
   ;; insert stuff
   "ie" #'emoji-search                 ;;  :desc "Emoji"
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
-  "is" #'consult-yasnippet
-  "ic" #'my/insert-shell-line
+  "is" #'my/insert-shell-line
+  "it" #'consult-yasnippet
   ;; rm stuff
   "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
