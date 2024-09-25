@@ -10,6 +10,7 @@
   #:use-module (srfi srfi-88)
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
+  #:use-module (nongnu packages firmware)
   #:use-module (gnu system setuid)
   #:use-module (gnu packages package-management)
   #:use-module (guix channels)
@@ -27,7 +28,7 @@
             %laptop-fstab))
 
 
-(use-service-modules shepherd xorg sddm desktop networking ssh xorg)
+(use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg)
 (use-package-modules base linux emacs emacs-xyz shells bash networking display-managers xdisorg suckless fonts)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,11 +99,14 @@
 
 (define-public %laptop-services
   (cons*
+   (simple-service 'fwupd-polkit polkit-service-type (list fwupd-nonfree))
+
    (service bluetooth-service-type
             (bluetooth-configuration (auto-enable? #t)))
 
    ;; FIXME
    (extra-special-file "/etc/guix/channels.scm" (scheme-file "_" %channels))
+
    (service guix-publish-service-type
             (guix-publish-configuration
              (host "0.0.0.0")
@@ -116,7 +120,7 @@
                     (host "192.168.1.4" "rocinante.local")
                     (host "192.168.1.6" "enterprise.local")
                     (host "192.168.1.9" "nispe.local")))
-   (service tor-service-type)
+
    (service openssh-service-type
             (openssh-configuration
              (authorized-keys
@@ -128,6 +132,8 @@
              (x11-forwarding? #t)
              (password-authentication? #f)
              (permit-root-login #t)))
+
+   (service tor-service-type)
 
    (modify-services %desktop-services
      (delete gdm-service-type)
