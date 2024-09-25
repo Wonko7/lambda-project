@@ -131,8 +131,8 @@
   (setq flyspell-mark-duplications-flag nil))
 
 (use-package verbiste
-  :defer nil)
-;; (require 'verbiste)
+  :defer t
+  :commands (verbiste-deconjugate verbiste-conjugate))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile

@@ -66,6 +66,10 @@
           (org-web-tools-insert-link-for-url (current-kill 0 t))
           (org-id-get-create)
           (evil-next-line 2))
+  "oiwe" #'org-web-tools-insert-web-page-as-entry ;; :desc "web: insert entry"
+  "oiwu" #'org-web-tools-insert-link-for-url ;; :desc "web: insert url"
+  "owe" #'org-web-tools-insert-web-page-as-entry
+  "owu" #'org-web-tools-insert-link-for-url
 
   ;; roam
   "rD" #'org-roam-demote-entire-buffer
@@ -193,6 +197,8 @@
  "C-/"  #'evil-search-forward
  "-d"   #'delete-trailing-whitespace
  "z="   #'flyspell-correct-at-point
+ ;; "`"    #' FIXME do something with this
+ "'"    #'evil-owl-goto-mark
  "Y"    (lambda () (interactive) (execute-kbd-macro (kbd "y$"))))
 
 ;; TODO: sentence & paragraph motions.
