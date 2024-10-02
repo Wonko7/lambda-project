@@ -304,7 +304,7 @@
         ;; bling
         feh
         qtsvg   ;; needed for rendering icons
-        ;; FIXME doesn't currently build ;; kvantum ;; for qt theme
+        kvantum ;; for qt theme
         qt5ct   ;; for changing icon theme & font size.
         breeze breeze-gtk breeze-icons))
 
@@ -479,4 +479,4 @@
         weechat))
 
 (define-public %borked-world
-  (list kvantum))
+  (list))
