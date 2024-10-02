@@ -377,8 +377,8 @@
               (number-sequence 10 20)))
 
 (setq exwm-workspace-warp-cursor t
-      mouse-autoselect-window t
-      focus-follows-mouse t)
+      mouse-autoselect-window nil
+      focus-follows-mouse nil)
 
 ;; autorandr
 
