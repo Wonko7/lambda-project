@@ -71,7 +71,7 @@
 (defun my/set-date ()
   (interactive)
   (pcase-let ((`(,m ,d ,y) (cfw:org-read-date-command)))
-    (my/sudo (format "date %02d%i1300%i" m d y))))
+    (my/sudo (format "date %02d%02d1300%i" m d y))))
 
 (defun my/insert-shell-line ()
   (interactive)
