@@ -82,5 +82,5 @@
                      (make-vault-subvolumes mapped-devices)
                      %base-file-systems))))))
 
-;; %enterprise-os
 %enterprise-wonko-home
+%enterprise-os

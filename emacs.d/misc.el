@@ -91,4 +91,15 @@
                              :require-match t)))
     (insert cmd)))
 
+
+;; (general-evil-define-key '(normal) embark-general-map
+;;                     "gP" (lambda (file)
+;;                            (interactive "f") ;; binds =file= to result of (read-file-name ...), when called interactively
+;;                            (message "I will git")
+;;                            (message file))
+
+;;                     )
+
+
+
 (provide 'conf/misc)

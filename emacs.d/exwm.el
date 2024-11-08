@@ -31,9 +31,8 @@
 
 (setq exwm-workspace-number 20) ;; 10-20 for external monitors.
 (require 'exwm)
-(require 'exwm-randr)
 (require 'exwm-xim)
-(require 'exwm-config)
+(require 'exwm-randr)
 (require 'exwm-workspace)
 (require 'exwm-systemtray)
 (require 'exwm-edit)
