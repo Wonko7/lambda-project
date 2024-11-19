@@ -73,6 +73,19 @@
   (pcase-let ((`(,m ,d ,y) (cfw:org-read-date-command)))
     (my/sudo (format "date %02d%02d1300%i" m d y))))
 
+
+(defun my/star-date ()
+  "Return difference between TIME1 & TIME2 as a readable string."
+  (let* ((start-date (org-read-date nil nil "1986-07-23")
+                     ;;(org-read-date nil nil "2019-04-11")
+                     )
+         (end-date (org-read-date nil nil "+0"))
+         (days (- (org-time-string-to-absolute end-date)
+                  (org-time-string-to-absolute start-date))))
+    days))
+
+;; (my/star-date)
+
 (defun my/insert-shell-line ()
   (interactive)
   (let* ((f "/data/org/here-be-dragons/20230412204446-shell.org")
