@@ -26,7 +26,7 @@
  ;; web
  chromium tor matrix irc bittorrent
  ;; tools
- admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs
+ admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls
  ;; dev
  android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
@@ -448,7 +448,11 @@
         sloccount
         ;; android
         adb
+        ;; net
+        openntpd
         ;; web
+        gnutls
+        libressl
         curl
         jq))
 
