@@ -226,6 +226,16 @@
       (targets    '("/boot"))
       (keyboard-layout %dvorak-kb)))))
 
+(define-public %uskb-removable-laptop-os
+  (operating-system
+    (inherit %laptop-os)
+    (keyboard-layout %dvorak-kb)
+    (bootloader
+     (bootloader-configuration
+      (bootloader grub-efi-removable-bootloader)
+      (targets    '("/boot"))
+      (keyboard-layout %us-kb)))))
+
 (define-public %removable-laptop-os-init-from-external
   (operating-system
     (inherit %laptop-os)
