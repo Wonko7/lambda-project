@@ -119,15 +119,17 @@
                     (host "192.168.1.3" "yggdrasill.local")
                     (host "192.168.1.4" "rocinante.local")
                     (host "192.168.1.6" "enterprise.local")
+                    (host "192.168.1.7" "of-course-i-still-love-you.local")
                     (host "192.168.1.9" "nispe.local")))
 
    (service openssh-service-type
             (openssh-configuration
              (authorized-keys
-              `(("wonko" ,(local-file "data/ssh/rocinante.pub"))
-                ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
+              `(("wonko" ,(local-file "data/ssh/discovery.pub"))
                 ("wonko" ,(local-file "data/ssh/enterprise.pub"))
-                ("wonko" ,(local-file "data/ssh/discovery.pub"))
+                ("wonko" ,(local-file "data/ssh/of-course-i-still-love-you.pub"))
+                ("wonko" ,(local-file "data/ssh/rocinante.pub"))
+                ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
                 ("root"  ,(local-file "data/ssh/one-ring-to-rule-them-all.pub"))))
              (x11-forwarding? #t)
              (password-authentication? #f)
@@ -157,10 +159,14 @@
                                  %default-substitute-urls))
                          (authorized-keys
                           (append
-                           (list (local-file "data/substitutes/enterprise.pub")
-                                 (local-file "data/substitutes/rocinante.pub")
-                                 (local-file "data/substitutes/yggdrasill.pub")
-                                 (local-file "data/substitutes/nonguix.pub"))
+                           (list
+                            ;; fleet:
+                            (local-file "data/substitutes/enterprise.pub")
+                            (local-file "data/substitutes/of-course-i-still-love-you.pub")
+                            (local-file "data/substitutes/rocinante.pub")
+                            (local-file "data/substitutes/yggdrasill.pub")
+                            ;; external:
+                            (local-file "data/substitutes/nonguix.pub"))
                            %default-authorized-guix-keys)))))))
 
 (define-public %laptop-os
