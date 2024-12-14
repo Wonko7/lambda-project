@@ -719,7 +719,7 @@
            " --menu-font JetBrainsMono-Regular/" fsz
            " --font JetBrainsMono-Regular/" fsz "\n")))
       (".Xresources"
-       ,(plain-file "Xresources" (xresources-configuration %font 20)))
+       ,(plain-file "Xresources" (xresources-configuration %font 10)))
       (".config/picom/picom.conf"
        ,(plain-file "picom.conf" (picom-configuration 25)))
       (".config/dunst/dunstrc"
