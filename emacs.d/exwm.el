@@ -165,12 +165,13 @@
   (setq my/exwm-workspace-previous-index exwm-workspace-current-index))
 
 (defun my/init-exwm ()
+  ;; FIXME borked
   ;; When window "class" updates, use it to set the buffer name
-  (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+  ;; (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
   ;; When window title updates, use it to set the buffer name
-  (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+  ;; (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
   ;; Configure windows as they're created
-  (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+  ;; (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
   (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
 
 (add-hook 'exwm-init-hook #'my/init-exwm)
