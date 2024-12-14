@@ -110,8 +110,8 @@
     ("tarc"  . "tar -cavf")
     ("tarx"  . "tar -xavf")
     ("tart"  . "tar -tavf")
-    ("rsy"   . "rsync -hrlpD --progress")
-    ("prsy"  . "rsync -hrlpD --progress --owner --group")
+    ("rsy"   . "rsync -hrlpD --append-verify --progress")
+    ("copy"  . "rsy")
     ("nmcli" . "nmcli -c yes")
     ("ip"    . "ip -c -h")))
 
