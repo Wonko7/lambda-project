@@ -265,6 +265,7 @@
 (define-public %xorg-world
   (list xinit
         xset
+        xsetroot
         xhost
         xorg-server
         xf86-input-libinput

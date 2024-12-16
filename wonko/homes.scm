@@ -292,31 +292,51 @@
        (documentation "can't be arsed to move IRL"))
       %common-shepherd-wonko-services)))))
 
-(define* (make-xsession #:key (disable-dpms #f))
+(define* (make-xsession #:key
+                        (deprecated-xmodmap #f) ;; deprecated
+                        (media-station #f)
+                        (dvorak #t))
   (simple-service
    'xsession
    home-files-service-type
    `((".xsession"
       ,(program-file
         "xsession"
-        (cmd+arg->script
-         `(("source" . "~/.bash_profile")
-           (xhost . "+SI:localuser:$USER")
-           (xset . "b 0 0 0")
-           (xset . "r rate 400 30")
-           ,(if #t
-                ;;disable-dpms
-                `(xset . "s off -dpms")
-                `(xset . "dpms 600 1200 0"))
-           (xsetroot . "-cursor_name left_ptr")
-           (setxkbmap . "dvorak")
-           (xmodmap . "~/.config/x-config/common.xmodmap")
-           (xmodmap . "~/.config/x-config/ship.xmodmap") ;; TODO carefull
-           (feh . ,(string-append "--bg-scale '" %wallpaper "'"))
-           (xrdb  . "-load ~/.Xresources")
-           ("~/.x-config" . "")
-           (,#~(string-append  "exec " #$dbus "/bin/dbus-launch --exit-with-session")
-               . #$(file-append emacs-exwm "/bin/exwm")))))))))
+        #~(begin
+            (system "source ~/.bash_profile")
+            (system* #$(file-append xhost "/bin/xhost")
+                     "+SI:localuser:$USER")
+            (system (string-append #$xset "/bin/xset"
+                                   " b 0 0 0"))
+            (system (string-append #$xset "/bin/xset"
+                                   " r rate 400 30"))
+            (system (string-append #$xsetroot "/bin/xsetroot"
+                                    " -cursor_name left_ptr"))
+            (system (string-append #$feh "/bin/feh"
+                                    " --bg-scale" "'" #$%wallpaper "'"))
+            (system (string-append #$xrdb "/bin/xrdb"
+                                   " -load ~/.Xresources"))
+            (system "~/.x-config")
+            #$(if dvorak
+                  #~(system* #$(file-append setxkbmap "/bin/setxkbmap")
+                             "dvorak")
+                  #~(begin))
+            #$(if media-station
+                  #~(system #$(file-append xset "/bin/xset")
+                             " s off -dpms")
+                  #~(begin))
+            #$(if deprecated-xmodmap
+                  #~(begin
+                      (system* #$(file-append xmodmap "/bin/xmodmap")
+                               "~/.config/x-config/common.xmodmap")
+                      (system* #$(file-append xmodmap "/bin/xmodmap")
+                               "~/.config/x-config/ship.xmodmap"))
+                  #~(begin))
+            (system
+             (string-append
+              "exec"
+              #$dbus "/bin/dbus-launch" " --exit-with-session "
+              #$emacs-exwm "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
@@ -630,7 +650,7 @@
 
 (define-public %skeleton-wonko-services
   (cons*
-   (make-xsession)
+   (make-xsession #:deprecated-xmodmap #t)
    %bare-skeleton-wonko-services))
 
 (define-public %skeleton-wonko-home
@@ -733,13 +753,18 @@
    (inherit %skeleton-wonko-home)
    (services %highdpi-wonko-services)))
 
+
+(define-public %qwkb-wonko-home
+  (home-environment
+   (inherit %skeleton-wonko-home)
+   (services %highdpi-wonko-services)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; media-station config: just needs x-config
 
 (define-public %media-station-wonko-services
   (cons*
-   ;(make-xsession #:disable-dpms? #t)
-   (make-xsession #:disable-dpms #t)
+   (make-xsession #:media-station #t #:dvorak #f)
    %media-station-shepherd-wonko-service
    (append
     %bare-skeleton-wonko-services
