@@ -31,33 +31,51 @@
 
 (use-package-modules xorg)
 
-(define %daban-urnud-wonko-home
+(define machine-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/enterprise.xmodmap")))
+      (".x-config"
+       ,(program-file
+         "x-config"
+         #~(begin
+             (system* #$(file-append xrandr "/bin/xrandr") "--dpi" "96")
+             (system*
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
+             (system*
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7"))))))))
+
+(define %wonko-home
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
-    (cons*
-     (simple-service
-      'config-files
-      home-files-service-type
-      `((".config/x-config/ship.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/enterprise.xmodmap")))
-        (".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 96") ;; FIXME this is tmp:
-              (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
-              (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
+    (append
+     machine-home-services
      %vanilla-wonko-services))))
+
+(define %media-station-home
+  (home-environment
+   (inherit %media-station-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %daban-urnud-os
   (operating-system
     (inherit %laptop-os)
     (host-name "daban-urnud")
-    (services (cons* (service noautostart-slim-service-type wonko-slim-config)
+    (services (cons* (service slim-service-type wonko-slim-config)
+                     (service slim-service-type media-station-slim-config)
                      (service guix-home-service-type
-                              `(("wonko" ,%daban-urnud-wonko-home)))
+                              `((,(crew-name %wonko) ,%wonko-home)
+                                (,(crew-name %media) ,%media-station-home)))
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
@@ -82,4 +100,5 @@
                       (make-vault-subvolumes mapped-devices)
                       %base-file-systems))))))
 
-%daban-urnud-wonko-home
+%wonko-home
+%daban-urnud-os
