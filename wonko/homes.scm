@@ -303,7 +303,7 @@
       ,(program-file
         "xsession"
         #~(begin
-            (system "source ~/.bash_profile")
+            (system "source ~/.profile")
             (system* #$(file-append xhost "/bin/xhost")
                      "+SI:localuser:$USER")
             (system (string-append #$xset "/bin/xset"
@@ -333,10 +333,9 @@
                                "~/.config/x-config/ship.xmodmap"))
                   #~(begin))
             (system
-             (string-append
-              "exec"
-              #$dbus "/bin/dbus-launch" " --exit-with-session "
-              #$emacs-exwm "/bin/exwm"))))))))
+             (string-append "exec "
+                            #$dbus "/bin/dbus-launch" " --exit-with-session "
+                            #$emacs-exwm "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
