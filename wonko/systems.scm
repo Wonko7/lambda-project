@@ -119,24 +119,24 @@
              (port 1337)
              (advertise? #t)))
 
-   (simple-service 'fleet-hosts-entries hosts-service-type
-                   (list
-                    (host "192.168.1.1" "daban-urnud.local")
-                    (host "192.168.1.3" "yggdrasill.local")
-                    (host "192.168.1.4" "rocinante.local")
-                    (host "192.168.1.6" "enterprise.local")
-                    (host "192.168.1.7" "of-course-i-still-love-you.local")
-                    (host "192.168.1.9" "nispe.local")))
+   (simple-service 'fleet-hosts-entries hosts-service-type %fleet-hosts)
 
    (service openssh-service-type
             (openssh-configuration
              (authorized-keys
-              `(("wonko" ,(local-file "data/ssh/discovery.pub"))
-                ("wonko" ,(local-file "data/ssh/enterprise.pub"))
-                ("wonko" ,(local-file "data/ssh/of-course-i-still-love-you.pub"))
-                ("wonko" ,(local-file "data/ssh/rocinante.pub"))
-                ("wonko" ,(local-file "data/ssh/yggdrasill.pub"))
-                ("root"  ,(local-file "data/ssh/one-ring-to-rule-them-all.pub"))))
+              (cons*
+               (list
+                "root"
+                (local-file
+                 (string-append %lambda-project
+                                "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
+               (append-map (lambda (u)
+                             (map (lambda (hn)
+                                    (list u (local-file
+                                             (string-append %lambda-project
+                                                            "/wonko/data/ssh/" hn ".pub"))))
+                                  (cons "discovery" %fleet-names)))
+                '("wonko" "media"))))
              (x11-forwarding? #t)
              (password-authentication? #f)
              (permit-root-login #t)))
@@ -167,14 +167,11 @@
                                  %default-substitute-urls))
                          (authorized-keys
                           (append
-                           (list
-                            ;; fleet:
-                            (local-file "data/substitutes/enterprise.pub")
-                            (local-file "data/substitutes/of-course-i-still-love-you.pub")
-                            (local-file "data/substitutes/rocinante.pub")
-                            (local-file "data/substitutes/yggdrasill.pub")
-                            ;; external:
-                            (local-file "data/substitutes/nonguix.pub"))
+                           (map (lambda (hn)
+                                  (local-file
+                                   (string-append %lambda-project
+                                                  "/wonko/data/substitutes/" hn ".pub")))
+                                (cons "nonguix" %fleet-names))
                            %default-authorized-guix-keys)))))))
 
 (define-public %laptop-os
