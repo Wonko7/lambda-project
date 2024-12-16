@@ -32,6 +32,13 @@
    (uid 1069)
    (kb %fr-kb)))
 
+(define-public %media
+  (crew
+   (name "media")
+   (admin? #f)
+   (uid 1099)
+   (kb %dvorak-kb)))
+
 (define-public (crew->user-account crew)
  (user-account
   (name (crew-name crew))
@@ -45,4 +52,4 @@
                '("wheel")
                '())))))
 
-(define-public %crew (list %wonko %tina))
+(define-public %crew (list %wonko %tina %media))

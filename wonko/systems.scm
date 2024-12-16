@@ -85,6 +85,16 @@
    (default-user (crew-name %wonko))
    (xorg-configuration (xorg-configuration
                         (keyboard-layout (crew-kb %wonko))))))
+
+(define-public media-station-slim-config
+  (slim-configuration
+   (display ":11")
+   (vt "vt11")
+   (auto-login? #f)
+   (default-user (crew-name %media))
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout (crew-kb %media))))))
+
 ;; (service noautostart-slim-service-type wonko-slim-config)
 ;; (service slim-service-type wonko-slim-config)
 ;; (service
