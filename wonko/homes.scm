@@ -776,6 +776,21 @@
    (services %media-station-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; desktop config: just needs x-config
+
+(define-public %desktop-wonko-services
+  (cons*
+   (make-xsession #:dvorak #f)
+   (append
+    %bare-skeleton-wonko-services
+    %just-vanilla-wonko-services)))
+
+(define-public %desktop-wonko-home
+  (home-environment
+   (inherit %skeleton-wonko-home)
+   (services %desktop-wonko-services)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina
 
 (define-public %tina-home
