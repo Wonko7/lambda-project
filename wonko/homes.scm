@@ -438,13 +438,12 @@
 
    (simple-service 'guix-config-files
                    home-files-service-type
-                   (map
+                   (map ;; there used to be more
                     (lambda (file)
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
                           (string-append %lambda-project "/guix/config/" file))))
-                    '("shell-authorized-directories"
-                      "channels.scm")))
+                    '("shell-authorized-directories")))
 
    (simple-service 'guix-manifests
                    home-files-service-type
@@ -796,14 +795,6 @@
   (home-environment
    (services
     (list
-     (simple-service 'guix-config-files
-                     home-files-service-type
-                     (map
-                      (lambda (file)
-                        `(,(string-append ".config/guix/" file)
-                          ,(local-file
-                            (string-append %lambda-project "/guix/config/" file))))
-                      '("channels.scm")))
      (simple-service 'x-config-files
                      home-files-service-type
                      `((".xsession"
