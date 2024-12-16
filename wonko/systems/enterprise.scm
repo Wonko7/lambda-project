@@ -31,34 +31,54 @@
 
 (use-package-modules xorg)
 
+(define machine-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/enterprise.xmodmap")))
+      (".x-config"
+       ,(program-file
+         "x-config"
+         #~(begin
+             (system* #$(file-append xrandr "/bin/xrandr") "--dpi" "96")
+             (system*
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
+             (system*
+              #$(file-append xinput "/bin/xinput")
+              "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7"))))))))
+
 (define %enterprise-wonko-home
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
-    (cons*
-     (simple-service
-      'config-files
-      home-files-service-type
-      `((".config/x-config/ship.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/enterprise.xmodmap")))
-        (".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 96")
-              (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
-              (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
+    (append
+     machine-home-services
      %vanilla-wonko-services))))
+
+(define %enterprise-media-station-home
+  (home-environment
+   (inherit %media-station-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %enterprise-os
   (operating-system
-   (inherit %laptop-os)
+   (inherit %media-station-os)
    (host-name "enterprise")
    (services (cons* (service slim-service-type wonko-slim-config)
+                    (service slim-service-type (slim-configuration
+                                                (inherit media-station-slim-config)
+                                                (auto-login? #t)))
                     (service guix-home-service-type
-                             `(("wonko" ,%enterprise-wonko-home)))
-                    %laptop-services))
+                             `((,(crew-name %wonko) ,%enterprise-wonko-home)
+                               (,(crew-name %media) ,%enterprise-media-station-home)))
+                    %media-station-services))
    (mapped-devices
     (list (mapped-device
            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
