@@ -51,7 +51,7 @@
               #$(file-append xinput "/bin/xinput")
               "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7"))))))))
 
-(define %enterprise-wonko-home
+(define %wonko-home
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
@@ -59,7 +59,7 @@
      machine-home-services
      %vanilla-wonko-services))))
 
-(define %enterprise-media-station-home
+(define %media-station-home
   (home-environment
    (inherit %media-station-wonko-home)
    (services
@@ -76,8 +76,8 @@
                                                 (inherit media-station-slim-config)
                                                 (auto-login? #t)))
                     (service guix-home-service-type
-                             `((,(crew-name %wonko) ,%enterprise-wonko-home)
-                               (,(crew-name %media) ,%enterprise-media-station-home)))
+                             `((,(crew-name %wonko) ,%wonko-home)
+                               (,(crew-name %media) ,%media-station-home)))
                     %media-station-services))
    (mapped-devices
     (list (mapped-device
@@ -102,5 +102,5 @@
                      (make-vault-subvolumes mapped-devices)
                      %base-file-systems))))))
 
-%enterprise-wonko-home
+%wonko-home
 %enterprise-os
