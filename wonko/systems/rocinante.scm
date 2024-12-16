@@ -91,3 +91,6 @@
                      (append
                       (make-vault-subvolumes mapped-devices)
                       %base-file-systems))))))
+
+%rocinante-wonko-home
+%rocinante-os

@@ -83,3 +83,4 @@
                       %base-file-systems))))))
 
 %yggdrasill-wonko-home
+%yggdrasill-os
