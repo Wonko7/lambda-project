@@ -304,16 +304,14 @@
         "xsession"
         #~(begin
             (system "source ~/.profile")
-            (system* #$(file-append xhost "/bin/xhost")
-                     "+SI:localuser:$USER")
-            (system (string-append #$xset "/bin/xset"
-                                   " b 0 0 0"))
+            (system (string-append #$xhost "/bin/xhost"
+                                   " +SI:localuser:$USER"))
             (system (string-append #$xset "/bin/xset"
                                    " r rate 400 30"))
             (system (string-append #$xsetroot "/bin/xsetroot"
                                     " -cursor_name left_ptr"))
             (system (string-append #$feh "/bin/feh"
-                                    " --bg-scale" "'" #$%wallpaper "'"))
+                                    " --bg-scale '" #$%wallpaper "'"))
             (system (string-append #$xrdb "/bin/xrdb"
                                    " -load ~/.Xresources"))
             (system "~/.x-config")
@@ -322,15 +320,15 @@
                              "dvorak")
                   #~(begin))
             #$(if media-station
-                  #~(system #$(file-append xset "/bin/xset")
-                             " s off -dpms")
+                  #~(system (string-append $#xset "/bin/xset"
+                                           " s off -dpms"))
                   #~(begin))
             #$(if deprecated-xmodmap
                   #~(begin
-                      (system* #$(file-append xmodmap "/bin/xmodmap")
-                               "~/.config/x-config/common.xmodmap")
-                      (system* #$(file-append xmodmap "/bin/xmodmap")
-                               "~/.config/x-config/ship.xmodmap"))
+                      (system (string-append #$xmodmap "/bin/xmodmap"
+                                               " ~/.config/x-config/common.xmodmap"))
+                      (system (string-append #$xmodmap "/bin/xmodmap"
+                                               " ~/.config/x-config/ship.xmodmap")))
                   #~(begin))
             (system
              (string-append "exec "

@@ -44,12 +44,14 @@
          "x-config"
          #~(begin
              (system* #$(file-append xrandr "/bin/xrandr") "--dpi" "96")
-             (system*
-              #$(file-append xinput "/bin/xinput")
-              "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
-             (system*
-              #$(file-append xinput "/bin/xinput")
-              "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7"))))))))
+             (system
+              (string-append
+               $#xinput "/bin/xinput"
+               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1"))
+             (system
+              (string-append
+               #$xinput "/bin/xinput"
+               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))))
 
 (define %wonko-home
   (home-environment
