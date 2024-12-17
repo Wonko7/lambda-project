@@ -45,11 +45,14 @@
         (".x-config"
          ,(program-file
            "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 96")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 0.7")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Enabled' 1")
-              (xinput . "set-prop 'SynPS/2 Synaptics TouchPad' 'Tapping Drag Lock Enabled' 1")))))))
+           #~(begin
+             (system
+              (string-append
+               #$xrandr "/bin/xrandr --dpi 96;"
+               #$xinput "/bin/xinput"
+               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
+               #$xinput "/bin/xinput"
+               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
      %media-station-wonko-services))))
 
 (define %rocinante-os

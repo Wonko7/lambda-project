@@ -43,13 +43,10 @@
        ,(program-file
          "x-config"
          #~(begin
-             ;; (system* #$(file-append xrandr "/bin/xrandr") "--dpi" "96")
              (system
               (string-append
-               $#xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1"))
-             (system
-              (string-append
+               #$xinput "/bin/xinput"
+               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
                #$xinput "/bin/xinput"
                " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))))
 
