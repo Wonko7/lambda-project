@@ -478,32 +478,7 @@
                         (system
                          (string-append guix " package -m ~/local/manifests/" p
                                         " -p $GUIX_EXTRA_PROFILES/" p)))
-                      ps))))))
-
-      ("local/bin/guix-os-reconfigure"
-       ,(program-file
-         "reconfigure"
-         (with-imported-modules
-             '((guix config)
-               (guix memoization)
-               (guix profiling)
-               (guix build syscalls)
-               (guix combinators)
-               (guix diagnostics)
-               (guix colors)
-               (guix i18n)
-               (guix utils))
-           #~(begin
-               (use-modules (guix utils))
-               (let ((guix "~/.config/guix/current/bin/guix"))
-                 (with-environment-variables
-                     '(("GUILE_LOAD_PATH"
-                        #$(string-append "$GUILE_LOAD_PATH:" %lambda-project "/guix"))
-                       ;; FIXME ("SHIP" #$(ship-name %ship))
-                       )
-                   (system
-                    (string-append guix " system reconfigure "
-                                   #$%lambda-project "/guix/os.scm"))))))))))
+                      ps))))))))
 
    (simple-service
     'home-scripts
