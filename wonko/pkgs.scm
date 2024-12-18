@@ -423,39 +423,41 @@
         git-annex))
 
 (define-public %utils-world
-  (list ripgrep
-        fd
-        ;; system
-        acpi
-        tmux
-        net-tools
-        ;; disk
-        cpio
-        parted
-        smartmontools
-        gptfdisk
-        ;; files
-        coreutils
-        recutils
-        moreutils
-        file
-        tree
-        lsof
-        ;; compression
-        p7zip
-        unzip
-        unrar
-        ;; dev
-        sloccount
-        ;; android
-        adb
-        ;; net
-        openntpd
-        ;; web
-        gnutls
-        libressl
-        curl
-        jq))
+  (list
+   ;; files
+   ripgrep
+   fd
+   coreutils
+   recutils
+   moreutils
+   file
+   tree
+   lsof
+   ;; system
+   btop
+   acpi
+   tmux
+   net-tools
+   ;; disk
+   cpio
+   parted
+   smartmontools
+   gptfdisk
+   ;; compression
+   p7zip
+   unzip
+   unrar
+   ;; dev
+   sloccount
+   ;; android
+   adb
+   ;; net
+   openntpd
+   ;; web
+   gnutls
+   libressl
+   curl
+   jq))
 
 (define-public %os-net-world
   (list wireguard-tools
