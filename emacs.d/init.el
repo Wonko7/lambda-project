@@ -139,7 +139,7 @@
 
 (use-package projectile
   :config
-  (setq projectile-project-search-path '(( "/code" . 3) ( "/work" . 3) ("/data" . 1)))
+  (setq projectile-project-search-path '(( "/code" . 1) ( "/work" . 1) ("/data" . 1)))
   (setq projectile-sort-order 'recently-active)
   (setq projectile-enable-caching t)
   (projectile-global-mode))
