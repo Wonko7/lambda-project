@@ -306,6 +306,7 @@
             (system
              (string-append
               "source ~/.profile"					"; "
+              "source ~/.bash_profile"					"; "
               #$xhost "/bin/xhost +SI:localuser:$USER"			"; "
               #$xset "/bin/xset r rate 400 30"				"; "
               #$xsetroot "/bin/xsetroot -cursor_name left_ptr"   	"; "
@@ -317,8 +318,8 @@
                              "dvorak")
                   #~(begin))
             #$(if media-station
-                  #~(system (string-append #$xset "/bin/xset" " s off -dpms"))
-                  #~(system (string-append #$xset "/bin/xset" "dpms 600 1200 0")))
+                  #~(system (string-append #$xset "/bin/xset s off -dpms"))
+                  #~(system (string-append #$xset "/bin/xset dpms 600 1200 0")))
             #$(if deprecated-xmodmap
                   #~(system
                      (string-append

@@ -26,38 +26,54 @@
   #:use-module (wonko xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
-  #:export (%yggdrasill-wonko-home
-            %yggdrasill-os))
+  #:export (%yggdrasill-os))
 
 (use-package-modules xorg)
 
-(define %yggdrasill-wonko-home
+(define machine-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".config/x-config/ship.xmodmap"
+       ,(local-file
+         (string-append %lambda-project "/misc/yggdrasill.xmodmap")))
+      (".x-config"
+       ,(program-file
+         "x-config"
+         #~(system
+            (string-append
+             #$xrandr "/bin/xrandr --dpi 288;"
+             #$xinput "/bin/xinput"
+             " set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1;"
+             #$xinput "/bin/xinput"
+             " set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0"))))))))
+
+(define %wonko-home
   (home-environment
    (inherit %highdpi-wonko-home)
    (services
-    (cons*
-     (simple-service
-      'config-files
-      home-files-service-type
-      `((".config/x-config/ship.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/yggdrasill.xmodmap")))
-        (".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `((xrandr . "--dpi 288")
-              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1")
-              (xinput . "set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Accel Speed' 1.0")))))))
+    (append
+     machine-home-services
      %highdpi-wonko-services))))
+
+(define %media-station-home
+  (home-environment
+   (inherit %media-station-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %yggdrasill-os
   (operating-system
     (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
     (host-name "yggdrasill")
     (services (cons* (service slim-service-type wonko-slim-config)
+                     (service slim-service-type media-station-slim-config)
                      (service guix-home-service-type
-                              `(("wonko" ,%yggdrasill-wonko-home)))
+                             `((,(crew-name %wonko) ,%wonko-home)
+                               (,(crew-name %media) ,%media-station-home)))
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
@@ -82,5 +98,5 @@
                       (make-vault-subvolumes mapped-devices)
                       %base-file-systems))))))
 
-%yggdrasill-wonko-home
+%wonko-home
 %yggdrasill-os

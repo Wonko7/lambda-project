@@ -26,8 +26,7 @@
   #:use-module (wonko xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
-  #:export (%rocinante-wonko-home
-            %rocinante-os))
+  #:export (%rocinante-os))
 
 (use-package-modules xorg)
 

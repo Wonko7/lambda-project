@@ -26,8 +26,7 @@
   #:use-module (wonko xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
-  #:export (%enterprise-wonko-home
-            %enterprise-os))
+  #:export (%enterprise-os))
 
 (use-package-modules xorg)
 
@@ -42,16 +41,12 @@
       (".x-config"
        ,(program-file
          "x-config"
-         #~(begin
-             (system* #$(file-append xrandr "/bin/xrandr") "--dpi" "96")
-             (system
-              (string-append
-               $#xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1"))
-             (system
-              (string-append
-               #$xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))))
+         #~(string-append
+            #$xrandr "/bin/xrandr --dpi 96;"
+            #$xinput "/bin/xinput"
+            " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
+            #$xinput "/bin/xinput"
+            " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
 
 (define %wonko-home
   (home-environment
