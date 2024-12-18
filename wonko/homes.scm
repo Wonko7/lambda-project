@@ -178,6 +178,10 @@
       "# Source the system-wide file.\n"
       "[ -f /etc/bashrc ] && source /etc/bashrc\n")
      (mixed-text-file
+      "path-setup"
+      "# Source my paths:\n"
+      "source ~/.profile\n")
+     (mixed-text-file
       "interactive-shell-bash-options"
       "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
       "shopt -s autocd\n"
@@ -305,31 +309,26 @@
         #~(begin
             (system
              (string-append
-              "source ~/.profile"					"; "
-              "source ~/.bash_profile"					"; "
-              #$xhost "/bin/xhost +SI:localuser:$USER"			"; "
-              #$xset "/bin/xset r rate 400 30"				"; "
-              #$xsetroot "/bin/xsetroot -cursor_name left_ptr"   	"; "
-              #$feh "/bin/feh --bg-scale '" #$%wallpaper "'"		"; "
-              #$xrdb "/bin/xrdb -load ~/.Xresources"			"; "
-              "~/.x-config"						"; "))
-            #$(if dvorak
-                  #~(system* #$(file-append setxkbmap "/bin/setxkbmap")
-                             "dvorak")
-                  #~(begin))
-            #$(if media-station
-                  #~(system (string-append #$xset "/bin/xset s off -dpms"))
-                  #~(system (string-append #$xset "/bin/xset dpms 600 1200 0")))
-            #$(if deprecated-xmodmap
-                  #~(system
-                     (string-append
-                      #$xmodmap "/bin/xmodmap ~/.config/x-config/common.xmodmap;"
-                      #$xmodmap "/bin/xmodmap ~/.config/x-config/ship.xmodmap"))
-                  #~(begin))
-            (system
-             (string-append "exec "
-                            #$dbus "/bin/dbus-launch" " --exit-with-session "
-                            #$emacs-exwm "/bin/exwm"))))))))
+              "source ~/.bash_profile;"
+              #$xhost "/bin/xhost +SI:localuser:$USER;"
+              #$xset "/bin/xset r rate 400 30;"
+              #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
+              #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
+              #$xrdb "/bin/xrdb -load ~/.Xresources;"
+              "~/.x-config;"
+              #$(if dvorak
+                    #~(string-append #$setxkbmap "/bin/setxkbmap dvorak;")
+                    "")
+              #$(if media-station
+                    #~(string-append #$xset "/bin/xset s off -dpms;")
+                    #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
+              #$(if deprecated-xmodmap
+                    #~(string-append
+                       #$xmodmap "/bin/xmodmap ~/.config/x-config/common.xmodmap;"
+                       #$xmodmap "/bin/xmodmap ~/.config/x-config/ship.xmodmap;")
+                    "")
+              "exec " #$dbus "/bin/dbus-launch --exit-with-session "
+              #$emacs-exwm "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
