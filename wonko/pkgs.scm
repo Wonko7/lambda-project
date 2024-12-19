@@ -230,6 +230,7 @@
 
         ;; system
         emacs-bluetooth
+        emacs-emamux ;; tmux
 
         ;; x stuff
         emacs-desktop-environment
@@ -422,6 +423,10 @@
   (list git
         git-annex))
 
+(define-public %dev-world
+  (list sloccount
+        adb))
+
 (define-public %utils-world
   (list
    ;; files
@@ -433,26 +438,20 @@
    file
    tree
    lsof
+   ;; keyboard
+   kmonad
    ;; system
    btop
    acpi
    tmux
    net-tools
-   ;; disk
-   cpio
-   parted
-   smartmontools
-   gptfdisk
+   strace
    ;; compression
    p7zip
    unzip
    unrar
-   ;; dev
-   sloccount
    ;; android
    adb
-   ;; net
-   openntpd
    ;; web
    gnutls
    libressl
@@ -460,23 +459,29 @@
    jq))
 
 (define-public %os-net-world
-  (list wireguard-tools
-        iproute
-        iw))
+  (list
+   openntpd
+   wireguard-tools
+   iproute
+   iw))
+
+(define-public %os-disk-world
+  (list
+   cpio
+   parted
+   smartmontools
+   gptfdisk
+   rsync
+   parted
+   cryptsetup
+   btrfs-progs
+   dosfstools
+   util-linux+udev))
 
 (define-public %os-misc-world
   (list font-terminus
         emacs
         vim))
-
-(define-public %os-disk-world
-  (list git
-        rsync
-        parted
-        cryptsetup
-        btrfs-progs
-        dosfstools
-        util-linux+udev))
 
 (define-public %os-nonfree
   (list fwupd-nonfree))

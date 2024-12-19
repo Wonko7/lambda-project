@@ -116,9 +116,14 @@
     ("ip"    . "ip -c -h")))
 
 (define-public %profiles
+  ;; utils: add everything that's in system packages if this
+  ;; needs to be deployed on non guix OS
   `(("communication" . ,%communication-world)
     ("desktop" . ,%desktop-world)
-    ("utils" . ,%utils-world)
+    ("utils" . ,(append
+                 %dev-world
+                 %git-world
+                 %utils-world))
     ("web" . ,%web-world)
     ("borked" . ,%borked-world)
     ))
@@ -297,9 +302,9 @@
       %common-shepherd-wonko-services)))))
 
 (define* (make-xsession #:key
-                        (deprecated-xmodmap #f) ;; deprecated
-                        (media-station #f)
-                        (dvorak #t))
+                        (xmodmap? #f) ;; deprecated
+                        (media-station? #f)
+                        (dvorak? #t))
   (simple-service
    'xsession
    home-files-service-type
@@ -316,13 +321,13 @@
               #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
               #$xrdb "/bin/xrdb -load ~/.Xresources;"
               "~/.x-config;"
-              #$(if dvorak
+              #$(if dvorak?
                     #~(string-append #$setxkbmap "/bin/setxkbmap dvorak;")
                     "")
-              #$(if media-station
+              #$(if media-station?
                     #~(string-append #$xset "/bin/xset s off -dpms;")
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
-              #$(if deprecated-xmodmap
+              #$(if xmodmap?
                     #~(string-append
                        #$xmodmap "/bin/xmodmap ~/.config/x-config/common.xmodmap;"
                        #$xmodmap "/bin/xmodmap ~/.config/x-config/ship.xmodmap;")
@@ -616,7 +621,7 @@
 
 (define-public %skeleton-wonko-services
   (cons*
-   (make-xsession #:deprecated-xmodmap #t)
+   (make-xsession #:xmodmap? #t)
    %bare-skeleton-wonko-services))
 
 (define-public %skeleton-wonko-home
@@ -730,7 +735,7 @@
 
 (define-public %media-station-wonko-services
   (cons*
-   (make-xsession #:media-station #t #:dvorak #f)
+   (make-xsession #:media-station? #t #:dvorak? #f)
    %media-station-shepherd-wonko-service
    (append
     %bare-skeleton-wonko-services
@@ -746,7 +751,7 @@
 
 (define-public %desktop-wonko-services
   (cons*
-   (make-xsession #:dvorak #f)
+   (make-xsession #:dvorak? #f)
    (append
     %bare-skeleton-wonko-services
     %just-vanilla-wonko-services)))
