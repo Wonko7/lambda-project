@@ -96,7 +96,7 @@
 
 (define %aliases
   `(("g"     . "git")
-    ("psrg"  . "ps aux | rg")
+    ("psrg"  . "ps aux | rg -M0")
     ("df"    . "df -h")
     ("dmesg" . "dmesg -He")
     ("free"  . "free -h")

@@ -282,6 +282,7 @@
         ([?\s-l] . windmove-right)
         ([?\s-k] . windmove-up)
         ([?\s-j] . windmove-down)
+        ([?\s-g] . ace-select-window)
 
         ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
         ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
