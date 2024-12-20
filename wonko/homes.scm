@@ -143,6 +143,11 @@
     ("DICTIONARY"          . "en_GB-ise") ;; hunspell
     ("DISPLAY"             . ":9")
     ("BLOCK_SIZE"          . "human-readable")
+    ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
+    ("XMODIFIER"           . "@im=exwm-xim")
+    ("GTK_IM_MODULE"       . "xim")
+    ("QT_IM_MODULE"        . "xim")
+    ("CLUTTER_IM_MODULE"   . "xim")
     ("LIBRARY_PATH"        . "$LIBRARY_PATH:~/.guix-home/profile/lib")
     ("C_INCLUDE_PATH"      . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
     ("LD_LIBRARY_PATH"     . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
@@ -424,9 +429,9 @@
       (".XCompose"
        ,(local-file
          (string-append %lambda-project "/misc/XCompose")))
-      (".config/x-config/common.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/common.xmodmap")))
+      ;; (".config/x-config/common.xmodmap"
+      ;;  ,(local-file
+      ;;    (string-append %lambda-project "/misc/common.xmodmap")))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file
          (string-append %lambda-project "/misc/pantalaimon.conf")))

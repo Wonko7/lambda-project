@@ -235,8 +235,6 @@
         ;; x stuff
         emacs-desktop-environment
         emacs-zathura-sync-theme
-        ;; locale
-        glibc-locales
 
         ;; communication
         emacs-ement

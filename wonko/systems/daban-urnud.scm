@@ -85,31 +85,42 @@
 
 (define %keyboard-config
   (mixed-text-file
-   "kbd"
+   "kmonad-config"
    (object->string
     `(defcfg
-      input (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
-      output (uinput-sink "keyboard-you-touch-my-tralala"
-                          "echo this keyboard fucks &&
+       input (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+       output (uinput-sink "keyboard-you-touch-my-tralala"
+                           "echo this keyboard fucks &&
                            /run/current-system/profile/bin/sleep 1 &&
-                           /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt")
-      cmp-seq ralt    ;; Set the compose key to `RightAlt'
-      cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
+                           DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt") ;; which display though?
+       cmp-seq ralt    ;; Set the compose key to `RightAlt'
+       cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
-      ;; Comment this if you want unhandled events not to be emitted
-      fallthrough true
-      ;; Set this to false to disable any command-execution in KMonad
-      allow-cmd true))
+       ;; Comment this if you want unhandled events not to be emitted
+       fallthrough true
+       ;; Set this to false to disable any command-execution in KMonad
+       allow-cmd true))
    ;; ; might be a symbol for kmonad but guile disagrees:
    "(defalias smc ;)\n"
    "(defalias dot .)\n"
    "(defalias com ,)\n"
+   "(defalias p |)\n"
    "(defalias csb ])\n"
    "(defalias osb [)\n"
+   "(defalias ccb })\n"
+   "(defalias ocb {)\n"
+   "(defalias cp \\))\n"
+   "(defalias op \\()\n"
    "(defalias qte ')\n"
    ;; <3
-   "(defalias EC (tap-hold-next-release 100 esc lctl))\n"
-   "(defalias RC (tap-hold-next-release 100 ret rctl))\n"
+   (object->string '(defalias EC (tap-hold-next-release 100 esc lctl)))
+   (object->string '(defalias RC (tap-hold-next-release 100 ret rctl)))
+   (object->string '(defalias SA (tap-hold-next-release 100
+                                                        (layer-next symbols)
+                                                        (layer-toggle symbols))))
+   ;; "(defalias SA (sticky-key 500 ralt))\n"
+   (object->string
+    '(defalias Tsy (layer-toggle symbols)))
    ;; using keymap/template/us_ansi_tkl.kbd:
    ;; "(defalias "
    "(defsrc
@@ -128,7 +139,16 @@
        tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
        lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-       lctl lalt lmet           spc            rmet ralt cmp  rctl            left down rght
+       @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght
+       ))
+   (object->string
+    '(deflayer symbols
+       esc  ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  f12
+       grv  â    XX   ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+       tab  ^    -    è    =    @ocb /    XX   ç    XX   XX   /    =    \     del  end  pgdn
+       @EC  à    ô    é    &    @p   \    @op  @cp  XX   XX   -    @RC
+       lsft +    _    XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
        ))))
 
 (define %daban-urnud-os
@@ -143,7 +163,7 @@
                                 (,(crew-name %media) ,%media-station-home)))
                      (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
                                                                    "# (.)(.)\n#  8==o~~"))
-                     (kmonad-service "/home/wonko/k.kbd") ;; FIXME
+                     (service kmonad-service-type %keyboard-config)
                      (extra-special-file "/etc/kmonad/keyboard.kbd"
                                          %keyboard-config)
                      %laptop-services))
