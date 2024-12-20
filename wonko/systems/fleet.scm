@@ -17,20 +17,22 @@
 (use-package-modules bootloaders)
 
 (map
- (match-lambda ((hostname . os)
+ (match-lambda ((hostname os key)
                 (machine
                  (operating-system os)
                  (environment managed-host-environment-type)
                  (configuration (machine-ssh-configuration
                                  (host-name (string-append hostname ".local"))
+                                 (host-key key)
                                  (system "x86_64-linux")
                                  (user "root")
                                  (identity "/root/.ssh/id_guix")
                                  (port 22))))))
- (filter (match-lambda ((hn . os)
+ (filter (match-lambda ((hn os key)
                         (not (string= hn (gethostname)))))
          `(;; ("192.168.1.8" . ,%discovery-os)
-           ("daban-urnud" . ,%daban-urnud-os)
+           ("daban-urnud" ,%daban-urnud-os
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
            ;; ("enterprise" . ,%enterprise-os)
            ;; ("yggdrasill" . ,%yggdrasill-os)
            ;; ("rocinante" . ,%rocinante-os)
