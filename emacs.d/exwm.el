@@ -370,27 +370,6 @@
 (exwm-xim-mode 1)
 (exwm-enable)
 
-;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-(setq default-input-method "latin-9-prefix")
-(add-hook 'change-major-mode-hook #'toggle-input-method)
-(add-hook 'comint-mode-hook #'toggle-input-method)
-(add-hook 'lisp-mode-hook #'toggle-input-method)
-;; (add-hook 'vertico-mode-hook #'toggle-input-method)
-(add-hook 'minibuffer-setup-hook #'toggle-input-method)
-;; (activate-transient-input-method )
-
-;; Main setup for  all the buffers
-;; (defadvice switch-to-buffer (after activate-input-method activate)
-;;   (toggle-input-method))
-
-;; Sets up the minibuffer
-;; (add-hook 'minibuffer-setup-hook #'toggle-input-method)
-
-;; Sets up *scratch* buffer
-;; (save-excursion
-;;   (set-buffer (get-buffer "*scratch*"))
-;;   (toggle-input-method))
-
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
 (setq exwm-randr-workspace-monitor-plist
       (mapcan (lambda (i)

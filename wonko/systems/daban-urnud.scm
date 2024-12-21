@@ -36,10 +36,7 @@
    (simple-service
     'config-files
     home-files-service-type
-    `((".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/enterprise.xmodmap")))
-      (".x-config"
+    `((".x-config"
        ,(program-file
          "x-config"
          #~(system
@@ -72,100 +69,19 @@
      machine-home-services
      %media-station-wonko-services))))
 
-;; (object->string
-;;     `(defsrc
-;;        o
-;;       esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-;;       grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup
-;;       ;;tab  q    w    e    r    t    y    u    i    o    p    "["   "]"   \     del  end  pgdn
-;;       ;;caps a    s    d    f    g    h    j    k    l    \;   '    ret
-;;       ;;lsft z    x    c    v    b    n    m    \,   \.    /    rsft                 up
-;;       lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght
-;;       ))
-
-(define %keyboard-config
-  (mixed-text-file
-   "kmonad-config"
-   (object->string
-    `(defcfg
-       input (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
-       output (uinput-sink "keyboard-you-touch-my-tralala"
-                           "echo this keyboard fucks &&
-                           /run/current-system/profile/bin/sleep 1 &&
-                           DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt") ;; which display though?
-       cmp-seq ralt    ;; Set the compose key to `RightAlt'
-       cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
-
-       ;; Comment this if you want unhandled events not to be emitted
-       fallthrough true
-       ;; Set this to false to disable any command-execution in KMonad
-       allow-cmd true))
-   ;; ; might be a symbol for kmonad but guile disagrees:
-   "(defalias smc ;)\n"
-   "(defalias dot .)\n"
-   "(defalias com ,)\n"
-   "(defalias p |)\n"
-   "(defalias csb ])\n"
-   "(defalias osb [)\n"
-   "(defalias ccb })\n"
-   "(defalias ocb {)\n"
-   "(defalias cp \\))\n"
-   "(defalias op \\()\n"
-   "(defalias qte ')\n"
-   ;; <3
-   (object->string '(defalias EC (tap-hold-next-release 100 esc lctl)))
-   (object->string '(defalias RC (tap-hold-next-release 100 ret rctl)))
-   (object->string '(defalias SA (tap-hold-next-release 100
-                                                        (layer-next symbols)
-                                                        (layer-toggle symbols))))
-   ;; "(defalias SA (sticky-key 500 ralt))\n"
-   (object->string
-    '(defalias Tsy (layer-toggle symbols)))
-   ;; using keymap/template/us_ansi_tkl.kbd:
-   ;; "(defalias "
-   "(defsrc
-      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-      grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup
-      tab  q    w    e    r    t    y    u    i    o    p    [    ]    \\    del  end  pgdn
-      caps a    s    d    f    g    h    j    k    l    ;    '    ret
-      lsft z    x    c    v    b    n    m    ,    .    /    rsft                 up
-      lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght
-      )\n"
-   "\n"
-   (object->string
-    '(deflayer dvorak
-       esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
-       grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
-       tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
-       @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-       lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-       @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght
-       ))
-   (object->string
-    '(deflayer symbols
-       esc  ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  f12
-       grv  â    XX   ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-       tab  ^    -    è    =    @ocb /    XX   ç    XX   XX   /    =    \     del  end  pgdn
-       @EC  à    ô    é    &    @p   \    @op  @cp  XX   XX   -    @RC
-       lsft +    _    XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
-       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
-       ))))
-
 (define %daban-urnud-os
   (operating-system
     (inherit %laptop-os)
     (host-name "daban-urnud")
     (keyboard-layout %us-kb)
     (services (cons* (service slim-service-type wonko-slim-config)
-                     (service slim-service-type media-station-slim-config)
+                     (service noautostart-slim-service-type media-station-slim-config)
                      (service guix-home-service-type
                               `((,(crew-name %wonko) ,%wonko-home)
                                 (,(crew-name %media) ,%media-station-home)))
                      (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
                                                                    "# (.)(.)\n#  8==o~~"))
-                     (service kmonad-service-type %keyboard-config)
-                     (extra-special-file "/etc/kmonad/keyboard.kbd"
-                                         %keyboard-config)
+                     (service kmonad-service-type %kmonad-config)
                      %laptop-services))
     (mapped-devices
      (list (mapped-device

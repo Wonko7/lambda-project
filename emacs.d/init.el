@@ -436,4 +436,77 @@ This function could be in the list `comint-output-filter-functions'."
   (diminish 'evil-escape-mode)
   (diminish 'evil-owl-mode))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; input method
+
+(require 'robin)
+(require 'quail)
+
+(robin-define-package "minimal-im"
+                      "minimal desc"
+
+                      ("\\\\ba"      ?à)
+                      ("\\\\ca"      ?â)
+                      ("\\\\ta"      ?ä)
+                      ("||BA"        ?À)
+                      ("||CA"        ?Â)
+                      ("||TA"        ?Ä)
+
+                      ("\\\\qe"      ?é)
+                      ("\\\\be"      ?è)
+                      ("\\\\ce"      ?ê)
+                      ("\\\\te"      ?ë)
+                      ("||QE"        ?É)
+                      ("||BE"        ?È)
+                      ("||CE"        ?Ê)
+                      ("||TE"        ?Ë)
+
+                      ("\\\\ti"      ?ï)
+                      ("\\\\ci"      ?î)
+                      ("||TI"        ?Ï)
+                      ("||CI"        ?Î)
+
+                      ("\\\\oe"      ?œ)
+                      ("\\\\to"      ?ö)
+                      ("\\\\co"      ?ô)
+                      ("||OE"        ?Œ)
+                      ("||TO"        ?Ö)
+                      ("||CO"        ?Ô)
+
+                      ("\\\\bu"      ?ù)
+                      ("\\\\cu"      ?û)
+                      ("\\\\tu"      ?ü)
+                      ("||BU"        ?Ù)
+                      ("||CU"        ?Û)
+                      ("||TU"        ?Ü)
+
+                      ("\\\\ty"      ?ÿ)
+                      ("||TY"        ?Ÿ)
+
+                      ("\\\\cc"      ?ç)
+                      ("||CC"        ?Ç)
+                      ("\\\\lambda"  ?λ)
+                      ("||LAMBDA"    ?Λ))
+
+
+(register-input-method "minimal-im"
+                       "english"
+                       'robin-use-package
+                       "λ"
+                       "minimal doc str")
+
+(setq default-input-method "minimal-im")
+
+(defun set-inp-meth! ()
+  ;; (activate-input-method default-input-method)
+  (set-input-method "minimal-im"))
+(defun hook-set-inp-meth! ()
+  ;; (activate-input-method default-input-method)
+  (set-input-method "minimal-im"))
+
+(add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
+(add-hook 'comint-mode-hook #'hook-set-inp-meth!)
+(add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
+(add-hook 'minibuffer-setup-hook #'set-inp-meth!)
+
 (provide 'init)

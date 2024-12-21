@@ -119,18 +119,18 @@
    (auto-login? #t)
    (default-user (crew-name %wonko))
    ;; FIXME: this should break nothing, xsession does setxkbmap.
-   ;; (xorg-configuration (xorg-configuration
-   ;;                      (keyboard-layout (crew-kb %wonko))))
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout %us-kb)))
    ))
 
 (define-public media-station-slim-config
   (slim-configuration
    (display ":11")
    (vt "vt11")
-   (auto-login? #f)
+   (auto-login? #t)
    (default-user (crew-name %media))
-   ;; (xorg-configuration (xorg-configuration
-   ;;                      (keyboard-layout (crew-kb %media))))
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout %us-kb)))
    ))
 
 ;; (service noautostart-slim-service-type wonko-slim-config)

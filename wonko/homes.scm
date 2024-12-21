@@ -309,7 +309,7 @@
 (define* (make-xsession #:key
                         (xmodmap? #f) ;; deprecated
                         (media-station? #f)
-                        (dvorak? #t))
+                        (dvorak? #f))
   (simple-service
    'xsession
    home-files-service-type
@@ -626,7 +626,7 @@
 
 (define-public %skeleton-wonko-services
   (cons*
-   (make-xsession #:xmodmap? #t)
+   (make-xsession)
    %bare-skeleton-wonko-services))
 
 (define-public %skeleton-wonko-home

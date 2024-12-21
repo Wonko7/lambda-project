@@ -26,6 +26,7 @@
   #:use-module (wonko xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
+  #:use-module (wonko services kmonad)
   #:export (%yggdrasill-os))
 
 (use-package-modules xorg)
@@ -35,10 +36,7 @@
    (simple-service
     'config-files
     home-files-service-type
-    `((".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/yggdrasill.xmodmap")))
-      (".x-config"
+    `((".x-config"
        ,(program-file
          "x-config"
          #~(system
@@ -69,11 +67,13 @@
   (operating-system
     (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
     (host-name "yggdrasill")
+    (keyboard-layout %us-kb)
     (services (cons* (service slim-service-type wonko-slim-config)
-                     (service slim-service-type media-station-slim-config)
+                     (service noautostart-slim-service-type media-station-slim-config)
                      (service guix-home-service-type
                              `((,(crew-name %wonko) ,%wonko-home)
                                (,(crew-name %media) ,%media-station-home)))
+                     (service kmonad-service-type %kmonad-config)
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
