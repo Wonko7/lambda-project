@@ -144,10 +144,10 @@
     ("DISPLAY"             . ":9")
     ("BLOCK_SIZE"          . "human-readable")
     ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-    ("XMODIFIER"           . "@im=exwm-xim")
-    ("GTK_IM_MODULE"       . "xim")
-    ("QT_IM_MODULE"        . "xim")
-    ("CLUTTER_IM_MODULE"   . "xim")
+    ;; ("XMODIFIER"           . "@im=exwm-xim")
+    ;; ("GTK_IM_MODULE"       . "xim")
+    ;; ("QT_IM_MODULE"        . "xim")
+    ;; ("CLUTTER_IM_MODULE"   . "xim")
     ("LIBRARY_PATH"        . "$LIBRARY_PATH:~/.guix-home/profile/lib")
     ("C_INCLUDE_PATH"      . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
     ("LD_LIBRARY_PATH"     . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
@@ -170,11 +170,7 @@
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
     ("QT_QPA_PLATFORM_PLUGIN_PATH"     . "$HOME/.guix-home/profile/lib/qt5/plugins")
     ("QT_STYLE_OVERRIDE"               . "kvantum")
-    ("XDG_CURRENT_DESKTOP"             . "qt5ct")
-    ("XMODIFIERS"                      . "@im=exwm-xim")
-    ("GTK_IM_MODULE"                   . "xim")
-    ("QT_IM_MODULE"                    . "xim")
-    ("CLUTTER_IM_MODULE"               . "xim")))
+    ("XDG_CURRENT_DESKTOP"             . "qt5ct")))
 
 (define-public %wonko-bash-config
   (home-bash-configuration

@@ -495,7 +495,7 @@ This function could be in the list `comint-output-filter-functions'."
                        "λ"
                        "minimal doc str")
 
-(setq default-input-method "minimal-im")
+;; (setq default-input-method "minimal-im")
 
 (defun set-inp-meth! ()
   ;; (activate-input-method default-input-method)
@@ -504,9 +504,11 @@ This function could be in the list `comint-output-filter-functions'."
   ;; (activate-input-method default-input-method)
   (set-input-method "minimal-im"))
 
-(add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
-(add-hook 'comint-mode-hook #'hook-set-inp-meth!)
-(add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
-(add-hook 'minibuffer-setup-hook #'set-inp-meth!)
+;; (add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
+;; (add-hook 'comint-mode-hook #'hook-set-inp-meth!)
+;; (add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
+;; (add-hook 'minibuffer-setup-hook #'set-inp-meth!)
+;;
+;; (evil-set-initial-state 'exwm-mode 'emacs)
 
 (provide 'init)

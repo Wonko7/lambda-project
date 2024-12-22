@@ -365,10 +365,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; start exwm
 
+(exwm-enable)
 (exwm-systemtray-enable)
 (exwm-randr-enable)
-(exwm-xim-mode 1)
-(exwm-enable)
+;; (exwm-xim-mode 1)
 
 ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
 (setq exwm-randr-workspace-monitor-plist

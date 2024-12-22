@@ -28,12 +28,14 @@
                                  (user "root")
                                  (identity "/root/.ssh/id_guix")
                                  (port 22))))))
- (filter (match-lambda ((hn os key)
-                        (not (string= hn (gethostname)))))
-         `(;; ("192.168.1.8" . ,%discovery-os)
-           ("daban-urnud" ,%daban-urnud-os
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
-           ;; ("enterprise" . ,%enterprise-os)
-           ;; ("yggdrasill" . ,%yggdrasill-os)
-           ;; ("rocinante" . ,%rocinante-os)
-           )))
+ (filter
+  (match-lambda ((hn os key)
+                 (not (string= hn (gethostname)))))
+  `(;; ("192.168.1.8" . ,%discovery-os)
+    ("daban-urnud" ,%daban-urnud-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
+    ;; ("enterprise" . ,%enterprise-os)
+    ;; ("yggdrasill" ,%yggdrasill-os
+    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBy585dRrMhGrilQX03YBntgKPGcUlP7WM1ET+uknMus")
+    ;; ("rocinante" . ,%rocinante-os)
+    )))

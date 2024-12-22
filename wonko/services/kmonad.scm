@@ -39,24 +39,25 @@
                            "echo this keyboard fucks &&
                            /run/current-system/profile/bin/sleep 1 &&
                            DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt") ;; which display though?
-       cmp-seq \    ;; Set the compose key to `RightAlt'
+       cmp-seq ralt    ;; Set the compose key to `RightAlt'
        cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
        ;; Comment this if you want unhandled events not to be emitted
        fallthrough true
        ;; Set this to false to disable any command-execution in KMonad
        allow-cmd true))
-   ;; ; might be a symbol for kmonad but guile disagrees:
+
+   ;; kmonad may have nilly willy symbols but guile does not:
    "(defalias smc ;)"
    "(defalias dot .)"
    "(defalias com ,)"
-   "(defalias p |)"
+   "(defalias p   |)"
    "(defalias csb ])"
    "(defalias osb [)"
    "(defalias ccb })"
    "(defalias ocb {)"
-   "(defalias cp \\))"
-   "(defalias op \\()"
+   "(defalias cp  \\))"
+   "(defalias op  \\()"
    "(defalias qte ')"
    "(defalias rqt `)"
 
@@ -113,6 +114,8 @@
       lsft z    x    c    v    b    n    m    ,    .    /    rsft                 up
       lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght)"
 
+   "\n"
+
    (object->string
     '(deflayer dvorak
        esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
@@ -121,16 +124,17 @@
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
        lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+   "\n"
 
    (object->string
     '(deflayer symbols
-       @SYS @ä   @ö   @ë   @ü   @ï   @ÿ   f7   f8   f9   f10  f11  @SYS
-       grv  @â   @ô   @ê   @ù   @î   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-       tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
-       @EC  @à   @œ   @é   &    @p   \    @op  @cp  \    XX   -    @RC
+       @SYS ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  @SYS
+       grv  â    ô    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+       tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
+       @EC  à    œ    é    &    @p   \    @op  @cp  \    XX   -    @RC
        lsft +    \_   XX   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
        lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
-
+   "\n"
    (object->string
     '(deflayer system
        XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 XX   @v11 XX

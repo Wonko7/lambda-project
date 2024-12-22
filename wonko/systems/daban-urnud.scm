@@ -50,16 +50,17 @@
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
-    ;; (append
-    ;;  machine-home-services
-    ;;  %vanilla-wonko-services)
     (append
      machine-home-services
-     (@@ (wonko homes) %just-vanilla-wonko-services)
-     (cons*
-      ((@@ (wonko homes) make-xsession) #:xmodmap? #f #:dvorak? #f)
-      %vanilla-shepherd-wonko-service
-      %bare-skeleton-wonko-services)))))
+     %vanilla-wonko-services)
+    ;; (append
+    ;;  machine-home-services
+    ;;  (@@ (wonko homes) %just-vanilla-wonko-services)
+    ;;  (cons*
+    ;;   ((@@ (wonko homes) make-xsession) #:xmodmap? #f #:dvorak? #f)
+    ;;   %vanilla-shepherd-wonko-service
+    ;;   %bare-skeleton-wonko-services))
+    )))
 
 (define %media-station-home
   (home-environment
