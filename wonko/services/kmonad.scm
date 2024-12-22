@@ -116,6 +116,41 @@
 
    "\n"
 
+   (object->string '(defalias ac (tap-hold-next-release 200 a lctl)))
+   (object->string '(defalias um (tap-hold-next-release 200 u lmet)))
+   (object->string '(defalias hm (tap-hold-next-release 200 h lmet)))
+   (object->string '(defalias sc (tap-hold-next-release 200 s lctl)))
+   (object->string '(defalias Qs (tap-hold-next-release 200 @qte lsft)))
+   (object->string '(defalias ls (tap-hold-next-release 200 l rsft)))
+   (object->string '(defalias oS (tap-hold-next-release 200 o (layer-toggle symbols))))
+   (object->string '(defalias nS (tap-hold-next-release 200 n (layer-toggle symbols))))
+
+   (object->string '(defalias eW (tap-hold-next-release 200 e (layer-toggle whitespace))))
+   (object->string '(defalias tW (tap-hold-next-release 200 t (layer-toggle whitespace))))
+
+   (object->string '(defalias Cn C-n))
+   (object->string '(defalias Cp C-p))
+
+
+   (object->string
+    '(deflayer dance-controller
+       esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
+       grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
+       tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    =    \     del  end  pgdn
+       @EC  @ac  @oS  @eW  @um  i    d    @hm  @tW  @nS  @sc  -    @RC
+       lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
+       @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+
+   (object->string
+    '(deflayer whitespace
+       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+       XX   XX   XX   XX   XX   del  del  XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+       XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    =    \     del  end  pgdn
+       XX   XX   XX   down up   ret  ret  left down rght XX   -    @RC
+       lsft XX   XX   @Cn  @Cp  spc  spc  XX   XX   XX   XX   rsft                 up
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
+       ))
+
    (object->string
     '(deflayer dvorak
        esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
@@ -134,6 +169,16 @@
        @EC  à    œ    é    &    @p   \    @op  @cp  \    XX   -    @RC
        lsft +    \_   XX   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
        lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+
+   (object->string
+    '(deflayer xim-symbols
+       @SYS @ä   @ö   @ë   @ü   @ï   @ÿ   f7   f8   f9   f10  f11  @SYS
+       grv  @â   @ô   @ê   @ù   @î   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+       tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
+       @EC  @à   @œ   @é   &    @p   \    @op  @cp  \    XX   -    @RC
+       lsft +    \_   XX   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+
    "\n"
    (object->string
     '(deflayer system
