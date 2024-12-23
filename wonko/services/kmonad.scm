@@ -38,7 +38,7 @@
        output (uinput-sink "keyboard-you-touch-my-tralala"
                            "echo this keyboard fucks &&
                            /run/current-system/profile/bin/sleep 1 &&
-                           DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt") ;; which display though?
+                           DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt us") ;; which display though?
        cmp-seq ralt    ;; Set the compose key to `RightAlt'
        cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
@@ -117,44 +117,76 @@
    "\n"
 
    (object->string '(defalias ac (tap-hold-next-release 200 a lctl)))
-   (object->string '(defalias um (tap-hold-next-release 200 u lmet)))
-   (object->string '(defalias hm (tap-hold-next-release 200 h lmet)))
+   (object->string '(defalias uW (tap-hold-next-release 200 u (layer-toggle whitespace))))
+   (object->string '(defalias hW (tap-hold-next-release 200 h (layer-toggle whitespace))))
    (object->string '(defalias sc (tap-hold-next-release 200 s lctl)))
    (object->string '(defalias Qs (tap-hold-next-release 200 @qte lsft)))
    (object->string '(defalias ls (tap-hold-next-release 200 l rsft)))
+   (object->string '(defalias qs (tap-hold-next-release 200 q lsft)))
+   (object->string '(defalias vs (tap-hold-next-release 200 v rsft)))
    (object->string '(defalias oS (tap-hold-next-release 200 o (layer-toggle symbols))))
    (object->string '(defalias nS (tap-hold-next-release 200 n (layer-toggle symbols))))
-
-   (object->string '(defalias eW (tap-hold-next-release 200 e (layer-toggle whitespace))))
-   (object->string '(defalias tW (tap-hold-next-release 200 t (layer-toggle whitespace))))
-
+   (object->string '(defalias em (tap-hold-next-release 200 e lmet)))
+   (object->string '(defalias tm (tap-hold-next-release 200 t lmet)))
+   (object->string '(defalias SDV (layer-switch dvorak-num-mod)))
+   (object->string '(defalias SDC (layer-switch dance-commander)))
+   (object->string '(defalias SDN (layer-switch dvorak-no-bullshit)))
+   (object->string '(defalias LLL (layer-next meta-layer)))
+"\n"
    (object->string '(defalias Cn C-n))
    (object->string '(defalias Cp C-p))
+   (object->string '(defalias Csp C-spc))
+   (object->string '(defalias Css #(C-spc C-spc)))
+   (object->string '(defalias CP  #(C-spc P)))
 
+"\n"
 
    (object->string
-    '(deflayer dance-controller
-       esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
-       grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
-       tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    =    \     del  end  pgdn
-       @EC  @ac  @oS  @eW  @um  i    d    @hm  @tW  @nS  @sc  -    @RC
-       lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
+    '(deflayer dance-commander
+ ;; esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+       esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+       grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
+       tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    @SDV \     del  end  pgdn
+       @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
+       lsft @smc @qs  j    k    x    b    m    w    @vs  z    rsft                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
+"\n"
    (object->string
     '(deflayer whitespace
        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-       XX   XX   XX   XX   XX   del  del  XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-       XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    =    \     del  end  pgdn
-       XX   XX   XX   down up   ret  ret  left down rght XX   -    @RC
-       lsft XX   XX   @Cn  @Cp  spc  spc  XX   XX   XX   XX   rsft                 up
-       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
-       ))
+       XX   XX   XX   XX   @SDV del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  home pgup
+       XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    @SDC \     del  end  pgdn
+       caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
+       lsft XX   XX   @Cn  @Cp  @Csp @Csp XX   XX   XX   XX   rsft                 up
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+
+"\n"
+   (object->string
+    '(deflayer dvorak-no-bullshit
+       @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+       grv  1    2    3    4    5    6    7    8    9    0    @SDC @csb bspc  ins  home pgup
+       tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
+       @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
+       lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
+       @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+"\n"
+
+   (object->string '(defalias c1 (tap-hold-next-release 200 1 lctl)))
+   (object->string '(defalias c0 (tap-hold-next-release 200 0 lctl)))
+   (object->string '(defalias W4 (tap-hold-next-release 200 4 (layer-toggle whitespace))))
+   (object->string '(defalias W7 (tap-hold-next-release 200 7 (layer-toggle whitespace))))
+   (object->string '(defalias S2 (tap-hold-next-release 200 2 (layer-toggle symbols))))
+   (object->string '(defalias S9 (tap-hold-next-release 200 9 (layer-toggle symbols))))
+   (object->string '(defalias m3 (tap-hold-next-release 200 3 lmet)))
+   (object->string '(defalias m8 (tap-hold-next-release 200 8 lmet)))
+
+"\n"
 
    (object->string
-    '(deflayer dvorak
-       esc  f1   f2   x    f4   f5   f6   f7   f8   f9   f10  f11  f12
-       grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
+    '(deflayer dvorak-num-mod
+       @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+       grv  @c1  @S2  @m3  @W4  5    6    @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
        tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
        lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
@@ -189,6 +221,18 @@
        lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
        lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
+"\n"
+   (object->string
+    '(deflayer meta-layer
+       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+       XX   @SDC @SDV @SDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
+       XX   XX   XX   XX   XX   XX   @SDC XX   XX   @SDN XX   -    @RC
+       lsft XX   XX   XX   XX   XX   XX   XX   XX   @SDV XX   rsft                 up
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
+       ))
+
+"\n"
    (object->string
     '(deflayer empty
        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
