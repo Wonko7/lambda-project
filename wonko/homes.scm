@@ -202,7 +202,9 @@
       "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
       "\\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
       "set -o vi\n"
-      "bind '\"jj\":vi-movement-mode'\n")))))
+      "bind '\"jj\":vi-movement-mode'\n"
+      "[ -n \"$EAT_SHELL_INTEGRATION_DIR\" ] && source \"$EAT_SHELL_INTEGRATION_DIR/bash\"\n"
+      )))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used

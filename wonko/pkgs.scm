@@ -26,7 +26,7 @@
  ;; web
  chromium tor matrix irc bittorrent
  ;; tools
- admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls
+ admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls screen
  ;; dev
  android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
@@ -114,6 +114,7 @@
         emacs-diff-hl
         emacs-dirvish
         emacs-coterm
+        emacs-eat
         emacs-detached
         emacs-dired-du
         emacs-diredfl
@@ -442,6 +443,7 @@
    btop
    acpi
    tmux
+   dtach
    net-tools
    strace
    ;; compression

@@ -213,9 +213,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
+;; notes on eat:
+;;  - line-mode is friendlier to evil
+;;  - couldn't get ssh/tramp integration to work, which was the whole point
+
 (use-package coterm
   :config
   (coterm-mode))
+
+(use-package detached
+  :ensure t
+  :init
+  (detached-init)
+  :custom ((detached-show-output-on-attach t)
+           (detached-terminal-data-command system-type))
+  )
+
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
