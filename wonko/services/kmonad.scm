@@ -133,25 +133,36 @@
    (object->string '(defalias SDN (layer-switch dvorak-no-bullshit)))
    (object->string '(defalias LLL (layer-next meta-layer)))
 "\n"
+
+   (object->string '(defalias Smc (tap-hold-next-release 200 @smc lsft)))
+   (object->string '(defalias Sz (tap-hold-next-release 200 z lsft)))
+   (object->string '(defalias yW (tap-hold-next-release 200 y (layer-toggle whitespace))))
+   (object->string '(defalias fW (tap-hold-next-release 200 f (layer-toggle whitespace))))
+   (object->string '(defalias qS (tap-hold-next-release 200 q (layer-toggle symbols))))
+   (object->string '(defalias vS (tap-hold-next-release 200 v (layer-toggle symbols))))
+"\n"
    (object->string '(defalias Cn C-n))
    (object->string '(defalias Cp C-p))
    (object->string '(defalias Csp C-spc))
    (object->string '(defalias Css #(C-spc C-spc)))
    (object->string '(defalias CP  #(C-spc P)))
+   (object->string '(defalias jm (tap-hold-next-release 200 j lmet)))
+   (object->string '(defalias wm (tap-hold-next-release 200 w lmet)))
 
 "\n"
+   (object->string '(defalias shV (tap-hold-next-release 200 @SDV lsft)))
+   (object->string '(defalias shC (tap-hold-next-release 200 @SDC lsft)))
 
    (object->string
     '(deflayer dance-commander
- ;; esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-       esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+       esc  @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
        grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
-       tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    @SDV \     del  end  pgdn
-       @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
-       lsft @smc @qs  j    k    x    b    m    w    @vs  z    rsft                 up
+       tab  @qte @com @dot p    @yW  @fW  g    c    r    l    /    @SDV \     del  end  pgdn
+       @EC  @ac  o    e    u    i    d    h    t    n    @sc  -    @RC
+       @shV @Smc @qS  @jm  k    x    b    m    @wm  @vS  @Sz  @shV                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
-"\n"
+   "\n"
    (object->string
     '(deflayer whitespace
        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
@@ -164,7 +175,7 @@
 "\n"
    (object->string
     '(deflayer dvorak-no-bullshit
-       @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+       @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  f12
        grv  1    2    3    4    5    6    7    8    9    0    @SDC @csb bspc  ins  home pgup
        tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
@@ -185,11 +196,11 @@
 
    (object->string
     '(deflayer dvorak-num-mod
-       @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+       @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  f12
        grv  @c1  @S2  @m3  @W4  5    6    @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
        tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-       lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
+       @shC @smc q    j    k    x    b    m    w    v    z    @shC                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
    "\n"
 
@@ -241,4 +252,14 @@
        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
        lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
        lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght
-       ))))
+       ))
+
+   (object->string
+    '(deflayer dance-commander-old-middle-row
+       esc  @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+       grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
+       tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    @SDV \     del  end  pgdn
+       @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
+       lsft @smc @qs  j    k    x    b    m    w    @vs  z    rsft                 up
+       @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+   ))
