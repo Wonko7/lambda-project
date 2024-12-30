@@ -163,14 +163,15 @@
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
    "\n"
+   ;; micm isn't recognized
    (object->string
     '(deflayer whitespace
-       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-       XX   XX   XX   XX   @SDV del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  home pgup
-       XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    @SDC \     del  end  pgdn
+       XX   mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
+       XX   XX   XX   XX   @SDV del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  brup pgup
+       XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
        caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
-       lsft XX   XX   @Cn  @Cp  @Csp @Csp XX   XX   XX   XX   rsft                 up
-       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+       lsft XX   XX   @Cn  @Cp  @Csp @Csp XX   XX   XX   XX   rsft                 brup
+       lalt @SA  lmet           spc            rmet ralt cmp  @SA             left brdn rght))
 
 "\n"
    (object->string
