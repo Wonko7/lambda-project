@@ -20,7 +20,7 @@
 (evil-set-undo-system evil-undo-system) ;; FIXME: this shouldn't be needed
 
 ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-(setq evil-input-method "latin-9-prefix")
+;; (setq evil-input-method "latin-9-prefix")
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding t)
 (setq evil-want-minibuffer t)

@@ -217,7 +217,7 @@
   (operating-system
     (locale "en_GB.utf8")
     (timezone "Europe/Paris")
-    (keyboard-layout %dvorak-kb)
+    (keyboard-layout %us-kb)
 
     (kernel linux)
     (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
@@ -274,16 +274,6 @@
      (bootloader-configuration
       (bootloader grub-efi-removable-bootloader)
       (targets    '("/boot"))
-      (keyboard-layout %dvorak-kb)))))
-
-(define-public %uskb-removable-laptop-os
-  (operating-system
-    (inherit %laptop-os)
-    (keyboard-layout %dvorak-kb)
-    (bootloader
-     (bootloader-configuration
-      (bootloader grub-efi-removable-bootloader)
-      (targets    '("/boot"))
       (keyboard-layout %us-kb)))))
 
 (define-public %removable-laptop-os-init-from-external
@@ -293,7 +283,7 @@
      (bootloader-configuration
       (bootloader grub-efi-removable-bootloader)
       (targets '("/mnt/tmp-efi/"))
-      (keyboard-layout %dvorak-kb)))))
+      (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
   (modify-services %laptop-services
