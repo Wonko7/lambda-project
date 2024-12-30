@@ -39,9 +39,9 @@
      (simple-service
       'config-files
       home-files-service-type
-      `((".config/x-config/ergo.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/of-course-i-still-love-you.xmodmap")))
+      `(;; (".config/x-config/ergo.xmodmap"
+        ;;  ,(local-file
+        ;;    (string-append %lambda-project "/misc/of-course-i-still-love-you.xmodmap")))
         (".x-config"
          ,(program-file
            "x-config"
@@ -55,7 +55,7 @@
 
 (define %of-course-i-still-love-you-os
   (operating-system
-   (inherit %uskb-removable-laptop-os)
+   (inherit %laptop-os)
    (host-name "of-course-i-still-love-you")
    (services (cons* (service slim-service-type wonko-slim-config)
                     (service guix-home-service-type
@@ -63,7 +63,7 @@
                     %laptop-services))
    (mapped-devices
     (list (mapped-device
-           (source (uuid "11111111-1111-1111-1111-11116cb14975"))
+           (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
            (target "vault")
            (type luks-device-mapping))))
 
@@ -72,7 +72,7 @@
                    (cons*
                     (file-system
                       (mount-point "/boot")
-                      (device (uuid "1111-1111"
+                      (device (uuid "3073-DA9D"
                                     'fat32))
                       (type "vfat"))
                     (file-system
