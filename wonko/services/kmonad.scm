@@ -158,7 +158,7 @@
        esc  @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
        grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
        tab  @qte @com @dot p    @yW  @fW  g    c    r    l    /    @SDV \     del  end  pgdn
-       @EC  @ac  o    e    u    i    d    h    t    n    @sc  -    @RC
+       @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
        @shV @Smc @qS  @jm  k    x    b    m    @wm  @vS  @Sz  @shV                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
@@ -211,7 +211,7 @@
        grv  â    ô    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
        tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
        @EC  à    œ    é    &    @p   \    @op  @cp  \    XX   -    @RC
-       lsft +    \_   XX   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
+       lsft +    \_   XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
        lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
    (object->string
