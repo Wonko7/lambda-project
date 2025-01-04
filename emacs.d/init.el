@@ -226,8 +226,7 @@
   :init
   (detached-init)
   :custom ((detached-show-output-on-attach t)
-           (detached-terminal-data-command system-type))
-  )
+           (detached-terminal-data-command system-type)))
 
 
 (setq comint-scroll-to-bottom-on-input t

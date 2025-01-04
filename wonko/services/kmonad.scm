@@ -38,7 +38,7 @@
        output (uinput-sink "keyboard-you-touch-my-tralala"
                            "echo this keyboard fucks &&
                            /run/current-system/profile/bin/sleep 1 &&
-                           DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt us") ;; which display though?
+                           sudo -u wonko DISPLAY=:9 /home/wonko/.guix-home/profile/bin/setxkbmap -option compose:ralt us") ;; which display though?
        cmp-seq ralt    ;; Set the compose key to `RightAlt'
        cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
@@ -157,9 +157,9 @@
     '(deflayer dance-commander
        esc  @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
        grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
-       tab  @qte @com @dot p    @yW  @fW  g    c    r    l    /    @SDV \     del  end  pgdn
+       tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
        @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
-       @shV @Smc @qS  @jm  k    x    b    m    @wm  @vS  @Sz  @shV                 up
+       @shV @Smc q    j    k    x    b    m    w    v    @Sz  @shV                 up
        @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
    "\n"
@@ -187,6 +187,8 @@
    (object->string '(defalias c1 (tap-hold-next-release 200 1 lctl)))
    (object->string '(defalias c0 (tap-hold-next-release 200 0 lctl)))
    (object->string '(defalias W4 (tap-hold-next-release 200 4 (layer-toggle whitespace))))
+   (object->string '(defalias W5 (tap-hold-next-release 200 5 (layer-toggle whitespace))))
+   (object->string '(defalias W6 (tap-hold-next-release 200 6 (layer-toggle whitespace))))
    (object->string '(defalias W7 (tap-hold-next-release 200 7 (layer-toggle whitespace))))
    (object->string '(defalias S2 (tap-hold-next-release 200 2 (layer-toggle symbols))))
    (object->string '(defalias S9 (tap-hold-next-release 200 9 (layer-toggle symbols))))
@@ -198,7 +200,7 @@
    (object->string
     '(deflayer dvorak-num-mod
        @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  f12
-       grv  @c1  @S2  @m3  @W4  5    6    @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
+       grv  @c1  @S2  @m3  @W4  @W5  @W6  @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
        tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
        @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
        @shC @smc q    j    k    x    b    m    w    v    z    @shC                 up
