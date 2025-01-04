@@ -26,37 +26,47 @@
   #:use-module (wonko xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
+  #:use-module (wonko services kmonad)
   #:export (%rocinante-os))
 
 (use-package-modules xorg)
 
-(define %rocinante-wonko-home
-  (home-environment
-   (inherit %media-station-wonko-home)
-   (services
-    (cons*
-     (simple-service
-      'config-files
-      home-files-service-type
-      `((".config/x-config/ship.xmodmap"
-         ,(local-file
-           (string-append %lambda-project "/misc/rocinante.xmodmap")))
-        (".x-config"
-         ,(program-file
-           "x-config"
-           #~(begin
+(define machine-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".x-config"
+       ,(program-file
+         "x-config"
+         #~(begin
              (system
               (string-append
                #$xrandr "/bin/xrandr --dpi 96;"
                #$xinput "/bin/xinput"
                " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
                #$xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))
-     %media-station-wonko-services))))
+               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))))
+
+(define %wonko-home
+  (home-environment
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %vanilla-wonko-services))))
+
+(define %media-station-home
+  (home-environment
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %vanilla-wonko-services))))
 
 (define %rocinante-os
   (operating-system
-    (inherit %media-station-os)
+    (inherit %laptop-os)
     (host-name "rocinante")
     (services (cons* (service slim-service-type
                               (slim-configuration
@@ -65,12 +75,15 @@
                                (auto-login? #t)
                                (default-user (crew-name %tina))
                                (xorg-configuration (xorg-configuration
-                                                    (keyboard-layout (crew-kb %tina))))))
+                                                    (keyboard-layout %us-kb))))) ;; FIXME
                      (service noautostart-slim-service-type wonko-slim-config)
+                     (service noautostart-slim-service-type media-station-slim-config)
                      (service guix-home-service-type
-                              `(("wonko" ,%rocinante-wonko-home)
-                                ("tina" ,%tina-home)))
-                     %media-station-services))
+                             `((,(crew-name %tina)  ,%tina-home)
+                               (,(crew-name %wonko) ,%wonko-home)
+                               (,(crew-name %media) ,%media-station-home)))
+                     (service kmonad-service-type %kmonad-config)
+                     %laptop-services))
     (mapped-devices
      (list (mapped-device
             (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))

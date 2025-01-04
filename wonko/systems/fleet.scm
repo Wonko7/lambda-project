@@ -23,6 +23,7 @@
                  (environment managed-host-environment-type)
                  (configuration (machine-ssh-configuration
                                  (host-name (string-append hostname ".local"))
+                                 (allow-downgrades? #t)
                                  (host-key key)
                                  (system "x86_64-linux")
                                  (user "root")
@@ -32,10 +33,11 @@
   (match-lambda ((hn os key)
                  (not (string= hn (gethostname)))))
   `(;; ("192.168.1.8" . ,%discovery-os)
-    ("daban-urnud" ,%daban-urnud-os
-     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
+    ;; ("daban-urnud" ,%daban-urnud-os
+    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
     ;; ("enterprise" . ,%enterprise-os)
     ;; ("yggdrasill" ,%yggdrasill-os
     ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBy585dRrMhGrilQX03YBntgKPGcUlP7WM1ET+uknMus")
-    ;; ("rocinante" . ,%rocinante-os)
+    ("rocinante" ,%rocinante-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0IndtUDb/hlus4gfsySCoRrN+qR1LTkDT1UXzVu42h")
     )))
