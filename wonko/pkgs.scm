@@ -287,6 +287,7 @@
         autorandr
         xdotool
         wmctrl
+        xwininfo
 
         xsettingsd ;; meh.
         ;; xautolock
