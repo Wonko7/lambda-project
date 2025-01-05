@@ -42,10 +42,10 @@
       "}"     #'evil-forward-paragraph
       "("     #'evil-cp-previous-opening
       ")"     #'evil-cp-next-opening
-      "é"     #'sp-backward-sexp
-      "&"     #'sp-next-sexp
-      "C-k"   #'sp-backward-up-sexp
+      "C-k"   #'sp-backward-sexp
       "C-j"   #'sp-next-sexp
+      "é"     #'sp-backward-up-sexp
+      "&"     #'sp-next-sexp
       "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
       "M-r"   #'paredit-raise-sexp
       "M-t"   #'sp-transpose-sexp
