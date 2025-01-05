@@ -138,6 +138,7 @@
     (defalias XDC #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
     (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
+    (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
     (defalias LLL (layer-next meta))
     (defalias shV (tap-hold-next-release 200 @SDV lsft))
     (defalias shC (tap-hold-next-release 200 @SDC lsft))))
@@ -255,8 +256,8 @@
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @XFR
      XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
-     XX   XX   XX   XX   XX   XX   @XDC XX   XX   @XDN XX   -    @RC
-     lsft XX   XX   XX   XX   XX   XX   XX   XX   @XDV XX   rsft                 up
+     XX   @XFR XX   XX   @XUS XX   @XDC XX   XX   @XDN XX   -    @RC
+     lsft XX   @XUS XX   XX   XX   XX   XX   XX   @XDV XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define kmonad-fr-layer
