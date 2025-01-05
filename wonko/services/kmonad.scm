@@ -40,24 +40,28 @@
                 (zip (circular-list "\n")
                      (map object->string sexps)))))
 
+(define (setxkb xkb)
+  (let ((setxkb " /run/current-system/profile/bin/setxkbmap -option compose:ralt ")
+        (sudo "/run/privileged/bin/sudo -u ")
+        (display  " DISPLAY="))
+    (apply string-append
+           (map (match-lambda
+                  ((user . disp)
+                   (string-append sudo user display disp setxkb xkb ";\n")))
+                '(("wonko" . ":9")
+                  ("media" . ":11")
+                  ("tina"  . ":10"))))))
+
 (define (kmonad-defcfg input output xkb)
   ;; laptop: "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-  (let* ((setxkb " /run/current-system/profile/bin/setxkbmap -option compose:ralt ")
-         (sudo "/run/privileged/bin/sudo -u ")
-         (display  " DISPLAY=")
-         (set-xorg-kb (apply string-append
-                             "echo this keyboard fucks &&
+  (let ((init-cmd (string-append
+                   "echo this keyboard fucks &&
                               /run/current-system/profile/bin/sleep 1 ;"
-                             (map (match-lambda
-                                    ((user . disp)
-                                     (string-append sudo user display disp setxkb xkb ";\n")))
-                                  '(("wonko" . ":9")
-                                    ("media" . ":11")
-                                    ("tina"  . ":10"))))))
+                   (setxkb xkb))))
     `(defcfg
        input (device-file ,input)
        output (uinput-sink ,output
-                           ,set-xorg-kb)
+                           ,init-cmd)
        cmp-seq    ralt ;; Set the compose key to `RightAlt'
        cmp-seq-delay 5 ;; 5ms delay between each compose-key sequence press
 
@@ -73,15 +77,6 @@
       tab  q    w    e    r    t    y    u    i    o    p    [    ]    \\    del  end  pgdn
       caps a    s    d    f    g    h    j    k    l    ;    '    ret
       lsft z    x    c    v    b    n    m    ,    .    /    rsft                 up
-      lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght)")
-
-(define kmonad-defsrc-fr
-  "(defsrc
-      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-      grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup
-      tab  a    z    e    r    t    y    u    i    o    p    [    ]    \\    del  end  pgdn
-      caps q    s    d    f    g    h    j    k    l    m    '    ret
-      lsft w    x    c    v    b    n    ;    ,    .    /    rsft                 up
       lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght)")
 
 (define kmonad-base-aliases
@@ -126,7 +121,7 @@
     (defalias λ #(\ \ l a m b d a))))
 
 (define kmonad-common-modifier-aliases
-  '(;; <3
+  `(;; <3
     (defalias EC (tap-hold-next-release 200 esc lctl))
     (defalias RC (tap-hold-next-release 200 ret rctl))
     ;; next doesn't work in this one:
@@ -139,7 +134,10 @@
     (defalias SDV (layer-switch dvorak-num-mod))
     (defalias SDC (layer-switch dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
-    (defalias SFR (layer-switch fr))
+    (defalias XDV #((cmd-button ,(setxkb "us")) (layer-switch dvorak-num-mod)))
+    (defalias XDC #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
+    (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
+    (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
     (defalias LLL (layer-next meta))
     (defalias shV (tap-hold-next-release 200 @SDV lsft))
     (defalias shC (tap-hold-next-release 200 @SDC lsft))))
@@ -209,7 +207,7 @@
 
 (define kmonad-dvorak-nummod-layer
   '(deflayer dvorak-num-mod
-     @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  f12
+     @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  @c1  @S2  @m3  @W4  @W5  @W6  @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
@@ -254,20 +252,21 @@
 
 (define kmonad-meta-layer
   '(deflayer meta
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @SFR
-     XX   @SDC @SDV @SDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-     XX   XX   XX   XX   XX   XX   @SFR XX   XX   XX   XX   /    =    \     del  end  pgdn
-     XX   XX   XX   XX   XX   XX   @SDC XX   XX   @SDN XX   -    @RC
-     lsft XX   XX   XX   XX   XX   XX   XX   XX   @SDV XX   rsft                 up
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @XFR
+     XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+     XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
+     XX   XX   XX   XX   XX   XX   @XDC XX   XX   @XDN XX   -    @RC
+     lsft XX   XX   XX   XX   XX   XX   XX   XX   @XDV XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define kmonad-fr-layer
+  ;; kmonad sets it as us, then we let xorg take care of it.
   '(deflayer fr
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup
-     tab  a    z    e    r    t    y    u    i    o    p    @osb @csb \     del  end  pgdn
-     caps q    s    d    f    g    h    j    k    l    m    @qte ret
-     lsft w    x    c    v    b    n    @smc @com @dot /    rsft                 up
+     tab  q    w    e    r    t    y    u    i    o    p    @osb @csb \     del  end  pgdn
+     caps a    s    d    f    g    h    j    k    l    @smc @qte ret
+     lsft z    x    c    v    b    n    m    @com @dot /    rsft                 up
      lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght))
 
 (define kmonad-empty-layer
@@ -280,12 +279,12 @@
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define (kmonad-make-config input output default-layer)
-  (let-values (((xkb defsrc) (if (equal? default-layer kmonad-fr-layer)
-                                 (values "fr" kmonad-defsrc-fr)
-                                 (values "us" kmonad-defsrc-us))))
+  (let ((xkb (if (equal? default-layer kmonad-fr-layer)
+                 "fr"
+                 "us")))
     (mixed-text-file
      "kmonad-config"
-     defsrc
+     kmonad-defsrc-us
      (sexps-to-string (list (kmonad-defcfg input output xkb)))
      kmonad-base-aliases
      (apply string-append
