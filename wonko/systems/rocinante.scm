@@ -75,14 +75,18 @@
                                (auto-login? #t)
                                (default-user (crew-name %tina))
                                (xorg-configuration (xorg-configuration
-                                                    (keyboard-layout %us-kb))))) ;; FIXME
+                                                    (keyboard-layout %fr-kb))))) ;; FIXME
                      (service noautostart-slim-service-type wonko-slim-config)
                      (service noautostart-slim-service-type media-station-slim-config)
                      (service guix-home-service-type
-                             `((,(crew-name %tina)  ,%tina-home)
-                               (,(crew-name %wonko) ,%wonko-home)
-                               (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type %kmonad-config)
+                              `((,(crew-name %tina)  ,%tina-home)
+                                (,(crew-name %wonko) ,%wonko-home)
+                                (,(crew-name %media) ,%media-station-home)))
+                     (service kmonad-service-type
+                              (kmonad-make-config
+                               "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+                               "keyboard-you-touch-my-tralala"
+                               kmonad-fr-layer))
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
@@ -107,5 +111,5 @@
                       (make-vault-subvolumes mapped-devices)
                       %base-file-systems))))))
 
-%rocinante-wonko-home
+%wonko-home
 %rocinante-os

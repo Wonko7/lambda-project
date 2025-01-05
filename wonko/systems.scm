@@ -215,57 +215,58 @@
 
 (define-public %laptop-os
   (operating-system
-    (locale "en_GB.utf8")
-    (timezone "Europe/Paris")
-    (keyboard-layout %us-kb)
+   (locale "en_GB.utf8")
+   (timezone "Europe/Paris")
+   (keyboard-layout %us-kb)
 
-    (kernel linux)
-    (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
-    (initrd microcode-initrd)
-    (firmware (list linux-firmware))
-    (bootloader
-     (bootloader-configuration
-      ;; choose wisely:
-      ;; grub-efi-removable-bootloader =>
-      ;;   use when installing on external device:
-      ;;   expects /mnt/boot/efi to exist & be mounted
-      ;; grub-efi-bootloader => for local machine
-      ;;
-      ;; (bootloader grub-efi-removable-bootloader)
-      ;; (targets '("/mnt/tmp-efi/"))
-      (bootloader grub-efi-bootloader)
-      (targets    '("/boot"))
-      (keyboard-layout keyboard-layout)))
+   (kernel linux)
+   (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
+   (initrd microcode-initrd)
+   (firmware (list linux-firmware))
+   (bootloader
+    (bootloader-configuration
+     ;; choose wisely:
+     ;; grub-efi-removable-bootloader =>
+     ;;   use when installing on external device:
+     ;;   expects /mnt/boot/efi to exist & be mounted
+     ;; grub-efi-bootloader => for local machine
+     ;;
+     ;; (bootloader grub-efi-removable-bootloader)
+     ;; (targets '("/mnt/tmp-efi/"))
+     (bootloader grub-efi-bootloader)
+     (targets    '("/boot"))
+     (keyboard-layout keyboard-layout)))
 
-    (host-name "discovery")
-    (issue (string-append (spock-say "live long & prosper!") "\n\n"))
-    (users (map crew->user-account %crew))
+   (host-name "discovery")
+   (issue (string-append (spock-say "live long & prosper!") "\n\n"))
+   (users (map crew->user-account %crew))
 
-    (packages (append
-               %git-world
-               %utils-world
-               %os-disk-world
-               %os-net-world
-               %os-misc-world
-               %os-nonfree
-               %base-packages))
+   (packages (append
+              %git-world
+              %utils-world
+              %os-disk-world
+              %os-net-world
+              %os-misc-world
+              %os-nonfree
+              %xorg-world
+              %base-packages))
 
-    (services %laptop-services)
+   (services %laptop-services)
 
-    (setuid-programs
-     (cons*
-      ;; FIXME dumpcap?
-      (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl)
-                                            "/bin/brightnessctl")))
-      %setuid-programs))
+   (setuid-programs
+    (cons*
+     ;; FIXME dumpcap?
+     (setuid-program (program (file-append (@ (gnu packages linux) brightnessctl)
+                                           "/bin/brightnessctl")))
+     %setuid-programs))
 
-    (file-systems '())
+   (file-systems '())
 
-    (swap-devices
-     (list (swap-space
-             (target "/mnt/vault/swap/swapfile")
-             (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                   file-systems)))))))
+   (swap-devices
+    (list (swap-space
+           (target "/mnt/vault/swap/swapfile")
+           (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                 file-systems)))))))
 
 (define-public %removable-laptop-os
   (operating-system
