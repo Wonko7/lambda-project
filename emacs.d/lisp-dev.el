@@ -22,6 +22,11 @@
 (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
 (add-hook 'scheme-mode-hook #'evil-cleverparens-mode)
 
+(use-package aggressive-indent
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+  (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
+
 (use-package eval-sexp-fu
   ;;:defer t
   )

@@ -149,11 +149,13 @@
         emacs-lsp-mode ;; FIXME
         emacs-lsp-ui
         emacs-eglot
-        emacs-eval-sexp-fu-el
-        emacs-eval-in-repl-geiser
         emacs-gnuplot
         emacs-eval-in-repl-ocaml
         emacs-tuareg
+        ;; lisps
+        emacs-eval-sexp-fu-el
+        emacs-eval-in-repl-geiser
+        emacs-aggressive-indent
         ;; clojure
         emacs-cider
         emacs-clojure-mode
