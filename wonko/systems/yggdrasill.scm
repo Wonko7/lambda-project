@@ -65,38 +65,38 @@
 
 (define %yggdrasill-os
   (operating-system
-    (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
-    (host-name "yggdrasill")
-    (keyboard-layout %us-kb)
-    (services (cons* (service slim-service-type wonko-slim-config)
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
+   (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
+   (host-name "yggdrasill")
+   (keyboard-layout %us-kb)
+   (services (cons* (service slim-service-type wonko-slim-config)
+                    (service noautostart-slim-service-type media-station-slim-config)
+                    (service guix-home-service-type
                              `((,(crew-name %wonko) ,%wonko-home)
                                (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type %kmonad-config)
-                     %laptop-services))
-    (mapped-devices
-     (list (mapped-device
-            (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
-            (target "vault")
-            (type luks-device-mapping))))
+                    (service kmonad-service-type %kmonad-config)
+                    %laptop-services))
+   (mapped-devices
+    (list (mapped-device
+           (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
+           (target "vault")
+           (type luks-device-mapping))))
 
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "77DE-0AE2"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+   (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                             (make-vault-subvolume args mapped-devices))))
+                   (cons*
+                    (file-system
+                     (mount-point "/boot")
+                     (device (uuid "77DE-0AE2"
+                                   'fat32))
+                     (type "vfat"))
+                    (file-system
+                     (mount-point "/mnt/vault")
+                     (device "/dev/mapper/vault")
+                     (type "btrfs")
+                     (dependencies mapped-devices))
+                    (append
+                     (make-vault-subvolumes mapped-devices)
+                     %base-file-systems))))))
 
 %wonko-home
 %yggdrasill-os
