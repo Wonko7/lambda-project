@@ -73,7 +73,11 @@
                     (service guix-home-service-type
                              `((,(crew-name %wonko) ,%wonko-home)
                                (,(crew-name %media) ,%media-station-home)))
-                    (service kmonad-service-type %kmonad-config)
+                    (service kmonad-service-type
+                             (kmonad-make-config
+                              "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+                              "keyboard-you-touch-my-tralala"
+                              kmonad-dance-commander-layer))
                     %laptop-services))
    (mapped-devices
     (list (mapped-device
