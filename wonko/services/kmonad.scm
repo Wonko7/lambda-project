@@ -56,7 +56,7 @@
   ;; laptop: "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
   (let ((init-cmd (string-append
                    "echo this keyboard fucks &&
-                              /run/current-system/profile/bin/sleep 1 ;"
+                   /run/current-system/profile/bin/sleep 1 ;"
                    (setxkb xkb))))
     `(defcfg
        input (device-file ,input)
@@ -244,8 +244,8 @@
 
 (define kmonad-system-layer
   '(deflayer system
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 XX   @v11 XX
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 XX   @osb @csb bspc  ins  home pgup
+     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 XX
+     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @osb @csb bspc  ins  home pgup
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
@@ -286,7 +286,9 @@
     (mixed-text-file
      "kmonad-config"
      kmonad-defsrc-us
-     (sexps-to-string (list (kmonad-defcfg input output xkb)))
+     (sexps-to-string
+      (list
+       (kmonad-defcfg input output xkb)))
      kmonad-base-aliases
      (apply string-append
             (map sexps-to-string
@@ -296,14 +298,15 @@
                        kmonad-system-actions-aliases
                        kmonad-whitespce-aliases
                        kmonad-xim-aliases)))
-     (sexps-to-string ;; delete-duplicates
-      (delete-duplicates (list default-layer
-                               kmonad-dance-commander-layer
-                               kmonad-dvorak-no-bullshit-layer
-                               kmonad-dvorak-nummod-layer
-                               kmonad-whitespace-layer
-                               kmonad-symbols-layer
-                               kmonad-system-layer
-                               kmonad-xim-symbols-layer
-                               kmonad-meta-layer
-                               kmonad-fr-layer))))))
+     (sexps-to-string
+      (delete-duplicates
+       (list default-layer
+             kmonad-dance-commander-layer
+             kmonad-dvorak-no-bullshit-layer
+             kmonad-dvorak-nummod-layer
+             kmonad-whitespace-layer
+             kmonad-symbols-layer
+             kmonad-system-layer
+             kmonad-xim-symbols-layer
+             kmonad-meta-layer
+             kmonad-fr-layer))))))
