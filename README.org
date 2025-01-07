@@ -2,15 +2,5 @@
 I have achieved peak computing.
 * usage
 #+begin_src shell
-  cd guix
-  # testing
-  sudo $(SHIP=`hostname` guix system vm os.scm) -nic user,model=virtio-net-pci,hostfwd=tcp::10022-:22
-  guix home container wonko.scm
-  # deploy
-  sudo SHIP=`hostname` `which guix` system reconfigure os.scm
-  SHIP=`hostname` guix home reconfigure wonko.scm
-  # discovery on usb
-  SHIP=discovery guix system image -t iso9660 os.scm
-  sudo dd if=$(SHIP=discovery guix system image -t iso9660 os.scm) of=/dev/sda status=progress
-  sudo sync /dev/sda
+  sudo -E guix deploy wonko/systems/fleet.scm
 #+end_src
