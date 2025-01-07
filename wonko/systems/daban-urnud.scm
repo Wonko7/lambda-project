@@ -23,7 +23,7 @@
   #:use-module (wonko crew)
   #:use-module (wonko fleet)
   #:use-module (wonko dotfiles)
-  #:use-module (wonko xorg)
+  #:use-module (wonko services xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
   #:use-module (wonko services kmonad)

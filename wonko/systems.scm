@@ -21,7 +21,7 @@
   #:use-module (wonko crew)
   #:use-module (wonko fleet)
   #:use-module (wonko pkgs)
-  #:use-module (wonko xorg)
+  #:use-module (wonko services xorg)
   #:export (%laptop-os
             wonko-slim-config
             %laptop-services
