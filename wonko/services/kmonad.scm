@@ -217,8 +217,8 @@
 (define kmonad-whitespace-layer
   '(deflayer whitespace
      XX   mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   XX   XX   XX   @SDV del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  brup pgup
-     XX   XX   XX   pgup pgdn bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
+     XX   home XX   XX   end  del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  brup pgup
+     tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
      caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
      lsft XX   XX   @Cn  @Cp  @Csp @Csp XX   XX   XX   XX   rsft                 brup
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left brdn rght))
@@ -226,9 +226,9 @@
 (define kmonad-symbols-layer
   '(deflayer symbols
      @SYS ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  @SYS
-     grv  â    ô    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+     grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
-     @EC  à    œ    é    &    @p   \    @op  @cp  \    XX   -    @RC
+     @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
      lsft +    \_   XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
@@ -252,7 +252,7 @@
 
 (define kmonad-meta-layer
   '(deflayer meta
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @XFR
+     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @XFR
      XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   @XFR XX   XX   @XUS XX   @XDC XX   XX   @XDN XX   -    @RC
