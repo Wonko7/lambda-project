@@ -16,8 +16,7 @@
   ;; Tells shepherd how we want it to create a (single) <shepherd-service>
   ;; for kmonad from a string
   (list (shepherd-service
-         (documentation "Run the kmonad daemon (kmonad-daemon).")
-         ;; (description "Run the kmonad daemon (kmonad-daemon).")
+         (documentation "Run the kmonad daemon.")
          (provision '(kmonad))
          (requirement '(udev user-processes))
          (start #~(make-forkexec-constructor
@@ -34,11 +33,11 @@
     (list (service-extension shepherd-root-service-type
                              kmonad-shepherd-service)))))
 
-(define (sexps-to-string sexps)
+(define* (sexps-to-string #:rest sexps)
   (apply string-append
          (apply append
                 (zip (circular-list "\n")
-                     (map object->string sexps)))))
+                     (map object->string (apply append sexps))))))
 
 (define (setxkb xkb)
   (let ((setxkb " /run/current-system/profile/bin/setxkbmap -option compose:ralt ")
@@ -290,14 +289,13 @@
       (list
        (kmonad-defcfg input output xkb)))
      kmonad-base-aliases
-     (apply string-append
-            (map sexps-to-string
-                 (list kmonad-common-modifier-aliases
-                       kmonad-numrow-modifier-aliases
-                       kmonad-dance-commander-modifier-aliases
-                       kmonad-system-actions-aliases
-                       kmonad-whitespce-aliases
-                       kmonad-xim-aliases)))
+     (sexps-to-string
+      kmonad-common-modifier-aliases
+      kmonad-numrow-modifier-aliases
+      kmonad-dance-commander-modifier-aliases
+      kmonad-system-actions-aliases
+      kmonad-whitespce-aliases
+      kmonad-xim-aliases)
      (sexps-to-string
       (delete-duplicates
        (list default-layer
