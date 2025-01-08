@@ -35,9 +35,10 @@
   `(;; ("192.168.1.8" . ,%discovery-os)
     ;; ("daban-urnud" ,%daban-urnud-os
     ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
-    ;; ("enterprise" . ,%enterprise-os)
+    ("enterprise" ,%enterprise-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIx0IZ0N7CqF431lNvKGzmX4la95DRo25AirEeB+YkyH")
     ;; ("yggdrasill" ,%yggdrasill-os
     ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBy585dRrMhGrilQX03YBntgKPGcUlP7WM1ET+uknMus")
-    ("rocinante" ,%rocinante-os
-     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0IndtUDb/hlus4gfsySCoRrN+qR1LTkDT1UXzVu42h")
+    ;; ("rocinante" ,%rocinante-os
+    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0IndtUDb/hlus4gfsySCoRrN+qR1LTkDT1UXzVu42h")
     )))
