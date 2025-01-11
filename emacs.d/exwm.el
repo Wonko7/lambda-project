@@ -64,7 +64,9 @@
   "maximize buffer"
   (interactive)
   (if exwm-class-name
-      (exwm-layout-toggle-fullscreen exwm--id)
+      (progn
+        (exwm-layout-toggle-fullscreen exwm--id)
+        (exwm-input-grab-keyboard))
     (if (= 1 (length (window-list)))
         (let ((wc (my/get-workspace-window-configuration)))
           (when wc
