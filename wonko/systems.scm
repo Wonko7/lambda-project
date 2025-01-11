@@ -4,6 +4,9 @@
   #:use-module (guix build utils)
   #:use-module (guix channels)
   #:use-module (guix packages)
+  #:use-module (guix profiles)
+  #:use-module (guix monads)
+  #:use-module (guix store)
   #:use-module (ice-9 format)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
@@ -113,7 +116,7 @@
          ("/junkyard" . "junkyard"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; services
+;; slim services:
 
 (define-public wonko-slim-config
   (slim-configuration
@@ -148,6 +151,40 @@
 ;;      (xorg-configuration (xorg-configuration
 ;;                           (keyboard-layout (crew-kb %tina))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; extra-profiles-service:
+
+(define (make-extra-profile-service-type profile-name)
+  ;; The service that populates the system's profile---i.e.,
+  ;; /run/current-system/profile-name.  It is extended by package lists.
+  (define (packages->profile-entry packages)
+    "Return a system entry for the profile containing PACKAGES."
+    ;; XXX: 'mlet' is needed here for one reason: to get the proper
+    ;; '%current-target' and '%current-target-system' bindings when
+    ;; 'packages->manifest' is called, and thus when the 'package-inputs'
+    ;; etc. procedures are called on PACKAGES.  That way, conditionals in those
+    ;; inputs see the "correct" value of these two parameters.  See
+    ;; <https://issues.guix.gnu.org/44952>.
+    (mlet %store-monad ((_ (current-target-system)))
+      (return `((,(string-append profile-name "-profile")
+                 ,(profile
+                   (content (packages->manifest
+                             (delete-duplicates packages eq?)))))))))
+  (service-type (name (string->symbol
+                       (string-append profile-name "-extra-profile")))
+                (extensions
+                 (list (service-extension system-service-type
+                                          packages->profile-entry)))
+                (compose concatenate)
+                (extend append)
+                (default-value '())
+                (description
+                 "This is @dfn{extra profile}, available as
+@file{/run/gep/profile}.  It contains packages that you like.")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; laptop services
+
 (define-public %laptop-services
   (cons*
    (simple-service 'fwupd-polkit polkit-service-type (list fwupd-nonfree))
@@ -178,12 +215,17 @@
                                              (string-append %lambda-project
                                                             "/wonko/data/ssh/" hn ".pub"))))
                                   (cons "discovery" %fleet-names)))
-                '("wonko" "media"))))
+                           '("wonko" "media"))))
              (x11-forwarding? #t)
              (password-authentication? #f)
              (permit-root-login #t)))
 
    (service tor-service-type)
+
+   ;; (service (make-extra-profile-service-type "comms")   %communication-world)
+   (service (make-extra-profile-service-type "desktop") %desktop-world)
+   (service (make-extra-profile-service-type "web")     %web-world)
+   (service (make-extra-profile-service-type "img")     %image-edition-world)
 
    (modify-services %desktop-services
      (delete gdm-service-type)
@@ -215,6 +257,9 @@
                                                   "/wonko/data/substitutes/" hn ".pub")))
                                 (cons "nonguix" %fleet-names))
                            %default-authorized-guix-keys)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; laptop-os and declinations
 
 (define-public %laptop-os
   (operating-system

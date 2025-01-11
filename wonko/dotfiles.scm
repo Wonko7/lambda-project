@@ -60,16 +60,16 @@
      (string-append " " b " $*\n"))))
 
 (define-public (bash-profile-source-profiles profiles)
-  (let* ((profiles (concatenate
-                    (zip
-                     profiles
-                     (circular-list " "))))
-         (profiles (apply string-append profiles)))
+  (let* ((profiles (apply string-append
+                          (concatenate
+                           (zip
+                            (circular-list " $GUIX_EXTRA_PROFILES/")
+                            profiles)))))
     (mixed-text-file
      "bash-profile"
      "# hey boy. hey girl. superstar DJ. here we go!\n"
-     (string-append "for p in " profiles "; do\n")
-     "    profile=$GUIX_EXTRA_PROFILES/$p\n"
+     "# priortiy to system profiles, then user stuff\n"
+     "for profile in /run/current-system/*-profile " profiles "; do\n"
      "    if [ -f $profile/etc/profile ]; then\n"
      "        GUIX_PROFILE=$profile\n"
      "        . $GUIX_PROFILE/etc/profile\n"
