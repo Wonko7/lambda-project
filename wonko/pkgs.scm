@@ -22,7 +22,7 @@
  ;; emacs
  emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
- pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz
  ;; web
  chromium tor matrix irc bittorrent
  ;; tools
@@ -317,6 +317,7 @@
    ;; img
    scrot
    imagemagick
+   graphviz
    ;; video
    mpv
    vlc
@@ -349,9 +350,10 @@
   (list wireshark))
 
 (define-public %image-edition-world
-  (list gimp
-        ;; kdenlive
-        krita))
+  (list
+   ;; gimp
+   ;; kdenlive
+   krita))
 
 (define-public %fonts-world
   (list font-jetbrains-mono
@@ -440,6 +442,7 @@
    file
    tree
    lsof
+   inotify-tools
    ;; keyboard
    kmonad
    ;; system
