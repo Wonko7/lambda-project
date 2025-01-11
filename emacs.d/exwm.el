@@ -43,32 +43,10 @@
 (setq exwm-input-prefix-keys
       `(?\s-i
         ?\s-I
-        ;; ?\C-: ;; FIXME: I need to use these
-        ?\C-\  ;; I want whitespace here ;; but this is also unused
+        ?\C-\  ;; I want whitespace here
         ?\C-\\ ;; xim
-        ?\s-\S-J
-        ?\s-\S-K
-        ?\s-\S-j
-        ?\s-\S-k
-        ?\s-J
-        ?\s-K
-        ?\s-l
-        ?\s-h
-        ?\s-\ ;; yep
-        ?\M-:
-        ?\A-\s-\S-J
-        ?\A-\s-\S-K
-        ?\A-\s-\S-j
-        ?\A-\s-\S-k
-        ?\A-\s-i
-        ?\A-\s-I
-        ?\A-\s-J
-        ?\A-\s-K
-        ?\A-\s-l
-        ?\A-\s-h
-        ?\A-\s- ;; yep
-        ,(kbd "<escape>")
-        ))
+        ?\s-\  ;; yep
+        ?\M-:))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fullscreen / toggle window config
@@ -218,62 +196,7 @@
       (_ (exwm-workspace-switch-create i)))))
 
 (setq exwm-input-global-keys
-      `(;; FIXME: emacs 29 sometimes sees my key inputs as \A-\s-x, sometimes \s-x
-        ;; https://emacs.stackexchange.com/questions/78135/why-does-emacs-29-translates-meta-to-metahyper-m-somekey-to-h-m-somekey
-        ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51001
-        ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=65802
-        ([?\A-\s-r] . exwm-reset)
-        ([?\A-\s-i] . exwm-input-toggle-keyboard)
-        ([?\A-\s-I] . coterm-char-mode-cycle)
-
-        ;; Move between windows
-        ([?\A-\s-h] . windmove-left)
-        ([?\A-\s-l] . windmove-right)
-        ([?\A-\s-k] . windmove-up)
-        ([?\A-\s-j] . windmove-down)
-
-        ([?\A-\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
-        ([?\A-\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
-        ([?\A-\s-K] . previous-buffer)
-        ([?\A-\s-J] . next-buffer)
-
-        ([?\A-\s-C] . kill-this-buffer)
-        ([?\A-\s-c] . (lambda () (interactive) (async-shell-command "dunstctl close")))
-
-        ([?\A-\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
-        ([?\A-\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
-        ([?\A-\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
-        ([?\A-\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
-        ([?\A-\s-\C-&] . async-shell-command)
-
-        ([?\A-\s-f] . my/toggle-fullscreen)
-        ([?\A-\s-F] . exwm-layout-toggle-fullscreen)
-        ;; ([?\A-\s-d] . my/set-window-dedicated)
-
-        ;; Launch applications via shell command
-        ([?\A-\s-:] . (lambda (command)
-                        (interactive (list (read-shell-command "$ ")))
-                        (start-process-shell-command command nil command)))
-        ([?\A-\s-y] . ws/force-run-auto-start)
-
-        ;; Switch workspace
-        ([?\A-\s-w] . exwm-workspace-switch)
-        ([?\A-\s- ] . my/exwm-workspace-switch-to-previous)
-        ([?\A-\s-M] . exwm-workspace-move-window)
-        ,@(mapcar (lambda (i)
-                    `(,(kbd (format "A-s-%d" i)) .
-                      (lambda ()
-                        (interactive)
-                        (exwm-workspace-switch-create ,i))))
-                  (number-sequence 0 9))
-        ,@(-map-indexed (lambda (i c)
-                          `(,(kbd (format "A-s-%s" c)) .
-                            (lambda ()
-                              (interactive)
-                              (go-to-external-screen ,i))))
-                        (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))
-
-        ([?\s-r] . exwm-reset)
+      `(([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
         ([?\s-I] . coterm-char-mode-cycle)
 
