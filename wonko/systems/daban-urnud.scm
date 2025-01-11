@@ -64,26 +64,31 @@
 
 (define %media-station-home
   (home-environment
-   (inherit %media-station-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %media-station-wonko-services))))
+    (inherit %media-station-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-wonko-services))))
 
 (define %daban-urnud-os
   (operating-system
     (inherit %laptop-os)
     (host-name "daban-urnud")
     (keyboard-layout %us-kb)
-    (services (cons* (service slim-service-type wonko-slim-config)
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
-                              `((,(crew-name %wonko) ,%wonko-home)
-                                (,(crew-name %media) ,%media-station-home)))
-                     (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
-                                                                   "# (.)(.)\n#  8==o~~"))
-                     (service kmonad-service-type %kmonad-config)
-                     %laptop-services))
+    (services
+     (cons* (service slim-service-type wonko-slim-config)
+            (service noautostart-slim-service-type media-station-slim-config)
+            (service guix-home-service-type
+                     `((,(crew-name %wonko) ,%wonko-home)
+                       (,(crew-name %media) ,%media-station-home)))
+            (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
+                                                          "# (.)(.)\n#  8==o~~"))
+            (service kmonad-service-type
+                     (kmonad-make-config
+                      "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+                      "keyboard-you-touch-my-tralala"
+                      kmonad-dance-commander-layer))
+            %laptop-services))
     (mapped-devices
      (list (mapped-device
             (source (uuid "0a59dd11-43cf-4043-bcb6-932ad861fb2b"))
