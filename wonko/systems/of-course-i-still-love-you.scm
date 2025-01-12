@@ -60,7 +60,15 @@
     (host-name "of-course-i-still-love-you")
     (services
      (cons*
-      (service slim-service-type wonko-slim-config)
+      (service slim-service-type
+               (slim-configuration
+                (inherit  wonko-slim-config)
+                (xorg-configuration (xorg-configuration
+                                     (keyboard-layout %us-kb)
+                                     (extra-config '("Section \"Device\"\n"
+                                                     "  Option \"SWcursor\"\n"
+                                                     "  Identifier \"Card1\"\n"
+                                                     "EndSection\n"))))))
       (service guix-home-service-type
                `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
       (service kmonad-service-type kmonad-ergodox-config)
