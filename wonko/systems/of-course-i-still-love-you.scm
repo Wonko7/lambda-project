@@ -32,27 +32,23 @@
 
 (use-package-modules xorg)
 
+(define machine-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".x-config"
+       ,(program-file
+         "x-config"
+         #~(system "echo lol")))))))
+
 (define %of-course-i-still-love-you-wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (cons*
-     (simple-service
-      'config-files
-      home-files-service-type
-      `(;; (".config/x-config/ergo.xmodmap"
-        ;;  ,(local-file
-        ;;    (string-append %lambda-project "/misc/of-course-i-still-love-you.xmodmap")))
-        (".x-config"
-         ,(program-file
-           "x-config"
-           (cmd+arg->script
-            `(("echo" . "lol")
-              ;; (xrandr . "--dpi 96")
-              ;; (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1")
-              ;; (xinput . "set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")
-              ))))))
-     %vanilla-wonko-services))))
+    (inherit %vanilla-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %vanilla-wonko-services))))
 
 (define %of-course-i-still-love-you-os
   (operating-system
@@ -79,7 +75,6 @@
             (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
             (target "vault")
             (type luks-device-mapping))))
-
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*
