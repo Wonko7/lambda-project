@@ -23,9 +23,10 @@
   #:use-module (wonko crew)
   #:use-module (wonko fleet)
   #:use-module (wonko dotfiles)
-  #:use-module (wonko services xorg)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
+  #:use-module (wonko services kmonad)
+  #:use-module (wonko services xorg)
   #:export (%of-course-i-still-love-you-wonko-home
             %of-course-i-still-love-you-os))
 
@@ -55,34 +56,38 @@
 
 (define %of-course-i-still-love-you-os
   (operating-system
-   (inherit %laptop-os)
-   (host-name "of-course-i-still-love-you")
-   (services (cons* (service slim-service-type wonko-slim-config)
-                    (service guix-home-service-type
-                             `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
-                    %laptop-services))
-   (mapped-devices
-    (list (mapped-device
-           (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
-           (target "vault")
-           (type luks-device-mapping))))
+    (inherit %laptop-os)
+    (host-name "of-course-i-still-love-you")
+    (services
+     (cons*
+      (service slim-service-type wonko-slim-config)
+      (service guix-home-service-type
+               `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      %laptop-services))
+    (mapped-devices
+     (list (mapped-device
+            (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
+            (target "vault")
+            (type luks-device-mapping))))
 
-   (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                             (make-vault-subvolume args mapped-devices))))
-                   (cons*
-                    (file-system
-                      (mount-point "/boot")
-                      (device (uuid "3073-DA9D"
-                                    'fat32))
-                      (type "vfat"))
-                    (file-system
-                      (mount-point "/mnt/vault")
-                      (device "/dev/mapper/vault")
-                      (type "btrfs")
-                      (dependencies mapped-devices))
-                    (append
-                     (make-vault-subvolumes mapped-devices)
-                     %base-file-systems))))))
+    (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                              (make-vault-subvolume args mapped-devices))))
+                    (cons*
+                     (file-system
+                       (mount-point "/boot")
+                       (device (uuid "3073-DA9D"
+                                     'fat32))
+                       (type "vfat"))
+                     (file-system
+                       (mount-point "/mnt/vault")
+                       (device "/dev/mapper/vault")
+                       (type "btrfs")
+                       (dependencies mapped-devices))
+                     (append
+                      (make-vault-subvolumes mapped-devices)
+                      %base-file-systems))))))
 
 %of-course-i-still-love-you-wonko-home
 %of-course-i-still-love-you-os

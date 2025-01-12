@@ -83,11 +83,9 @@
                        (,(crew-name %media) ,%media-station-home)))
             (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
                                                           "# (.)(.)\n#  8==o~~"))
-            (service kmonad-service-type
-                     (kmonad-make-config
-                      "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-                      "keyboard-you-touch-my-tralala"
-                      kmonad-dance-commander-layer))
+            (service kmonad-service-type kmonad-laptop-config)
+            (service kmonad-service-type kmonad-ergodox-config)
+            (service kmonad-service-type kmonad-bullshit-config)
             %laptop-services))
     (mapped-devices
      (list (mapped-device

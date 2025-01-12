@@ -83,11 +83,9 @@
                               `((,(crew-name %tina)  ,%tina-home)
                                 (,(crew-name %wonko) ,%wonko-home)
                                 (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type
-                              (kmonad-make-config
-                               "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-                               "keyboard-you-touch-my-tralala"
-                               kmonad-fr-layer))
+                     (service kmonad-service-type kmonad-fr-laptop-config)
+                     (service kmonad-service-type kmonad-ergodox-config)
+                     (service kmonad-service-type kmonad-bullshit-config)
                      %laptop-services))
     (mapped-devices
      (list (mapped-device

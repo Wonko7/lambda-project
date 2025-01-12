@@ -7,22 +7,29 @@
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
-  #:export (kmonad-service-type
-            kmonad-dance-commander-layer
+  #:export (kmonad-dance-commander-layer
             kmonad-fr-layer
-            kmonad-make-config))
+            kmonad-service-type
+            kmonad-config
+            kmonad-make-config
+            kmonad-laptop-config
+            kmonad-fr-laptop-config
+            kmonad-ergodox-config
+            kmonad-bullshit-config))
 
-(define (kmonad-shepherd-service config-path)
+(define (kmonad-shepherd-service config)
   ;; Tells shepherd how we want it to create a (single) <shepherd-service>
   ;; for kmonad from a string
-  (list (shepherd-service
-         (documentation "Run the kmonad daemon.")
-         (provision '(kmonad))
-         (requirement '(udev user-processes))
-         (start #~(make-forkexec-constructor
-                   (list #$(file-append kmonad "/bin/kmonad")
-                         #$config-path)))
-         (stop #~(make-kill-destructor)))))
+  (let ((id          (first config))
+        (config-path (second config)))
+    (list (shepherd-service
+           (documentation "Run the kmonad daemon.")
+           (provision (list (string->symbol (string-append "kmonad-" id))))
+           (requirement '(udev user-processes))
+           (start #~(make-forkexec-constructor
+                     (list #$(file-append kmonad "/bin/kmonad")
+                           #$config-path)))
+           (stop #~(make-kill-destructor))))))
 
 (define kmonad-service-type
   ;; Extend the shepherd root into a new type of service that takes a single string
@@ -278,7 +285,7 @@
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
-(define (kmonad-make-config input output default-layer)
+(define (kmonad-make-config-file input output default-layer)
   (let ((xkb (if (equal? default-layer kmonad-fr-layer)
                  "fr"
                  "us")))
@@ -308,3 +315,30 @@
              kmonad-xim-symbols-layer
              kmonad-meta-layer
              kmonad-fr-layer))))))
+
+(define (kmonad-config id input default-layer)
+  `(,id
+    ,(kmonad-make-config-file
+      input
+      (string-append "kbd-you-touch-my-tralala-" id)
+      default-layer)))
+
+(define kmonad-laptop-config
+  (kmonad-config "laptop"
+                 "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+                 kmonad-dance-commander-layer))
+
+(define kmonad-fr-laptop-config
+  (kmonad-config "laptop"
+                 "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+                 kmonad-fr-layer))
+
+(define kmonad-ergodox-config
+  (kmonad-config "ergodox"
+                 "/dev/input/by-id/usb-ZSA_Technology_Labs_Ergodox_EZ_9p4oo_6aXwEB-event-kbd"
+                 kmonad-dance-commander-layer))
+
+(define kmonad-bullshit-config
+  (kmonad-config "cheap-bullshit"
+                 "/dev/input/by-id/usb-MOSART_Semi._2.4G_INPUT_DEVICE-event-kbd"
+                 kmonad-fr-layer))
