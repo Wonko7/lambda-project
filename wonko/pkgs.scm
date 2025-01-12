@@ -28,7 +28,7 @@
  ;; tools
  admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls screen
  ;; dev
- android haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
+ android flashing-tools haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
 (define-public %emacs-world
   (list emacs
@@ -429,7 +429,8 @@
 
 (define-public %dev-world
   (list sloccount
-        adb))
+        adb
+        teensy-loader-cli))
 
 (define-public %utils-world
   (list

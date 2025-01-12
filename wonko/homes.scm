@@ -629,23 +629,24 @@
 
 (define-public %skeleton-wonko-home
   (home-environment
-   (packages
-    (append
-     %emacs-world
-     %ocaml-with-opam-world
-     %ocaml-mode-deps
-     %crypto-world
-     %xorg-world
-     %fonts-world
-     %vcs-world
-     (list
-      ;; services
-      picom
-      synergy
-      dunst
-      ;; yes also man pages plz
-      man-db)))
-   (services %skeleton-wonko-services)))
+    (packages
+     (append
+      %emacs-world
+      %ocaml-with-opam-world
+      %ocaml-mode-deps
+      %crypto-world
+      %xorg-world
+      %fonts-world
+      %vcs-world
+      %dev-world
+      (list
+       ;; services
+       picom
+       synergy
+       dunst
+       ;; yes also man pages plz
+       man-db)))
+    (services %skeleton-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vanilla config: just needs x-config
