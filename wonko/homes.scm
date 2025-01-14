@@ -8,6 +8,7 @@
  #:use-module (guix profiles)
  #:use-module (srfi srfi-1)
  #:use-module (srfi srfi-11)
+ #:use-module (ice-9 match)
  ;; fonts
  #:use-module (wonko packages fonts)
  ;; services
@@ -33,7 +34,6 @@
  haskell-apps compression commencement pkg-config base gdb m4 maths man
  ;; services
  matrix wm compton)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; home components
@@ -205,6 +205,16 @@
       "bind '\"jj\":vi-movement-mode'\n"
       "[ -n \"$EAT_SHELL_INTEGRATION_DIR\" ] && source \"$EAT_SHELL_INTEGRATION_DIR/bash\"\n"
       )))))
+
+(define-public %media-bash-config
+  (home-bash-configuration
+   (inherit %wonko-bash-config)
+   (environment-variables
+    (map (match-lambda
+           (("DISPLAY" . l)
+            '("DISPLAY" . ":11"))
+           (x x))
+         %wonko-env))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used
@@ -728,42 +738,21 @@
    (inherit %skeleton-wonko-home)
    (services %highdpi-wonko-services)))
 
-
-(define-public %qwkb-wonko-home
-  (home-environment
-   (inherit %skeleton-wonko-home)
-   (services %highdpi-wonko-services)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; media-station config: just needs x-config
+;; media-station
 
 (define-public %media-station-wonko-services
   (cons*
    (make-xsession #:media-station? #t #:dvorak? #f)
-   %media-station-shepherd-wonko-service
    (append
-    %bare-skeleton-wonko-services
-    %just-vanilla-wonko-services)))
+    %bare-skeleton-wonko-services ;; skeleton svc = this + make xsession
+    (modify-services %just-vanilla-wonko-services
+                     (home-bash-service-type config => %media-bash-config)))))
 
 (define-public %media-station-wonko-home
   (home-environment
    (inherit %skeleton-wonko-home)
    (services %media-station-wonko-services)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; desktop config: just needs x-config
-
-(define-public %desktop-wonko-services
-  (cons*
-   (make-xsession #:dvorak? #f)
-   (append
-    %bare-skeleton-wonko-services
-    %just-vanilla-wonko-services)))
-
-(define-public %desktop-wonko-home
-  (home-environment
-   (inherit %skeleton-wonko-home)
-   (services %desktop-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina

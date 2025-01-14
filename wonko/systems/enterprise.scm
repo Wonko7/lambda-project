@@ -51,58 +51,58 @@
 
 (define %wonko-home
   (home-environment
-    (inherit %vanilla-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %media-station-wonko-services))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %media-station-home
   (home-environment
-    (inherit %media-station-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %media-station-wonko-services))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %enterprise-os
   (operating-system
-    (inherit %media-station-os)
-    (host-name "enterprise")
-    (services (cons* (service slim-service-type wonko-slim-config)
-                     ;; (service slim-service-type (slim-configuration
-                     ;;                             (inherit media-station-slim-config)
-                     ;;                             (auto-login? #t)))
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
-                              `((,(crew-name %wonko) ,%wonko-home)
-                                (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type kmonad-laptop-config)
-                     (service kmonad-service-type kmonad-ergodox-config)
-                     (service kmonad-service-type kmonad-bullshit-config)
-                     %media-station-services))
-    (mapped-devices
-     (list (mapped-device
-            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
-            (target "vault")
-            (type luks-device-mapping))))
+   (inherit %media-station-os)
+   (host-name "enterprise")
+   (services (cons* (service slim-service-type wonko-slim-config)
+                    ;; (service slim-service-type (slim-configuration
+                    ;;                             (inherit media-station-slim-config)
+                    ;;                             (auto-login? #t)))
+                    (service noautostart-slim-service-type media-station-slim-config)
+                    (service guix-home-service-type
+                             `((,(crew-name %wonko) ,%wonko-home)
+                               (,(crew-name %media) ,%media-station-home)))
+                    (service kmonad-service-type kmonad-laptop-config)
+                    (service kmonad-service-type kmonad-ergodox-config)
+                    (service kmonad-service-type kmonad-bullshit-config)
+                    %media-station-services))
+   (mapped-devices
+    (list (mapped-device
+           (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+           (target "vault")
+           (type luks-device-mapping))))
 
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "6C21-E416"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+   (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                             (make-vault-subvolume args mapped-devices))))
+                   (cons*
+                    (file-system
+                     (mount-point "/boot")
+                     (device (uuid "6C21-E416"
+                                   'fat32))
+                     (type "vfat"))
+                    (file-system
+                     (mount-point "/mnt/vault")
+                     (device "/dev/mapper/vault")
+                     (type "btrfs")
+                     (dependencies mapped-devices))
+                    (append
+                     (make-vault-subvolumes mapped-devices)
+                     %base-file-systems))))))
 
 %wonko-home
 %enterprise-os
