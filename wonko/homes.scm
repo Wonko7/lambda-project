@@ -246,11 +246,8 @@
    (shepherd-service
     (provision '(guix-repl))
     (start #~(make-forkexec-constructor
-              (list
-               "/home/wonko/.config/guix/current/bin/guix" "repl"
-               "--listen=tcp:37146"
-               "-L/code/nonguix"
-               "-L/code/w7-guix-channel")
+              (list ;; a case could be made for /run/current-system/profile/bin/guix
+               "/home/wonko/.config/guix/current/bin/guix" "repl" "--listen=tcp:37146")
               #:environment-variables '("INSIDE_EMACS=1")
               #:log-file "herd-logs/guix-repl.log"))
     (stop #~(make-kill-destructor))
