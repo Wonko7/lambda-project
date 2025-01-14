@@ -221,6 +221,11 @@
 (general-evil-define-key '(normal insert visual) minibuffer-mode-map ;; not sure about best place for this
   "C-b"        #'embark-become)
 
+;; WTF: both this & the exwm mapping are needed for this to work.
+(general-evil-define-key '(normal insert visual global emacs) exwm-mode-map
+  (kbd "C-SPC") #'my/force-main-menu)
+
+
 ;; (general-evil-define-key '(normal insert visual) embark-collect-mode-map
 ;;   "C-k"        #'next line + embark default live buffer action
 ;;   "C-j"        #'minibuffer-next-prompt

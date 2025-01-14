@@ -38,7 +38,7 @@
 (require 'exwm-edit)
 ;; (require 'exwm-modeline)
 ;; (require 'exwm-firefox)
-(require 'exwm-mff)
+;; (require 'exwm-mff)
 
 (setq exwm-input-prefix-keys
       `(?\s-i
@@ -74,6 +74,12 @@
       (progn
         (my/set-workspace-window-configuration)
         (delete-other-windows)))))
+
+(defun my/force-main-menu ()
+  (interactive)
+  (exwm-layout-unset-fullscreen exwm--id)
+  (set-transient-map evil-leader--default-map)
+  (which-key-show-keymap 'evil-leader--default-map t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc functions, should move this?
@@ -232,6 +238,9 @@
                      (interactive (list (read-shell-command "$ ")))
                      (start-process-shell-command command nil command)))
         ([?\s-y] . ws/force-run-auto-start)
+
+        ([?\s-\C-\ ] . my/force-main-menu)
+        ([?\C-\ ] . my/force-main-menu) ;; => see keys.el exwm-mode-map.
 
         ;; Switch workspace
         ([?\s-w] . exwm-workspace-switch)
