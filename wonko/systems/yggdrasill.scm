@@ -57,11 +57,11 @@
 
 (define %media-station-home
   (home-environment
-   (inherit %media-station-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %media-station-wonko-services))))
+    (inherit %vanilla-media-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-wonko-services))))
 
 (define %yggdrasill-os
   (operating-system
@@ -82,7 +82,6 @@
             (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
             (target "vault")
             (type luks-device-mapping))))
-
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*

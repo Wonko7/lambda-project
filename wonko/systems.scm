@@ -227,36 +227,37 @@
    (service (make-extra-profile-service-type "web")     %web-world)
    (service (make-extra-profile-service-type "img")     %image-edition-world)
 
-   (modify-services %desktop-services
-     (delete gdm-service-type)
-     (console-font-service-type config => ;; TODO: separate services for highdpi?
-                                (map (lambda (tty)
-                                       `(,tty
-                                         . ,(file-append font-terminus
-                                                         "/share/consolefonts/ter-132n")))
-                                     '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
-     (elogind-service-type config =>
-                           (elogind-configuration
-                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                            (handle-lid-switch 'suspend)
-                            (handle-lid-switch-docked  'suspend)
-                            (handle-lid-switch-external-power 'suspend)))
-     (guix-service-type config =>
-                        (guix-configuration
-                         (discover? #t)
-                         (channels %channels)
-                         (guix (guix-for-channels %channels))
-                         (substitute-urls
-                          (cons* "https://substitutes.nonguix.org"
-                                 %default-substitute-urls))
-                         (authorized-keys
-                          (append
-                           (map (lambda (hn)
-                                  (local-file
-                                   (string-append %lambda-project
-                                                  "/wonko/data/substitutes/" hn ".pub")))
-                                (cons "nonguix" %fleet-names))
-                           %default-authorized-guix-keys)))))))
+   (modify-services
+    %desktop-services
+    (delete gdm-service-type)
+    (console-font-service-type config => ;; TODO: separate services for highdpi?
+                               (map (lambda (tty)
+                                      `(,tty
+                                        . ,(file-append font-terminus
+                                                        "/share/consolefonts/ter-132n")))
+                                    '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
+    (elogind-service-type config =>
+                          (elogind-configuration
+                           (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                           (handle-lid-switch 'suspend)
+                           (handle-lid-switch-docked  'suspend)
+                           (handle-lid-switch-external-power 'suspend)))
+    (guix-service-type config =>
+                       (guix-configuration
+                        (discover? #t)
+                        (channels %channels)
+                        (guix (guix-for-channels %channels))
+                        (substitute-urls
+                         (cons* "https://substitutes.nonguix.org"
+                                %default-substitute-urls))
+                        (authorized-keys
+                         (append
+                          (map (lambda (hn)
+                                 (local-file
+                                  (string-append %lambda-project
+                                                 "/wonko/data/substitutes/" hn ".pub")))
+                               (cons "nonguix" %fleet-names))
+                          %default-authorized-guix-keys)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop-os and declinations
