@@ -187,6 +187,10 @@
   (setq org-roam-completion-everywhere t)
   (org-roam-db-autosync-mode))
 
+(use-package org-roam-dailies
+  ;; :defer t
+  :after org)
+
 (use-package consult-org-roam
   ;; :defer t
   :after org-roam
