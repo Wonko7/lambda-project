@@ -358,6 +358,7 @@
 (define-public %fonts-world
   (list font-jetbrains-mono
         ;; font-nerd-noto
+        font-google-roboto-mono
         font-nerd-symbols
         font-goog-noto-emoji))
 

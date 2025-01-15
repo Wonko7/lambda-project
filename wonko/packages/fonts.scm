@@ -79,3 +79,37 @@ of glyphs (icons). Specifically to add a high number of extra glyphs
 from popular ‘iconic fonts’ such as Font Awesome, Devicons, Octicons,
 and others.")
     (license (@ (guix licenses) expat))))
+
+(define-public font-google-roboto-mono
+  (package
+    (name "font-google-roboto-mono")
+    (version "2.136")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/googlefonts/RobotoMono")
+                    (commit "8f651634e746da6df6c2c0be73255721d24f2372")))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "00ddmr7yvb9isakfvgv6g74m80fmg81dmh1hrrdyswapaa7858a5"))))
+    (build-system font-build-system)
+    (home-page "https://github.com/googlefonts/RobotoMono")
+    (synopsis "Monospaced Roboto font")
+    (description
+     "Roboto Mono is a monospaced addition to the Roboto type family.
+Like the other members of the Roboto family, the fonts are optimized for readability
+on screens across a wide variety of devices and reading environments. While the
+monospaced version is related to its variable width cousin, it doesn’t hesitate to
+change forms to better fit the constraints of a monospaced environment. For example,
+narrow glyphs like ‘I’, ‘l’ and ‘i’ have added serifs for more even texture while
+wider glyphs are adjusted for weight. Curved caps like ‘C’ and ‘O’ take on the
+straighter sides from Roboto Condensed. Special consideration is given to glyphs
+important for reading and writing software source code. Letters with similar shapes
+are easy to tell apart. Digit ‘1’, lowercase ‘l’ and capital ‘I’ are easily
+differentiated as are zero and the letter ‘O’. Punctuation important for code has
+also been considered. For example, the curly braces ‘{ }’ have exaggerated points
+to clearly differentiate them from parenthesis ‘( )’ and braces ‘[ ]’. Periods and
+commas are also exaggerated to identify them more quickly. The scale and weight of
+symbols commonly used as operators have also been optimized.")
+    (license (@ (guix licenses) asl2.0))))
