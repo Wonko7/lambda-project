@@ -43,6 +43,7 @@
 (define* (make-emacs-values-service #:key
                                     (font-size                          120)
                                     (modeline-height                    40)
+                                    (theme                              "doom-laserwave")
                                     (tag-height                         0.95)
                                     (tag-font-size                      11)
                                     (tag-radius                         10)
@@ -50,34 +51,35 @@
                                     (org-agenda-tags-column             78)
                                     (org-habit-preceding-days           43)
                                     (window-divider-default-right-width 2))
-   (simple-service
-    'emacsd-generated-config-files
-    home-files-service-type
-    (list
-     `(".emacs.d/generated-values.el"
-       ,(scheme-file
-         "emacs_values_el"
-         #~(progn
-            (setq
-             my/font-size                            #$font-size
-             my/modeline-height                      #$modeline-height
-             my/tag-height                           #$tag-height
-             my/tag-font-size                        #$tag-font-size
-             my/tag-radius                           #$tag-radius
-             my/tag-padding                          #$tag-padding
-             my/org-agenda-tags-column               #$org-agenda-tags-column
-             my/org-habit-preceding-days             #$org-habit-preceding-days
-             my/window-divider-default-right-width   #$window-divider-default-right-width
-             my/font           #$%font
-             my/lambda-project #$%lambda-project
-             my/term-cmd       #$%term-cmd
-             my/lock-cmd       #$(apply
-                                  string-append
-                                  (concatenate
-                                   ((@ (srfi srfi-1) zip)
-                                    %lock-cmd
-                                    (circular-list " ")))))
-            (provide 'conf/generated-values)))))))
+  (simple-service
+   'emacsd-generated-config-files
+   home-files-service-type
+   (list
+    `(".emacs.d/generated-values.el"
+      ,(scheme-file
+        "emacs_values_el"
+        #~(progn
+           (setq
+            my/theme                                #$theme
+            my/font-size                            #$font-size
+            my/modeline-height                      #$modeline-height
+            my/tag-height                           #$tag-height
+            my/tag-font-size                        #$tag-font-size
+            my/tag-radius                           #$tag-radius
+            my/tag-padding                          #$tag-padding
+            my/org-agenda-tags-column               #$org-agenda-tags-column
+            my/org-habit-preceding-days             #$org-habit-preceding-days
+            my/window-divider-default-right-width   #$window-divider-default-right-width
+            my/font           #$%font
+            my/lambda-project #$%lambda-project
+            my/term-cmd       #$%term-cmd
+            my/lock-cmd       #$(apply
+                                 string-append
+                                 (concatenate
+                                  ((@ (srfi srfi-1) zip)
+                                   %lock-cmd
+                                   (circular-list " ")))))
+           (provide 'conf/generated-values)))))))
 
 (define-public %vanilla-emacs-values-service
   (make-emacs-values-service))
