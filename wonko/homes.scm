@@ -577,6 +577,11 @@
                                    "-" branch))))))))))
 
    (simple-service
+    'home-run-folder home-run-on-first-login-service-type
+    #~(let ((mkdir #$(file-append coreutils "/bin/mkdir")))
+        (system (string-append mkdir " -p ~/.run/emacs/ ~/.run/log/"))))
+
+   (simple-service
     'secrets-scripts
     home-files-service-type
     `(("local/bin/secrets-backup"
