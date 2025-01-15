@@ -96,6 +96,10 @@
    #:org-habit-preceding-days           47
    #:window-divider-default-right-width 5))
 
+(define-public %media-emacs-values-service
+  (make-emacs-values-service #:font-size 240
+                             #:theme "doom-outrun-electric"))
+
 (define %aliases
   `(("g"     . "git")
     ("psrg"  . "ps aux | rg -M0")
@@ -212,11 +216,13 @@
   (home-bash-configuration
    (inherit %wonko-bash-config)
    (environment-variables
-    (map (match-lambda
-           (("DISPLAY" . l)
-            '("DISPLAY" . ":11"))
-           (x x))
-         %wonko-env))))
+    (append (map (match-lambda
+                   (("DISPLAY" . l)
+                    '("DISPLAY" . ":11"))
+                   (x x))
+                 %wonko-env)
+            '(("GDK_SCALE" . "3")
+              ("QT_SCALE_FACTOR" . "3"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used
@@ -316,9 +322,7 @@
       %common-shepherd-wonko-services)))))
 
 (define* (make-xsession #:key
-                        (xmodmap? #f) ;; deprecated
-                        (media-station? #f)
-                        (dvorak? #f))
+                        (media-station? #f))
   (simple-service
    'xsession
    home-files-service-type
@@ -335,17 +339,9 @@
               #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
               #$xrdb "/bin/xrdb -load ~/.Xresources;"
               "~/.x-config;"
-              #$(if dvorak?
-                    #~(string-append #$setxkbmap "/bin/setxkbmap dvorak;")
-                    "")
               #$(if media-station?
                     #~(string-append #$xset "/bin/xset s off -dpms;")
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
-              #$(if xmodmap?
-                    #~(string-append
-                       #$xmodmap "/bin/xmodmap ~/.config/x-config/common.xmodmap;"
-                       #$xmodmap "/bin/xmodmap ~/.config/x-config/ship.xmodmap;")
-                    "")
               "exec " #$dbus "/bin/dbus-launch --exit-with-session "
               #$emacs-exwm "/bin/exwm"))))))))
 
@@ -709,6 +705,7 @@
 (define-public %highdpi-wonko-services
   (cons*
    %highdpi-emacs-values-service
+   %vanilla-shepherd-wonko-service
    (service
     home-bash-service-type
     (home-bash-configuration
@@ -736,29 +733,46 @@
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 8 175)))))
-   %vanilla-shepherd-wonko-service
    %skeleton-wonko-services))
 
 (define-public %highdpi-wonko-home
   (home-environment
-   (inherit %skeleton-wonko-home)
-   (services %highdpi-wonko-services)))
+    (inherit %skeleton-wonko-home)
+    (services %highdpi-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; media-station
 
 (define-public %media-station-wonko-services
   (cons*
-   (make-xsession #:media-station? #t #:dvorak? #f)
-   (append
-    %bare-skeleton-wonko-services ;; skeleton svc = this + make xsession
-    (modify-services %just-vanilla-wonko-services
-                     (home-bash-service-type config => %media-bash-config)))))
+   (make-xsession #:media-station? #t)
+   %media-emacs-values-service
+   %media-station-shepherd-wonko-service
+   (service home-bash-service-type %media-bash-config)
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".config/feh/themes"
+       ,(let ((fsz "30"))
+          (mixed-text-file
+           "feh_symlink_name_is_theme_name"
+           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+           " --menu-font JetBrainsMono-Regular/" fsz
+           " --font JetBrainsMono-Regular/" fsz "\n")))
+      (".Xresources"
+       ,(plain-file "Xresources" (xresources-configuration %font 20)))
+      (".config/picom/picom.conf"
+       ,(plain-file "picom.conf" (picom-configuration 10)))
+      (".config/dunst/dunstrc"
+       ,(plain-file "dunstrc"
+                    (dunst-configuration %font 12 300)))))
+   %bare-skeleton-wonko-services))
 
 (define-public %media-station-wonko-home
   (home-environment
-   (inherit %skeleton-wonko-home)
-   (services %media-station-wonko-services)))
+    (inherit %skeleton-wonko-home)
+    (services %media-station-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina
