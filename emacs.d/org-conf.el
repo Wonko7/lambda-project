@@ -399,12 +399,9 @@
         ("mt" "tv bookmark" entry
          ,(string-join '("* 📺 %? :bm:tv:\n"
                          "#+begin_src shell :dir "
-                         "/ssh:wonko@enterprise.local:/mnt/trantor/media " ;; FIXME: media-center.local?
+                         "/ssh:media@enterprise.local:/mnt/trantor/media " ;; FIXME: media-center.local?
                          ":results value output\n"
                          "  (mpv --slang=eng */*s01e01* &)\n"
-                         "  # GDK_SCALE=3 QT_SCALE_FACTOR=3\n"
-                         "  # (GDK_SCALE=3 /home/wonko/.guix-extra-profiles/web/bin/transmission-gtk&)\n"
-                         "  # (QT_SCALE_FACTOR=3 vlc The*Village* &)\n"
                          "#+end_src\n"))
          :jump-to-captured t
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
