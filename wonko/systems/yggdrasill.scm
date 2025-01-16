@@ -57,7 +57,7 @@
 
 (define %media-station-home
   (home-environment
-    (inherit %vanilla-media-home)
+    (inherit %media-station-wonko-home)
     (services
      (append
       machine-home-services

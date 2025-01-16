@@ -59,11 +59,11 @@
 
 (define %media-station-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %media-station-wonko-services))))
+    (inherit %media-station-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-wonko-services))))
 
 (define %enterprise-os
   (operating-system
