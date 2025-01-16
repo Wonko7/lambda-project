@@ -21,6 +21,8 @@
 
 (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
 (add-hook 'scheme-mode-hook #'evil-cleverparens-mode)
+(add-hook 'scheme-mode-hook #'guix-devel-mode)
+(add-hook 'scheme-mode-hook #'geiser-mode)
 
 (use-package aggressive-indent
   :init
