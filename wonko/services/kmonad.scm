@@ -137,17 +137,19 @@
     (defalias SA  (layer-toggle symbols))
     (defalias SYS (layer-next system))
     (defalias Tsy (layer-toggle symbols))
-    (defalias SDV (layer-switch dvorak-num-mod))
+    (defalias SDV (layer-switch dvorak-some-bullshit))
     (defalias SDC (layer-switch dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
-    (defalias XDV #((cmd-button ,(setxkb "us")) (layer-switch dvorak-num-mod)))
+    (defalias XDV #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
     (defalias XDC #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
     (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
     (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
     (defalias LLL (layer-next meta))
     (defalias shV (tap-hold-next-release 200 @SDV lsft))
-    (defalias shC (tap-hold-next-release 200 @SDC lsft))))
+    (defalias shC (tap-hold-next-release 200 @SDC lsft))
+    (defalias mtV (tap-hold-next-release 200 @SDV lmet))
+    (defalias mtC (tap-hold-next-release 200 @SDC lmet))))
 
 (define kmonad-numrow-modifier-aliases
   '((defalias c1 (tap-hold-next-release 200 1 lctl))
@@ -201,7 +203,7 @@
      tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
      @shV @Smc q    j    k    x    b    m    w    v    @Sz  @shV                 up
-     @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     @SA  @Tsy @mtV           spc            @mtV ralt cmp  @Tsy            left down rght))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
@@ -212,14 +214,14 @@
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
      @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
-(define kmonad-dvorak-nummod-layer
-  '(deflayer dvorak-num-mod
+(define kmonad-dvorak-some-bullshit-layer
+  '(deflayer dvorak-some-bullshit
      @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  @c1  @S2  @m3  @W4  @W5  @W6  @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      @shC @smc q    j    k    x    b    m    w    v    z    @shC                 up
-     @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     @SA  @Tsy @mtC           spc            @mtC ralt cmp  @Tsy            left down rght))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
@@ -308,7 +310,7 @@
        (list default-layer
              kmonad-dance-commander-layer
              kmonad-dvorak-no-bullshit-layer
-             kmonad-dvorak-nummod-layer
+             kmonad-dvorak-some-bullshit-layer
              kmonad-whitespace-layer
              kmonad-symbols-layer
              kmonad-system-layer
