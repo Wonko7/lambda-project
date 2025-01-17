@@ -225,6 +225,7 @@
         emacs-perspective
         emacs-persp-mode
         emacs-lemon
+        emacs-window-layout
         emacs-ace-window
         emacs-ace-link      ;; FIXME
         emacs-ace-jump-mode ;; FIXME

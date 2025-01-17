@@ -92,8 +92,144 @@
   (setq aw-char-position 'top-left)
   (setq aw-scope 'frame))
 
-
 ;; (require 'ace-link)
+
+(use-package window-layout
+  )
+
+(defvar ws/current-layout (-repeat exwm-workspace-number nil))
+
+;; (plist-get '(:name code :buffer "init.el") ':name)
+
+(setq ws/layouts
+      `(( :layout code3
+          :recipe (-
+                   (:upper-size-ratio 0.8)
+                   (| (:left-size-ratio 0.5)
+                      code
+                      magit)
+                   shell)
+          :buffers ((:name code  :buffer "init.el")
+                    (:name magit ;;:buffer-f (filter-project-buffs "magit")
+                           :buffer "magit")
+                    (:name shell ;; :buffer-f (filter-project-buffs "*shell")
+                           :buffer "*shell")))))
+
+;; (defun)
+(defun ws/set-layout ()
+  (interactive)
+  (let* ((layouts     (mapcar (lambda (lo)
+                                (plist-get lo ':layout))
+                              ws/layouts))
+         (layout-name (consult--read
+                       (mapcar #'symbol-name layouts)
+                       :prompt "layout?"
+                       :sort nil
+                       :require-match t))
+         (layout       (first (-filter (lambda (lo)
+                                         (string= layout-name (plist-get lo ':layout)))
+                                       ws/layouts))))
+    (setf (nth exwm-workspace-current-index ws/current-layout)
+          (list layout
+                (wlf:layout (plist-get layout ':recipe)
+                            (plist-get layout ':buffers))))))
+
+(defun ws/toggle-buffer ()
+  (interactive)
+  (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
+         (layout (first lo))
+         (wm     (second lo))
+         (buffs  (mapcar (lambda (bi)
+                           (plist-get bi ':name))
+                         (plist-get layout ':buffers)))
+         (bn     (consult--read
+                  (mapcar #'symbol-name buffs)
+                  :prompt "buffer?"
+                  :sort nil
+                  :require-match t)))
+    (wlf:toggle wm (intern bn))))
+
+(setq wm
+      (wlf:layout
+       '(-
+         (:upper-size-ratio 0.8)
+         (| (:left-size-ratio 0.5)
+            code
+            magit)
+         shell)
+       `((:name code :buffer "init.el")
+         (:name magit
+                :buffer ,(filter-project-buffs "magit"))
+         (:name shell
+                :buffer ,(filter-project-buffs "*shell")))))
+
+(wlf:toggle wm 'shell)
+(wlf:select wm 'shell)
+
+(setq wm
+      (wlf:layout
+       '(|
+         (:left-size-ratio 0.3)
+         shell
+         (| (:left-size-ratio 0.5)
+            code
+            magit))
+       `((:name code :buffer "init.el")
+         (:name magit
+                :buffer ,(filter-project-buffs "magit"))
+         (:name shell
+                :buffer ,(filter-project-buffs "*shell")))))
+
+(setq wm
+      (wlf:layout
+       '(|
+         (:left-size-ratio 0.3)
+         (-
+          (:upper-size-ratio 0.3)
+          c
+          (-
+           (:upper-size-ratio 0.5)
+           a
+           b))
+         (| (:left-size-ratio 0.5)
+            (-
+             (:upper-size-ratio 0.3)
+             f
+             (-
+              (:upper-size-ratio 0.5)
+              d
+              e))
+            (-
+             (:upper-size-ratio 0.3)
+             i
+             (-
+              (:upper-size-ratio 0.5)
+              g
+              h))))
+       (mapcar
+        (lambda (ab)
+          (let ((a (car ab))
+                (b (cdr ab)))
+            `(:name ,a :buffer ,b)))
+        (-zip '(a b c d e f g h i) (projectile-project-buffers)))))
+
+(mapcar
+ (lambda (ab)
+   (let ((a (car ab))
+         (b (cdr ab)))
+     `(:name ,a :buffer ,b)))
+ (-zip '(a b c d e f g h i) (projectile-project-buffers)))
+
+(mapcar
+ #'buffer-name
+ (projectile-project-buffers))
+
+(defun filter-project-buffs (name)
+  (first (-filter (lambda (b)
+                    (string-prefix-p name (buffer-name b)))
+                  (projectile-project-buffers))))
+
+(filter-project-buffs "magit")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auth/pass
