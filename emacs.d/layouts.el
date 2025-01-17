@@ -39,11 +39,7 @@
                           topr
                           botr))
             :buffers-f (let* ((pr (projectile-acquire-root))
-                              (rm (consult--read
-                                   (remove "" (string-split (shell-command-to-string "cat /etc/hosts | cut -d\\\t -f2 | grep -v localhost") "\n"))
-                                   :prompt "choose ship from fleet: "
-                                   :sort nil
-                                   :require-match t))
+                              (rm (my/choose-remote-from-fleet))
                               (rpr (concat "/ssh:" rm ":" pr)))
                          `((:name topl :buffer-f (magit-status ,pr))
                            (:name topr :buffer-f (magit-status ,rpr))
@@ -98,7 +94,7 @@
                                 ws/layouts))
            (layout-name (consult--read
                          (mapcar #'symbol-name layouts)
-                         :prompt "layout?"
+                         :prompt "layout? "
                          :sort nil
                          :require-match t))
            (layout       (first (-filter (lambda (lo)
@@ -132,7 +128,7 @@
                            (plist-get layout ':buffers)))
            (bn     (consult--read
                     (mapcar #'symbol-name buffs)
-                    :prompt "buffer?"
+                    :prompt "buffer? "
                     :sort nil
                     :require-match t)))
       (wlf:toggle wm (intern bn))))
