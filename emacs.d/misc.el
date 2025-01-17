@@ -113,6 +113,11 @@
 
 ;;                     )
 
-
+(defun my/choose-remote-from-fleet ()
+  (consult--read
+   (remove "" (string-split (shell-command-to-string "cat /etc/hosts | cut -d\\\t -f2 | grep -v localhost") "\n"))
+   :prompt "choose ship from fleet: "
+   :sort nil
+   :require-match t))
 
 (provide 'conf/misc)
