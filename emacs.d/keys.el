@@ -177,6 +177,10 @@
   "wx" #'ace-swap-window
   "ws" #'switch-window-then-swap-buffer
   "wo" #'other-window
+  ;; layouts
+  "ll" #'ws/set-layout
+  "lt" #'ws/toggle-buffer
+
   "zai" #'gptel-send
   "zl"  #'scroll-lock-mode
   "z''" (lambda () (interactive) (async-shell-command "dunstctl set-paused toggle"))
