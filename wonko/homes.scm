@@ -372,6 +372,7 @@
                       "fancy.el"
                       "early-init.el"
                       "init.el"
+                      "layouts.el"
                       "lisp-dev.el"
                       "keys.el"
                       "misc.el"
