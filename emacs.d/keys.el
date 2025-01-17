@@ -105,15 +105,13 @@
   "pa"  #'projectile-add-known-project
   "pF"  #'(lambda ()
             (interactive)
-            (let ((remote (consult--read
-                           (remove "" (string-split (shell-command-to-string "cat /etc/hosts | cut -d\\\t -f2 | grep -v localhost") "\n"))
-                           :prompt "choose ship from fleet: "
-                           :sort nil
-                           :require-match t)))
+            (let* ((remote (my/choose-remote-from-fleet))
+                   (fp     (or (buffer-file-name)
+                               default-directory)))
               (find-file
                (read-file-name
                 "Find TRAMP file: "
-                (concat "/ssh:" remote ":" default-directory)))))
+                (concat "/ssh:" remote ":" fp)))))
   "pf"  #'projectile-find-file
   "p'"  #'projectile-find-file
   "pgf" #'projectile-find-file-dwim
