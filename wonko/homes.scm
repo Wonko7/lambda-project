@@ -340,7 +340,7 @@
               #$(if media-station?
                     #~(string-append #$xset "/bin/xset s off -dpms;")
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
-              "exec " #$dbus "/bin/dbus-launch --exit-with-session "
+              ;; #$emacs-exwm-custom-emacs
               #$emacs-exwm "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
