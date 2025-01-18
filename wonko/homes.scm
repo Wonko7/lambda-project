@@ -778,19 +778,19 @@
 
 (define-public %tina-home
   (home-environment
-   (services
-    (list
-     (simple-service 'x-config-files
-                     home-files-service-type
-                     `((".xsession"
-                        ,(program-file
-                          "xsession"
-                          #~(system #$(file-append xfce "/bin/startxfce4"))))))))
-   (packages
-    (append
-     %fonts-world
-     %xfce-world
-     %web-world
+    (services
      (list
-      pavucontrol
-      man-db)))))
+      (simple-service 'x-config-files
+                      home-files-service-type
+                      `((".xsession"
+                         ,(program-file
+                           "xsession"
+                           #~(system #$(file-append xfce "/bin/startxfce4"))))))))
+    (packages
+     (append
+      %fonts-world
+      %xfce-world
+      %web-world
+      (list
+       pavucontrol
+       man-db)))))
