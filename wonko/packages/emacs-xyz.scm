@@ -5,6 +5,7 @@
   #:use-module (guix bzr-download)
   #:use-module (guix gexp)
   #:use-module (guix i18n)
+  #:use-module (guix utils)
   #:use-module (guix git-download)
   #:use-module (guix hg-download)
   #:use-module (guix build-system gnu)
@@ -15,7 +16,13 @@
   #:use-module (guix build-system perl)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages)
+  #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
+  ;; (for emacs x-toolkits experiments
+  #:use-module (gnu packages xorg)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages lesstif)
+  ;; )
   #:use-module (wonko packages office)
   #:use-module (guix utils)
   #:use-module (srfi srfi-1)
@@ -257,3 +264,29 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (synopsis "")
     (description "")
     (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-exwm-custom-emacs ;; use this in homes.scm's xsession.
+  (package
+    (inherit emacs-exwm)
+    (name "emacs-exwm-next")
+    (arguments
+     (substitute-keyword-arguments (package-arguments emacs-exwm)
+       ((#:emacs _ #f) (package
+                         (inherit emacs)
+                         (inputs (modify-inputs (package-inputs emacs)
+                                   (prepend gtk+-2 libxaw motif)))
+                         (arguments
+                          (substitute-keyword-arguments (package-arguments emacs)
+                            ((#:configure-flags flags #~'())
+                             ;; tried a lot of variations, could not get alpha-background
+                             ;; to work with exwm
+                             #~`("--with-x-toolkit=athena"
+                                 ;; gtk, gtk2, gtk3, lucid or athena, motif, no
+                                 ;; tried: gtk, gtk2, gtk3, athena, motif, no
+                                 "--without-cairo"
+                                 ;; "--with-cairo-xcb"
+                                 ;; "--with-x"
+                                 "--without-toolkit-scroll-bars"
+                                 ;; ,@#$flags
+                                 ,@(fold delete #$flags '("--with-cairo"))
+                                 ))))))))))
