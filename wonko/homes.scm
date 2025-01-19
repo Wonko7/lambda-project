@@ -232,7 +232,8 @@
    (shepherd-service
     (provision '(picom))
     (start #~(make-forkexec-constructor
-              (list #$(file-append picom "/bin/picom"))
+              (list #$(file-append picom "/bin/picom")
+                    "--opacity-rule=10:name *= 'oneko'")
               #:log-file #$(string-append %log-root "picom.log")))
     (stop #~(make-kill-destructor))
     (documentation "bling"))
@@ -680,8 +681,6 @@
            " --font JetBrainsMono-Regular/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 10)))
-      (".config/picom/picom.conf"
-       ,(plain-file "picom.conf" (picom-configuration 10)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 12 300)))))))
@@ -727,8 +726,6 @@
            " --font JetBrainsMono-Regular/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 10)))
-      (".config/picom/picom.conf"
-       ,(plain-file "picom.conf" (picom-configuration 25)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 8 175)))))
@@ -761,8 +758,6 @@
            " --font JetBrainsMono-Regular/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 20)))
-      (".config/picom/picom.conf"
-       ,(plain-file "picom.conf" (picom-configuration 10)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
                     (dunst-configuration %font 12 300)))))
