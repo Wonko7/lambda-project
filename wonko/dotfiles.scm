@@ -5,8 +5,7 @@
   #:use-module (ice-9 textual-ports)
   #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)
-  #:use-module (srfi srfi-11)
-  #:export (cmd+arg->script))
+  #:use-module (srfi srfi-11))
 
 (define (field-replace key value file)
   (regexp-substitute/global #f key file
@@ -87,17 +86,3 @@
       #~(begin
           #$(manifest->code
              (packages->manifest ps))))))
-
-(define-macro (cmd+arg->script cmds)
-  (let ((cmds (eval cmds (current-module))))
-    `(gexp
-      (system
-       (string-append
-        ,@(map (lambda (command)
-                 (let-values (((cmd args) (car+cdr command)))
-                   (cond ((gexp? cmd)   `(string-append (ungexp ,cmd) " " ,args "; "))
-                         ((string? cmd) `(string-append ,cmd  " " ,args "; "))
-                         (#t            `(string-append (ungexp ,cmd) "/bin/"
-                                                        ,(symbol->string cmd) " "
-                                                        ,args "; ")))))
-               cmds))))))
