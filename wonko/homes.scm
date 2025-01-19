@@ -449,7 +449,7 @@
                     (lambda (file)
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
-                          (string-append %lambda-project "/guix/config/" file))))
+                          (string-append %lambda-project "/misc/guix-config/" file))))
                     '("shell-authorized-directories")))
 
    (simple-service 'guix-manifests
