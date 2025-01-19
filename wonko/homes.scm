@@ -434,9 +434,6 @@
       (".XCompose"
        ,(local-file
          (string-append %lambda-project "/misc/XCompose")))
-      ;; (".config/x-config/common.xmodmap"
-      ;;  ,(local-file
-      ;;    (string-append %lambda-project "/misc/common.xmodmap")))
       (".config/pantalaimon/pantalaimon.conf"
        ,(local-file
          (string-append %lambda-project "/misc/pantalaimon.conf")))
