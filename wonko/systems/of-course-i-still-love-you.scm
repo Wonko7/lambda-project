@@ -44,11 +44,11 @@
 
 (define %of-course-i-still-love-you-wonko-home
   (home-environment
-    (inherit %vanilla-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %vanilla-wonko-services))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %vanilla-wonko-services))))
 
 (define %of-course-i-still-love-you-os
   (operating-system
