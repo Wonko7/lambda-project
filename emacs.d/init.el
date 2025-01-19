@@ -102,6 +102,8 @@
 (use-package pass
   :defer t)
 
+(setq password-store-time-before-clipboard-restore 5)
+
 (require 'pinentry)
 (setq epg-pinentry-mode 'loopback)
 (pinentry-start)
