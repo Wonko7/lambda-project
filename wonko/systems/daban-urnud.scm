@@ -41,6 +41,7 @@
          "x-config"
          #~(system
             (string-append
+             #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"
              #$xinput "/bin/xinput"
              " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
              #$xinput "/bin/xinput"

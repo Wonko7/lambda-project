@@ -36,13 +36,11 @@
    (simple-service
     'config-files
     home-files-service-type
-    `((".config/x-config/ship.xmodmap"
-       ,(local-file
-         (string-append %lambda-project "/misc/enterprise.xmodmap")))
-      (".x-config"
+    `((".x-config"
        ,(program-file
          "x-config"
          #~(string-append
+            #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"
             #$xrandr "/bin/xrandr --dpi 96;"
             #$xinput "/bin/xinput"
             " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"

@@ -40,7 +40,9 @@
     `((".x-config"
        ,(program-file
          "x-config"
-         #~(system "echo lol")))))))
+         #~(system
+            (string-append
+             #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"))))))))
 
 (define %of-course-i-still-love-you-wonko-home
   (home-environment

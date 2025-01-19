@@ -41,6 +41,7 @@
          "x-config"
          #~(system
             (string-append
+             #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"
              #$xrandr "/bin/xrandr --dpi 288;"
              #$xinput "/bin/xinput"
              " set-prop 'DELL07E6:00 06CB:76AF Touchpad' 'libinput Click Method Enabled' 0 1;"
