@@ -692,8 +692,8 @@
    (simple-service 'highdpi-bash home-bash-service-type
                    (home-bash-extension
                     (environment-variables
-                     '(("GDK_SCALE" . "2")
-                       ("GDK_DPI_SCALE" . "1.5")))))
+                     '(("GDK_SCALE" . "3")
+                       ("QT_SCALE_FACTOR" . "3")))))
    (simple-service
     'config-files
     home-files-service-type
