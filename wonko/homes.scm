@@ -267,7 +267,8 @@
        (provision '(synergy))
        (start #~(make-forkexec-constructor
                  (list #$(file-append synergy "/bin/synergy"))
-                 #:environment-variables '("QT_SCALE_FACTOR=1")
+                 #:environment-variables (cons "QT_SCALE_FACTOR=1"
+                                               (default-environment-variables))
                  #:log-file #$(string-append %home-log-root "synergy.log")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
