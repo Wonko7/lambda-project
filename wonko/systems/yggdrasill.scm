@@ -29,7 +29,7 @@
   #:use-module (wonko services kmonad)
   #:export (%yggdrasill-os))
 
-(use-package-modules xorg)
+(use-package-modules xorg kde)
 
 (define machine-home-services
   (list
@@ -50,11 +50,25 @@
 
 (define %wonko-home
   (home-environment
-   (inherit %highdpi-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %highdpi-wonko-services))))
+    (inherit %highdpi-wonko-home)
+    (services
+     (cons*
+      (simple-service
+       'yggdrasill-shepherd home-shepherd-service-type
+       (list
+        (shepherd-service
+         (provision '(kdeconnectd))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append kdeconnect "/bin/kdeconnectd"))
+                   #:log-file #$(string-append %home-log-root "kdeconnectd.log")))
+         (stop #~(make-kill-destructor))
+         (documentation "ET phone home"))))
+      (append
+       machine-home-services
+       %highdpi-wonko-services)))
+    (packages (cons*
+               kdeconnect
+               (home-environment-packages %highdpi-wonko-home)))))
 
 (define %media-station-home
   (home-environment
