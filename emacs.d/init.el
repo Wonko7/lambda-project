@@ -399,6 +399,11 @@ This function could be in the list `comint-output-filter-functions'."
 ;; (setq clean-buffer-list-delay-general 3) ;; days
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; transmission
+
+(setq transmission-host "enterprise.local")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
 
 (use-package bluetooth)

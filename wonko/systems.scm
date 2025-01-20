@@ -25,12 +25,14 @@
   #:use-module (wonko fleet)
   #:use-module (wonko pkgs)
   #:use-module (wonko services xorg)
+  #:use-module (wonko services file-sharing)
   #:export (%laptop-os
             wonko-slim-config
             %laptop-services
             %laptop-fstab))
 
-(use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg)
+(use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg
+                     file-sharing)
 (use-package-modules base linux emacs emacs-xyz shells bash
                      networking display-managers xdisorg suckless fonts
                      ;; guix dev deps:
@@ -338,17 +340,28 @@
       (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
-  (modify-services %laptop-services
-                   (elogind-service-type config =>
-                                         (elogind-configuration
-                                          (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                                          (handle-lid-switch 'ignore)
-                                          (handle-lid-switch-docked 'ignore)
-                                          (handle-lid-switch-external-power 'ignore)))))
+  (cons*
+   (service noautostart-transmission-daemon-service-type
+            (transmission-daemon-configuration
+             (rpc-authentication-required? #f)
+             (rpc-whitelist-enabled? #t)
+             (rpc-host-whitelist (map (lambda (hn)
+                                        (string-append hn ".local"))
+                                      %fleet-names))
+             (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
+             (umask #o000)
+             (download-dir "/mnt/trantor/media/inbox")))
+   (modify-services %laptop-services
+     (elogind-service-type config =>
+                           (elogind-configuration
+                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                            (handle-lid-switch 'ignore)
+                            (handle-lid-switch-docked 'ignore)
+                            (handle-lid-switch-external-power 'ignore))))))
 
 (define-public %media-station-os
   (operating-system
-   (inherit %laptop-os)
-   (services %media-station-services)))
+    (inherit %laptop-os)
+    (services %media-station-services)))
 
 ;; FIXME: add media station stuff.
