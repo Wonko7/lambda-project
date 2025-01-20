@@ -280,13 +280,6 @@ consult-omni can be an open-source free alternative to other omni-search tools s
                             ((#:configure-flags flags #~'())
                              ;; tried a lot of variations, could not get alpha-background
                              ;; to work with exwm
-                             #~`("--with-x-toolkit=athena"
-                                 ;; gtk, gtk2, gtk3, lucid or athena, motif, no
-                                 ;; tried: gtk, gtk2, gtk3, athena, motif, no
-                                 "--without-cairo"
-                                 ;; "--with-cairo-xcb"
-                                 ;; "--with-x"
+                             #~`("--with-x-toolkit=gtk3"
                                  "--without-toolkit-scroll-bars"
-                                 ;; ,@#$flags
-                                 ,@(fold delete #$flags '("--with-cairo"))
-                                 ))))))))))
+                                 ,@#$flags))))))))))
