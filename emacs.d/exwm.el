@@ -397,7 +397,7 @@
            (other-window 1))
           ;; external monitor
           ((run-init-p 14)
-           (async-shell-command "GDK_SCALE=1 GDK_DPI_SCALE=3 firefox")))))
+           (async-shell-command "GDK_DPI_SCALE=2.5 firefox")))))
 
 (defun ws/force-run-auto-start ()
   (interactive)

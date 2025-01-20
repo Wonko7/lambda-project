@@ -267,6 +267,7 @@
        (provision '(synergy))
        (start #~(make-forkexec-constructor
                  (list #$(file-append synergy "/bin/synergy"))
+                 #:environment-variables '("QT_SCALE_FACTOR=1")
                  #:log-file #$(string-append %home-log-root "synergy.log")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
@@ -691,7 +692,8 @@
                    (home-bash-extension
                     (environment-variables
                      '(("GDK_SCALE" . "3")
-                       ("QT_SCALE_FACTOR" . "3")))))
+                       ("QT_SCALE_FACTOR" . "3")
+                       ("GDK_DPI_SCALE" . "1.5")))))
    (simple-service
     'config-files
     home-files-service-type
