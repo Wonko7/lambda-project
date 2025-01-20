@@ -210,18 +210,6 @@
       "set -o vi\n"
       "bind '\"jj\":vi-movement-mode'\n")))))
 
-(define-public %media-bash-config
-  (home-bash-configuration
-   (inherit %wonko-bash-config)
-   (environment-variables
-    (append (map (match-lambda
-                   (("DISPLAY" . l)
-                    '("DISPLAY" . ":11"))
-                   (x x))
-                 %wonko-env)
-            '(("GDK_SCALE" . "3")
-              ("QT_SCALE_FACTOR" . "3"))))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used
 
@@ -346,6 +334,7 @@
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (list
+   (service home-bash-service-type %wonko-bash-config)
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
                     ;; (mixed-text-file
@@ -663,7 +652,6 @@
 (define %just-vanilla-wonko-services
   (list
    %vanilla-emacs-values-service
-   (service home-bash-service-type %wonko-bash-config)
    (simple-service
     'config-files
     home-files-service-type
@@ -701,15 +689,11 @@
   (cons*
    %highdpi-emacs-values-service
    %vanilla-shepherd-wonko-service
-   (service
-    home-bash-service-type
-    (home-bash-configuration
-     (inherit %wonko-bash-config)
-     (environment-variables
-      (cons*
-       '("GDK_SCALE" . "2")
-       '("GDK_DPI_SCALE" . "1.5")
-       %wonko-env))))
+   (simple-service 'highdpi-bash home-bash-service-type
+                   (home-bash-extension
+                    (environment-variables
+                     '(("GDK_SCALE" . "2")
+                       ("GDK_DPI_SCALE" . "1.5")))))
    (simple-service
     'config-files
     home-files-service-type
@@ -741,7 +725,15 @@
    (make-xsession #:media-station? #t)
    %media-emacs-values-service
    %media-station-shepherd-wonko-service
-   (service home-bash-service-type %media-bash-config)
+   (simple-service 'media-bash home-bash-service-type
+                   (home-bash-extension
+                    (bashrc (list (mixed-text-file
+                                   "media-umask"
+                                   "umask 0002\n")))
+                    (environment-variables
+                     '(("DISPLAY" . ":11")
+                       ("GDK_SCALE" . "3")
+                       ("QT_SCALE_FACTOR" . "3")))))
    (simple-service
     'config-files
     home-files-service-type
