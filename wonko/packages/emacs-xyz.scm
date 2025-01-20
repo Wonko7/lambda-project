@@ -265,7 +265,8 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (description "")
     (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-exwm-custom-emacs ;; use this in homes.scm's xsession.
+;; libxaw was needed to get alpha-background working
+(define-public emacs-exwm-custom-emacs
   (package
     (inherit emacs-exwm)
     (name "emacs-exwm-custom-emacs")
@@ -274,12 +275,4 @@ consult-omni can be an open-source free alternative to other omni-search tools s
        ((#:emacs _ #f) (package
                          (inherit emacs)
                          (inputs (modify-inputs (package-inputs emacs)
-                                   (prepend gtk+-2 libxaw motif)))
-                         (arguments
-                          (substitute-keyword-arguments (package-arguments emacs)
-                            ((#:configure-flags flags #~'())
-                             ;; tried a lot of variations, could not get alpha-background
-                             ;; to work with exwm
-                             #~`("--with-x-toolkit=gtk3"
-                                 "--without-toolkit-scroll-bars"
-                                 ,@#$flags))))))))))
+                                   (prepend libxaw)))))))))
