@@ -213,8 +213,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; skeleton config: needs emacs-values & x-config before being used
 
-(define %log-root ".run/log/")
-
 (define-public %common-shepherd-wonko-services
   (list
    (shepherd-service
@@ -222,7 +220,7 @@
     (start #~(make-forkexec-constructor
               (list #$(file-append picom "/bin/picom")
                     "--opacity-rule=10:name *= 'oneko'")
-              #:log-file #$(string-append %log-root "picom.log")))
+              #:log-file #$(string-append %home-log-root "picom.log")))
     (stop #~(make-kill-destructor))
     (documentation "bling"))
    (shepherd-service
@@ -230,14 +228,14 @@
     (start #~(make-forkexec-constructor
               (list #$(string-append %guix-extra-profiles-dir
                                      "/communication/bin/pantalaimon"))
-              #:log-file #$(string-append %log-root "matrix.log")))
+              #:log-file #$(string-append %home-log-root "matrix.log")))
     (stop #~(make-kill-destructor))
     (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
     (provision '(dunst))
     (start #~(make-forkexec-constructor
               (list #$(file-append dunst "/bin/dunst"))
-              #:log-file #$(string-append %log-root "dunst.log")))
+              #:log-file #$(string-append %home-log-root "dunst.log")))
     (stop #~(make-kill-destructor))
     (documentation "riced notifications"))
    (shepherd-service
@@ -246,7 +244,7 @@
               (list ;; a case could be made for /run/current-system/profile/bin/guix
                "/home/wonko/.config/guix/current/bin/guix" "repl" "--listen=tcp:37146")
               #:environment-variables '("INSIDE_EMACS=1")
-              #:log-file #$(string-append %log-root "guix-repl.log")))
+              #:log-file #$(string-append %home-log-root "guix-repl.log")))
     (stop #~(make-kill-destructor))
     (documentation "REPL to me, like lovers do"))))
 
@@ -262,21 +260,21 @@
                  (cons* #$(file-append xss-lock "/bin/xss-lock")
                         "--"
                         '#$%lock-cmd)
-                 #:log-file #$(string-append %log-root "xss-lock.log")))
+                 #:log-file #$(string-append %home-log-root "xss-lock.log")))
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
        (provision '(synergy))
        (start #~(make-forkexec-constructor
                  (list #$(file-append synergy "/bin/synergy"))
-                 #:log-file #$(string-append %log-root "synergy.log")))
+                 #:log-file #$(string-append %home-log-root "synergy.log")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
       (shepherd-service
        (provision '(oneko))
        (start #~(make-forkexec-constructor
                  (list #$(file-append oneko "/bin/oneko") "-dog")
-                 #:log-file #$(string-append %log-root "oneko.log")))
+                 #:log-file #$(string-append %home-log-root "oneko.log")))
        (stop #~(make-kill-destructor))
        (documentation "neko"))
       %common-shepherd-wonko-services)))))
@@ -294,7 +292,7 @@
                  (cons* #$(file-append xss-lock "/bin/xss-lock")
                         "--"
                         '#$%lock-cmd)
-                 #:log-file #$(string-append %log-root "xss-lock.log")))
+                 #:log-file #$(string-append %home-log-root "xss-lock.log")))
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
@@ -303,7 +301,7 @@
                  (list #$(file-append synergy "/bin/synergyc")
                        "-n" "media-station"
                        "-f" "yggdrasill.local")
-                 #:log-file #$(string-append %log-root "synergy.log")))
+                 #:log-file #$(string-append %home-log-root "synergy.log")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
       %common-shepherd-wonko-services)))))

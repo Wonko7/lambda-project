@@ -25,3 +25,5 @@
     (if (predicate v)
         v
         (display (string-append "bad record value : " v)))))
+
+(define-public %home-log-root ".run/log/")
