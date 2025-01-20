@@ -243,7 +243,8 @@
     (start #~(make-forkexec-constructor
               (list ;; a case could be made for /run/current-system/profile/bin/guix
                "/home/wonko/.config/guix/current/bin/guix" "repl" "--listen=tcp:37146")
-              #:environment-variables '("INSIDE_EMACS=1")
+              #:environment-variables (cons "INSIDE_EMACS=1"
+                                            (default-environment-variables))
               #:log-file #$(string-append %home-log-root "guix-repl.log")))
     (stop #~(make-kill-destructor))
     (documentation "REPL to me, like lovers do"))))
