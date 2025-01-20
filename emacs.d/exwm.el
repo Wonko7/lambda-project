@@ -267,16 +267,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; colors & transparency
 
-;; (set-frame-parameter (selected-frame) 'alpha-background 50)
-;; (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
-;; (frame-parameter nil alpha-background)
-(setq exwm-systemtray-background-color 'workspace-background)
+;; this is now set in early-init, keeping these for eval convinience:
+;; (set-frame-parameter (selected-frame) 'alpha-background 0.5)
+;; (set-frame-parameter (selected-frame) 'alpha '(100 . 70))
+;; (set-frame-parameter (selected-frame) 'alpha '(94 . 70))
 
-(set-frame-parameter (selected-frame) 'alpha '(94 . 70))
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-;; this is now set in early-init:
-;; (add-to-list 'default-frame-alist '(alpha . (94 . 70)))
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(setq exwm-systemtray-background-color 'workspace-background)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; perspepctive

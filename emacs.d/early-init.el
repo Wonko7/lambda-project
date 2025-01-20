@@ -1,7 +1,8 @@
 (setq default-frame-alist '((background-color . "#27212E")
                             (ns-appearance . dark)
                             (fullscreen . maximized)
-                            (alpha . (94 . 70))))
+                            (alpha . (100 . 70))
+                            (alpha-background . 0.9)))
 
 (setq initial-frame-alist (quote ((fullscreen . maximized))))
 
