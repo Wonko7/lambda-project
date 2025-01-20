@@ -268,7 +268,7 @@ consult-omni can be an open-source free alternative to other omni-search tools s
 (define-public emacs-exwm-custom-emacs ;; use this in homes.scm's xsession.
   (package
     (inherit emacs-exwm)
-    (name "emacs-exwm-next")
+    (name "emacs-exwm-custom-emacs")
     (arguments
      (substitute-keyword-arguments (package-arguments emacs-exwm)
        ((#:emacs _ #f) (package
