@@ -220,7 +220,7 @@
     (start #~(make-forkexec-constructor
               (list #$(file-append picom "/bin/picom")
                     "--opacity-rule=10:name *= 'oneko'")
-              #:log-file #$(string-append %home-log-root "picom.log")))
+              #:log-file #$(home-log-path "picom")))
     (stop #~(make-kill-destructor))
     (documentation "bling"))
    (shepherd-service
@@ -228,14 +228,14 @@
     (start #~(make-forkexec-constructor
               (list #$(string-append %guix-extra-profiles-dir
                                      "/communication/bin/pantalaimon"))
-              #:log-file #$(string-append %home-log-root "matrix.log")))
+              #:log-file #$(home-log-path "matrix")))
     (stop #~(make-kill-destructor))
     (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
     (provision '(dunst))
     (start #~(make-forkexec-constructor
               (list #$(file-append dunst "/bin/dunst"))
-              #:log-file #$(string-append %home-log-root "dunst.log")))
+              #:log-file #$(home-log-path "dunst")))
     (stop #~(make-kill-destructor))
     (documentation "riced notifications"))
    (shepherd-service
@@ -245,7 +245,7 @@
                "/home/wonko/.config/guix/current/bin/guix" "repl" "--listen=tcp:37146")
               #:environment-variables (cons "INSIDE_EMACS=1"
                                             (default-environment-variables))
-              #:log-file #$(string-append %home-log-root "guix-repl.log")))
+              #:log-file #$(home-log-path "guix-repl")))
     (stop #~(make-kill-destructor))
     (documentation "REPL to me, like lovers do"))))
 
@@ -261,7 +261,7 @@
                  (cons* #$(file-append xss-lock "/bin/xss-lock")
                         "--"
                         '#$%lock-cmd)
-                 #:log-file #$(string-append %home-log-root "xss-lock.log")))
+                 #:log-file #$(home-log-path "xss-lock")))
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
@@ -270,14 +270,14 @@
                  (list #$(file-append synergy "/bin/synergy"))
                  #:environment-variables (cons "QT_SCALE_FACTOR=1"
                                                (default-environment-variables))
-                 #:log-file #$(string-append %home-log-root "synergy.log")))
+                 #:log-file #$(home-log-path "synergy")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
       (shepherd-service
        (provision '(oneko))
        (start #~(make-forkexec-constructor
                  (list #$(file-append oneko "/bin/oneko") "-dog")
-                 #:log-file #$(string-append %home-log-root "oneko.log")))
+                 #:log-file #$(home-log-path "oneko")))
        (stop #~(make-kill-destructor))
        (documentation "neko"))
       %common-shepherd-wonko-services)))))
@@ -295,7 +295,7 @@
                  (cons* #$(file-append xss-lock "/bin/xss-lock")
                         "--"
                         '#$%lock-cmd)
-                 #:log-file #$(string-append %home-log-root "xss-lock.log")))
+                 #:log-file #$(home-log-path "xss-lock")))
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
@@ -304,7 +304,7 @@
                  (list #$(file-append synergy "/bin/synergyc")
                        "-n" "media-station"
                        "-f" "yggdrasill.local")
-                 #:log-file #$(string-append %home-log-root "synergy.log")))
+                 #:log-file #$(home-log-path "synergy")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
       %common-shepherd-wonko-services)))))

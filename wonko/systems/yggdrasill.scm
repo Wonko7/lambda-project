@@ -60,7 +60,7 @@
          (provision '(kdeconnectd))
          (start #~(make-forkexec-constructor
                    (list #$(file-append kdeconnect "/bin/kdeconnectd"))
-                   #:log-file #$(string-append %home-log-root "kdeconnectd.log")))
+                   #:log-file #$(home-log-path "kdeconnectd")))
          (stop #~(make-kill-destructor))
          (documentation "ET phone home"))))
       (append

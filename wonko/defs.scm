@@ -1,4 +1,5 @@
 (define-module (wonko defs)
+  #:use-module (guix gexp)
   #:use-module (gnu system keyboard))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,3 +28,6 @@
         (display (string-append "bad record value : " v)))))
 
 (define-public %home-log-root ".run/log/")
+
+(define-public (home-log-path fn)
+  #~(string-append (getenv "HOME") "/" #$%home-log-root #$fn ".log"))
