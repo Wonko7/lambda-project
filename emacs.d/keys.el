@@ -166,6 +166,7 @@
   "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
   "is" #'my/insert-shell-line
   "it" #'consult-yasnippet
+  "ip" #'embark-insert-relative-path
   ;; rm stuff
   "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
