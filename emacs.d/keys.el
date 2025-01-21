@@ -5,6 +5,15 @@
 (general-evil-setup t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; helper
+
+(defun local-async-shell-command (command)
+  ;; some things aren't meant to be executed remotely via tramp.
+  (interactive)
+  (let ((default-directory "~/"))
+    (async-shell-command command)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; leader actions
 
 (evil-leader/set-key
@@ -39,16 +48,16 @@
   ;; emacs but not that close to my heart
   "aab" #'bluetooth-list-devices
   ;; external apps
-  "aaT" (lambda () (interactive) (async-shell-command my/term-cmd))
-  "aat" (lambda () (interactive) (async-shell-command "transmission-gtk"))
-  "aac" (lambda () (interactive) (async-shell-command "calibre")) ;; FIXME guix the shit out of this.
-  "aap" (lambda () (interactive) (async-shell-command "pavucontrol"))
+  "aaT" (lambda () (interactive) (local-async-shell-command my/term-cmd))
+  "aat" (lambda () (interactive) (local-async-shell-command "transmission-gtk"))
+  "aac" (lambda () (interactive) (local-async-shell-command "calibre")) ;; FIXME guix the shit out of this.
+  "aap" (lambda () (interactive) (local-async-shell-command "pavucontrol"))
   ;; browsers
-  "aBf" (lambda () (interactive) (async-shell-command "firefox"))
-  "aBc" (lambda () (interactive) (async-shell-command "chromium"))
+  "aBf" (lambda () (interactive) (local-async-shell-command "firefox"))
+  "aBc" (lambda () (interactive) (local-async-shell-command "chromium"))
   "aBt" #'my/tbb
   ;; utils
-  "zz"  (lambda () (interactive) (async-shell-command my/lock-cmd))
+  "zz"  (lambda () (interactive) (local-async-shell-command my/lock-cmd))
 
   ;; buffers
   "br" #'rename-buffer
@@ -187,10 +196,10 @@
 
   "zai" #'gptel-send
   "zl"  #'scroll-lock-mode
-  "z''" (lambda () (interactive) (async-shell-command "dunstctl set-paused toggle"))
-  "z'c" (lambda () (interactive) (async-shell-command "dunstctl close"))
-  "z'C" (lambda () (interactive) (async-shell-command "dunstctl close-all"))
-  "z'h" (lambda () (interactive) (async-shell-command "dunstctl history")))
+  "z''" (lambda () (interactive) (local-async-shell-command "dunstctl set-paused toggle"))
+  "z'c" (lambda () (interactive) (local-async-shell-command "dunstctl close"))
+  "z'C" (lambda () (interactive) (local-async-shell-command "dunstctl close-all"))
+  "z'h" (lambda () (interactive) (local-async-shell-command "dunstctl history")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; states
