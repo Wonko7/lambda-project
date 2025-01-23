@@ -578,6 +578,28 @@
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)))
 
+(defun org-roam-dailies--list-active-files (&rest extra-files)
+  "List all files in `org-roam-dailies-directory', non recursively.
+EXTRA-FILES can be used to append extra files to the list."
+  (let ((dir (expand-file-name org-roam-dailies-directory org-roam-directory))
+        (regexp (rx-to-string `(and "." (or ,@org-roam-file-extensions)))))
+    (append (--remove (let ((file (file-name-nondirectory it)))
+                        (when (or (auto-save-file-name-p file)
+                                  (backup-file-name-p file)
+                                  (string-match "^\\." file))
+                          it))
+                      (directory-files dir regexp))
+            extra-files)))
+
+(defun org-roam-dailies-latest ()
+  "Find latest dailies that is not in the future."
+  (first (last (-filter (lambda (f)
+                          (let ((fn    (file-name-base f))
+                                (ext   (file-name-extension f))
+                                (today (format-time-string "%Y-%m-%d")))
+                            (and (string= "org" (file-name-extension f))
+                                 (not (string< today fn)))))
+                        (org-roam-dailies--list-active-files)))))
 
 (use-package calfw-org
   :config
@@ -587,8 +609,8 @@
     "SPC" evil-leader--default-map)
   (define-key cfw:calendar-mode-map (kbd "<SPC>") evil-leader--default-map))
 
-
 ;; https://github.com/kiwanami/emacs-calfw/issues/111
+;; https://github.com/kiwanami/emacs-calfw/pull/134/files
 ;; temporary fix:
 ;; (defun cfw:org-get-timerange (text)
 ;;   "Return a range object (begin end text).
