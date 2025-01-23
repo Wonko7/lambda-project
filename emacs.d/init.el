@@ -406,7 +406,9 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
 
-(use-package bluetooth)
+(use-package bluetooth
+  :config
+  (setq bluetooth-battery-display-warning nil))
 
 (defun my/brace-for-impact ()
   (recentf-save-list)
