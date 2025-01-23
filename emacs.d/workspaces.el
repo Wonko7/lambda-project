@@ -234,13 +234,9 @@
       (cl-flet ((run-init-p (i)
                   (and (= exwm-workspace-current-index i)
                        (ws/check-and-mark-auto-start-state i))))
+        ;; external monitor only
         (cond ((run-init-p 11)
-               (delete-other-windows)
-               (evil-window-vsplit)
-               (shell)
-               (bluetooth-list-devices)
-               (other-window 1))
-              ;; external monitor
+               (ws/set-layout 'init2))
               ((run-init-p 14)
                (async-shell-command "GDK_DPI_SCALE=2.5 firefox"))))) )
 
