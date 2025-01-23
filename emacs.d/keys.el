@@ -203,7 +203,11 @@
   "z''" (lambda () (interactive) (local-async-shell-command "dunstctl set-paused toggle"))
   "z'c" (lambda () (interactive) (local-async-shell-command "dunstctl close"))
   "z'C" (lambda () (interactive) (local-async-shell-command "dunstctl close-all"))
-  "z'h" (lambda () (interactive) (local-async-shell-command "dunstctl history")))
+  "z'h" (lambda () (interactive) (local-async-shell-command "dunstctl history"))
+  "z't" (lambda () (interactive)
+          (local-async-shell-command
+           "dunstify 'How are we gonna fuck this pig?' \
+                     'With enough cologne to upset a Bangkok ladyboy.'")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; states
