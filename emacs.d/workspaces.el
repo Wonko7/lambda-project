@@ -115,7 +115,15 @@
                                               "remote-media-shell" nil d)))))
                       ( :name right
                         :buffer-f (org-roam-node-open
-                                   (org-roam-node-from-title-or-alias "📺 sense8")))))))
+                                   (org-roam-node-from-title-or-alias "📺 sense8")))))
+          ( :layout org2
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers (( :name left
+                        :buffer-f (find-file (org-roam-dailies-latest)))
+                      ( :name right
+                        :buffer-f (org-agenda nil "z"))))))
 
   (defun ws/set-layout (&optional layout)
     (interactive)
@@ -205,7 +213,7 @@
                 ((run-init-p 8)
                  (projectile-switch-project-by-name my/lambda-project))
                 ((run-init-p 7)
-                 (my/init-org))
+                 (ws/set-layout 'org2))
                 ((run-init-p 6)
                  (gnus))
                 ((run-init-p 5)
