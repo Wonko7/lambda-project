@@ -365,6 +365,7 @@
       (cl-flet ((run-init-p (i)
                   (and (= exwm-workspace-current-index i)
                        (ws/check-and-mark-auto-start-state i))))
+        ;; might end up calling on layouts.el.
         (cond ((run-init-p 9)
                (push my/init-ement-room-list display-buffer-alist)
                (my/ement-init))
@@ -382,15 +383,19 @@
                (projectile-switch-project))
               ((run-init-p 2)
                (org-roam-node-open
-                (org-roam-node-from-title-or-alias "3 body problem 2024? netflix us"))
+                (org-roam-node-from-title-or-alias "📺 sense8"))
                (delete-other-windows)
                (evil-window-vsplit)
-               (project-shell))
+               (let ((d "/ssh:media@enterprise.local:/mnt/trantor/media/"))
+                 (projectile-with-default-dir d
+                   (shell (projectile-generate-process-name
+                           "remote-media-shell" nil d)))))
               ((run-init-p 1)
-               (delete-other-windows)
-               (evil-window-vsplit)
-               (shell)
                (bluetooth-list-devices)
+               (delete-other-windows)
+               (shell "*shell*")
+               (evil-window-vsplit)
+               (display-buffer "*Bluetooth*")
                (other-window 1))
               ;; external monitor
               ((run-init-p 14)

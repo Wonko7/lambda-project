@@ -54,7 +54,7 @@
                              :buffer-f (projectile-with-default-dir ,rpr
                                          (shell
                                           (projectile-generate-process-name
-                                           "tramp-shell" nil ,rpr)))))))
+                                           "remote-shell" nil ,rpr)))))))
 
           ( :layout grid9
             :recipe (|
@@ -90,9 +90,29 @@
                               (-filter (lambda (b)
                                          ;; remove mini-buffers from list
                                          (not (string-prefix-p " " (buffer-name b))))
-                                       (buffer-list)))))))
+                                       (buffer-list)))))
 
-  (defun ws/set-layout ()
+          ( :layout init2
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers-f (progn
+                         (bluetooth-list-devices)
+                         '((:name right :buffer-f (shell))
+                           (:name left  :buffer-f "*Bluetooth*"))))
+
+          ( :layout media2
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers (( :name left
+                        :buffer-f (let ((d "/ssh:media@enterprise.local:/mnt/trantor/media/"))
+                                    (projectile-with-default-dir d
+                                      (shell (projectile-generate-process-name
+                                              "remote-media-shell" nil d)))))
+                      ( :name right
+                        :buffer-f (org-roam-node-open
+                                   (org-roam-node-from-title-or-alias "📺 sense8")))))))
     (interactive)
     (let* ((layouts     (mapcar (lambda (lo)
                                   (plist-get lo ':layout))
