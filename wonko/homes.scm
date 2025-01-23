@@ -363,11 +363,11 @@
                       "fancy.el"
                       "early-init.el"
                       "init.el"
-                      "layouts.el"
                       "lisp-dev.el"
                       "keys.el"
                       "misc.el"
-                      "org-conf.el")))
+                      "org-conf.el"
+                      "workspaces.el")))
 
    (simple-service 'emacsd-snippets-config-files
                    home-files-service-type

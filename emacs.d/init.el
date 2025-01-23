@@ -434,7 +434,7 @@ This function could be in the list `comint-output-filter-functions'."
 
 (require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
 (require 'conf/completion    "~/.emacs.d/completion.el")
-(require 'conf/layouts       "~/.emacs.d/layouts.el")
+(require 'conf/workspaces    "~/.emacs.d/workspaces.el")
 (require 'conf/org           "~/.emacs.d/org-conf.el")
 (require 'conf/lisp          "~/.emacs.d/lisp-dev.el")
 (require 'conf/dev           "~/.emacs.d/dev.el")

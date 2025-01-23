@@ -346,69 +346,6 @@
 
 (lemon-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; auto start workspaces:
-
-(defvar ws/auto-start-state (-repeat exwm-workspace-number t))
-;; disable auto run for nameless projects:
-(setf (nth 5 ws/auto-start-state) nil)
-(setf (nth 3 ws/auto-start-state) nil)
-(setf (nth 0 ws/auto-start-state) nil)
-
-(defun ws/check-and-mark-auto-start-state (i)
-  (let ((state (nth i ws/auto-start-state)))
-    (setf (nth i ws/auto-start-state) nil) ;; mark as visited
-    state))
-
-(if (string= "wonko" user-login-name)
-    (defun ws/run-auto-start ()
-      (cl-flet ((run-init-p (i)
-                  (and (= exwm-workspace-current-index i)
-                       (ws/check-and-mark-auto-start-state i))))
-        ;; might end up calling on layouts.el.
-        (cond ((run-init-p 9)
-               (push my/init-ement-room-list display-buffer-alist)
-               (my/ement-init))
-              ((run-init-p 8)
-               (projectile-switch-project-by-name my/lambda-project))
-              ((run-init-p 7)
-               (my/init-org))
-              ((run-init-p 6)
-               (gnus))
-              ((run-init-p 5)
-               (projectile-switch-project))
-              ((run-init-p 4)
-               (async-shell-command "firefox"))
-              ((run-init-p 3)
-               (projectile-switch-project))
-              ((run-init-p 2)
-               (ws/set-layout 'media2))
-              ((run-init-p 1)
-               (ws/set-layout 'init2))
-              ;; external monitor
-              ((run-init-p 14)
-               (async-shell-command "GDK_DPI_SCALE=2.5 firefox")))))
-  ;; else media:
-  (defun ws/run-auto-start ()
-    (cl-flet ((run-init-p (i)
-                (and (= exwm-workspace-current-index i)
-                     (ws/check-and-mark-auto-start-state i))))
-      (cond ((run-init-p 11)
-             (delete-other-windows)
-             (evil-window-vsplit)
-             (shell)
-             (bluetooth-list-devices)
-             (other-window 1))
-            ;; external monitor
-            ((run-init-p 14)
-             (async-shell-command "GDK_DPI_SCALE=2.5 firefox"))))) )
-
-(defun ws/force-run-auto-start ()
-  (interactive)
-  (setf (nth exwm-workspace-current-index ws/auto-start-state) t)
-  (ws/run-auto-start))
-
-(add-hook 'exwm-workspace-switch-hook #'ws/run-auto-start)
 
 ;;; exwm.el ends here
 (provide 'conf/exwm)
