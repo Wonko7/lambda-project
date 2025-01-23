@@ -382,21 +382,9 @@
               ((run-init-p 3)
                (projectile-switch-project))
               ((run-init-p 2)
-               (org-roam-node-open
-                (org-roam-node-from-title-or-alias "📺 sense8"))
-               (delete-other-windows)
-               (evil-window-vsplit)
-               (let ((d "/ssh:media@enterprise.local:/mnt/trantor/media/"))
-                 (projectile-with-default-dir d
-                   (shell (projectile-generate-process-name
-                           "remote-media-shell" nil d)))))
+               (ws/set-layout 'media2))
               ((run-init-p 1)
-               (bluetooth-list-devices)
-               (delete-other-windows)
-               (shell "*shell*")
-               (evil-window-vsplit)
-               (display-buffer "*Bluetooth*")
-               (other-window 1))
+               (ws/set-layout 'init2))
               ;; external monitor
               ((run-init-p 14)
                (async-shell-command "GDK_DPI_SCALE=2.5 firefox")))))
