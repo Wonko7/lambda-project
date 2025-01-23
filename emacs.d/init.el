@@ -234,9 +234,9 @@
 
 (setq comint-scroll-to-bottom-on-input t
       comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
-;;(setq shell-prompt-pattern "^[^#$%>\n]*[#$%>λ] *")
-;; (setq shell-prompt-pattern "^.*\n*[#$%>λ]")
-(setq shell-prompt-pattern "^[🍏🍎].*\nλ")
+(setq shell-prompt-pattern "^[🍏🍎].*\nλ ")
+;; for tramp shell sessions:
+(setq explicit-shell-file-name "bash")
 
 (defun toggle-scroll-to-bottom-on-output ()
   (interactive)

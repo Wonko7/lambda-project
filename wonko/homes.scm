@@ -204,9 +204,9 @@
       "bind 'set completion-ignore-case on' 2> /dev/null\n"
       "[ x$TERM = xtramp ] && return\n"
       "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
-      " \\A \\u@\\h "
-      "$([ ! -z \"$SSH_CLIENT\" ] && echo \"📡 \")"
-      "\\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+      " \\A 🦄 \\u@\\h "
+      "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
+      " \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
       "set -o vi\n"
       "bind '\"jj\":vi-movement-mode'\n")))))
 
