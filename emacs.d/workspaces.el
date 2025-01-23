@@ -165,6 +165,12 @@
                     :require-match t)))
       (wlf:toggle wm (intern bn))))
 
+  (defun ws/layout-reinit ()
+    (interactive)
+    (wlf:reset-init
+     (second
+      (nth exwm-workspace-current-index ws/current-layout))))
+
   (defun unused/filter-project-buffs (name)
     (first (-filter (lambda (b)
                       (string-prefix-p name (buffer-name b)))

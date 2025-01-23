@@ -194,8 +194,11 @@
   ;; layouts
   "ll" #'ws/set-layout
   "lt" #'ws/toggle-buffer
+  "lr" #'ws/layout-reinit
 
   "zai" #'gptel-send
+
+  ;; xorg stuff
   "zl"  #'scroll-lock-mode
   "z''" (lambda () (interactive) (local-async-shell-command "dunstctl set-paused toggle"))
   "z'c" (lambda () (interactive) (local-async-shell-command "dunstctl close"))
