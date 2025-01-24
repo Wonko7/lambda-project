@@ -163,14 +163,9 @@
 
 (use-package embark
   :defer t
-  :config
-  (defvar-keymap my/embark-become-line-map
-    :doc "Embark become keymap for search."
-    :parent embark-meta-map
-    "l"        #'consult-line
-    "i"        #'consult-imenu
-    "o"        #'consult-outline
-    "s"        #'consult-outline))
+  :bind (:map embark-file-map
+              ("g" . #'magit-file-dispatch)
+              ("F" . #'my/remote-fleet-find-file)))
 
 (use-package embark-consult
   :defer t
