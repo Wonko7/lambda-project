@@ -110,6 +110,9 @@
   "rdY" #'org-roam-dailies-capture-yesterday  ;;  :desc "Capture yesterday"
   "rd-" #'org-roam-dailies-find-directory     ;;  :desc "Find directory"
 
+  ;; detached:
+  "dl" #'detached-list-sessions
+
   ;; projectile
   "pa"  #'projectile-add-known-project
   "pF"  (lambda ()
@@ -320,6 +323,59 @@
 
 (general-evil-define-key '(normal) verbiste-mode-keymap
   "q"    #'kill-this-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; detached
+
+(general-evil-define-key '(normal) detached-list-mode-map
+  "a" #'detached-edit-session-annotation
+  "d" #'detached-list-delete-session
+  "e" #'detached-edit-and-run-session
+  "f" #'detached-list-select-filter
+  "g" #'detached-list-revert
+  "I" #'detached-list-initialize-session-directory
+  ;; "i" #'imenu
+  "K" #'detached-list-kill-session
+  "m" #'detached-list-mark-session
+  ;; Narrow
+  "na" #'detached-list-narrow-annotation
+  "nc" #'detached-list-narrow-command
+  "nd" #'detached-list-narrow-session-directory
+  ;; Host
+  "nhh" #'detached-list-narrow-host
+  "nhc" #'detached-list-narrow-currenthost
+  "nhl" #'detached-list-narrow-localhost
+  "nhr" #'detached-list-narrow-remotehost
+  "no" #'detached-list-narrow-output
+  "nO" #'detached-list-narrow-origin
+  ;; State
+  "nsa" #'detached-list-narrow-active
+  "nsf" #'detached-list-narrow-failure
+  "nsi" #'detached-list-narrow-inactive
+  "nss" #'detached-list-narrow-success
+  "nu" #'detached-list-narrow-unique
+  "nw" #'detached-list-narrow-working-directory
+  "n+" #'detached-list-narrow-after-time
+  "n-" #'detached-list-narrow-before-time
+  "q" #'detached-list-quit
+  "r" #'detached-rerun-session
+  "t" #'detached-list-toggle-mark-session
+  "T" #'detached-list-toggle-sessions
+  "u" #'detached-list-unmark-session
+  "U" #'detached-list-unmark-sessions
+  "v" #'detached-list-view-session
+  "w" #'detached-copy-session-command
+  "W" #'detached-copy-session-output
+  "x" #'detached-list-detach-from-session
+  "%" #'detached-list-mark-regexp
+  "=" #'detached-list-diff-marked-sessions
+  "-" #'detached-list-widen
+  "!" #'detached-shell-command
+  ;; Describe
+  ". s" #'detached-describe-session
+  ". d" #'detached-describe-duration
+  "<backspace>" #'detached-list-remove-narrow-criterion
+  "<return>" #'detached-list-open-session)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
