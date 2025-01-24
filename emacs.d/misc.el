@@ -132,4 +132,21 @@
    :sort nil
    :require-match t))
 
+(defun my/remote-fleet-find-file (&optional file)
+  (interactive "FFile: ")
+  (let* ((remote (my/choose-remote-from-fleet))
+         (fp     (or file
+                     (buffer-file-name)
+                     default-directory))
+         (dn     (file-name-directory fp))
+         (fn     (file-name-nondirectory fp)))
+    (message remote)
+    (find-file
+     (read-file-name
+      "Find remote file: "
+      (concat "/ssh:" remote ":" dn)
+      (concat "/ssh:" remote ":" fp)
+      'confirm fn))))
+
+
 (provide 'conf/misc)

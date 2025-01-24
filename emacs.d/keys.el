@@ -115,19 +115,7 @@
 
   ;; projectile
   "pa"  #'projectile-add-known-project
-  "pF"  (lambda ()
-          (interactive)
-          (let* ((remote (my/choose-remote-from-fleet))
-                 (fp     (or (buffer-file-name)
-                             default-directory))
-                 (dn     (file-name-directory fp))
-                 (fn     (file-name-nondirectory fp)))
-            (find-file
-             (read-file-name
-              "Find remote file: "
-              (concat "/ssh:" remote ":" dn)
-              (concat "/ssh:" remote ":" fp)
-              'confirm fn))))
+  "pF"  #'my/remote-fleet-find-file
   "pf"  #'projectile-find-file
   "p'"  #'projectile-find-file
   "pgf" #'projectile-find-file-dwim
