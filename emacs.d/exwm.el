@@ -221,7 +221,7 @@
         ([?\s-J] . next-buffer)
 
         ([?\s-C] . kill-this-buffer)
-        ([?\s-c] . (lambda () (interactive) (local-async-shell-command "dunstctl close")))
+        ([?\s-c] . (lambda () (interactive) (my/local-async-shell-command "dunstctl close")))
 
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
         ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
@@ -258,6 +258,10 @@
                               (interactive)
                               (go-to-external-screen ,i))))
                         (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
+
+;; WTF: both this & the exwm mapping are needed for this to work.
+(general-evil-define-key '(normal insert visual global emacs) exwm-mode-map
+  (kbd "C-SPC") #'my/force-main-menu)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exwm settings

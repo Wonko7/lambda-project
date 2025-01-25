@@ -139,7 +139,10 @@
 
 (use-package verbiste
   :defer t
-  :commands (verbiste-deconjugate verbiste-conjugate))
+  :commands (verbiste-deconjugate verbiste-conjugate)
+  :config
+  (general-evil-define-key '(normal) verbiste-mode-keymap
+    "q"    #'kill-this-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
@@ -240,7 +243,35 @@ This function could be in the list `comint-output-filter-functions'."
 	      (message "Password prompt recursion too deep")
 	    (when (get-buffer-process (current-buffer))
 	      (comint-send-invisible
-	       (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+")))))))))
+	       (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
+
+  (general-evil-define-key '(normal visual) comint-mode-map
+    "|"           #'my/insert-shell-line
+    "ï"           #'my/cd-up
+    "-"           #'my/cd--
+    "("           #'comint-previous-prompt
+    ")"           #'comint-next-prompt
+    "gm"          #'man-follow
+    "gS"          #'my/toggle-scroll-to-bottom-on-output
+    "C-k"         #'comint-previous-prompt
+    "C-j"         #'comint-next-prompt
+    "C-r"         #'consult-history
+    "RET"         #'comint-send-input
+    "C-<return>"  #'comint-copy-old-input
+    "A"           (lambda() (interactive) (evil-goto-line) (evil-append-line 1)))
+
+  (general-evil-define-key '(insert) comint-mode-map
+    "C-k"         #'comint-previous-prompt
+    "C-j"         #'comint-next-prompt
+    "C-r"         #'consult-history
+    "C-<return>"  #'comint-copy-old-input
+    "RET"         #'comint-send-input)
+
+  (evil-collection-define-key 'insert 'comint-mode-map
+    (kbd "C-s") #'my/insert-shell-line
+    (kbd "C-r") #'consult-history
+    (kbd "C-p") #'comint-previous-input
+    (kbd "C-n") #'comint-next-input))
 
 (use-package coterm
   :after comint
@@ -258,7 +289,10 @@ This function could be in the list `comint-output-filter-functions'."
   :custom
   (shell-prompt-pattern "^[🍏🍎].*\nλ ")
   ;; for tramp shell sessions:
-  (explicit-shell-file-name "bash"))
+  (explicit-shell-file-name "bash")
+  :config
+  (general-evil-define-key '(insert normal) shell-mode-map
+    "C-S-<return>" #'detached-shell-send-input))
 
 (use-package bash-completion
   :after shell
@@ -282,7 +316,57 @@ This function could be in the list `comint-output-filter-functions'."
               ( :name "Created" :function detached--creation-str
                 :length 20 :face detached-creation-face)
               ( :name "Metadata" :function detached--metadata-str
-                :length 20 :face detached-metadata-face)))))
+                :length 20 :face detached-metadata-face))))
+  :config
+  (general-evil-define-key '(normal) detached-list-mode-map
+    "a" #'detached-edit-session-annotation
+    "d" #'detached-list-delete-session
+    "e" #'detached-edit-and-run-session
+    "f" #'detached-list-select-filter
+    "g" #'detached-list-revert
+    "I" #'detached-list-initialize-session-directory
+    ;; "i" #'imenu
+    "K" #'detached-list-kill-session
+    "m" #'detached-list-mark-session
+    ;; Narrow
+    "na" #'detached-list-narrow-annotation
+    "nc" #'detached-list-narrow-command
+    "nd" #'detached-list-narrow-session-directory
+    ;; Host
+    "nhh" #'detached-list-narrow-host
+    "nhc" #'detached-list-narrow-currenthost
+    "nhl" #'detached-list-narrow-localhost
+    "nhr" #'detached-list-narrow-remotehost
+    "no" #'detached-list-narrow-output
+    "nO" #'detached-list-narrow-origin
+    ;; State
+    "nsa" #'detached-list-narrow-active
+    "nsf" #'detached-list-narrow-failure
+    "nsi" #'detached-list-narrow-inactive
+    "nss" #'detached-list-narrow-success
+    "nu" #'detached-list-narrow-unique
+    "nw" #'detached-list-narrow-working-directory
+    "n+" #'detached-list-narrow-after-time
+    "n-" #'detached-list-narrow-before-time
+    "q" #'detached-list-quit
+    "r" #'detached-rerun-session
+    "t" #'detached-list-toggle-mark-session
+    "T" #'detached-list-toggle-sessions
+    "u" #'detached-list-unmark-session
+    "U" #'detached-list-unmark-sessions
+    "v" #'detached-list-view-session
+    "w" #'detached-copy-session-command
+    "W" #'detached-copy-session-output
+    "x" #'detached-list-detach-from-session
+    "%" #'detached-list-mark-regexp
+    "=" #'detached-list-diff-marked-sessions
+    "-" #'detached-list-widen
+    "!" #'detached-shell-command
+    ;; Describe
+    ". s" #'detached-describe-session
+    ". d" #'detached-describe-duration
+    "<backspace>" #'detached-list-remove-narrow-criterion
+    "<return>" #'detached-list-open-session))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
@@ -299,6 +383,11 @@ This function could be in the list `comint-output-filter-functions'."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
+
+(use-package dired
+  :config
+  (general-evil-define-key '(normal) dired-mode-map
+    "ï"    #'dired-up-directory))
 
 (use-package diredfl
   :defer t
@@ -353,6 +442,24 @@ This function could be in the list `comint-output-filter-functions'."
 
 (add-to-list 'display-buffer-alist
 	     '("*Async Shell Command*" display-buffer-no-window (nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; calc
+
+(use-package calc
+  :config
+  (general-evil-define-key '(normal) calc-mode-map
+    "i"    (lambda ()
+             (interactive) ;; avoid having info popping up all the time.
+             (message "beep boop - I'm a robot"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; info
+
+(use-package info
+  :config
+  (general-evil-define-key '(normal) Info-mode-map ;; this is not working anymore :(
+    "s"   #'consult-info))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search

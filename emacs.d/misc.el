@@ -148,5 +148,13 @@
       (concat "/ssh:" remote ":" fp)
       'confirm fn))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exec helper
+
+(defun my/local-async-shell-command (command)
+  ;; some things aren't meant to be executed remotely via tramp.
+  (interactive)
+  (let ((default-directory "~/"))
+    (async-shell-command command)))
 
 (provide 'conf/misc)
