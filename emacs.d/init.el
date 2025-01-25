@@ -155,23 +155,12 @@
 
 (use-package magit
   :after general
-  :config
-  (setq magit-status-initial-section '(((unstaged) (status))))
-  ;; FIXME: this shouldn't be needed. WORKAROUND:
-  ;; :hook (magit-status-mode-hook . magit-status-goto-initial-section)
-  ;; fails with wrong type argument: (or eieio-object ).
-  ;; hook shouldn't be needed in the first place, but currently magit is not
-  ;; taking me to my init section 🤷
-  (defun hack-magit-use-package-startup-add-hook (a b)
-    ;; I'm guessing this works because once magit-status has been called once it is
-    ;; properly initialised, whereas running magit-status-goto-initial-section before that
-    ;; is missing some dependencies.
-    (add-hook 'magit-status-mode-hook #'magit-status-goto-initial-section)
-    (advice-remove 'magit-status #'hack-magit-use-package-startup-add-hook)
-    b)
-  (advice-add 'magit-status :after #'hack-magit-use-package-startup-add-hook)
-  ;; end hack.
+  :custom
+  (magit-status-initial-section '(((unstaged) (status))))
+  :hook
+  (magit-refresh-buffer-hook . magit-status-goto-initial-section)
 
+  :config
   (general-evil-define-key '(normal) magit-diff-mode-map
     "("      #'diff-hunk-prev
     ")"      #'diff-hunk-next
