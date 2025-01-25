@@ -220,24 +220,58 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
-(use-package coterm
+(use-package comint
+  :custom
+  (comint-scroll-to-bottom-on-input t)
+  (comint-scroll-to-bottom-on-output t)
   :config
-  (coterm-mode))
+  ;; FIXME: fuck me: comint-watch-for-password-prompt - try w/o on emacs 30.
+  ;; run-at-time 0 nil => bug
+  ;; run-at-time 0.01 nil => no bug. wtf?
+  (defun comint-watch-for-password-prompt (string)
+    "Prompt in the minibuffer for password and send without echoing.
+Looks for a match to `comint-password-prompt-regexp' in order
+to detect the need to (prompt and) send a password.  Ignores any
+carriage returns (\\r) in STRING.
 
-(setq comint-scroll-to-bottom-on-input t
-      comint-scroll-to-bottom-on-output t)
+This function could be in the list `comint-output-filter-functions'."
+    (when (let ((case-fold-search t))
+	    (string-match comint-password-prompt-regexp
+			  (string-replace "\r" "" string)))
+      ;; Use `run-at-time' in order not to pause execution of the
+      ;; process filter with a minibuffer
+      ;; or don't use it so that there is no weird timeout bug.
+      (with-current-buffer (current-buffer)
+        (let ((comint--prompt-recursion-depth
+	       (1+ comint--prompt-recursion-depth)))
+	  (if (> comint--prompt-recursion-depth 10)
+	      (message "Password prompt recursion too deep")
+	    (when (get-buffer-process (current-buffer))
+	      (comint-send-invisible
+	       (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+")))))))))
 
-(defun my/toggle-scroll-to-bottom-on-output ()
-  (interactive)
-  (setq-local comint-scroll-to-bottom-on-output
-	      (not comint-scroll-to-bottom-on-output)))
+(use-package coterm
+  ;; :defer t
+  :config
+  (coterm-mode)
+  (defun my/toggle-scroll-to-bottom-on-output ()
+    (interactive)
+    (setq-local comint-scroll-to-bottom-on-output
+	        (not comint-scroll-to-bottom-on-output))))
 
-(setq shell-prompt-pattern "^[🍏🍎].*\nλ ")
-;; for tramp shell sessions:
-(setq explicit-shell-file-name "bash")
+(use-package shell
+  :custom
+  (shell-prompt-pattern "^[🍏🍎].*\nλ ")
+  ;; for tramp shell sessions:
+  (explicit-shell-file-name "bash"))
+
+(use-package bash-completion
+  :after shell
+  :hook (shell-dynamic-complete-functions . bash-completion-dynamic-complete)
+  :config
+  (bash-completion-setup))
 
 (use-package detached
-  :ensure t
   :init
   (detached-init)
   :custom ((detached-show-output-on-attach t)
@@ -246,48 +280,14 @@
             `((:name "Host" :function detached--host-str :length 15 :face detached-host-face)
               (:name "Command" :function detached-list--command-str :length 75)
               (:name "Status" :function detached-list--status-str :length 7)
-              (  :name "Directory" :function detached--working-dir-str
-                 :length 30 :face detached-working-dir-face)
+              ( :name "Directory" :function detached--working-dir-str
+                :length 30 :face detached-working-dir-face)
               ( :name "Duration" :function detached--duration-str
                 :length 10 :face detached-duration-face)
               ( :name "Created" :function detached--creation-str
                 :length 20 :face detached-creation-face)
               ( :name "Metadata" :function detached--metadata-str
                 :length 20 :face detached-metadata-face)))))
-
-;; (use-package bash-completion
-;;   :config
-;;   (bash-completion-setup)
-;;   :hook
-;;   (shell-dynamic-complete-functions . #'bash-completion-dynamic-complete))
-(require 'bash-completion)
-(bash-completion-setup)
-(add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete)
-
-;; FIXME: fuck me: comint-watch-for-password-prompt - try w/o on emacs 30.
-;; run-at-time 0 nil => bug
-;; run-at-time 0.01 nil => no bug. wtf?
-(defun comint-watch-for-password-prompt (string)
-  "Prompt in the minibuffer for password and send without echoing.
-Looks for a match to `comint-password-prompt-regexp' in order
-to detect the need to (prompt and) send a password.  Ignores any
-carriage returns (\\r) in STRING.
-
-This function could be in the list `comint-output-filter-functions'."
-  (when (let ((case-fold-search t))
-	  (string-match comint-password-prompt-regexp
-			(string-replace "\r" "" string)))
-    ;; Use `run-at-time' in order not to pause execution of the
-    ;; process filter with a minibuffer
-    ;; or don't use it so that there is no weird timeout bug.
-    (with-current-buffer (current-buffer)
-      (let ((comint--prompt-recursion-depth
-	     (1+ comint--prompt-recursion-depth)))
-	(if (> comint--prompt-recursion-depth 10)
-	    (message "Password prompt recursion too deep")
-	  (when (get-buffer-process (current-buffer))
-	    (comint-send-invisible
-	     (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
