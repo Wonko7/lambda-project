@@ -20,6 +20,7 @@
 (savehist-mode)
 
 (save-place-mode)
+(setq history-length 100000)
 
 (require 'recentf)
 (recentf-mode)
@@ -148,7 +149,6 @@
   (setq projectile-sort-order 'recently-active)
   (setq projectile-enable-caching t)
   (projectile-global-mode))
-;; FIXME (projectile-save-known-projects) call this from time to time? after each add? on session exit?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
@@ -216,13 +216,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 
-;; notes on eat:
-;;  - line-mode is friendlier to evil
-;;  - couldn't get ssh/tramp integration to work, which was the whole point
-
 (use-package coterm
   :config
   (coterm-mode))
+
+(setq comint-scroll-to-bottom-on-input t
+      comint-scroll-to-bottom-on-output t)
+
+(defun my/toggle-scroll-to-bottom-on-output ()
+  (interactive)
+  (setq-local comint-scroll-to-bottom-on-output
+	      (not comint-scroll-to-bottom-on-output)))
+
+(setq shell-prompt-pattern "^[🍏🍎].*\nλ ")
+;; for tramp shell sessions:
+(setq explicit-shell-file-name "bash")
 
 (use-package detached
   :ensure t
@@ -243,20 +251,6 @@
               ( :name "Metadata" :function detached--metadata-str
                 :length 20 :face detached-metadata-face)))))
 
-
-(setq comint-scroll-to-bottom-on-input t
-      comint-scroll-to-bottom-on-output t) ;; setq-local to toggle this per shell?
-(setq shell-prompt-pattern "^[🍏🍎].*\nλ ")
-;; for tramp shell sessions:
-(setq explicit-shell-file-name "bash")
-
-(defun toggle-scroll-to-bottom-on-output ()
-  (interactive)
-  (setq-local comint-scroll-to-bottom-on-output
-	      (not comint-scroll-to-bottom-on-output)))
-
-(setq history-length 100000)
-
 ;; (use-package bash-completion
 ;;   :config
 ;;   (bash-completion-setup)
@@ -266,7 +260,7 @@
 (bash-completion-setup)
 (add-hook 'shell-dynamic-complete-functions #'bash-completion-dynamic-complete)
 
-;; FIXME: fuck me: comint-watch-for-password-prompt
+;; FIXME: fuck me: comint-watch-for-password-prompt - try w/o on emacs 30.
 ;; run-at-time 0 nil => bug
 ;; run-at-time 0.01 nil => no bug. wtf?
 (defun comint-watch-for-password-prompt (string)
