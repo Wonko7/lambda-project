@@ -269,6 +269,7 @@
   "("           #'comint-previous-prompt
   ")"           #'comint-next-prompt
   "gm"          #'man-follow
+  "gS"          #'my/toggle-scroll-to-bottom-on-output
   "C-k"         #'comint-previous-prompt
   "C-j"         #'comint-next-prompt
   "C-r"         #'consult-history
