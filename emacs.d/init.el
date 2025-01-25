@@ -163,9 +163,10 @@
 ;;   ;; (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
 ;;   ;; (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
 ;;   :config
-(setq magit-status-initial-section '(((unstaged) (status))
-			       ((staged) (status))
-			       ((TODOs) (status))))
+
+(setq magit-status-initial-section '(((unstaged) (status))))
+;; FIXME: this shouldn't be needed. WORKAROUND.
+(add-hook 'magit-status-mode-hook #'magit-status-goto-initial-section)
 
 (general-evil-define-key '(normal) magit-diff-mode-map
   "("      #'diff-hunk-prev
@@ -174,8 +175,8 @@
   "C-j"    #'diff-hunk-next)
 
 (general-evil-define-key '(normal) magit-mode-map
-  "("    #'magit-section-backward-sibling
-  ")"    #'magit-section-forward-sibling
+  "("      #'magit-section-backward-sibling
+  ")"      #'magit-section-forward-sibling
   "C-k"    #'magit-section-backward-sibling
   "C-j"    #'magit-section-backward-sibling)
 
@@ -200,17 +201,17 @@
   (setq magit-todos-max-items 1000)
   (setq magit-todos-auto-group-items 'always)
   (advice-add #'magit-todos--insert-todos
-	      :before-until #'check-if-todo-blacklisted)
+              :before-until #'check-if-todo-blacklisted)
   (advice-add #'magit-todos--add-to-status-buffer-kill-hook
-	      :before-until #'check-if-todo-blacklisted)
+              :before-until #'check-if-todo-blacklisted)
   (magit-todos-mode))
 
 (defun check-if-todo-blacklisted ()
   (let ((root (magit-with-toplevel default-directory)))
     (or (string= (substring root 0 5) "/ssh:")
-	(string= root "/data/org/")
-	(string= root "/work/guix/guix")
-	(string= root "/code/guix/guix"))))
+        (string= root "/data/org/")
+        (string= root "/work/guix/guix")
+        (string= root "/code/guix/guix"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
