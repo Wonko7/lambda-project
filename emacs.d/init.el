@@ -15,6 +15,7 @@
 ;; emacs general config:
 
 (setq use-package-hook-name-suffix nil)
+(setq use-package-always-defer t)
 
 (require 'savehist)
 (savehist-mode)
@@ -144,6 +145,7 @@
 ;; projectile
 
 (use-package projectile
+  :demand t
   :config
   (setq projectile-project-search-path '(( "/code" . 1) ( "/work" . 1) ("/data" . 1)))
   (setq projectile-sort-order 'recently-active)
@@ -210,6 +212,7 @@
 ;; shell
 
 (use-package comint
+  :demand t
   :custom
   (comint-scroll-to-bottom-on-input t)
   (comint-scroll-to-bottom-on-output t)
@@ -240,7 +243,8 @@ This function could be in the list `comint-output-filter-functions'."
 	       (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+")))))))))
 
 (use-package coterm
-  ;; :defer t
+  :after comint
+  :demand t
   :config
   (coterm-mode)
   (defun my/toggle-scroll-to-bottom-on-output ()
@@ -249,6 +253,8 @@ This function could be in the list `comint-output-filter-functions'."
 	        (not comint-scroll-to-bottom-on-output))))
 
 (use-package shell
+  :after coterm
+  :demand t
   :custom
   (shell-prompt-pattern "^[🍏🍎].*\nλ ")
   ;; for tramp shell sessions:
@@ -256,7 +262,7 @@ This function could be in the list `comint-output-filter-functions'."
 
 (use-package bash-completion
   :after shell
-  :hook (shell-dynamic-complete-functions . bash-completion-dynamic-complete)
+  :demand t
   :config
   (bash-completion-setup))
 
