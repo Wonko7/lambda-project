@@ -25,14 +25,17 @@
     "x"   #'embark-export
     ;; vertico
     "."  #'vertico-repeat
+    "v"  '("Vertico" . (keymap))
     "vG" #'vertico-grid-mode
     "vu" #'vertico-unobtrusive-mode
 
     ;; yank
+    "y"  '("yank" . (keymap))
     "yp" (lambda () (interactive) (kill-new (buffer-file-name)))
     "yP" #'consult-yank-pop
 
     ;; emacs apps
+    "a"   '("Apps" . (keymap))
     "ab"  #'ibuffer
     "ac"  #'calc
     "ad"  #'dired
@@ -40,21 +43,21 @@
     "as"  #'shell
     "ap"  #'proced
     "aE"  #'eww-search-words
-    ;; emacs but not that close to my heart
-    "aab" #'bluetooth-list-devices
     ;; external apps
+    "aa"  '("More apps" . (keymap))
+    "aab" #'bluetooth-list-devices
     "aaT" (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
     "aat" (lambda () (interactive) (my/local-async-shell-command "transmission-gtk"))
     "aac" (lambda () (interactive) (my/local-async-shell-command "calibre")) ;; FIXME guix the shit out of this.
     "aap" (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
     ;; browsers
+    "aB"  '("Browsers" . (keymap))
     "aBf" (lambda () (interactive) (my/local-async-shell-command "firefox"))
     "aBc" (lambda () (interactive) (my/local-async-shell-command "chromium"))
     "aBt" #'my/tbb
-    ;; utils
-    "zz"  (lambda () (interactive) (my/local-async-shell-command my/lock-cmd))
 
     ;; buffers
+    "b"  '("buffers" . (keymap))
     "br" #'rename-buffer
     "bk" #'kill-this-buffer
     "bn" #'evil-buffer-new
@@ -62,20 +65,25 @@
     "bg" #'consult-focus-lines
 
     ;; org
+    "o"   '("org" . (keymap))
     "oa"  (lambda () (interactive) (org-agenda nil "z"))
     "oc"  #'cfw:open-org-calendar ;; FIXME use this as date picker?
+    "oi"  '("insert" . (keymap))
     "oib" (lambda ()
             (interactive)
             (execute-kbd-macro (kbd "^wD"))
             (org-web-tools-insert-link-for-url (current-kill 0 t))
             (org-id-get-create)
             (evil-next-line 2))
+    "oiw"  '("web" . (keymap))
     "oiwe" #'org-web-tools-insert-web-page-as-entry ;; :desc "web: insert entry"
     "oiwu" #'org-web-tools-insert-link-for-url      ;; :desc "web: insert url"
+    "ow"  '("insert web" . (keymap))
     "owe" #'org-web-tools-insert-web-page-as-entry
     "owu" #'org-web-tools-insert-link-for-url
 
     ;; roam
+    "r"  '("roam" . (keymap))
     "rD" #'org-roam-demote-entire-buffer
     "rf" #'org-roam-node-find
     "rF" #'org-roam-ref-find
@@ -89,7 +97,8 @@
     "rr" #'org-roam-refile
     "rR" #'org-roam-link-replace-all
 
-    ;; roam date:
+    ;; roam dailies:
+    "rd"  '("roam dailies" . (keymap))
     "rdb" #'org-roam-dailies-goto-previous-note ;;  :desc "Goto previous note"
     "rdk" #'org-roam-dailies-goto-previous-note ;;  :desc "Goto previous note"
     "rdd" #'org-roam-dailies-goto-date          ;;  :desc "Goto date"
@@ -105,10 +114,11 @@
     "rdY" #'org-roam-dailies-capture-yesterday  ;;  :desc "Capture yesterday"
     "rd-" #'org-roam-dailies-find-directory     ;;  :desc "Find directory"
 
-    ;; detached:
+    ;; detached: put in apps?
     "dl" #'detached-list-sessions
 
     ;; projectile
+    "p"  '("projects" . (keymap))
     "pa"  #'projectile-add-known-project
     "pF"  #'my/remote-fleet-find-file
     "pf"  #'projectile-find-file
@@ -129,6 +139,7 @@
     "P"  #'password-store-copy
 
     ;; magit
+    "g"  '("git" . (keymap))
     "g/" #'consult-git-grep
     "g." #'magit-file-dispatch
     "gg" #'magit-status
@@ -148,6 +159,7 @@
                (async-shell-command (concat "git-add-remotes --push-remote=" pr))))
 
     ;; insert stuff
+    "i"  '("insert" . (keymap))
     "ie" #'emoji-search                 ;;  :desc "Emoji"
     "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
     "is" #'my/insert-shell-line
@@ -157,6 +169,7 @@
     "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
     ;; file stuff, dired, ibuffer
+    "f"  '("files" . (keymap))
     "fr" #'consult-recent-file ;; :desc "file recent"
     "ff" #'find-file
 
@@ -173,19 +186,23 @@
 
     ;; windows
     ;; TODO: use W for other windows mirror of this map.
+    "w"  '("Windows" . (keymap))
     "wg" #'ace-select-window
     "wx" #'ace-swap-window
     "ws" #'switch-window-then-swap-buffer
     "wo" #'other-window
     ;; layouts
+    "l"  '("Layouts" . (keymap))
     "ll" #'ws/set-layout
     "lt" #'ws/toggle-buffer
     "lr" #'ws/layout-reinit
 
-    "zai" #'gptel-send
-
     ;; xorg stuff
+    "z"  '("Xorg desktop things" . (keymap))
+    "zai" #'gptel-send ;; meh
+    "zz"  (lambda () (interactive) (my/local-async-shell-command my/lock-cmd))
     "zl"  #'scroll-lock-mode
+    "z'"  '("Notifications" . (keymap))
     "z''" (lambda () (interactive) (my/local-async-shell-command "dunstctl set-paused toggle"))
     "z'c" (lambda () (interactive) (my/local-async-shell-command "dunstctl close"))
     "z'C" (lambda () (interactive) (my/local-async-shell-command "dunstctl close-all"))
