@@ -87,13 +87,13 @@
 
 (use-package ace-window
   :defer t
-  :config
-  (setq aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
-  (setq aw-dispatch-when-more-than 2)
-  (setq aw-dispatch-always nil)
-  (setq aw-leading-char-style 'path)
-  (setq aw-char-position 'top-left)
-  (setq aw-scope 'frame))
+  :custom
+  (aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
+  (aw-dispatch-when-more-than 2)
+  (aw-dispatch-always nil)
+  (aw-leading-char-style 'path)
+  (aw-char-position 'top-left)
+  (aw-scope 'frame))
 
 ;; (require 'ace-link)
 
