@@ -386,6 +386,11 @@ This function could be in the list `comint-output-filter-functions'."
 ;; transmission
 
 (setq transmission-host "enterprise.local")
+(setq transmission-refresh-modes '(transmission-mode
+                                   transmission-files-mode
+                                   transmission-info-mode
+                                   transmission-peers-mode))
+(setq transmission-refresh-interval 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
