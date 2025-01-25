@@ -153,49 +153,54 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
 
-(require 'magit)
-;;evil-state-property
-;; (use-package magit
-;;   ;; :defer t
-;;   ;; :hook
-;;   ;; ((magit-diff-mode-hook . #'scroll-lock-mode)
-;;   ;;  (git-commit-setup-hook . #'my/org-commit-msg-setup 100))
-;;   ;; (add-hook 'git-commit-setup-hook #'my/org-commit-msg-setup 100)
-;;   ;; (add-hook 'magit-diff-mode-hook #'scroll-lock-mode)
-;;   :config
+(use-package magit
+  :after general
+  :config
+  (setq magit-status-initial-section '(((unstaged) (status))))
+  ;; FIXME: this shouldn't be needed. WORKAROUND:
+  ;; :hook (magit-status-mode-hook . magit-status-goto-initial-section)
+  ;; fails with wrong type argument: (or eieio-object ).
+  ;; hook shouldn't be needed in the first place, but currently magit is not
+  ;; taking me to my init section 🤷
+  (defun hack-magit-use-package-startup-add-hook (a b)
+    ;; I'm guessing this works because once magit-status has been called once it is
+    ;; properly initialised, whereas running magit-status-goto-initial-section before that
+    ;; is missing some dependencies.
+    (add-hook 'magit-status-mode-hook #'magit-status-goto-initial-section)
+    (advice-remove 'magit-status #'hack-magit-use-package-startup-add-hook)
+    b)
+  (advice-add 'magit-status :after #'hack-magit-use-package-startup-add-hook)
+  ;; end hack.
 
-(setq magit-status-initial-section '(((unstaged) (status))))
-;; FIXME: this shouldn't be needed. WORKAROUND.
-(add-hook 'magit-status-mode-hook #'magit-status-goto-initial-section)
+  (general-evil-define-key '(normal) magit-diff-mode-map
+    "("      #'diff-hunk-prev
+    ")"      #'diff-hunk-next
+    "C-k"    #'diff-hunk-prev
+    "C-j"    #'diff-hunk-next)
 
-(general-evil-define-key '(normal) magit-diff-mode-map
-  "("      #'diff-hunk-prev
-  ")"      #'diff-hunk-next
-  "C-k"    #'diff-hunk-prev
-  "C-j"    #'diff-hunk-next)
+  (general-evil-define-key '(normal) magit-mode-map
+    "("      #'magit-section-backward-sibling
+    ")"      #'magit-section-forward-sibling
+    "C-k"    #'magit-section-backward-sibling
+    "C-j"    #'magit-section-backward-sibling)
 
-(general-evil-define-key '(normal) magit-mode-map
-  "("      #'magit-section-backward-sibling
-  ")"      #'magit-section-forward-sibling
-  "C-k"    #'magit-section-backward-sibling
-  "C-j"    #'magit-section-backward-sibling)
+  (general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
+    "K"    #'git-rebase-move-line-up
+    "J"    #'git-rebase-move-line-down)
 
-(general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
-  "K"    #'git-rebase-move-line-up
-  "J"    #'git-rebase-move-line-down)
-
-(general-evil-define-key '(normal) smerge-mode-map ;; FIXME
-  "grk" #'smerge-prev
-  "grj" #'smerge-next
-  "C-k" #'smerge-prev
-  "C-j" #'smerge-next
-  "("   #'smerge-prev
-  ")"   #'smerge-next
-  "Ku"  #'smerge-keep-upper
-  "Kl"  #'smerge-keep-lower)
+  (general-evil-define-key '(normal) smerge-mode-map ;; FIXME
+    "grk" #'smerge-prev
+    "grj" #'smerge-next
+    "C-k" #'smerge-prev
+    "C-j" #'smerge-next
+    "("   #'smerge-prev
+    ")"   #'smerge-next
+    "Ku"  #'smerge-keep-upper
+    "Kl"  #'smerge-keep-lower))
 
 (use-package magit-todos
-  ;;:defer t
+  :defer t
+  :after magit
   :config
   (setq magit-todos-ignore-case t)
   (setq magit-todos-max-items 1000)
@@ -204,15 +209,13 @@
               :before-until #'check-if-todo-blacklisted)
   (advice-add #'magit-todos--add-to-status-buffer-kill-hook
               :before-until #'check-if-todo-blacklisted)
-  (magit-todos-mode))
-
-(defun check-if-todo-blacklisted ()
-  (let ((root (magit-with-toplevel default-directory)))
-    (or (string= (substring root 0 5) "/ssh:")
-        (string= root "/data/org/")
-        (string= root "/work/guix/guix")
-        (string= root "/code/guix/guix"))))
-
+  (magit-todos-mode)
+  (defun check-if-todo-blacklisted ()
+    (let ((root (magit-with-toplevel default-directory)))
+      (or (string= (substring root 0 5) "/ssh:")
+          (string= root "/data/org/")
+          (string= root "/work/guix/guix")
+          (string= root "/code/guix/guix")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
