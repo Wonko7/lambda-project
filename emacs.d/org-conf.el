@@ -189,7 +189,31 @@
 
 (use-package org-roam-dailies
   ;; :defer t
-  :after org)
+  :commands (org-roam-dailies-latest)
+  :after org
+  :config
+  (defun org-roam-dailies--list-active-files (&rest extra-files)
+    "List all files in `org-roam-dailies-directory', non recursively.
+EXTRA-FILES can be used to append extra files to the list."
+    (let ((dir (expand-file-name org-roam-dailies-directory org-roam-directory))
+          (regexp (rx-to-string `(and "." (or ,@org-roam-file-extensions)))))
+      (append (--remove (let ((file (file-name-nondirectory it)))
+                          (when (or (auto-save-file-name-p file)
+                                    (backup-file-name-p file)
+                                    (string-match "^\\." file))
+                            it))
+                        (directory-files dir regexp))
+              extra-files)))
+
+  (defun org-roam-dailies-latest ()
+    "Find latest dailies that is not in the future."
+    (first (last (-filter (lambda (f)
+                            (let ((fn    (file-name-base f))
+                                  (ext   (file-name-extension f))
+                                  (today (format-time-string "%Y-%m-%d")))
+                              (and (string= "org" (file-name-extension f))
+                                   (not (string< today fn)))))
+                          (org-roam-dailies--list-active-files))))))
 
 (use-package consult-org-roam
   ;; :defer t
@@ -583,29 +607,6 @@
          :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
          :jump-to-captured t)))
 
-(defun org-roam-dailies--list-active-files (&rest extra-files)
-  "List all files in `org-roam-dailies-directory', non recursively.
-EXTRA-FILES can be used to append extra files to the list."
-  (let ((dir (expand-file-name org-roam-dailies-directory org-roam-directory))
-        (regexp (rx-to-string `(and "." (or ,@org-roam-file-extensions)))))
-    (append (--remove (let ((file (file-name-nondirectory it)))
-                        (when (or (auto-save-file-name-p file)
-                                  (backup-file-name-p file)
-                                  (string-match "^\\." file))
-                          it))
-                      (directory-files dir regexp))
-            extra-files)))
-
-(defun org-roam-dailies-latest ()
-  "Find latest dailies that is not in the future."
-  (first (last (-filter (lambda (f)
-                          (let ((fn    (file-name-base f))
-                                (ext   (file-name-extension f))
-                                (today (format-time-string "%Y-%m-%d")))
-                            (and (string= "org" (file-name-extension f))
-                                 (not (string< today fn)))))
-                        (org-roam-dailies--list-active-files)))))
-
 (use-package calfw-org
   :config
   (setq cfw:org-agenda-schedule-args '(:timestamp))
@@ -706,12 +707,6 @@ EXTRA-FILES can be used to append extra files to the list."
 
 (defun check-if-org ()
   (string= (magit-with-toplevel (pwd)) "Directory /data/org/"))
-
-;; FIXME: fix this with git hook.
-(defun my/org-commit-msg-setup ()
-  (when (check-if-org)
-    (emoji-search)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org appear
