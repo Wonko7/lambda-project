@@ -36,6 +36,18 @@
 (add-hook 'org-agenda-mode-hook (lambda () ;; only disable in agenda.
                                   (setq truncate-lines t))) ;; and yet you shit in my mouth, why? t?
 
+(setq-default fill-column 80
+              indent-tabs-mode nil
+              mode-line-format (remove '(vc-mode vc-mode) mode-line-format)
+              scroll-down-aggressively 0
+              scroll-up-aggressively 0)
+
+(setq tab-width 8
+      disabled-command-function nil
+      track-eol t
+      view-read-only t)
+(setq help-enable-variable-value-editing t)
+
 (use-package whitespace
   :config
   (setq whitespace-action '(auto-cleanup))
@@ -44,10 +56,12 @@
           tabs trailing
           empty
           tab-mark
-          missing-newline-at-eof))
-  (global-whitespace-mode 1))
+          missing-newline-at-eof)))
 
-(setq help-enable-variable-value-editing t)
+(use-package elec-pair
+  :demand t
+  :config
+  (electric-pair-mode))
 
 ;; stop touching my stuff (see perfect window placement):
 (setq display-buffer-base-action
@@ -87,7 +101,6 @@
 ;; windows
 
 (use-package ace-window
-  :defer t
   :custom
   (aw-keys '(?u ?h ?e ?t ?o ?n ?a ?s ?i ?d))
   (aw-dispatch-when-more-than 2)
@@ -219,6 +232,7 @@
   :custom
   (comint-scroll-to-bottom-on-input t)
   (comint-scroll-to-bottom-on-output t)
+  (comint-prompt-read-only t)
   :config
   ;; FIXME: fuck me: comint-watch-for-password-prompt - try w/o on emacs 30.
   ;; run-at-time 0 nil => bug

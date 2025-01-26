@@ -1,8 +1,13 @@
-(add-hook 'prog-mode-hook #'rainbow-identifiers-mode)
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-(general-evil-define-key '(normal) prog-mode-map
-  "zj"  #'flymake-goto-next-error
-  "zk"  #'flymake-goto-prev-error)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; bling
+
+(use-package rainbow-identifiers
+  :hook
+  (prog-mode-hook . rainbow-identifiers-mode))
+
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode-hook . rainbow-delimiters-mode))
 
 ;; ocaml + sane defaults
 ;; (require 'lsp)
@@ -26,8 +31,6 @@
 ;; (setq eglot-autoshutdown t)
 ;; FIXME: eglot doesn't seem to like ocsigen.
 
-
-
 (use-package tuareg
   :defer t
   :hook
@@ -39,30 +42,38 @@
                                     (concat tuareg-interactive-program " -nopromptcont"))
                         (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
   :config
-  (progn
-    (setq tuareg-interactive-read-only-input t)
-    (general-evil-define-key '(normal) tuareg-mode-map
-      :prefix "RET"
-      "ge"  #'merlin-error-next
-      "o"   #'merlin-pop-stack
-      "RET" #'tuareg-eval-phrase
-      "b"   #'tuareg-eval-buffer
-      "TAB" #'tuareg-complete
-      "K"   #'tuareg-kill-ocaml
-      "a"   #'ff-get-other-file))
-  ;; (add-hook 'tuareg-mode-hook
-  ;;           (lambda ()
-  ;;             (setq mode-name "🐫")
-  ;;             (add-hook 'before-save-hook #'ocamlformat-before-save)
-  ;;             (setq-local comment-style 'indent)
-  ;;             (setq-local tuareg-interactive-program
-  ;;                         (concat tuareg-interactive-program " -nopromptcont"))
-  ;;             (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
-  ;; for your eval convenience  (remove-hook 'tuareg-mode #'ocamlformat-before-save)
-  )
 
-(use-package ocamlformat
-  :defer t)
+  (setq tuareg-interactive-read-only-input t)
+
+  (general-evil-define-key '(normal) tuareg-mode-map
+    :prefix "RET"
+    "ge"  #'merlin-error-next
+    "o"   #'merlin-pop-stack
+    "RET" #'tuareg-eval-phrase
+    "b"   #'tuareg-eval-buffer
+    "TAB" #'tuareg-complete
+    "K"   #'tuareg-kill-ocaml
+    "a"   #'ff-get-other-file)
+
+  (mapc (lambda (ext) (add-to-list 'completion-ignored-extensions ext))
+        '(".bc" ".byte" ".exe" ".native"))
+
+  (mapc (lambda (ext) (add-to-list 'auto-mode-alist ext))
+        '(("dune-project\\'" . dune-mode)
+          ("dune-workspace\\'" . dune-mode)
+          ("README\\'" . text-mode)
+          ("\\.dockerignore\\'" . conf-unix-mode)
+          ("\\.gitignore\\'" . conf-unix-mode)
+          ("\\.merlin\\'" . conf-space-mode)
+          ("\\.ocamlinit\\'" . tuareg-mode)
+          ("\\.top\\'" . tuareg-mode)
+          ("\\.mli?\\'" . tuareg-mode)
+          ("\\.eliomi?\\'" . tuareg-mode)))
+
+  ;; Hack to open files like Makefile.local with the right mode.
+  (add-to-list 'auto-mode-alist '("\\.[^\\.].*\\'" nil t) t))
+
+(use-package ocamlformat)
 
 ;; (use-package utop
 ;;   :defer t
@@ -80,101 +91,46 @@
 
 ;; (use-package tuareg :ensure t)
 
-(setq-default fill-column 80
-              indent-tabs-mode nil
-              mode-line-format (remove '(vc-mode vc-mode) mode-line-format)
-              require-final-newline t
-              scroll-down-aggressively 0
-              scroll-up-aggressively 0)
-
-(setq tab-width 8
-      ;; ocaml
-      comint-prompt-read-only t ; comint -> repl
-      comment-multi-line t
-      compilation-scroll-output 'first-error
-      compilation-context-lines 0
-      disabled-command-function nil
-      sql-product 'postgres
-      track-eol t
-      view-read-only t
-      vc-follow-symlinks t)
-
-(mapc (lambda (ext) (add-to-list 'completion-ignored-extensions ext))
-      '(".bc" ".byte" ".exe" ".native"))
-
-(mapc (lambda (ext) (add-to-list 'auto-mode-alist ext))
-      '(("dune-project\\'" . dune-mode)
-        ("dune-workspace\\'" . dune-mode)
-        ("README\\'" . text-mode)
-        ("\\.dockerignore\\'" . conf-unix-mode)
-        ("\\.gitignore\\'" . conf-unix-mode)
-        ("\\.merlin\\'" . conf-space-mode)
-        ("\\.ocamlinit\\'" . tuareg-mode)
-        ("\\.top\\'" . tuareg-mode)
-        ("\\.mli?\\'" . tuareg-mode)
-        ("\\.eliomi?\\'" . tuareg-mode)))
-
-;; Hack to open files like Makefile.local with the right mode.
-(add-to-list 'auto-mode-alist '("\\.[^\\.].*\\'" nil t) t)
-
-;; (map :localleader
-;;       :map tuareg-mode-map
-;;       "ge"  #'merlin-error-next
-;;       "o"   #'merlin-pop-stack
-;;       "RET" #'tuareg-eval-phrase
-;;       "b"   #'tuareg-eval-buffer
-;;       "TAB" #'tuareg-complete
-;;       "K"   #'tuareg-kill-ocaml
-  ;; :nvm  "gd" #'+lookup/definition
-;;       "a"   #'ff-get-other-file)
-
-
 (use-package diff-hl
-  ;; :after magit
   :config
   (global-diff-hl-mode)
-  (setq diff-hl-draw-borders nil)
-  (setq diff-hl-side 'right))
+  :custom
+  (diff-hl-draw-borders nil)
+  (diff-hl-side 'right))
 
-;;(global-diff-hl-mode)
+(use-package compile
+  :custom
+  (compilation-scroll-output 'first-error)
+  (compilation-context-lines 0))
+
+(use-package flymake
+  :config
+  (general-evil-define-key '(normal) prog-mode-map
+    "zj"  #'flymake-goto-next-error
+    "zk"  #'flymake-goto-prev-error))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; buffer-env
 
 ;; use guix shell automagically <3
 
-;; (use-package buffer-env
-;;   ;; :defer t
-;;   :demand t
-;;   :hook
-;;   ((hack-local-variables-hook . #'buffer-env-update)
-;;    (utop-mode-hook . #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
-;;    (comint-mode-hook . #'hack-dir-local-variables-non-file-buffer))
-;;   :config
-;;   (setq buffer-env-script-name "guix.scm")
-;;   (setq buffer-env-commands
-;;           '((".env" . "set -a && >&2 . \"$0\" && env -0")
-;;             ("manifest.scm" . "guix shell -m \"$0\" -- env -0")
-;;             ("guix.scm" . "guix shell -D -f \"$0\" -- env -0")
-;;             ("*" . ">&2 . \"$0\" && env -0")))
-;;   )
-
-(require 'buffer-env)
-(add-hook 'hack-local-variables-hook #'buffer-env-update)
-(add-hook 'utop-mode-hook #'hack-dir-local-variables-non-file-buffer) ;; this one doesn't
-(add-hook 'comint-mode-hook #'hack-dir-local-variables-non-file-buffer)
-(setq buffer-env-script-name "guix.scm")
+(use-package buffer-env
+  :demand t
+  :hook
+  ((hack-local-variables-hook . buffer-env-update)
+   (utop-mode-hook . hack-dir-local-variables-non-file-buffer) ;; this one doesn't work?
+   (comint-mode-hook . hack-dir-local-variables-non-file-buffer))
+  :config
+  (setq buffer-env-script-name "guix.scm"))
 
 (use-package inheritenv
-  :demand t
-  ;;:defer t
-  )
+  :after buffer-env
+  :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; I, for one, welcome our new ai overlords
 
 (use-package gptel
-  :defer t
   :config
   (setq gptel-api-key (lambda ()
                         (auth-source-pass-get 'secret "web/openai/token/pandora"))))
@@ -183,13 +139,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql
 
-(general-evil-define-key '(normal) sql-mode-map
-  :prefix "RET"
-  "RET" #'sql-send-paragraph)
+(use-package sql
+  :config
+  (general-evil-define-key '(normal) sql-mode-map
+    :prefix "RET"
+    "RET" #'sql-send-paragraph)
 
-(setq sql-postgres-login-params '((user :default "wonko")
-                                  (database :default "maxi_passat")
-                                  (server :default "localhost")
-                                  (port :default 3000)))
+  (setq sql-product 'postgres)
+  (setq sql-postgres-login-params '((user :default "wonko")
+                                    (database :default "maxi_passat")
+                                    (server :default "localhost")
+                                    (port :default 3000))))
 
 (provide 'conf/dev)
