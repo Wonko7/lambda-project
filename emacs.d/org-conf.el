@@ -165,7 +165,7 @@
 
 (use-package org-roam
   :after org
-  ;; :defer t
+  :commands (org-roam-node-open)
   :config
   (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
@@ -174,7 +174,6 @@
   (org-roam-db-autosync-mode))
 
 (use-package org-roam-dailies
-  ;; :defer t
   :commands (org-roam-dailies-latest)
   :after org
   :config
@@ -202,20 +201,17 @@ EXTRA-FILES can be used to append extra files to the list."
                           (org-roam-dailies--list-active-files))))))
 
 (use-package consult-org-roam
-  ;; :defer t
   :after org-roam
   :config
   (consult-org-roam-mode 1)) ;; meh.
 
 (use-package org-roam-protocol
-  ;; :defer t
   :after org-roam)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; super agenda
 
 (use-package org-agenda
-  ;; :defer t
   :after org
   :config
   (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
@@ -354,7 +350,6 @@ EXTRA-FILES can be used to append extra files to the list."
 ;; capture
 
 (use-package org-capture
-  ;; :defer t
   :after org
   :config
   ;; firefox integration
@@ -619,8 +614,7 @@ EXTRA-FILES can be used to append extra files to the list."
 ;;                       (time-to-days
 ;;                        (org-read-date nil t end-date))) text))))))
 
-(use-package org-web-tools
-  :defer t)
+(use-package org-web-tools)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-ql
