@@ -268,15 +268,6 @@
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
-       (provision '(synergy))
-       (start #~(make-forkexec-constructor
-                 (list #$(file-append synergy "/bin/synergy"))
-                 #:environment-variables (cons "QT_SCALE_FACTOR=1"
-                                               (default-environment-variables))
-                 #:log-file #$(home-log-path "synergy")))
-       (stop #~(make-kill-destructor))
-       (documentation "can't be arsed to move IRL"))
-      (shepherd-service
        (provision '(oneko))
        (start #~(make-forkexec-constructor
                  (list #$(file-append oneko "/bin/oneko") "-dog")

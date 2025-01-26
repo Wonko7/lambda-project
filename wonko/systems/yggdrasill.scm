@@ -29,7 +29,7 @@
   #:use-module (wonko services kmonad)
   #:export (%yggdrasill-os))
 
-(use-package-modules xorg kde)
+(use-package-modules xorg kde synergy)
 
 (define machine-home-services
   (list
@@ -56,6 +56,13 @@
       (simple-service
        'yggdrasill-shepherd home-shepherd-service-type
        (list
+        (shepherd-service
+         (provision '(synergy))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append synergy "/bin/synergy"))
+                   #:log-file #$(home-log-path "synergy")))
+         (stop #~(make-kill-destructor))
+         (documentation "can't be arsed to move IRL"))
         (shepherd-service
          (provision '(kdeconnectd))
          (start #~(make-forkexec-constructor
