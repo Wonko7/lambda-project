@@ -8,7 +8,7 @@
   (setq ement-room-message-format-spec "%S> %W%B%r%R%t")
   (setq ement-room-prism 'both)
   (setq ement-save-sessions nil)
-  
+
   (general-evil-define-key '(normal) ement-room-list-mode-map
     "u" #'ement-tabulated-room-list-next-unread
     "X"  #'ement-room-list-kill-buffer
@@ -254,12 +254,10 @@
 ;;                topic))
 ;;             gnus-topic-alist)))
 
-(use-package f)
 (use-package gnus
-  :after f
   :config
   (let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
-    (if (f-file-p gnus)
+    (if (file-readable-p gnus)
         (load-file gnus)
       (setq my/gnus-topic-alist '(("tech" ;; the key of topic
                                    "nntp+news.gwene.org:gwene.com.schneier"
