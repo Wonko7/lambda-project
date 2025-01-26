@@ -47,7 +47,7 @@
     "aa"  '("More apps" . (keymap))
     "aab" #'bluetooth-list-devices
     "aaT" (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
-    "aat" (lambda () (interactive) (my/local-async-shell-command "transmission-gtk"))
+    "aat" #'transmission
     "aac" (lambda () (interactive) (my/local-async-shell-command "calibre")) ;; FIXME guix the shit out of this.
     "aap" (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
     ;; browsers
