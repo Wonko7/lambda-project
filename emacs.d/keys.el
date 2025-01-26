@@ -5,6 +5,7 @@
 
 (use-package general
   :demand t
+  :after evil-leader
   :config
   (general-evil-setup t)
 
