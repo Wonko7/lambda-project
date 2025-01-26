@@ -112,20 +112,24 @@
 ;; (require 'ace-link)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; auth/pass
+;; auth/gpg/pass
 
-(use-package pass
-  :defer t)
+(use-package epg
+  :custom
+  (epg-pinentry-mode 'loopback))
 
-(setq password-store-time-before-clipboard-restore 5)
+(use-package pinentry
+  :demand t
+  :after epg
+  :config
+  (setq epg-pinentry-mode 'loopback)
+  (pinentry-start))
 
-(require 'pinentry)
-(setq epg-pinentry-mode 'loopback)
-(pinentry-start)
-;; (use-package pinentry
-;;   :config
-;;   (setq epg-pinentry-mode 'loopback)
-;;   (pinentry-start))
+(use-package pass)
+
+(use-package password-store
+  :custom
+  (password-store-time-before-clipboard-restore 5))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spelling
