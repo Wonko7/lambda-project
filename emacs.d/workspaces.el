@@ -60,30 +60,23 @@
                                            "remote-shell" nil ,rpr)))))))
 
           ( :layout grid9
-            :recipe (|
-                     (:left-size-ratio 0.3)
-                     (-
-                      (:upper-size-ratio 0.3)
-                      a
-                      (-
-                       (:upper-size-ratio 0.5)
-                       b
-                       c))
-                     (| (:left-size-ratio 0.5)
-                        (-
-                         (:upper-size-ratio 0.3)
-                         d
-                         (-
-                          (:upper-size-ratio 0.5)
-                          e
-                          f))
-                        (-
-                         (:upper-size-ratio 0.3)
-                         g
-                         (-
-                          (:upper-size-ratio 0.5)
-                          h
-                          i))))
+            :recipe (| (:left-size-ratio 0.3)
+                       (- (:upper-size-ratio 0.3)
+                          a
+                          (- (:upper-size-ratio 0.5)
+                             b
+                             c))
+                       (| (:left-size-ratio 0.5)
+                          (- (:upper-size-ratio 0.3)
+                             d
+                             (- (:upper-size-ratio 0.5)
+                                e
+                                f))
+                          (- (:upper-size-ratio 0.3)
+                             g
+                             (- (:upper-size-ratio 0.5)
+                                h
+                                i))))
             :buffers-f (mapcar
                         (lambda (ab)
                           (let ((a (car ab))
