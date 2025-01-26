@@ -49,6 +49,7 @@
 (setq help-enable-variable-value-editing t)
 
 (use-package whitespace
+  :demand t
   :config
   (setq whitespace-action '(auto-cleanup))
   (setq whitespace-style
@@ -56,7 +57,8 @@
           tabs trailing
           empty
           tab-mark
-          missing-newline-at-eof)))
+          missing-newline-at-eof))
+  (global-whitespace-mode 1))
 
 (use-package elec-pair
   :demand t
