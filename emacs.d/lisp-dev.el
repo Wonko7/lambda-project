@@ -1,10 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clojure
 
-(use-package cider
-  :defer t)
-(use-package clojure-mode
-  :defer t)
+(use-package cider)
+(use-package clojure-mode)
 (setq org-babel-clojure-backend 'cider)
 
 ;; TODO: try out tropin's clojure settings:
@@ -13,29 +11,32 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; guile
 
-(use-package eval-in-repl-geiser
-  :defer t)
+(use-package eval-in-repl-geiser)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; paredit
 
-(add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
-(add-hook 'scheme-mode-hook #'evil-cleverparens-mode)
-(add-hook 'scheme-mode-hook #'guix-devel-mode)
-(add-hook 'scheme-mode-hook #'geiser-mode)
+
+(use-package eval-sexp-fu)
+(use-package paredit)
 
 (use-package aggressive-indent
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
+  :hook
+  ((emacs-lisp-mode-hook . aggressive-indent-mode)
+   (scheme-mode-hook . aggressive-indent-mode)))
 
-(use-package eval-sexp-fu
-  ;;:defer t
-  )
+(use-package guix-devel
+  :hook
+  (scheme-mode-hook . guix-devel-mode))
 
-(use-package paredit)
+(use-package geiser-mode
+  :hook
+  (scheme-mode-hook . geiser-mode))
+
 (use-package evil-cleverparens
   ;; :defer t
+  :hook ((emacs-lisp-mode-hook . evil-cleverparens-mode)
+         (scheme-mode-hook . evil-cleverparens-mode))
   :config
   (progn
     (general-evil-define-key '(normal visual) evil-cleverparens-mode-map
@@ -82,9 +83,7 @@
     (setq evil-cleverparens-drag-ignore-lines t)
     (setq evil-cleverparens-use-s-and-S nil)))
 
-
 ;; c-q to insert literal character without paredit balancing
 ;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
-
 
 (provide 'conf/lisp)
