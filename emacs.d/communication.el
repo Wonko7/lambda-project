@@ -1,16 +1,14 @@
-(require 'ement)
-  ;; :defer t
-  ;;:hook
-  ;; ((ement-room-compose-hook . #'ement-room-compose-org) ;; this isn't working?
-  ;;  (ement-room-read-string-setup-hook . #'flyspell-mode))
-;; enable flyspell in the minibuffer
-(add-hook 'ement-room-compose-hook #'ement-room-compose-org) ;; this isn't working?
-(add-hook 'ement-room-read-string-setup-hook #'flyspell-mode)
-  ;;:config
+(use-package ement
+  :commands (my/ement-init)
+  :hook
+  ((ement-room-compose-hook . ement-room-compose-org) ;; this isn't working?
+   (ement-room-read-string-setup-hook . flyspell-mode))
+
+  :config
   (setq ement-room-message-format-spec "%S> %W%B%r%R%t")
   (setq ement-room-prism 'both)
   (setq ement-save-sessions nil)
-  ;; keys
+  
   (general-evil-define-key '(normal) ement-room-list-mode-map
     "u" #'ement-tabulated-room-list-next-unread
     "X"  #'ement-room-list-kill-buffer
@@ -131,10 +129,10 @@
     ;; "g r" #'ement-view-room
     "m" #'ement-notify-switch-to-mentions-buffer
     "n" #'ement-notify-switch-to-notifications-buffer
-    "l"   #'ement-tabulated-room-list
-    "r"   #'ement-view-room
-    "R"   #'ement-room-sync
-    "y"   #'my/ement-home
+    "l" #'ement-tabulated-room-list
+    "r" #'ement-view-room
+    "R" #'ement-room-sync
+    "y" #'my/ement-home
 
     "RET" #'ement-room-send-message
     "c"   (lambda ()
@@ -154,18 +152,18 @@
 
   ;;)
 
-(defun my/ement-init ()
-  (interactive)
-  (ement-connect :user-id "@wonko7:matrix.org"
-                 :password (auth-source-pass-get 'secret "web/matrix/wonko7")
-                 :uri-prefix "http://127.0.0.1:8666"))
+  (defun my/ement-init ()
+    (interactive)
+    (ement-connect :user-id "@wonko7:matrix.org"
+                   :password (auth-source-pass-get 'secret "web/matrix/wonko7")
+                   :uri-prefix "http://127.0.0.1:8666"))
 
-(defun my/ement-home ()
-  (interactive)
-  (ement-notify-switch-to-notifications-buffer)
-  (delete-other-windows)
-  (split-window-horizontally)
-  (ement-tabulated-room-list))
+  (defun my/ement-home ()
+    (interactive)
+    (ement-notify-switch-to-notifications-buffer)
+    (delete-other-windows)
+    (split-window-horizontally)
+    (ement-tabulated-room-list)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; erc
@@ -256,8 +254,10 @@
 ;;                topic))
 ;;             gnus-topic-alist)))
 
-(require 'f)
-(require 'gnus)
+(use-package f)
+(use-package gnus
+  :after f
+  :config
   (let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
     (if (f-file-p gnus)
         (load-file gnus)
@@ -283,7 +283,7 @@
 
   (setq gnus-select-method
         '(nnimap "gmail"
-                 (nnimap-address "imap.gmail.com")  ; it could also be imap.googlemail.com if that's your server.
+                 (nnimap-address "imap.gmail.com") ; it could also be imap.googlemail.com if that's your server.
                  (nnimap-server-port "imaps")
                  (nnimap-stream ssl)))
 
@@ -320,25 +320,25 @@
                topic))
             gnus-topic-alist))
 
-(general-evil-define-key '(normal) gnus-group-mode-map
-  "u" #'gnus-group-unsubscribe
-  "S" #'gnus-group-unsubscribe
-  "s" #'gnus-group-subscribe)
+  (general-evil-define-key '(normal) gnus-group-mode-map
+    "u" #'gnus-group-unsubscribe
+    "S" #'gnus-group-unsubscribe
+    "s" #'gnus-group-subscribe)
 
-(general-evil-define-key '(normal) gnus-summary-mode-map
-  "U" #'gnus-summary-put-mark-as-unread
-  "K" #'gnus-summary-prev-article
-  "J" #'gnus-summary-next-article)
+  (general-evil-define-key '(normal) gnus-summary-mode-map
+    "U" #'gnus-summary-put-mark-as-unread
+    "K" #'gnus-summary-prev-article
+    "J" #'gnus-summary-next-article)
 
-(general-evil-define-key '(normal) gnus-article-mode-map
-  "U" #'gnus-summary-put-mark-as-unread
-  "K" #'gnus-summary-prev-article
-  "J" #'gnus-summary-next-article)
+  (general-evil-define-key '(normal) gnus-article-mode-map
+    "U" #'gnus-summary-put-mark-as-unread
+    "K" #'gnus-summary-prev-article
+    "J" #'gnus-summary-next-article)
 
-;;)
+  ;;)
 
-(require 'gnus-topic )
-(require 'evil-collection-gnus)
+  (require 'gnus-topic )
+  (require 'evil-collection-gnus))
 
 ;; (use-package gnus-topic
 ;;   :after gnus
