@@ -169,7 +169,6 @@
   :config
   (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (setq org-roam-directory (concat org-directory "here-be-dragons/"))
   (setq org-roam-completion-everywhere t)
   (org-roam-db-autosync-mode))
 
@@ -622,8 +621,8 @@ EXTRA-FILES can be used to append extra files to the list."
 (use-package org-ql)
 (use-package org-ql-search
   :after org-ql
-  :config
 
+  :config
   (defun my/sort-by-filename-date (a b)
     (cl-flet* ((get-fn (e)
                  (buffer-name (marker-buffer (org-element-property :org-marker e))))
