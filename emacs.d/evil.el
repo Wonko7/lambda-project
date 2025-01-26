@@ -17,9 +17,8 @@
 
   :init
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding t)
   (setq evil-want-minibuffer t)
-  ;; (setq evil-want-keybinding nil)
+  (setq evil-want-keybinding nil) ;; evil tells you to
   (setq evil-want-C-i-jump t)
 
   :config
@@ -48,13 +47,14 @@
 (use-package evil-collection
   :demand t
   :init
-  (setq evil-collection-calendar-want-org-bindings t)
-  :config
+  (setq evil-want-keybinding nil)
   (setq evil-collection-calendar-want-org-bindings t)
   (setq evil-collection-setup-minibuffer t)
   (setq evil-collection-outline-bind-tab-p t)
   (setq evil-collection-key-blacklist '("SPC" "C-SPC"))
+  :config
   (evil-collection-init)
+  (setq evil-want-keybinding t)
   ;; (setq evil-want-C-i-jump nil)
   )
 
