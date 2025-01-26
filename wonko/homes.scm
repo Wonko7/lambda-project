@@ -375,6 +375,8 @@
 
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
+             (default-cache-ttl (* 60 20))
+             (max-cache-ttl (* 60 60 2))
              (pinentry-program
               (file-append pinentry-emacs "/bin/pinentry-emacs"))
              (ssh-support? #t)))
