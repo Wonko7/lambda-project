@@ -48,7 +48,7 @@
     "aab" #'bluetooth-list-devices
     "aaT" (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
     "aat" #'transmission
-    "aac" (lambda () (interactive) (my/local-async-shell-command "calibre")) ;; FIXME guix the shit out of this.
+    "aac" (lambda () (interactive) (my/local-async-shell-command "calibre"))
     "aap" (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
     ;; browsers
     "aB"  '("Browsers" . (keymap))
@@ -196,6 +196,7 @@
     "ll" #'ws/set-layout
     "lt" #'ws/toggle-buffer
     "lr" #'ws/layout-reinit
+    "ls" #'ws/toggle-shells
 
     ;; xorg stuff
     "z"  '("Xorg desktop things" . (keymap))

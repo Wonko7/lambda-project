@@ -158,6 +158,24 @@
                      b)))
                (plist-get layout ':buffers)))))))
 
+  (defun ws/save-buffer-config ()
+    (interactive)
+    (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
+           (layout (first lo))
+           (wm     (second lo))
+           (buffs  (mapcar (lambda (bi)
+                             (plist-get bi ':name))
+                           (plist-get layout ':buffers)))
+           (buffs  (-filter (lambda (bi) ;; non shell only
+                              (not (string-search "shell" (symbol-name bi))))
+                            buffs)))
+      (wlf:wset-fix-windows wm)
+      (mapcar (lambda (b)
+                (wlf:set-buffer
+                 wm b
+                 (window-buffer (wlf:get-window wm b))))
+              buffs)))
+
   (defun ws/toggle-buffer ()
     (interactive)
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
@@ -172,6 +190,24 @@
                     :sort nil
                     :require-match t)))
       (wlf:toggle wm (intern bn))))
+
+  (defun ws/toggle-shells ()
+    (interactive)
+    (ws/save-buffer-config)
+    (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
+           (layout (first lo))
+           (wm     (second lo))
+           (buffs  (mapcar (lambda (bi)
+                             (symbol-name
+                              (plist-get bi ':name)))
+                           (plist-get layout ':buffers)))
+           (buffs  (-filter (lambda (bn)
+                              (string-search "shell" bn))
+                            buffs)))
+      (wlf:wset-fix-windows wm)
+      (mapcar (lambda (bn)
+                (wlf:toggle wm (intern bn)))
+              buffs)))
 
   (defun ws/layout-reinit ()
     (interactive)
