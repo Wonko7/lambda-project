@@ -256,14 +256,12 @@
         xfconf
         xfce4-battery-plugin))
 
-(define-public %crypto-world
+(define-public %crypto-world ;; complements %utils-world
   (list gnupg
         password-store
         emacs-pass
         emacs-auth-source-pass
-        emacs-pinentry
-        pinentry-emacs
-        openssh))
+        emacs-pinentry))
 
 (define-public %xorg-world
   (list xinit
@@ -453,7 +451,7 @@
    acpi
    tmux
    dtach
-   net-tools
+   net-tools ;; netstat
    strace
    ;; compression
    p7zip
@@ -463,11 +461,11 @@
    adb
    ;; web
    gnutls
-   libressl
+   openssl
    curl
    jq))
 
-(define-public %os-net-world
+(define-public %os-net-world ;; complements %utils-world
   (list
    openntpd
    wireguard-tools
