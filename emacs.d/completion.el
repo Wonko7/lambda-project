@@ -199,6 +199,8 @@
   :after consult
   :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
   :config
+  (general-evil-define-key '(normal insert visual) minibuffer-mode-map
+    "C-b"        #'embark-become)
   (setq embark-prompter 'embark-completing-read-prompter)
   (defun my/embark-toggle-prompter ()
     (interactive)
