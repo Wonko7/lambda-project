@@ -49,11 +49,11 @@
 
 (define %wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %vanilla-wonko-services))))
+    (inherit %vanilla-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %vanilla-wonko-services))))
 
 (define %media-station-home
   (home-environment
@@ -65,42 +65,42 @@
 
 (define %daban-urnud-os
   (operating-system
-   (inherit %laptop-os)
-   (host-name "daban-urnud")
-   (keyboard-layout %us-kb)
-   (services
-    (cons* (service slim-service-type wonko-slim-config)
-           (service noautostart-slim-service-type media-station-slim-config)
-           (service guix-home-service-type
-                    `((,(crew-name %wonko) ,%wonko-home)
-                      (,(crew-name %media) ,%media-station-home)))
-           (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
-                                                         "# (.)(.)\n#  8==o~~"))
-           (service kmonad-service-type kmonad-laptop-config)
-           (service kmonad-service-type kmonad-ergodox-config)
-           (service kmonad-service-type kmonad-bullshit-config)
-           %laptop-services))
-   (mapped-devices
-    (list (mapped-device
-           (source (uuid "0a59dd11-43cf-4043-bcb6-932ad861fb2b"))
-           (target "vault")
-           (type luks-device-mapping))))
-   (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                             (make-vault-subvolume args mapped-devices))))
-                   (cons*
-                    (file-system
-                     (mount-point "/boot")
-                     (device (uuid "D4BC-780D"
-                                   'fat32))
-                     (type "vfat"))
-                    (file-system
-                     (mount-point "/mnt/vault")
-                     (device "/dev/mapper/vault")
-                     (type "btrfs")
-                     (dependencies mapped-devices))
-                    (append
-                     (make-vault-subvolumes mapped-devices)
-                     %base-file-systems))))))
+    (inherit %laptop-os)
+    (host-name "daban-urnud")
+    (keyboard-layout %us-kb)
+    (services
+     (cons* (service slim-service-type wonko-slim-config)
+            (service noautostart-slim-service-type media-station-slim-config)
+            (service guix-home-service-type
+                     `((,(crew-name %wonko) ,%wonko-home)
+                       (,(crew-name %media) ,%media-station-home)))
+            (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
+                                                          "# (.)(.)\n#  8==o~~"))
+            (service kmonad-service-type kmonad-laptop-config)
+            (service kmonad-service-type kmonad-ergodox-config)
+            (service kmonad-service-type kmonad-bullshit-config)
+            %laptop-services))
+    (mapped-devices
+     (list (mapped-device
+            (source (uuid "0a59dd11-43cf-4043-bcb6-932ad861fb2b"))
+            (target "vault")
+            (type luks-device-mapping))))
+    (file-systems (let ((btrfs-vault-subvol (lambda (args)
+                                              (make-vault-subvolume args mapped-devices))))
+                    (cons*
+                     (file-system
+                       (mount-point "/boot")
+                       (device (uuid "D4BC-780D"
+                                     'fat32))
+                       (type "vfat"))
+                     (file-system
+                       (mount-point "/mnt/vault")
+                       (device "/dev/mapper/vault")
+                       (type "btrfs")
+                       (dependencies mapped-devices))
+                     (append
+                      (make-vault-subvolumes mapped-devices)
+                      %base-file-systems))))))
 
 %wonko-home
 %daban-urnud-os
