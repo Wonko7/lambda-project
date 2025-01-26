@@ -1,31 +1,33 @@
 (define-module (wonko homes)
- #:use-module (guix gexp)
- #:use-module (guix modules)
- #:use-module (gnu)
- #:use-module (gnu home)
- #:use-module (gnu system shadow)
- #:use-module (gnu services)
- #:use-module (guix profiles)
- #:use-module (srfi srfi-1)
- #:use-module (srfi srfi-11)
- #:use-module (ice-9 match)
- ;; fonts
- #:use-module (wonko packages fonts)
- ;; services
- #:use-module (gnu home services)
- #:use-module (gnu home services shepherd)
- #:use-module (gnu home services shells)
- #:use-module (gnu services shepherd)
- #:use-module (wonko packages emacs-xyz)
- ;; my stuff
- #:use-module (wonko defs)
- #:use-module (wonko fleet)
- #:use-module (wonko dotfiles)
- #:use-module (wonko pkgs))
+  #:use-module (guix gexp)
+  #:use-module (guix modules)
+  #:use-module (gnu)
+  #:use-module (gnu home)
+  #:use-module (gnu system shadow)
+  #:use-module (gnu services)
+  #:use-module (guix profiles)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-11)
+  #:use-module (ice-9 match)
+  ;; fonts
+  #:use-module (wonko packages fonts)
+  ;; services
+  #:use-module (gnu home services)
+  #:use-module (gnu home services shepherd)
+  #:use-module (gnu home services shells)
+  #:use-module (gnu home services gnupg)
+  #:use-module (gnu services shepherd)
+  #:use-module (wonko packages emacs-xyz)
+  ;; my stuff
+  #:use-module (wonko defs)
+  #:use-module (wonko fleet)
+  #:use-module (wonko dotfiles)
+  #:use-module (wonko pkgs))
 
 (use-package-modules
  fonts fontutils unicode
  emacs emacs-xyz
+ gnupg
  aspell hunspell libreoffice
  glib pulseaudio synergy xorg toys linux xdisorg suckless music image-viewers
  xfce lxde gnome kde-plasma kde-frameworks
@@ -379,6 +381,12 @@
                     '("fundamental-mode/danger_triangle"
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
+
+   (service home-gpg-agent-service-type
+            (home-gpg-agent-configuration
+             (pinentry-program
+              (file-append pinentry-emacs "/bin/pinentry-emacs"))
+             (ssh-support? #t)))
 
    (simple-service
     'config-files
