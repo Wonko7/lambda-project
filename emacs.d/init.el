@@ -137,7 +137,6 @@
 ;; spelling
 
 (use-package flyspell-correct
-  ;;:defer t
   :config
   ;; (global-spell-fu-mode 0)
   ;; (setenv "DICTIONARY" "en_GB-ise")
@@ -149,7 +148,6 @@
                                          nil utf-8))))
 
 (use-package flyspell
-  ;; :defer t
   :hook
   ((git-commit-mode-hook . (lambda () (flyspell-mode 1)))
    (org-mode-hook  . (lambda () (flyspell-mode 1))))
@@ -157,7 +155,6 @@
   (setq flyspell-mark-duplications-flag nil))
 
 (use-package verbiste
-  :defer t
   :commands (verbiste-deconjugate verbiste-conjugate)
   :config
   (general-evil-define-key '(normal) verbiste-mode-keymap
@@ -178,7 +175,6 @@
 ;; magit
 
 (use-package magit
-  :after general
   :custom
   (magit-status-initial-section '(((unstaged) (status))))
   :hook
@@ -212,7 +208,6 @@
     "Kl"  #'smerge-keep-lower))
 
 (use-package magit-todos
-  :defer t
   :after magit
   :config
   (setq magit-todos-ignore-case t)
@@ -392,7 +387,6 @@ This function could be in the list `comint-output-filter-functions'."
 ;; tramp
 
 (use-package tramp
-  :defer t
   :config
   (setq tramp-terminal-type "tramp")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
@@ -410,20 +404,14 @@ This function could be in the list `comint-output-filter-functions'."
     "ï"    #'dired-up-directory))
 
 (use-package diredfl
-  :defer t
   :hook (dired-mode-hook . #'diredfl-mode))
 (use-package all-the-icons-dired
-  :defer t
   :hook
   (dired-mode-hook . #'all-the-icons-dired-mode))
-(use-package dired-toggle-sudo
-  :defer t)
-(use-package dired-rsync
-  :defer t)
-(use-package dired-open
-  :defer t)
-(use-package dired-collapse
-  :defer t)
+(use-package dired-toggle-sudo)
+(use-package dired-rsync)
+(use-package dired-open)
+(use-package dired-collapse)
 
 (setq dired-dwim-target t)
 (add-hook 'dired-mode-hook #'auto-revert-mode)
