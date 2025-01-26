@@ -195,7 +195,8 @@
     "l"  '("Layouts" . (keymap))
     "ll" #'ws/set-layout
     "lt" #'ws/toggle-buffer
-    "lr" #'ws/layout-reinit
+    "lr" #'ws/layout-reset
+    "lR" #'ws/layout-reinit
     "ls" #'ws/toggle-shells
 
     ;; xorg stuff

@@ -118,6 +118,16 @@
                       ( :name right
                         :buffer-f (org-agenda nil "z"))))))
 
+  (defun ws/init-layout-buffers (layout)
+    (mapcar
+     (lambda (b)
+       (let* ((name (plist-get b ':name))
+              (bf   (plist-get b ':buffer-f)))
+         (if bf
+             `(:buffer ,(eval bf) :name ,name)
+           b)))
+     (plist-get layout ':buffers)))
+
   (defun ws/set-layout (&optional layout)
     (interactive)
     (let* ((layouts     (mapcar (lambda (lo)
@@ -142,14 +152,17 @@
              layout
              (wlf:layout
               (plist-get layout ':recipe)
-              (mapcar
-               (lambda (b)
-                 (let* ((name (plist-get b ':name))
-                        (bf   (plist-get b ':buffer-f)))
-                   (if bf
-                       `(:buffer ,(eval bf) :name ,name)
-                     b)))
-               (plist-get layout ':buffers)))))))
+              (ws/init-layout-buffers layout))))))
+
+  (defun ws/layout-reinit ()
+    (interactive)
+    (let* ((layout      (first (nth exwm-workspace-current-index ws/current-layout))))
+      (setf (nth exwm-workspace-current-index ws/current-layout)
+            (list
+             layout
+             (wlf:layout
+              (plist-get layout ':recipe)
+              (ws/init-layout-buffers layout))))))
 
   (defun ws/save-buffer-config ()
     (interactive)
@@ -202,7 +215,7 @@
                 (wlf:toggle wm (intern bn)))
               buffs)))
 
-  (defun ws/layout-reinit ()
+  (defun ws/layout-reset ()
     (interactive)
     (wlf:reset-init
      (second
