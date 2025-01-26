@@ -116,7 +116,26 @@
             :buffers (( :name left
                         :buffer-f (find-file (org-roam-dailies-latest)))
                       ( :name right
-                        :buffer-f (org-agenda nil "z"))))))
+                        :buffer-f (org-agenda nil "z"))))
+
+          ( :layout ement3
+            :recipe (| (:left-size 38)
+                       list
+                       (| (:left-size-ratio 0.33)
+                          a
+                          (| (:left-size-ratio 0.5)
+                             b
+                             c)))
+            :buffers (( :name list
+                        :buffer-f (progn (ement-tabulated-room-list)
+                                         "*Ement Rooms*"))
+                      ( :name a
+                        :buffer-f (ement-get-buf-for-named-room (first my/ement-ws-init)))
+
+                      ( :name b
+                        :buffer-f (ement-get-buf-for-named-room (second my/ement-ws-init)))
+                      ( :name c
+                        :buffer-f (ement-get-buf-for-named-room (third my/ement-ws-init)))))))
 
   (defun ws/init-layout-buffers (layout)
     (mapcar

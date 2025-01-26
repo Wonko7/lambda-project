@@ -1,3 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; prelude, load some definitions:
+
+(let ((comms "/data/org/emacs/comms.el")) ;; this sets gnus-topic-alist
+  (if (file-readable-p comms)
+      (load-file comms)
+    (setq my/ement-ws-init '("i" "hate" "sand"))
+    (setq my/gnus-topic-alist '(("tech" ;; the key of topic
+                                 "nntp+news.gwene.org:gwene.com.schneier"
+                                 "nntp+news.gwene.org:gwene.org.slashdot"
+                                 "nntp+news.gwene.org:gwene.cat.sizeof")
+                                ("dev"
+                                 "nntp+news.gwene.org:gwene.org.ocsigen.news")
+                                ("work"
+                                 "nntp+news.gwene.org:gwene.fr.linuxjobs")
+                                ("comics"
+                                 "nntp+news.gwene.org:gwene.com.smbc-comics"
+                                 "nntp+news.gwene.org:gwene.com.xkcd")
+                                ("Feeds")))))
+
 (use-package ement
   :commands (my/ement-init)
   :hook
@@ -163,7 +183,23 @@
     (ement-notify-switch-to-notifications-buffer)
     (delete-other-windows)
     (split-window-horizontally)
-    (ement-tabulated-room-list)))
+    (ement-tabulated-room-list))
+
+  (defun ement-get-buf-for-named-room (name)
+    "get buffer for named room"
+    (let ((session (alist-get "@wonko7:matrix.org" ement-sessions nil nil #'equal)))
+      (when-let (room (cl-find-if (lambda (room)
+                                    (let ((members (ement-room-members room)))
+                                      (or (and (= 2 (hash-table-count members))
+                                               (gethash name members))
+                                          (string= name (ement-room-display-name room)))))
+			          (ement-session-rooms session)))
+        (pcase-let* (((cl-struct ement-room (local (map buffer))) room))
+          (progn (unless (buffer-live-p buffer)
+                   (setf buffer (ement-room--buffer session room
+                                                    (ement-room--buffer-name room))
+                         (alist-get 'buffer (ement-room-local room))  buffer))
+                 buffer))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; erc
@@ -256,22 +292,6 @@
 
 (use-package gnus
   :config
-  (let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
-    (if (file-readable-p gnus)
-        (load-file gnus)
-      (setq my/gnus-topic-alist '(("tech" ;; the key of topic
-                                   "nntp+news.gwene.org:gwene.com.schneier"
-                                   "nntp+news.gwene.org:gwene.org.slashdot"
-                                   "nntp+news.gwene.org:gwene.cat.sizeof")
-                                  ("dev"
-                                   "nntp+news.gwene.org:gwene.org.ocsigen.news")
-                                  ("work"
-                                   "nntp+news.gwene.org:gwene.fr.linuxjobs")
-                                  ("comics"
-                                   "nntp+news.gwene.org:gwene.com.smbc-comics"
-                                   "nntp+news.gwene.org:gwene.com.xkcd")
-                                  ("Feeds")))))
-
   (setq gnus-use-cache t
         gnus-save-newsrc-file nil
         gnus-read-newsrc-file nil
