@@ -430,7 +430,13 @@
          (string-append %lambda-project "/misc/pantalaimon.conf")))
       (".config/Synergy/Synergy.conf"
        ,(local-file
-         (string-append %lambda-project "/misc/Synergy.conf")))))
+         (string-append %lambda-project "/misc/Synergy.conf")))
+      (".config/mpv/mpv.conf"
+       ,(local-file
+         (string-append %lambda-project "/misc/mpv.conf")))
+      (".config/mpv/input.conf"
+       ,(local-file
+         (string-append %lambda-project "/misc/mpv-input.conf")))))
 
    (simple-service 'guix-config-files
                    home-files-service-type
