@@ -108,8 +108,9 @@
                        "\n"))
          (cmds (seq-filter
                 (lambda (x)
-                  (not (string-match-p "^[*:#]" x)))
+                  (not (string-match-p "^\s*[*:#]" x)))
                 (remove "" buf-content)))
+         (cmds (mapcar #'string-clean-whitespace cmds))
          (cmd (consult--read cmds
                              :prompt "choose command: "
                              :sort nil
