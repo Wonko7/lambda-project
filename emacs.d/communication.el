@@ -183,23 +183,7 @@
     (ement-notify-switch-to-notifications-buffer)
     (delete-other-windows)
     (split-window-horizontally)
-    (ement-tabulated-room-list))
-
-  (defun ement-get-buf-for-named-room (name)
-    "get buffer for named room"
-    (let ((session (alist-get "@wonko7:matrix.org" ement-sessions nil nil #'equal)))
-      (when-let (room (cl-find-if (lambda (room)
-                                    (let ((members (ement-room-members room)))
-                                      (or (and (= 2 (hash-table-count members))
-                                               (gethash name members))
-                                          (string= name (ement-room-display-name room)))))
-			          (ement-session-rooms session)))
-        (pcase-let* (((cl-struct ement-room (local (map buffer))) room))
-          (progn (unless (buffer-live-p buffer)
-                   (setf buffer (ement-room--buffer session room
-                                                    (ement-room--buffer-name room))
-                         (alist-get 'buffer (ement-room-local room))  buffer))
-                 buffer))))))
+    (ement-tabulated-room-list)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; erc

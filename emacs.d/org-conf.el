@@ -337,12 +337,12 @@ EXTRA-FILES can be used to append extra files to the list."
 
 (use-package org-crypt
   :after org
+  :demand t
   :config
   (setq epa-file-encrypt-to '("william@underage.wang")
         org-tags-exclude-from-inheritance (quote ("crypt"))
         org-crypt-disable-auto-save "encrypt"
         org-crypt-key "william@underage.wang")
-
   (org-crypt-use-before-save-magic))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -586,6 +586,7 @@ EXTRA-FILES can be used to append extra files to the list."
            :jump-to-captured t))))
 
 (use-package calfw-org
+  :commands (cfw:org-read-date-command)
   :config
   (setq cfw:org-agenda-schedule-args '(:timestamp))
   (define-key cfw:calendar-mode-map (kbd "<SPC>") nil)
