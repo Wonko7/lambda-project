@@ -198,7 +198,7 @@
     "lt" #'ws/toggle-buffer
     "lr" #'ws/layout-reset
     "lR" #'ws/layout-reinit
-    "ls" #'ws/toggle-shells
+    "lh" #'ws/toggle-hide-your-kids
 
     ;; xorg stuff
     "z"  '("Xorg desktop things" . (keymap))

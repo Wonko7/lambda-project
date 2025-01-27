@@ -14,7 +14,7 @@
                        left
                        right)
             :buffers ((:name left  :buffer-f (magit-status))
-                      (:name right :buffer-f (projectile-run-shell))))
+                      (:name right :buffer-f (projectile-run-shell) :hide-your-kids t)))
 
           ( :layout code2-bottom-shell
             :recipe (- (:upper-size-ratio 0.8)
@@ -24,7 +24,7 @@
                        shell)
             :buffers ((:name right :buffer-f (buffer-name))
                       (:name left  :buffer-f (magit-status))
-                      (:name shell :buffer-f (projectile-run-shell))))
+                      (:name shell :buffer-f (projectile-run-shell) :hide-your-kids t)))
 
           ( :layout code3
             :recipe (| (:left-size-ratio 0.3)
@@ -34,7 +34,7 @@
                           left))
             :buffers ((:name center :buffer-f (buffer-name))
                       (:name right  :buffer-f (magit-status))
-                      (:name left   :buffer-f (projectile-run-shell))))
+                      (:name left   :buffer-f (projectile-run-shell) :hide-your-kids t)))
 
           ( :layout tramp4
             :recipe (| (:left-size-ratio 0.5)
@@ -50,10 +50,12 @@
                          `((:name local-code  :buffer-f (magit-status ,pr))
                            (:name remote-code :buffer-f (magit-status ,rpr))
                            ( :name local-shell
+                             :hide-your-kids t
                              :buffer-f (projectile-with-default-dir ,pr
                                          (shell
                                           (projectile-generate-process-name "shell" nil ,pr))))
                            ( :name remote-shell
+                             :hide-your-kids t
                              :buffer-f (projectile-with-default-dir ,rpr
                                          (shell
                                           (projectile-generate-process-name
@@ -95,13 +97,14 @@
             :buffers-f (progn
                          (bluetooth-list-devices)
                          '((:name right :buffer-f (shell))
-                           (:name left  :buffer-f "*Bluetooth*"))))
+                           (:name left  :buffer-f "*Bluetooth*" :hide-your-kids t))))
 
           ( :layout media2
             :recipe (| (:left-size-ratio 0.5)
                        left
                        right)
             :buffers (( :name left
+                        :hide-your-kids t
                         :buffer-f (let ((d "/ssh:wonko@enterprise.local:/mnt/trantor/media/"))
                                     (projectile-with-default-dir d
                                       (shell (projectile-generate-process-name
@@ -116,10 +119,33 @@
             :buffers (( :name left
                         :buffer-f (find-file (org-roam-dailies-latest)))
                       ( :name right
+                        :hide-your-kids t
                         :buffer-f (org-agenda nil "z"))))
 
+          ( :layout ement-notifs-4
+            :recipe (| (:left-max-size 38)
+                       list
+                       (| (:left-size-ratio 0.33)
+                          notif
+                          (| (:left-size-ratio 0.5)
+                             a
+                             b)))
+            :buffers (( :name list
+                        :hide-your-kids t
+                        :buffer-f (progn (ement-tabulated-room-list)
+                                         "*Ement Rooms*"))
+                      ( :name notif
+                        :hide-your-kids t
+                        :buffer-f (progn (ement-notify-switch-to-notifications-buffer)
+                                         "*Ement Notifications*"))
+                      ( :name a
+                        :buffer-f (ement-get-buf-for-named-room (first my/ement-ws-init)))
+
+                      ( :name b
+                        :buffer-f (ement-get-buf-for-named-room (second my/ement-ws-init)))))
+
           ( :layout ement3
-            :recipe (| (:left-size 38)
+            :recipe (| (:left-max-size 38)
                        list
                        (| (:left-size-ratio 0.33)
                           a
@@ -127,6 +153,7 @@
                              b
                              c)))
             :buffers (( :name list
+                        :hide-your-kids t
                         :buffer-f (progn (ement-tabulated-room-list)
                                          "*Ement Rooms*"))
                       ( :name a
@@ -188,13 +215,12 @@
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
            (layout (first lo))
            (wm     (second lo))
+           (buffs  (-filter (lambda (bi)
+                              (not (plist-get bi ':hide-your-kids)))
+                            (plist-get layout ':buffers)))
            (buffs  (mapcar (lambda (bi)
                              (plist-get bi ':name))
-                           (plist-get layout ':buffers)))
-           (buffs  (-filter (lambda (bi) ;; non shell only
-                              (not (string-search "shell" (symbol-name bi))))
-                            buffs)))
-      (wlf:wset-fix-windows wm)
+                           buffs)))
       (mapcar (lambda (b)
                 (wlf:set-buffer
                  wm b
@@ -216,22 +242,20 @@
                     :require-match t)))
       (wlf:toggle wm (intern bn))))
 
-  (defun ws/toggle-shells ()
+  (defun ws/toggle-hide-your-kids ()
     (interactive)
     (ws/save-buffer-config)
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
            (layout (first lo))
            (wm     (second lo))
+           (buffs  (-filter (lambda (bi)
+                              (plist-get bi ':hide-your-kids))
+                            (plist-get layout ':buffers)))
            (buffs  (mapcar (lambda (bi)
-                             (symbol-name
-                              (plist-get bi ':name)))
-                           (plist-get layout ':buffers)))
-           (buffs  (-filter (lambda (bn)
-                              (string-search "shell" bn))
-                            buffs)))
-      (wlf:wset-fix-windows wm)
+                             (plist-get bi ':name))
+                           buffs)))
       (mapcar (lambda (bn)
-                (wlf:toggle wm (intern bn)))
+                (wlf:toggle wm bn))
               buffs)))
 
   (defun ws/layout-reset ()
