@@ -130,19 +130,40 @@
                           (| (:left-size-ratio 0.5)
                              a
                              b)))
-            :buffers (( :name list
-                        :hide-your-kids t
-                        :buffer-f (progn (ement-tabulated-room-list)
-                                         "*Ement Rooms*"))
-                      ( :name notif
-                        :hide-your-kids t
-                        :buffer-f (progn (ement-notify-switch-to-notifications-buffer)
-                                         "*Ement Notifications*"))
-                      ( :name a
-                        :buffer-f (ement-get-buf-for-named-room (first my/ement-ws-init)))
+            :buffers-f
+            (progn
+              ;; FIXME: eek. doesn't eval if I put this in a (use-package ement-lib :config)
+              (require 'ement-lib)
+              (defun my/ement-get-buf-for-named-room (name)
+                "get buffer for named room"
+                (let ((session (alist-get "@wonko7:matrix.org" ement-sessions
+                                          nil nil #'equal)))
+                  (when-let (room (cl-find-if
+                                   (lambda (room)
+                                     (let ((members (ement-room-members room)))
+                                       (or (and (= 2 (hash-table-count members))
+                                                (gethash name members))
+                                           (string= name (ement-room-display-name room)))))
+                                   (ement-session-rooms session)))
+                    (pcase-let* (((cl-struct ement-room (local (map buffer))) room))
+                      (progn (unless (buffer-live-p buffer)
+                               (setf buffer (ement-room--buffer session room
+                                                                (ement-room--buffer-name room))
+                                     (alist-get 'buffer (ement-room-local room))  buffer))
+                             buffer)))))
+              `(( :name list
+                  :hide-your-kids t
+                  :buffer-f ,(progn (ement-tabulated-room-list)
+                                    "*Ement Rooms*"))
+                ( :name notif
+                  :hide-your-kids t
+                  :buffer-f ,(progn (ement-notify-switch-to-notifications-buffer)
+                                    "*Ement Notifications*"))
+                ( :name a
+                  :buffer-f ,(my/ement-get-buf-for-named-room (first my/ement-ws-init)))
 
-                      ( :name b
-                        :buffer-f (ement-get-buf-for-named-room (second my/ement-ws-init)))))
+                ( :name b
+                  :buffer-f ,(my/ement-get-buf-for-named-room (second my/ement-ws-init))))))
 
           ( :layout ement3
             :recipe (| (:left-max-size 38)
@@ -152,17 +173,18 @@
                           (| (:left-size-ratio 0.5)
                              b
                              c)))
-            :buffers (( :name list
-                        :hide-your-kids t
-                        :buffer-f (progn (ement-tabulated-room-list)
-                                         "*Ement Rooms*"))
-                      ( :name a
-                        :buffer-f (ement-get-buf-for-named-room (first my/ement-ws-init)))
+            :buffers-f
+            `(( :name list
+                :hide-your-kids t
+                :buffer-f ,(progn (ement-tabulated-room-list)
+                                  "*Ement Rooms*"))
+              ( :name a
+                :buffer-f ,(my/ement-get-buf-for-named-room (first my/ement-ws-init)))
 
-                      ( :name b
-                        :buffer-f (ement-get-buf-for-named-room (second my/ement-ws-init)))
-                      ( :name c
-                        :buffer-f (ement-get-buf-for-named-room (third my/ement-ws-init)))))))
+              ( :name b
+                :buffer-f ,(my/ement-get-buf-for-named-room (second my/ement-ws-init)))
+              ( :name c
+                :buffer-f ,(my/ement-get-buf-for-named-room (third my/ement-ws-init)))))))
 
   (defun ws/init-layout-buffers (layout)
     (mapcar
