@@ -234,7 +234,7 @@
 
         ;; system
         emacs-bluetooth
-        emacs-emamux ;; tmux
+        emacs-pulseaudio-control
 
         ;; x stuff
         emacs-desktop-environment

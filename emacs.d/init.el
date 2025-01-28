@@ -513,6 +513,8 @@ This function could be in the list `comint-output-filter-functions'."
   :config
   (setq bluetooth-battery-display-warning nil))
 
+(use-package pulseaudio-control)
+
 (defun my/brace-for-impact ()
   (recentf-save-list)
   (savehist-save)
