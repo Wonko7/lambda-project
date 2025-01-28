@@ -295,12 +295,18 @@
 
   (add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
 
-  (setq my/gnus-topic-topology '(("Gnus" visible)
-                                 (("tech" visible))
-                                 (("dev" visible))
-                                 (("work" visible))
-                                 (("comics" visible))
-                                 (("gmail" visible))))
+  (setq my/gnus-topic-topology (cons
+                                '("Gnus" visible)
+                                (-filter
+                                 #'identity
+                                 (mapcar (lambda (topic)
+                                           (let ((x (first topic)))
+                                             (if (string= x "Gnus")
+                                                 nil
+                                               `((,x visible)))))
+                                         my/gnus-topic-alist))))
+
+
 
   (setq gnus-topic-alist my/gnus-topic-alist)
   (setq gnus-topic-topology my/gnus-topic-topology)
@@ -321,6 +327,8 @@
                    (gnus-subscribe-group s)))
                topic))
             gnus-topic-alist))
+
+  (setq gnus-thread-sort-functions '((not gnus-thread-sort-by-date)))
 
   (general-evil-define-key '(normal) gnus-group-mode-map
     "u" #'gnus-group-unsubscribe
