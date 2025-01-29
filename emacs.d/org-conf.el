@@ -387,7 +387,7 @@ EXTRA-FILES can be used to append extra files to the list."
           ("g" "👣 go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
 
           ,(my/make-daily-capture "r" "📅 RDV"
-                                  "* 📅 RDV %?\n<%<%Y-%m-%d>>\n" t)
+                                  "* 📅 RDV %? :rdv:\n<%<%Y-%m-%d>>\n" t)
 
           ("m" "📺 media")
           ;; ("mt" "tv" entry "* 📺 %?\n%U"
@@ -497,8 +497,9 @@ EXTRA-FILES can be used to append extra files to the list."
                            "%U\n"
                            "** 🍚 [[roam:rice bucket]]\n"
                            "- %?\n"
-                           "** 💪 [[roam:HSPU]]\n"
-                           "** 💪 [[roam:press]]\n"
+                           "** 🤸 straddle [[roam:press]]\n"
+                           "** 🤸 [[roam:press]]\n"
+                           "** 🤸 [[roam:HSPU]]\n"
                            "** 🤸 session max hold:\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
