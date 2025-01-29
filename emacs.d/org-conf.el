@@ -622,6 +622,7 @@ EXTRA-FILES can be used to append extra files to the list."
 (use-package org-ql)
 (use-package org-ql-search
   :after org-ql
+  :commands (my/all-dailies my/recent-dailies)
 
   :config
   (defun my/sort-by-filename-date (a b)
