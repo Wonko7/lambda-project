@@ -92,6 +92,7 @@
 ;; (use-package tuareg :ensure t)
 
 (use-package diff-hl
+  :demand t
   :config
   (global-diff-hl-mode)
   :custom
