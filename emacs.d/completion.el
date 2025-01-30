@@ -201,7 +201,15 @@
           ("F" . #'my/remote-fleet-find-file)
           ("b" . #'consult-buffer)
           ("l" . #'consult-line)
-          ("/" . #'consult-ripgrep))
+          ("/" . #'consult-ripgrep)
+          :map embark-become-match-map
+          ("g" . #'magit-file-dispatch)
+          ("f" . #'find-file)
+          ("F" . #'my/remote-fleet-find-file)
+          ("b" . #'consult-buffer)
+          ("l" . #'consult-line)
+          ("/" . #'consult-ripgrep)
+          ("u" . #'flush-lines))
   :after consult
   :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
   :config
