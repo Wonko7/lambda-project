@@ -121,7 +121,8 @@
     ("rsy"   . "rsync -hrlpD --append-verify --progress")
     ("copy"  . "rsy")
     ("nmcli" . "nmcli -c yes")
-    ("ip"    . "ip -c -h")))
+    ("ip"    . "ip -c -h")
+    ("kys"   . "exit")))
 
 (define-public %profiles
   ;; utils: add everything that's in system packages if this
