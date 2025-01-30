@@ -193,9 +193,15 @@
 ;; embark
 
 (use-package embark
-  :bind (:map embark-file-map
-              ("g" . #'magit-file-dispatch)
-              ("F" . #'my/remote-fleet-find-file))
+  :bind ( :map embark-file-map
+          ("g" . #'magit-file-dispatch)
+          ("F" . #'my/remote-fleet-find-file)
+          :map embark-become-file+buffer-map
+          ("g" . #'magit-file-dispatch)
+          ("F" . #'my/remote-fleet-find-file)
+          ("b" . #'consult-buffer)
+          ("l" . #'consult-line)
+          ("/" . #'consult-ripgrep))
   :after consult
   :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
   :config
@@ -211,7 +217,6 @@
 
 (use-package embark-consult
   :after embark)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yasnippet
