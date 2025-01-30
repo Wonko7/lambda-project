@@ -178,8 +178,13 @@
     ;; ("PS1"                          . "is in bashrc because I want it after source /etc/bashrc")
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
     ("QT_QPA_PLATFORM_PLUGIN_PATH"     . "$HOME/.guix-home/profile/lib/qt5/plugins")
-    ("QT_STYLE_OVERRIDE"               . "kvantum")
-    ("XDG_CURRENT_DESKTOP"             . "qt5ct")))
+    ;; ("QT_STYLE_OVERRIDE"               . "kvantum")
+    ("XDG_CURRENT_DESKTOP"             . "qt5ct")
+    ("XCURSOR_THEME"                   . "breeze_cursors")
+    ("XCURSOR_SIZE"                    . "16")
+    ;; ("GTK_THEME"                       . "Adwaita:dark")
+    ;; ("GTK_THEME"                       . "Breeze-Dark")
+    ))
 
 (define-public %wonko-bash-config
   (home-bash-configuration
