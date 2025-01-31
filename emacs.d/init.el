@@ -166,7 +166,8 @@
 (use-package projectile
   :demand t
   :config
-  (setq projectile-project-search-path '(( "/code" . 1) ( "/work" . 1) ("/data" . 1)))
+  (setq projectile-project-search-path '(( "/code" . 0) ( "/work" . 0) ("/data" . 0)
+                                         ( "/code/maxi-passat" . 0)))
   (setq projectile-sort-order 'recently-active)
   (setq projectile-enable-caching t)
   (projectile-global-mode))
