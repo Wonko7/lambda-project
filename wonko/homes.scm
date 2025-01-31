@@ -423,6 +423,9 @@
       (".config/Synergy/Synergy.conf"
        ,(local-file
          (string-append %lambda-project "/misc/Synergy.conf")))
+      (".config/vlc/vlcrc"
+       ,(local-file
+         (string-append %lambda-project "/misc/vlcrc")))
       (".config/mpv/mpv.conf"
        ,(local-file
          (string-append %lambda-project "/misc/mpv.conf")))

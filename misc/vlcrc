@@ -1576,8 +1576,8 @@
 # List of words separated by | to filter (string)
 #qt-recentplay-filter=
 
-# Continue playback? (integer)
-#qt-continue=1
+# Continue playback? (integer) always = 2
+qt-continue=2
 
 # Embed the file browser in open dialog (boolean)
 #qt-embedded-open=0
@@ -3757,7 +3757,7 @@ qt-privacy-ask=0
 #grayscale=0
 
 # Fullscreen video output (boolean)
-#fullscreen=0
+fullscreen=1
 
 # Embedded video (boolean)
 #embedded-video=1
@@ -4257,11 +4257,11 @@ metadata-network-access=1
 # Control interfaces (string)
 #control=
 
-# Mouse wheel vertical axis control (integer)
-#hotkeys-y-wheel-mode=0
+# Mouse wheel vertical axis control (integer) # -1 = disable
+hotkeys-y-wheel-mode=-1
 
-# Mouse wheel horizontal axis control (integer)
-#hotkeys-x-wheel-mode=2
+# Mouse wheel horizontal axis control (integer) # -1 = disable
+hotkeys-x-wheel-mode=-1
 
 # Fullscreen (string)
 #global-key-toggle-fullscreen=
@@ -4489,13 +4489,13 @@ metadata-network-access=1
 #global-key-subdelay-up=
 
 # Subtitle delay up (string)
-#key-subdelay-up=h
+key-subdelay-up=Shift+v
 
 # Subtitle delay down (string)
 #global-key-subdelay-down=
 
 # Subtitle delay down (string)
-#key-subdelay-down=g
+key-subdelay-down=v
 
 # Subtitle sync / bookmark audio timestamp (string)
 #global-key-subsync-markaudio=
@@ -4525,31 +4525,31 @@ metadata-network-access=1
 #global-key-subpos-up=
 
 # Subtitle position up (string)
-#key-subpos-up=
+key-subpos-up=Shift+w
 
 # Subtitle position down (string)
 #global-key-subpos-down=
 
 # Subtitle position down (string)
-#key-subpos-down=
+key-subpos-down=w
 
 # Audio delay up (string)
 #global-key-audiodelay-up=
 
 # Audio delay up (string)
-#key-audiodelay-up=k
+key-audiodelay-up=a
 
 # Audio delay down (string)
 #global-key-audiodelay-down=
 
 # Audio delay down (string)
-#key-audiodelay-down=j
+key-audiodelay-down=Shift+a
 
 # Cycle audio track (string)
 #global-key-audio-track=
 
 # Cycle audio track (string)
-#key-audio-track=b
+key-audio-track=b
 
 # Cycle through audio devices (string)
 #global-key-audiodevice-cycle=
@@ -4561,19 +4561,19 @@ metadata-network-access=1
 #global-key-subtitle-revtrack=
 
 # Cycle subtitle track in reverse order (string)
-#key-subtitle-revtrack=Alt+v
+key-subtitle-revtrack=Shift+z
 
 # Cycle subtitle track (string)
 #global-key-subtitle-track=
 
 # Cycle subtitle track (string)
-#key-subtitle-track=v
+key-subtitle-track=z
 
 # Toggle subtitles (string)
 #global-key-subtitle-toggle=
 
 # Toggle subtitles (string)
-#key-subtitle-toggle=Shift+v
+key-subtitle-toggle=s
 
 # Cycle next program Service ID (string)
 #global-key-program-sid-next=
@@ -4591,13 +4591,13 @@ metadata-network-access=1
 #global-key-aspect-ratio=
 
 # Cycle source aspect ratio (string)
-#key-aspect-ratio=a
+key-aspect-ratio=r
 
 # Cycle video crop (string)
 #global-key-crop=
 
 # Cycle video crop (string)
-#key-crop=c
+key-crop=c
 
 # Toggle autoscaling (string)
 #global-key-toggle-autoscale=
@@ -4651,7 +4651,7 @@ metadata-network-access=1
 #global-key-snapshot=
 
 # Take video snapshot (string)
-#key-snapshot=Shift+s
+key-snapshot=p
 
 # Record (string)
 #global-key-record=
@@ -4729,7 +4729,7 @@ metadata-network-access=1
 #global-key-random=
 
 # Random (string)
-#key-random=r
+key-random=Shift+r
 
 # Normal/Loop/Repeat (string)
 #global-key-loop=
