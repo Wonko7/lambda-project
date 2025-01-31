@@ -411,22 +411,6 @@
       (".config/ripgrep/ripgreprc"
        ,(local-file
          (string-append %lambda-project "/misc/ripgreprc")))
-      ;; GTK & QT configs:
-      (".gtkrc-2.0"
-       ,(local-file
-         (string-append %lambda-project "/misc/gtkrc-2.0")))
-      (".config/gtk-3.0/settings.ini"
-       ,(local-file
-         (string-append %lambda-project "/misc/gtkrc-3.0")))
-      (".config/Kvantum/kvantum.kvconfig"
-       ,(local-file
-         (string-append %lambda-project "/misc/kvantum.kvconfig")))
-      ;; (".config/Kvantum/KvGnomish#/KvGnomish#.kvconfig"
-      ;;  ,(local-file
-      ;;    (string-append %lambda-project "/misc/kv_yggdrasill.kvconfig")))
-      (".config/qt5ct/qt5ct.conf"
-       ,(local-file
-         (string-append %lambda-project "/misc/qt5ct.conf")))
       ;; my X stuff:
       (".XCompose"
        ,(local-file
