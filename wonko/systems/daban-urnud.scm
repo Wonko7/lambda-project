@@ -52,6 +52,11 @@
     (inherit %vanilla-wonko-home)
     (services
      (append
+      (list
+       (simple-service 'highdpi-bash home-bash-service-type
+                       (home-bash-extension
+                        (environment-variables
+                         '(("XCURSOR_SIZE" . "16"))))))
       machine-home-services
       %vanilla-wonko-services))))
 

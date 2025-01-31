@@ -182,7 +182,7 @@
     ("GTK_THEME"                       . "Breeze-Dark")
     ("QT_QPA_PLATFORMTHEME"            . "qt6ct")
     ("XCURSOR_THEME"                   . "breeze_cursors")
-    ("XCURSOR_SIZE"                    . "16")))
+    ("XCURSOR_SIZE"                    . "32")))
 
 (define-public %wonko-bash-config
   (home-bash-configuration
