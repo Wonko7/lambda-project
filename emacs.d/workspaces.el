@@ -345,7 +345,7 @@
         (cond ((run-init-p 11)
                (ws/set-layout 'init2))
               ((run-init-p 14)
-               (async-shell-command "GDK_DPI_SCALE=2.5 firefox"))))) )
+               (async-shell-command "firefox"))))))
 
   (defun ws/force-run-auto-start ()
     (interactive)

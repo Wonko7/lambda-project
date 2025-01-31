@@ -152,11 +152,6 @@
     ("DICTIONARY"          . "en_GB-ise") ;; hunspell
     ("DISPLAY"             . ":9")
     ("BLOCK_SIZE"          . "human-readable")
-    ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-    ;; ("XMODIFIER"           . "@im=exwm-xim")
-    ;; ("GTK_IM_MODULE"       . "xim")
-    ;; ("QT_IM_MODULE"        . "xim")
-    ;; ("CLUTTER_IM_MODULE"   . "xim")
     ("LIBRARY_PATH"        . "$LIBRARY_PATH:~/.guix-home/profile/lib")
     ("C_INCLUDE_PATH"      . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
     ("LD_LIBRARY_PATH"     . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
@@ -177,14 +172,17 @@
     ("PASSWORD_STORE_GENERATED_LENGTH" . "33")
     ;; ("PS1"                          . "is in bashrc because I want it after source /etc/bashrc")
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
-    ("QT_QPA_PLATFORM_PLUGIN_PATH"     . "$HOME/.guix-home/profile/lib/qt5/plugins")
-    ;; ("QT_STYLE_OVERRIDE"               . "kvantum")
-    ("XDG_CURRENT_DESKTOP"             . "qt5ct")
+    ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
+    ;; ("XMODIFIER"           . "@im=exwm-xim")
+    ;; ("GTK_IM_MODULE"       . "xim")
+    ;; ("QT_IM_MODULE"        . "xim")
+    ;; ("CLUTTER_IM_MODULE"   . "xim")
+    ;; xorg appearance:
+    ("CALIBRE_USE_DARK_PALETTE"        . "1")
+    ("GTK_THEME"                       . "Breeze-Dark")
+    ("QT_QPA_PLATFORMTHEME"            . "qt6ct")
     ("XCURSOR_THEME"                   . "breeze_cursors")
-    ("XCURSOR_SIZE"                    . "16")
-    ;; ("GTK_THEME"                       . "Adwaita:dark")
-    ;; ("GTK_THEME"                       . "Breeze-Dark")
-    ))
+    ("XCURSOR_SIZE"                    . "16")))
 
 (define-public %wonko-bash-config
   (home-bash-configuration
@@ -693,7 +691,8 @@
                      '(("GDK_SCALE" . "2")
                        ("QT_USE_PHYSICAL_DPI" . "1")
                        ("QT_SCALE_FACTOR" . "1")
-                       ("GDK_DPI_SCALE" . "1.5")))))
+                       ("GDK_DPI_SCALE" . "1.5")
+                       ("XCURSOR_SIZE" . "64")))))
    (simple-service
     'config-files
     home-files-service-type
@@ -733,7 +732,8 @@
                     (environment-variables
                      '(("DISPLAY" . ":11")
                        ("GDK_SCALE" . "3")
-                       ("QT_SCALE_FACTOR" . "3")))))
+                       ("QT_SCALE_FACTOR" . "3")
+                       ("XCURSOR_SIZE" . "64")))))
    (simple-service
     'config-files
     home-files-service-type
