@@ -306,11 +306,8 @@
         xeyes
         ;; bling
         feh
-        ;; qtsvg   ;; needed for rendering icons
-        ;; kvantum ;; for qt theme
-        ;; qt5ct   ;; for changing icon theme & font size.
-        qt6ct
-        breeze breeze-qt5 breeze-gtk breeze-icons))
+        ;; gtk & qt theme:
+        breeze breeze-gtk breeze-icons))
 
 (define-public %desktop-world
   (list

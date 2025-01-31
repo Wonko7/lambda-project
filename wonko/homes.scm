@@ -180,7 +180,9 @@
     ;; xorg appearance:
     ("CALIBRE_USE_DARK_PALETTE"        . "1")
     ("GTK_THEME"                       . "Breeze-Dark")
-    ("QT_QPA_PLATFORMTHEME"            . "qt6ct")
+    ;; QT: in conjunction with .config/kdeglobals further down:
+    ("QT_PLUGIN_PATH"                  . "$HOME/.guix-home/profile/lib/qt6/plugins")
+    ("QT_STYLE_OVERRIDE"               . "Breeze")
     ("XCURSOR_THEME"                   . "breeze_cursors")
     ("XCURSOR_SIZE"                    . "32")))
 
@@ -410,6 +412,8 @@
        ,(local-file
          (string-append %lambda-project "/misc/ripgreprc")))
       ;; my X stuff:
+      (".config/kdeglobals"
+       ,(file-append breeze "/share/color-schemes/BreezeDark.colors"))
       (".XCompose"
        ,(local-file
          (string-append %lambda-project "/misc/XCompose")))
