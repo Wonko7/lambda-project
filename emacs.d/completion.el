@@ -91,6 +91,9 @@
   (setq vertico-resize t) ;; Grow and shrink the Vertico minibuffer
   (setq vertico-cycle t)
 
+  ;; fancy:
+  (set-face-attribute 'vertico-group-title nil :inherit 'font-lock-keyword-face)
+  (set-face-attribute 'vertico-current nil :background "black")
   ;; Prefix the current candidate with “» ”. From
   ;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
   (advice-add #'vertico--format-candidate :around
