@@ -124,8 +124,14 @@
 
 (use-package evil-goggles
   :demand t
+  :custom
+  (evil-goggles-duration 0.500)
+  (evil-goggles-pulse nil)
   :config
-  (evil-goggles-mode))
+  (evil-goggles-mode)
+  ;; fancy
+  (set-face-attribute 'evil-goggles-default-face nil :foreground "white")
+  (set-face-attribute 'evil-goggles-default-face nil :background "#EB64B9"))
 
 (use-package evil-visualstar
   :demand t
