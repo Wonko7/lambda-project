@@ -3928,7 +3928,7 @@ fullscreen=1
 #audio-language=
 
 # Subtitle language (string)
-#sub-language=
+sub-language=eng
 
 # Menu language (string)
 #menu-language=
@@ -4519,7 +4519,7 @@ key-subdelay-down=v
 #global-key-subsync-reset=
 
 # Subtitle sync / reset audio & subtitle synchronization (string)
-#key-subsync-reset=Ctrl+Shift+k
+key-subsync-reset=Ctrl+Shift+z
 
 # Subtitle position up (string)
 #global-key-subpos-up=
