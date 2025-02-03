@@ -192,13 +192,13 @@
     "("      #'magit-section-backward-sibling
     ")"      #'magit-section-forward-sibling
     "C-k"    #'magit-section-backward-sibling
-    "C-j"    #'magit-section-backward-sibling)
+    "C-j"    #'magit-section-forward-sibling)
 
-  (general-evil-define-key '(normal) git-rebase-mode-map ;; FIXME
+  (general-evil-define-key '(normal) git-rebase-mode-map
     "K"    #'git-rebase-move-line-up
     "J"    #'git-rebase-move-line-down)
 
-  (general-evil-define-key '(normal) smerge-mode-map ;; FIXME
+  (general-evil-define-key '(normal) diff-hl-mode-map
     "grk" #'smerge-prev
     "grj" #'smerge-next
     "C-k" #'smerge-prev
