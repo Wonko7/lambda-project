@@ -94,6 +94,8 @@
 
   (general-evil-define-key '(normal) org-mode-map
     :prefix "RET"
+    "at"    #'my/align-org-tags
+    "aT"    #'org-table-align
     "o"     #'consult-outline
     "y"     #'my/kill-src-block-at-point
     "RET"   #'+org/dwim-at-point)
@@ -145,22 +147,9 @@
 </div>
 </div>")
 
-
-  (defun my/reset-tag-spacing-to-zero-org-tags ()
-    (interactive)
-    (replace-regexp "^\\(\\*.*?\\)[[:blank:]]+\\(:[0-9A-Za-z:_-]+:\\)" "\\1 \\2" nil
-                    (point-min) (point-max)))
-
-  (defun my/justify-right-org-tags ()
-    (interactive)
-    (align-regexp (point-min) (point-max)
-                  "^\\(\\*.*[[:blank:]]\\(:[0-9A-Za-z:_-]+:\\)\\)" -2 1))
-
   (defun my/align-org-tags ()
     (interactive)
-    ;; highly annoying, why does this not work?
-    (my/reset-tag-spacing-to-zero-org-tags)
-    (my/justify-right-org-tags)))
+    (org-align-tags t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
