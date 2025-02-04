@@ -523,6 +523,7 @@ This function could be in the list `comint-output-filter-functions'."
 (use-package pulseaudio-control)
 
 (defun my/brace-for-impact ()
+  (interactive)
   (recentf-save-list)
   (savehist-save)
   (save-some-buffers)
