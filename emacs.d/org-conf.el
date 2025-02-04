@@ -37,6 +37,8 @@
   (defface +org-todo-onhold
     '((t (:inherit default :foreground "brown")))
     "active todo")
+  (set-face-attribute 'org-tag nil :foreground "#EB64B9")
+  (set-face-attribute 'org-tag nil :box t)
   (setq org-startup-indented t
         ;; FIXME fix this with guix magic:
         org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
