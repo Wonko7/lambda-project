@@ -196,6 +196,7 @@
 ;; embark
 
 (use-package embark
+  :commands (embark-insert-relative-path)
   :bind ( :map embark-file-map
           ("g" . #'magit-file-dispatch)
           ("F" . #'my/remote-fleet-find-file)
