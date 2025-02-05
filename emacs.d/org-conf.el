@@ -395,8 +395,6 @@ EXTRA-FILES can be used to append extra files to the list."
                            "/ssh:media@enterprise.local:/mnt/trantor/media " ;; FIXME: media-center.local?
                            ":results value output\n"
                            "  (vlc */*s01e01* &)\n"
-                           "  # (vlc --sub-language=eng */*s01e01* &)\n"
-                           "  # (mpv --slang=eng */*s01e01* &)\n"
                            "#+end_src\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
