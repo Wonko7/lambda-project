@@ -20,6 +20,9 @@
   (setq org-roam-dailies-directory "the-road-so-far")
 
   :config
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'my/align-org-tags nil 'local)))
   ;; FIXME review this:
   (setq
    org-catch-invisible-edits 'show-and-error
