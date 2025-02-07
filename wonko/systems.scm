@@ -206,6 +206,12 @@
    (service tor-service-type)
 
    ;; (service (make-extra-profile-service-type "comms")   %communication-world)
+   ;; I want this to be used rather than the old utils in extra-profiles
+   ;; ... which is still a useful fallback, but isn't often updated.
+   (service (make-extra-profile-service-type "utils")   (append
+                                                         %dev-world
+                                                         %git-world
+                                                         %utils-world))
    (service (make-extra-profile-service-type "desktop") %desktop-world)
    (service (make-extra-profile-service-type "web")     %web-world)
    (service (make-extra-profile-service-type "img")     %image-edition-world)
