@@ -60,7 +60,7 @@
      "bash-profile"
      "# hey boy. hey girl. superstar DJ. here we go!\n"
      "# priortiy to system profiles, then user stuff\n"
-     "for profile in /run/current-system/*-profile " profiles "; do\n"
+     "for profile in " profiles " /run/current-system/*-profile; do\n"
      "    if [ -f $profile/etc/profile ]; then\n"
      "        GUIX_PROFILE=$profile\n"
      "        . $GUIX_PROFILE/etc/profile\n"
