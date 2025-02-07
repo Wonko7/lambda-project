@@ -197,15 +197,25 @@
 
 (use-package embark
   :commands (embark-insert-relative-path)
-  :bind ( :map embark-file-map
+  :bind ( :map embark-general-map
+          ("$" . #'shell)
+          :map embark-library-map
+          ("$" . #'shell)
+          :map embark-buffer-map
+          ("$" . #'shell)
+          :map embark-bookmark-map
+          ("$" . #'shell)
+          :map embark-file-map
           ("g" . #'magit-file-dispatch)
           ("F" . #'my/remote-fleet-find-file)
+          ("$" . #'shell)
           :map embark-become-file+buffer-map
           ("g" . #'magit-file-dispatch)
           ("F" . #'my/remote-fleet-find-file)
           ("b" . #'consult-buffer)
           ("l" . #'consult-line)
           ("/" . #'consult-ripgrep)
+          ("$" . #'shell)
           :map embark-become-match-map
           ("g" . #'magit-file-dispatch)
           ("f" . #'find-file)
