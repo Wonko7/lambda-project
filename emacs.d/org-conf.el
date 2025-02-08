@@ -325,9 +325,142 @@ EXTRA-FILES can be used to append extra files to the list."
         org-habit-show-done-always-green t
         ;; glyphs:
         ;; │ | ⋮
-        ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙
-        org-habit-completed-glyph ?•
-        org-habit-today-glyph ?│))
+        ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙ ○
+        ;; ┋┇ ;; ┃ ;; /;;⋮ ;; | ;; ?│
+        ;; ▦ ;; ◼ ;; ▪ ;; ?√ ;; ?◉ ;; ⊘ ;; ◉ ;; ?•
+        ;; □ ;; □ ;; ◌ ;; ?○
+        org-habit-completed-glyph ?●
+        org-habit-clear-glyph ?○
+        org-habit-today-glyph ?┋)
+
+  ;; red boys:
+  (set-face-attribute 'org-habit-overdue-face nil :foreground "darkred")
+  (set-face-attribute 'org-habit-overdue-face nil :background nil)
+  (set-face-attribute 'org-habit-overdue-future-face nil :foreground "darkred")
+  (set-face-attribute 'org-habit-overdue-future-face nil :background nil)
+
+  ;; golden boys:
+  (set-face-attribute 'org-habit-alert-future-face nil :background nil)
+  (set-face-attribute 'org-habit-alert-future-face nil :foreground "gold")
+  (set-face-attribute 'org-habit-alert-face nil :background nil)
+  (set-face-attribute 'org-habit-alert-face nil :foreground "gold")
+
+  ;; grey boys: ;; grey:#4E415C  dvio: #6b4d76 vio: #B381C5
+  (set-face-attribute 'org-habit-clear-future-face nil :foreground "#B381C5")
+  (set-face-attribute 'org-habit-clear-future-face nil :background nil)
+  (set-face-attribute 'org-habit-clear-face nil :foreground "#B381C5")
+  (set-face-attribute 'org-habit-clear-face nil :background nil)
+
+  ;; pink boys: #EB64B9 pink  cyan: #74DFC4
+  (set-face-attribute 'org-habit-ready-future-face nil :foreground "#EB64B9") ;; forestgreen
+  (set-face-attribute 'org-habit-ready-face nil :foreground "#EB64B9")
+  (set-face-attribute 'org-habit-ready-future-face nil :background nil)
+  (set-face-attribute 'org-habit-ready-face nil :background nil)
+
+  ;; add clear glyphs:
+  (defun org-habit-build-graph (habit starting current ending)
+    "Build a graph for the given HABIT, from STARTING to ENDING.
+CURRENT gives the current time between STARTING and ENDING, for
+the purpose of drawing the graph.  It need not be the actual
+current time."
+    (let* ((all-done-dates (sort (org-habit-done-dates habit) #'<))
+	   (done-dates all-done-dates)
+	   (scheduled (org-habit-scheduled habit))
+	   (s-repeat (org-habit-scheduled-repeat habit))
+	   (start (time-to-days starting))
+	   (now (time-to-days current))
+	   (end (time-to-days ending))
+	   (graph (make-string (1+ (- end start)) ?\s))
+	   (index 0)
+	   last-done-date)
+      (while (and done-dates (< (car done-dates) start))
+        (setq last-done-date (car done-dates)
+	      done-dates (cdr done-dates)))
+      (while (< start end)
+        (let* ((in-the-past-p (< start now))
+	       (todayp (= start now))
+	       (donep (and done-dates (= start (car done-dates))))
+	       (faces
+	        (if (and in-the-past-p
+		         (not last-done-date)
+		         (not (< scheduled now)))
+		    (if (and all-done-dates (= (car all-done-dates) start))
+		        ;; This is the very first done of this habit.
+		        '(org-habit-ready-face . org-habit-ready-future-face)
+		      '(org-habit-clear-face . org-habit-clear-future-face))
+		  (org-habit-get-faces
+		   habit start
+		   (and in-the-past-p
+		        last-done-date
+		        ;; Compute scheduled time for habit at the time
+		        ;; START was current.
+		        (let ((type (org-habit-repeat-type habit)))
+			  (cond
+			   ;; At the last done date, use current
+			   ;; scheduling in all cases.
+			   ((null done-dates) scheduled)
+			   ((equal type ".+") (+ last-done-date s-repeat))
+			   ((equal type "+")
+			    ;; Since LAST-DONE-DATE, each done mark
+			    ;; shifted scheduled date by S-REPEAT.
+			    (- scheduled (* (length done-dates) s-repeat)))
+			   (t
+			    ;; Compute the scheduled time after the
+			    ;; first repeat.  This is the closest time
+			    ;; past FIRST-DONE which can reach SCHEDULED
+			    ;; by a number of S-REPEAT hops.
+			    ;;
+			    ;; Then, play TODO state change history from
+			    ;; the beginning in order to find current
+			    ;; scheduled time.
+			    (let* ((first-done (car all-done-dates))
+				   (s (let ((shift (mod (- scheduled first-done)
+						        s-repeat)))
+				        (+ (if (= shift 0) s-repeat shift)
+					   first-done))))
+			      (if (= first-done last-done-date) s
+			        (catch :exit
+				  (dolist (done (cdr all-done-dates) s)
+				    ;; Each repeat shifts S by any
+				    ;; number of S-REPEAT hops it takes
+				    ;; to get past DONE, with a minimum
+				    ;; of one hop.
+				    (cl-incf s (* (1+ (/ (max (- done s) 0)
+						         s-repeat))
+						  s-repeat))
+				    (when (= done last-done-date)
+				      (throw :exit s))))))))))
+		   donep)))
+	       markedp face)
+	  (cond
+	   (donep
+	    (aset graph index org-habit-completed-glyph)
+	    (setq markedp t)
+	    (while (and done-dates (= start (car done-dates)))
+	      (setq last-done-date (car done-dates))
+	      (setq done-dates (cdr done-dates))))
+	   (todayp
+	    (aset graph index org-habit-today-glyph))
+           ;; ⚠️ Hi there future me: tout ça pour ça:
+           (t (aset graph index org-habit-clear-glyph)))
+	  (setq face (if (or in-the-past-p todayp)
+		         (car faces)
+		       (cdr faces)))
+	  (when (and in-the-past-p
+		     (not (eq face 'org-habit-overdue-face))
+		     (not markedp))
+	    (setq face (cdr faces)))
+	  (put-text-property index (1+ index) 'face face graph)
+	  (put-text-property index (1+ index)
+			     'help-echo
+			     (concat (format-time-string
+				      (org-time-stamp-format)
+				      (time-add starting (days-to-time (- start (time-to-days starting)))))
+				     (if donep " DONE" ""))
+			     graph))
+        (setq start (1+ start)
+	      index (1+ index)))
+      graph)))
 
 (use-package org-crypt
   :after org
