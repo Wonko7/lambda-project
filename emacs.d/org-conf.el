@@ -334,9 +334,9 @@ EXTRA-FILES can be used to append extra files to the list."
         org-habit-today-glyph ?┋)
 
   ;; red boys:
-  (set-face-attribute 'org-habit-overdue-face nil :foreground "darkred")
+  (set-face-attribute 'org-habit-overdue-face nil :foreground "red")
   (set-face-attribute 'org-habit-overdue-face nil :background nil)
-  (set-face-attribute 'org-habit-overdue-future-face nil :foreground "darkred")
+  (set-face-attribute 'org-habit-overdue-future-face nil :foreground "red")
   (set-face-attribute 'org-habit-overdue-future-face nil :background nil)
 
   ;; golden boys:
