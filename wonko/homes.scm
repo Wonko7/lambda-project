@@ -156,7 +156,7 @@
     ("C_INCLUDE_PATH"      . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
     ("LD_LIBRARY_PATH"     . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
     ("PATH"                . "$HOME/local/bin:$PATH")
-    ("PATH"                . "./_opam/bin:$PATH")
+    ;; ("PATH"                . "./_opam/bin:$PATH")
     ("GUIX_EXTRA_PROFILES" . ,%guix-extra-profiles-dir)
     ;; ("GUILE_LOAD_COMPILED_PATH" .
     ;;  ,(string-append %lambda-project ":/code/w7-guix-channel:/code/nonguix"))
@@ -633,8 +633,8 @@
     (packages
      (append
       %emacs-world
-      %ocaml-with-opam-world
-      %ocaml-mode-deps
+      ;; %ocaml-with-opam-world
+      ;; %ocaml-mode-deps
       %crypto-world
       %xorg-world
       %fonts-world

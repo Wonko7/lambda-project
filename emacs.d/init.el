@@ -547,7 +547,7 @@ This function could be in the list `comint-output-filter-functions'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
-(require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
+;; (require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
 (require 'conf/completion    "~/.emacs.d/completion.el")
 (require 'conf/workspaces    "~/.emacs.d/workspaces.el")
 (require 'conf/org           "~/.emacs.d/org-conf.el")
