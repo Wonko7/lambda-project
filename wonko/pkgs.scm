@@ -491,9 +491,8 @@
 (define-public %os-nonfree
   (list fwupd-nonfree))
 
-(define-public %communication-world
-  (list pantalaimon
-        weechat))
+(define-public %borked-comms-world
+  (list pantalaimon))
 
-(define-public %borked-world
-  (list))
+(define-public %borked-calibre-world
+  (list calibre))

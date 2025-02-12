@@ -9,6 +9,7 @@
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
+  #:use-module (ice-9 regex)
   ;; fonts
   #:use-module (wonko packages fonts)
   ;; services
@@ -127,15 +128,8 @@
 (define-public %profiles
   ;; utils: add everything that's in system packages if this
   ;; needs to be deployed on non guix OS
-  `(("communication" . ,%communication-world)
-    ("desktop" . ,%desktop-world)
-    ("utils" . ,(append
-                 %dev-world
-                 %git-world
-                 %utils-world))
-    ("web" . ,%web-world)
-    ("borked" . ,%borked-world)
-    ))
+  `(("borked-comms" . ,%borked-comms-world)
+    ("borked-calibre" . ,%borked-calibre-world)))
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -236,7 +230,7 @@
     (provision '(pantalaimon))
     (start #~(make-forkexec-constructor
               (list #$(string-append %guix-extra-profiles-dir
-                                     "/communication/bin/pantalaimon"))
+                                     "/communication/bin/pantalaimon")) ;; FIXME borked-comms
               #:log-file #$(home-log-path "matrix")))
     (stop #~(make-kill-destructor))
     (documentation "Crypto back-end server for ement.el"))
@@ -459,24 +453,43 @@
          (with-imported-modules
              '((wonko spock)
                (srfi srfi-1)
-               (guix build utils))
+               (guix build utils)
+               (ice-9 match)
+               (ice-9 regex))
            #~(begin
                (use-modules (wonko spock)
                             (srfi srfi-1)
-                            (guix build utils))
+                            (guix build utils)
+                            (ice-9 match)
+                            (ice-9 regex))
                (let ((guix "~/.config/guix/current/bin/guix")
                      (ps   (let ((args (drop (program-arguments) 1)))
                              (if (null? args)
                                  '#$(profiles->names %profiles)
-                                 args))))
-                 (map (lambda (p)
-                        (display (spock-say
-                                  (string-append "build PROFILE " p))
-                                 (current-error-port))
-                        (newline (current-error-port))
-                        (system
-                         (string-append guix " package -m ~/local/manifests/" p
-                                        " -p $GUIX_EXTRA_PROFILES/" p)))
+                                 (map (lambda (path)
+                                        (list
+                                         (regexp-substitute/global #f "([^/_]+)_[^_]+.scm"
+                                                                   path 1)
+                                         path))
+                                      args)))))
+                 (map (match-lambda*
+                        (((profile channels))
+                         (display (spock-say
+                                   (string-append "build PROFILE " profile))
+                                  (current-error-port))
+                         (display (string-append "... with pinned channels " channels "\n\n")
+                                  (current-error-port))
+                         (system
+                          (string-append guix " time-machine -C " channels
+                                         " -- package -m ~/local/manifests/" profile
+                                         " -p " #$%guix-extra-profiles-dir  "/" profile)))
+                        ((profile)
+                         (display (spock-say
+                                   (string-append "build PROFILE " profile))
+                                  (current-error-port))
+                         (system
+                          (string-append guix " package -m ~/local/manifests/" profile
+                                         " -p " #$%guix-extra-profiles-dir  "/" profile))))
                       ps))))))))
 
    (simple-service
@@ -622,6 +635,24 @@
                  (system
                   (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
                                  base64 " -d | " tar " xz ")))))))))))
+
+
+;; (map (match-lambda*
+;;        (((profile channels))
+;;         (string-append " time-machine -C " channels
+;;                        " package -m ~/local/manifests/" profile
+;;                        " -p " %guix-extra-profiles-dir  "/" profile "\n"))
+;;        ((profile)
+;;         (string-append " package -m ~/local/manifests/" profile
+;;                        " -p " %guix-extra-profiles-dir  "/" profile "\n")))
+
+;;      (map (lambda (path)
+;;             (list
+;;              (regexp-substitute/global #f "([^/_]+)_[^_]+.scm"
+;;                                        path 1)
+;;              path))
+;;           (list "pinned/borked-comms_10-02-2025.scm"))
+;;      )
 
 (define-public %skeleton-wonko-services
   (cons*
