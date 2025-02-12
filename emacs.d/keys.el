@@ -221,10 +221,10 @@
   (general-define-key
    :states 'normal
    "C-e"  #'embark-act
-   "-"    nil
+   "-"    #'mode-line-other-buffer
+   ;; "-d"   #'delete-trailing-whitespace
    "/"    #'consult-line
    "C-/"  #'evil-search-forward
-   "-d"   #'delete-trailing-whitespace
    "z="   #'flyspell-correct-at-point
    ;; "`"    #' FIXME do something with this
    "'"    #'evil-owl-goto-mark

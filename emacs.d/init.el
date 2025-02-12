@@ -264,7 +264,6 @@ This function could be in the list `comint-output-filter-functions'."
   (general-evil-define-key '(normal visual) comint-mode-map
     "|"           #'my/insert-shell-line
     "ï"           #'my/cd-up
-    "-"           #'my/cd--
     "("           #'comint-previous-prompt
     ")"           #'comint-next-prompt
     "gm"          #'man-follow
