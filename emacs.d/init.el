@@ -317,6 +317,7 @@ This function could be in the list `comint-output-filter-functions'."
   (bash-completion-setup))
 
 (use-package detached
+  :demand t
   :init
   (detached-init)
   :custom ((detached-show-output-on-attach t)
