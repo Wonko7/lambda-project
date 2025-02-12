@@ -440,7 +440,7 @@
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
                           (string-append %lambda-project "/misc/guix-config/" file))))
-                    '("shell-authorized-directories")))
+                    '("shell-authorized-directories" "channels.scm")))
 
    (simple-service 'guix-manifests
                    home-files-service-type
