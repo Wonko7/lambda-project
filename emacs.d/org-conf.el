@@ -99,9 +99,14 @@
     :prefix "RET"
     "at"    #'my/align-org-tags
     "aT"    #'org-table-align
+    "l"     #'org-toggle-link-display
+    "zL"    #'org-toggle-link-display
     "o"     #'consult-outline
     "y"     #'my/kill-src-block-at-point
-    "RET"   #'+org/dwim-at-point)
+    "RET"   #'+org/dwim-at-point
+    ;; this should be in org-roam but the "RET" prefix key overlap doesn't work
+    "j"     #'org-roam-dailies-goto-next-note
+    "k"     #'org-roam-dailies-goto-previous-note)
 
   (general-evil-define-key '(normal) org-mode-map
     "zD"    #'org-decrypt-entries
