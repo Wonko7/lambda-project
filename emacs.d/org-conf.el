@@ -565,6 +565,10 @@ current time."
           ("if" "❤ fam" entry "* ❤ %? :is:fam:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
+          ("ir" "🚀 rocket go brrr" entry
+           "* 🚀 [[roam:rocket go brrr]] :is:fam:\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ih" "🏡 home" entry "* 🏡 [[roam:home]] %? :is:home:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
