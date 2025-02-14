@@ -82,8 +82,16 @@
   (keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
   (keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word)
   (keymap-set vertico-map "C-DEL" #'vertico-directory-up)
+
   (vertico-mode)
   (vertico-mouse-mode)
+
+  (general-evil-define-key '(normal insert) vertico-map
+    "C-j" #'vertico-next
+    "C-k" #'vertico-previous
+    "<up>" #'vertico-previous
+    "<down>" #'vertico-next)
+
   ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
 
   ;; (setq vertico-scroll-margin 2) ;; Different scroll margin
