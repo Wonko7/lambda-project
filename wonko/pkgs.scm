@@ -400,6 +400,9 @@
         ocaml-batteries
         ocamlformat))
 
+(define-public %ocaml-minimal
+  (list
+   ocamlformat))
 ;; this now lives in org's guix.scm
 ;; (define-public %babel-world
 ;;

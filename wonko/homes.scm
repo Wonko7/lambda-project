@@ -664,8 +664,7 @@
     (packages
      (append
       %emacs-world
-      ;; %ocaml-with-opam-world
-      ;; %ocaml-mode-deps
+      %ocaml-minimal
       %crypto-world
       %xorg-world
       %fonts-world

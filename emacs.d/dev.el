@@ -31,6 +31,7 @@
 ;; (setq eglot-autoshutdown t)
 ;; FIXME: eglot doesn't seem to like ocsigen.
 
+(use-package ocamlformat)
 (use-package tuareg
   :defer t
   :hook
