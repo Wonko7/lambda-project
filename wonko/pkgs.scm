@@ -22,7 +22,7 @@
  ;; emacs
  emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
- pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz image-viewers
  ;; web
  chromium tor matrix irc bittorrent
  ;; tools
@@ -322,6 +322,7 @@
    guvcview
    ;; ebooks & pdf
    calibre
+   mcomix
    ;;okular ;; 280Mb
    zathura ;; FIXME config this
    zathura-ps
