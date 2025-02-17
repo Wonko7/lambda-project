@@ -8,6 +8,14 @@
   email       = william@underage.wang
   signingkey  = william@underage.wang
 
+# enable gpg by default:
+## FIXME:
+[commit]
+  gpgsign = true
+[tag]
+  gpgSign = true
+# see push.gpgSign
+
 [color]
   ui = auto
 
@@ -77,14 +85,6 @@
   prompt = true
 [mergetool "vimdiff"]
   cmd    = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-
-# enable gpg by default:
-## FIXME:
-## [commit]
-##   gpgsign = true
-## [tag]
-##   gpgSign = true
-# see push.gpgSign
 
 # submodule stuff:
 [status]
