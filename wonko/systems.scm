@@ -30,7 +30,8 @@
 
 (use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg
                      file-sharing)
-(use-package-modules base linux emacs emacs-xyz shells bash
+(use-package-modules base linux
+                     emacs emacs-xyz shells bash
                      networking display-managers xdisorg suckless fonts
                      ;; guix dev deps:
                      package-management gnupg)
@@ -56,7 +57,7 @@
          (url "https://gitlab.com/nonguix/nonguix")
          (branch "master")
          (commit
-          "f44a49d3092d509c5e09cc27ada40a8c4d99c02d")
+          "6aa6de9fc86ddc3bcce8801a029f26b8bc0d074f")
          (introduction
           (make-channel-introduction
            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -67,12 +68,12 @@
          (url "https://git.savannah.gnu.org/git/guix.git")
          (branch "master")
          (commit
-          "dca55056f3f1b61b43fc3a2769bf671f1736a12b")
+          "2f6e5bc5079e2dcef92a9a937608599f1159aeeb")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
            (openpgp-fingerprint
-            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
