@@ -30,6 +30,7 @@
             %of-course-i-still-love-you-os))
 
 (use-package-modules xorg)
+(use-service-modules samba)
 
 (define machine-home-services
   (list
@@ -70,6 +71,20 @@
                `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
+      (service samba-service-type (samba-configuration
+                                   (enable-smbd? #t)
+                                   (config-file (plain-file "smb.conf" "\
+[global]
+map to guest = Bad User
+logging = syslog@1
+
+[public]
+browsable = yes
+path = /junkyard
+read only = yes
+guest ok = yes
+guest only = yes\n"))))
+
       %laptop-services))
     (mapped-devices
      (list (mapped-device
