@@ -11,13 +11,10 @@
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
-  #:use-module (srfi srfi-88)
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
   #:use-module (nongnu packages firmware)
   #:use-module (gnu system setuid)
-  #:use-module (gnu packages package-management)
-  #:use-module (guix channels)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko spock)
