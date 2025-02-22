@@ -275,7 +275,8 @@
 
     (host-name "discovery")
     (issue (string-append (spock-say "live long & prosper!") "\n\n"))
-    (users (map crew->user-account %crew))
+    (users (append (map crew->user-account %crew)
+                   %base-user-accounts))
 
     (packages
      (append
