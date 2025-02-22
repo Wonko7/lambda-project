@@ -328,7 +328,7 @@
               #$emacs-exwm-custom-emacs "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
-  (list
+  (cons*
    (service home-bash-service-type %wonko-bash-config)
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
@@ -597,7 +597,7 @@
                (use-modules (wonko spock)
                             (guix build utils))
                (display (spock-say
-                         (string-append "backup SECRETS for ";; FIXME #$(ship-name %ship)
+                         (string-append "backup SECRETS for " ;; FIXME #$(ship-name %ship)
                                         ))
                         (current-error-port))
                (newline (current-error-port))
@@ -635,7 +635,9 @@
                      (tar    #$(file-append tar "/bin/tar")))
                  (system
                   (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
-                                 base64 " -d | " tar " xz ")))))))))))
+                                 base64 " -d | " tar " xz ")))))))))
+
+   %base-home-services))
 
 
 ;; (map (match-lambda*
