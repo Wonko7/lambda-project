@@ -203,7 +203,7 @@
 
    (service tor-service-type)
 
-   ;; (service (make-extra-profile-service-type "comms")   %communication-world)
+   (service (make-extra-profile-service-type "comms")   %borked-comms-world)
    ;; I want this to be used rather than the old utils in extra-profiles
    ;; ... which is still a useful fallback, but isn't often updated.
    (service (make-extra-profile-service-type "utils")   (append
@@ -303,9 +303,9 @@
 
     (swap-devices
      (list (swap-space
-             (target "/mnt/vault/swap/swapfile")
-             (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                   file-systems)))))))
+            (target "/mnt/vault/swap/swapfile")
+            (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                  file-systems)))))))
 
 (define-public %removable-laptop-os
   (operating-system
