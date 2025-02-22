@@ -30,7 +30,7 @@
             %of-course-i-still-love-you-os))
 
 (use-package-modules xorg)
-(use-service-modules samba)
+(use-service-modules nfs)
 
 (define machine-home-services
   (list
@@ -56,6 +56,7 @@
   (operating-system
     (inherit %laptop-os)
     (host-name "of-course-i-still-love-you")
+    (keyboard-layout %us-kb)
     (services
      (cons*
       (service slim-service-type
@@ -71,20 +72,11 @@
                `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
-      (service samba-service-type (samba-configuration
-                                   (enable-smbd? #t)
-                                   (config-file (plain-file "smb.conf" "\
-[global]
-map to guest = Bad User
-logging = syslog@1
-
-[public]
-browsable = yes
-path = /junkyard
-read only = yes
-guest ok = yes
-guest only = yes\n"))))
-
+      (service nfs-service-type
+	       (nfs-configuration
+	        (exports
+	         '(("/junkyard/media"
+		    "*(rw,sync,no_root_squash,no_subtree_check)")))))
       %laptop-services))
     (mapped-devices
      (list (mapped-device
