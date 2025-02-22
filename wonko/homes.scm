@@ -221,7 +221,8 @@
     (provision '(picom))
     (start #~(make-forkexec-constructor
               (list #$(file-append picom "/bin/picom")
-                    "--corner-radius=20"
+                    "--backend=glx"
+                    "--corner-radius=20" ;; --rounded-corners-exclude
                     "--opacity-rule=10:name *= 'oneko'")
               #:log-file #$(home-log-path "picom")))
     (stop #~(make-kill-destructor))
