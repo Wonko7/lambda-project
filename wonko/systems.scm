@@ -149,8 +149,7 @@
     (mlet %store-monad ((_ (current-target-system)))
       (return `((,(string-append profile-name "-profile")
                  ,(profile
-                   (content (packages->manifest
-                             (delete-duplicates packages eq?)))))))))
+                   (content (packages->manifest packages))))))))
   (service-type (name (string->symbol
                        (string-append profile-name "-extra-profile")))
                 (extensions
