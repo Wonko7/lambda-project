@@ -187,8 +187,6 @@
         emacs-consult-eglot
         emacs-consult-org-roam
         emacs-consult-omni
-        emacs-consult-notes ;; omni
-        emacs-consult-gh    ;; omni
         emacs-browser-hist  ;; omni
         emacs-which-key
         emacs-yasnippet

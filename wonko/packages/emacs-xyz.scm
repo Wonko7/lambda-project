@@ -135,27 +135,6 @@
     (description "verbiste for emacs")
     (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-consult-gh
-  (package
-    (name "emacs-consult-gh")
-    (version "1.0")
-    (source (origin
-              (method git-fetch)
-              (uri
-               (git-reference
-                (url "https://github.com/armindarvish/consult-gh")
-                (commit "306053a25fbcdb07cf902644668cc55510125e10" )))
-              (sha256
-               (base32
-                "1c4nmzf0nbzc8g1rzs30af00nd4scl5rap330y26fllrw1mdwfbs"))))
-    (inputs (list emacs-embark
-                  emacs-transient))
-    (build-system emacs-build-system)
-    (home-page "https://github.com/armindarvish/consult-gh")
-    (synopsis "Consult-GH - A GitHub CLI client inside GNU Emacs using Consult")
-    (description "Consult-GH provides an interface to interact with GitHub repositories (search, view files and issues, clone, fork, …) from inside Emacs. It uses the awesome package consult by Daniel Mendler and GitHub CLI and optionally Embark by Omar Antolín Camarena, and provides an intuitive UI using minibuffer completion familiar to Emacs users.")
-    (license (@ (guix licenses) gpl3+))))
-
 (define-public emacs-browser-hist
   (package
     (name "emacs-browser-hist")
@@ -176,43 +155,20 @@
     (description "Browsers usually keep their history in a sqlite database, and it’s trivial to extract it. This package allows you to search through your browser history by URL and the Page Title.")
     (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-consult-notes
-  (package
-    (name "emacs-consult-notes")
-    (version "v0.1")
-    (source (origin
-              (method git-fetch)
-              (uri
-               (git-reference
-                (url "https://github.com/mclear-tools/consult-notes")
-                (commit "9858bb13b54934ea0a95df45947ff40ffde4553b")))
-              (sha256
-               (base32
-                "0kv5hdc3cl7vkr06llyd6dcbddd55rmhhsfr8hzjpmvgw0h317kg"))))
-    (inputs (list emacs-s
-                  emacs-dash
-                  emacs-consult))
-    (build-system emacs-build-system)
-    (home-page "https://github.com/mclear-tools/consult-notes")
-    (synopsis "for easily selecting notes via consult")
-    (description "consult-notes can be used with any directory (or directories) of note files. It easily integrates with note systems like zk, denote, or org-roam. Additionally, it may also search org headings in a set of specified files.")
-    (license (@ (guix licenses) gpl3+))))
-
 (define-public emacs-consult-omni
   (package
     (name "emacs-consult-omni")
-    (version "v0.1")
+    (version "v0.2")
     (source (origin
               (method git-fetch)
               (uri
                (git-reference
                 (url "https://github.com/armindarvish/consult-omni")
-                (commit version)))
+                (commit "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda")))
               (sha256
                (base32
-                "09a7jvmg2zkzci1b6vzlsjmlfcramfkfa24mv5hjmc20zc6sdnnf"))))
+                "12jz9hwb1m3ix7zai5qkbyycbaff55yf67pc8q3ijcg5xlks8ckp"))))
     (inputs (list emacs-browser-hist
-                  emacs-consult-gh
                   emacs-gptel
                   emacs-embark))
     (build-system emacs-build-system)
@@ -225,12 +181,28 @@
             (lambda _
               (for-each (lambda (f)
                           (let ((b (basename f)))
-                            (if (not (or (string= b "consult-omni-mu4e.el")
-                                         (string= b "consult-omni-notmuch.el")
-                                         (string= b "consult-omni-brave.el")
-                                         (string= b "consult-omni-brave-autosuggest.el")
-                                         (string= b "consult-omni-gptel.el")
-                                         (string= b "consult-omni-elfeed.el")))
+                            (if (or (string= b "consult-omni-browser-history.el")
+                                    (string= b "consult-omni-buffer.el")
+                                    (string= b "consult-omni-calc.el")
+                                    (string= b "consult-omni-dict.el")
+                                    (string= b "consult-omni-duckduckgo.el")
+                                    (string= b "consult-omni-fd.el")
+                                    (string= b "consult-omni-find.el")
+                                    (string= b "consult-omni-gptel.el")
+                                    (string= b "consult-omni-git-grep.el")
+                                    (string= b "consult-omni-grep.el")
+                                    (string= b "consult-omni-line-multi.el")
+                                    (string= b "consult-omni-invidious.el")
+                                    (string= b "consult-omni-man.el")
+                                    (string= b "consult-omni-org-agenda.el")
+                                    ;; projects
+                                    ;; removed github because of go cli dependency
+                                    (string= b "consult-omni-ripgrep-all.el")
+                                    (string= b "consult-omni-ripgrep.el")
+                                    (string= b "consult-omni-sources.el")
+                                    (string= b "consult-omni-stackoverflow.el")
+                                    (string= b "consult-omni-wikipedia.el")
+                                    (string= b "consult-omni-youtube.el"))
                                 (rename-file f b)
                                 (delete-file f))))
                         (find-files "./sources" ".*\\.el$")))))))
