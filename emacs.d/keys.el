@@ -176,6 +176,7 @@
 
     ;; use this for something else here
     "ss" #'consult-line ;; :desc "filter line"
+    "so" #'consult-omni
 
     ;; code stuff
     ;; M-x flymake-goto-next-error goes to previous error in the current buffer
