@@ -47,11 +47,19 @@
 
 (define %of-course-i-still-love-you-wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %vanilla-wonko-services))))
+    (inherit %vanilla-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %vanilla-wonko-services))))
+
+(define %media-station-home
+  (home-environment
+    (inherit %media-station-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-wonko-services))))
 
 (define %of-course-i-still-love-you-os
   (operating-system
@@ -60,26 +68,31 @@
     (host-name "of-course-i-still-love-you")
     (keyboard-layout %us-kb)
     (services
-     (cons*
-      (service slim-service-type
-               (slim-configuration
-                (inherit  wonko-slim-config)
-                (xorg-configuration (xorg-configuration
-                                     (keyboard-layout %us-kb)
-                                     (extra-config '("Section \"Device\"\n"
-                                                     "  Option \"SWcursor\"\n"
-                                                     "  Identifier \"Card1\"\n"
-                                                     "EndSection\n"))))))
-      (service guix-home-service-type
-               `(("wonko" ,%of-course-i-still-love-you-wonko-home)))
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
-      (service nfs-service-type
-	       (nfs-configuration
-	        (exports
-	         '(("/junkyard/media"
-		    "*(rw,sync,no_root_squash,no_subtree_check)")))))
-      %laptop-services))
+     (let ((xorg-cfg (xorg-configuration
+                      (keyboard-layout %us-kb)
+                      (extra-config '("Section \"Device\"\n"
+                                      "  Option \"SWcursor\"\n"
+                                      "  Identifier \"Card1\"\n"
+                                      "EndSection\n")))))
+       (cons*
+        (service slim-service-type (slim-configuration
+                                    (inherit wonko-slim-config)
+                                    (xorg-configuration xorg-cfg)))
+        (service slim-service-type (slim-configuration
+                                    (inherit media-station-slim-config)
+                                    (xorg-configuration xorg-cfg)
+                                    (auto-login? #t)))
+        (service guix-home-service-type
+                 `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
+                   (,(crew-name %media) ,%media-station-home)))
+        (service kmonad-service-type kmonad-ergodox-config)
+        (service kmonad-service-type kmonad-bullshit-config)
+        ;; (service nfs-service-type
+        ;;          (nfs-configuration
+        ;;           (exports
+        ;;            '(("/junkyard/media"
+        ;;               "*(rw,sync,no_root_squash,no_subtree_check)")))))
+        %media-station-services)))
     (mapped-devices
      (list (mapped-device
             (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
