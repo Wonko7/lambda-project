@@ -196,11 +196,11 @@
   (let ((i (+ 11 i)))
     (pcase (system-name)
       ("yggdrasill"
-       (async-shell-command
+       (my/local-async-shell-command
         "xdotool mousemove 1920 1000; xdotool mousemove_relative 0 3000")
-       (async-shell-command
-        (concat "ssh of-course-i-still-love-you.local DISPLAY=:9 "
-                "/home/wonko/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
+       (my/local-async-shell-command
+        (concat "ssh media@of-course-i-still-love-you.local DISPLAY=:11 "
+                "/home/media/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
       (_ (exwm-workspace-switch-create i)))))
 
 (setq exwm-input-global-keys
