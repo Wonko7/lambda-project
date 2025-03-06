@@ -4168,7 +4168,7 @@ sub-language=eng
 #random=0
 
 # Repeat all (boolean)
-loop=1
+loop=0
 
 # Repeat current item (boolean)
 #repeat=0
