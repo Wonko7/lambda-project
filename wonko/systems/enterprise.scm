@@ -71,7 +71,7 @@
       (service slim-service-type wonko-slim-config)
       (service slim-service-type (slim-configuration
                                   (inherit media-station-slim-config)
-                                  (auto-login? #t)))
+                                  (auto-login? #f)))
       ;; (service noautostart-slim-service-type media-station-slim-config)
       (service guix-home-service-type
                `((,(crew-name %wonko) ,%wonko-home)
@@ -79,7 +79,7 @@
       (service kmonad-service-type kmonad-laptop-config)
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
-      %media-station-services))
+      %laptop-services))
     (mapped-devices
      (list (mapped-device
             (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
