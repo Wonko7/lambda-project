@@ -175,8 +175,9 @@
     "ff" #'find-file
 
     ;; use this for something else here
-    "ss" #'consult-line ;; :desc "filter line"
+    "ss" #'consult-outline ;; :desc "filter line"
     "so" #'consult-omni
+    "sl" #'consult-line
 
     ;; code stuff
     ;; M-x flymake-goto-next-error goes to previous error in the current buffer
