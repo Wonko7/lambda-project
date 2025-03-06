@@ -11,6 +11,7 @@
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services shells)
+  #:use-module (nongnu packages linux)
   #:use-module (guix build utils)
   #:use-module (guix gexp)
   #:use-module (ice-9 format)
@@ -55,6 +56,7 @@
 (define %of-course-i-still-love-you-os
   (operating-system
     (inherit %laptop-os)
+    (kernel linux-lts)
     (host-name "of-course-i-still-love-you")
     (keyboard-layout %us-kb)
     (services
