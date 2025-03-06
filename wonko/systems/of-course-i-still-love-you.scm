@@ -13,6 +13,8 @@
   #:use-module (gnu home services shells)
   #:use-module (nongnu packages linux)
   #:use-module (guix build utils)
+  #:use-module (guix utils)
+  #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (ice-9 format)
   #:use-module (ice-9 match)
@@ -70,6 +72,13 @@
     (services
      (let ((xorg-cfg (xorg-configuration
                       (keyboard-layout %us-kb)
+                      (modules (filter
+                                (lambda (p)
+                                  ;; remove amdgpu and non supported by current-system
+                                  (and (not (equal? p xf86-video-amdgpu))
+                                       (member (%current-system)
+                                               (package-supported-systems p))))
+                                %default-xorg-modules))
                       (extra-config '("Section \"Device\"\n"
                                       "  Option \"SWcursor\"\n"
                                       "  Identifier \"Card1\"\n"
