@@ -533,7 +533,7 @@ current time."
           ("mt" "📺 tv bookmark" entry
            ,(string-join '("* 📺 %? :bm:tv:\n"
                            "#+begin_src shell :dir "
-                           "/ssh:media@enterprise.local:/mnt/trantor/media " ;; FIXME: media-center.local?
+                           "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media "
                            ":results value output\n"
                            "  (vlc */*s01e01* &)\n"
                            "#+end_src\n"))

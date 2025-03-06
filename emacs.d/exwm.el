@@ -199,7 +199,7 @@
        (async-shell-command
         "xdotool mousemove 1920 1000; xdotool mousemove_relative 0 3000")
        (async-shell-command
-        (concat "ssh rocinante.local DISPLAY=:9 "
+        (concat "ssh of-course-i-still-love-you.local DISPLAY=:9 "
                 "/home/wonko/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
       (_ (exwm-workspace-switch-create i)))))
 

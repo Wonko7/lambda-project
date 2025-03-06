@@ -105,7 +105,7 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
-                        :buffer-f (let ((d "/ssh:wonko@enterprise.local:/mnt/trantor/media/"))
+                        :buffer-f (let ((d "/ssh:wonko@of-course-i-still-love-you.local:/mnt/trantor/media/"))
                                     (projectile-with-default-dir d
                                       (shell (projectile-generate-process-name
                                               "remote-media-shell" nil d)))))
