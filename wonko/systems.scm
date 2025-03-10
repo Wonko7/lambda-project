@@ -57,23 +57,34 @@
          (url "https://gitlab.com/nonguix/nonguix")
          (branch "master")
          (commit
-          "8c41304decb916892fa07ca86893e4cf926ee884")
+          "944619c1947ba59823f4ad6d8b13842b7e162d76")
          (introduction
           (make-channel-introduction
            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
            (openpgp-fingerprint
             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
+         (name 'guix-forge)
+         (url "https://git.systemreboot.net/guix-forge/")
+         (branch "main")
+         (commit
+          "bcb3e2353b9f6b5ac7bc89d639e630c12049fc42")
+         (introduction
+          (make-channel-introduction
+           "0432e37b20dd678a02efee21adf0b9525a670310"
+           (openpgp-fingerprint
+            "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+        (channel
          (name 'guix)
          (url "https://git.savannah.gnu.org/git/guix.git")
          (branch "master")
          (commit
-          "673997a2688e5354901381e25b2ae7904ea59f3c")
+          "9866d32e173050ba99dc520b0a4d5aacb85e3fa0")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
            (openpgp-fingerprint
-            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))  )
+            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
