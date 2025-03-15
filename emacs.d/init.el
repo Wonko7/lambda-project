@@ -508,7 +508,7 @@ This function could be in the list `comint-output-filter-functions'."
 
 (use-package transmission
   :custom
-  (transmission-host "enterprise.local")
+  (transmission-host "of-course-i-still-love-you.local")
   (transmission-refresh-modes '(transmission-mode
                                 transmission-files-mode
                                 transmission-info-mode
