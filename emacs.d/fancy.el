@@ -12,15 +12,6 @@
 (setq visible-bell t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; emoji & icons
-
-(require 'all-the-icons)
-(require 'all-the-icons-completion)
-(all-the-icons-completion-mode)
-(add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
-(require 'kind-icon)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; theme
 
 (require 'doom-themes)
@@ -80,20 +71,6 @@
 ;; (setq doom-modeline-workspace-name t)
 ;; (setq doom-modeline-persp-icon nil)
 ;; (doom-modeline-mode)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; cursor
-
-;; (require 'beacon)
-;; (beacon-mode 1)
-;; (setq beacon-blink-when-point-moves-horizontally 2)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; nyan
-
-(require 'nyan-mode)
-(setq nyan-animate-nyancat nil) ;; FIXME doesn't like to animate with emacs 29.1
-(nyan-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows

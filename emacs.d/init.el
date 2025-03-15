@@ -178,6 +178,7 @@
 (use-package magit
   :custom
   (magit-status-initial-section '(((unstaged) (status))))
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :hook
   (magit-refresh-buffer-hook . magit-status-goto-initial-section)
 
@@ -408,9 +409,6 @@ This function could be in the list `comint-output-filter-functions'."
 
 (use-package diredfl
   :hook (dired-mode-hook . #'diredfl-mode))
-(use-package all-the-icons-dired
-  :hook
-  (dired-mode-hook . #'all-the-icons-dired-mode))
 (use-package dired-toggle-sudo)
 (use-package dired-rsync)
 (use-package dired-open)
@@ -550,13 +548,14 @@ This function could be in the list `comint-output-filter-functions'."
 ;; sub config
 
 ;; (require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
-(require 'conf/completion    "~/.emacs.d/completion.el")
-(require 'conf/workspaces    "~/.emacs.d/workspaces.el")
-(require 'conf/org           "~/.emacs.d/org-conf.el")
-(require 'conf/lisp          "~/.emacs.d/lisp-dev.el")
-(require 'conf/dev           "~/.emacs.d/dev.el")
-(require 'conf/doom          "~/.emacs.d/doom.el")
-(require 'conf/communication "~/.emacs.d/communication.el")
+(require 'conf/completion      "~/.emacs.d/completion.el")
+(require 'conf/workspaces      "~/.emacs.d/workspaces.el")
+(require 'conf/org             "~/.emacs.d/org-conf.el")
+(require 'conf/lisp            "~/.emacs.d/lisp-dev.el")
+(require 'conf/dev             "~/.emacs.d/dev.el")
+(require 'conf/doom            "~/.emacs.d/doom.el")
+(require 'conf/communication   "~/.emacs.d/communication.el")
+(require 'conf/fancy-but-later "~/.emacs.d/fancy-but-later.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; end of config stuff:

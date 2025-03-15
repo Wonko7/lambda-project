@@ -355,6 +355,7 @@
                       "elfeed.el"
                       "evil.el"
                       "fancy.el"
+                      "fancy-but-later.el"
                       "early-init.el"
                       "init.el"
                       "lisp-dev.el"

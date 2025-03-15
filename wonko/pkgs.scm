@@ -187,7 +187,7 @@
         emacs-consult-eglot
         emacs-consult-org-roam
         emacs-consult-omni
-        emacs-browser-hist  ;; omni
+        emacs-browser-hist ;; omni
         emacs-which-key
         emacs-yasnippet
         emacs-doom-snippets
@@ -208,10 +208,14 @@
         emacs-svg-tag-mode
         emacs-diminish
         emacs-doom-themes
-        emacs-all-the-icons
-        emacs-all-the-icons-completion
-        emacs-all-the-icons-dired
-        emacs-kind-icon
+        emacs-nerd-icons
+        emacs-nerd-icons-completion
+        emacs-nerd-icons-dired
+        emacs-nerd-icons-ibuffer
+        ;; emacs-all-the-icons
+        ;; emacs-all-the-icons-completion
+        ;; emacs-all-the-icons-dired
+        ;; emacs-kind-icon
         emacs-default-text-scale
         ;; exwm
         emacs-exwm
@@ -352,8 +356,7 @@
    krita))
 
 (define-public %fonts-world
-  (list font-jetbrains-mono
-        ;; font-nerd-noto
+  (list font-nerd-jetbrains
         font-google-roboto-mono
         font-nerd-symbols
         font-goog-noto-emoji))
