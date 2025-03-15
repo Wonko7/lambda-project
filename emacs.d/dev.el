@@ -42,8 +42,8 @@
                         (setq-local tuareg-interactive-program
                                     (concat tuareg-interactive-program " -nopromptcont"))
                         (add-hook 'before-save-hook #'ocamlformat-before-save t t)))
-  :config
 
+  :config
   (setq tuareg-interactive-read-only-input t)
 
   (general-evil-define-key '(normal) tuareg-mode-map

@@ -231,7 +231,6 @@
    ;; "`"    #' FIXME do something with this
    "'"    #'evil-owl-goto-mark
    "Y"    (lambda () (interactive) (execute-kbd-macro (kbd "y$"))))
-
   ;; TODO: sentence & paragraph motions.
 
   (general-define-key
