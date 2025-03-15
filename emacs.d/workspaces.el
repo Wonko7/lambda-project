@@ -111,7 +111,7 @@
                                               "media-shell" nil d)))))
                       ( :name right
                         :buffer-f (org-roam-node-open
-                                   (org-roam-node-from-title-or-alias "📺 The Handmaid's Tale")))))
+                                   (org-roam-node-from-title-or-alias my/current-media)))))
           ( :layout media2-remote
             :recipe (| (:left-size-ratio 0.5)
                        left
@@ -124,7 +124,7 @@
                                               "remote-media-shell" nil d)))))
                       ( :name right
                         :buffer-f (org-roam-node-open
-                                   (org-roam-node-from-title-or-alias "📺 sense8")))))
+                                   (org-roam-node-from-title-or-alias my/current-media)))))
           ( :layout org2
             :recipe (| (:left-size-ratio 0.5)
                        left
