@@ -25,6 +25,7 @@
  pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz image-viewers
  ;; web
  chromium tor matrix irc bittorrent
+ gnuzilla
  ;; tools
  admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls screen
  ;; dev
@@ -249,8 +250,7 @@
         ;; pantalaimon
 
         ;; ☠
-        emacs-transmission
-        emacs-mentor))
+        emacs-transmission))
 
 (define-public %xfce-world
   (list xfce
@@ -336,6 +336,7 @@
 
 (define-public %web-world
   (list firefox
+        icecat
         ungoogled-chromium
         speedtest-cli
         netcat-openbsd
@@ -343,7 +344,6 @@
         youtube-dl
         ;; ☠
         ;; onionshare
-        ;; rtorrent
         `(,transmission "gui")))
 
 (define-public %hack-the-world
