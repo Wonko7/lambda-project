@@ -70,6 +70,73 @@
     (description "synchronize Zathura’s theme with Emacs")
     (license (@ (guix licenses) gpl3+))))
 
+(define-public emacs-nerd-icons-completion
+  (let ((commit "8e5b995eb2439850ab21ba6062d9e6942c82ab9c")
+        (revision "1"))
+    (package
+      (name "emacs-nerd-icons-completion")
+      (version (git-version "0.1.0" revision commit))
+      (home-page "https://github.com/rainstormstudio/nerd-icons-completion/")
+      (propagated-inputs
+       (list emacs-compat
+             emacs-nerd-icons))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url home-page)
+                             (commit commit)))
+         (sha256
+          (base32
+           "0nbyrzz5sscycbr1h65ggzrm1m9agfwig2mjg7jljzw8dk1bmmd2"))))
+      (build-system emacs-build-system)
+      (synopsis "Use nerd-icons for completion")
+      (description "Use nerd-icons for completion")
+      (license (@ (guix licenses) gpl3+)))))
+
+(define-public emacs-nerd-icons-dired
+  (let ((commit "c0b0cda2b92f831d0f764a7e8c0c6728d6a27774")
+        (revision "1"))
+    (package
+      (name "emacs-nerd-icons-dired")
+      (version (git-version "0.1.0" revision commit))
+      (home-page "https://github.com/rainstormstudio/nerd-icons-dired")
+      (propagated-inputs
+       (list emacs-nerd-icons))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url home-page)
+                             (commit commit)))
+         (sha256
+          (base32
+           "1iwqzh32j6fsx0nl4y337iqkx6prbdv6j83490riraklzywv126a"))))
+      (build-system emacs-build-system)
+      (synopsis "Use nerd-icons for completion")
+      (description "Use nerd-icons for completion")
+      (license (@ (guix licenses) gpl3+)))))
+
+(define-public emacs-nerd-icons-ibuffer
+  (let ((commit "46f57138e57329d841b1745e586b4f2c69f82b87")
+        (revision "1"))
+    (package
+      (name "emacs-nerd-icons-ibuffer")
+      (version (git-version "0.1.0" revision commit))
+      (home-page "https://github.com/seagle0128/nerd-icons-ibuffer")
+      (propagated-inputs
+       (list emacs-nerd-icons))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url home-page)
+                             (commit commit)))
+         (sha256
+          (base32
+           "020nl0q6ab08frbikd78lnk821wsv6r3i7p5g1jmfw05zywj2jyr"))))
+      (build-system emacs-build-system)
+      (synopsis "Display nerd icons in ibuffer")
+      (description "Display nerd icons in ibuffer")
+      (license (@ (guix licenses) gpl3+)))))
+
 (define-public emacs-org-ml
   (package
     (name "emacs-org-ml")
