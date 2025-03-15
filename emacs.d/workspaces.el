@@ -105,6 +105,19 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
+                        :buffer-f (let ((d "~/")) ;; remote on init was annoying
+                                    (projectile-with-default-dir d
+                                      (shell (projectile-generate-process-name
+                                              "media-shell" nil d)))))
+                      ( :name right
+                        :buffer-f (org-roam-node-open
+                                   (org-roam-node-from-title-or-alias "📺 The Handmaid's Tale")))))
+          ( :layout media2-remote
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers (( :name left
+                        :hide-your-kids t
                         :buffer-f (let ((d "/ssh:wonko@of-course-i-still-love-you.local:/mnt/trantor/media/"))
                                     (projectile-with-default-dir d
                                       (shell (projectile-generate-process-name
