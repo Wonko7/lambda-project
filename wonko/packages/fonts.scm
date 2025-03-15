@@ -25,6 +25,37 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages xorg))
 
+(define-public font-nerd-jetbrains
+  (package
+    (name "font-nerd-jetbrains")
+    (version "3.3.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri
+        (string-append "https://github.com/ryanoasis/nerd-fonts/releases/download/v" version "/JetBrainsMono.zip"))
+       (sha256
+        (base32
+         "1r6v5naj0g6wkhpr53zc7rygg9s199h81s7wf3x4nq0b6lm7i0rd"))))
+    (build-system font-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-before 'install 'make-files-writable
+           (lambda _
+             (for-each
+              make-file-writable
+              (find-files "." ".*\\.(otf|otc|ttf|ttc)$"))
+             #t)))))
+    (home-page "https://www.nerdfonts.com/")
+    (synopsis "Iconic font aggregator, collection, and patcher")
+    (description
+     "Nerd Fonts patches developer targeted fonts with a high number
+of glyphs (icons). Specifically to add a high number of extra glyphs
+from popular ‘iconic fonts’ such as Font Awesome, Devicons, Octicons,
+and others.")
+    (license (@ (guix licenses) expat))))
+
 (define-public font-nerd-symbols
   (package
     (name "font-nerd-symbols")
