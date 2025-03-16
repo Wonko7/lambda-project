@@ -1,7 +1,7 @@
-URxvt.font: xft:=FONT=:size==SIZE=:Regular
-URxvt.boldFont: xft:=FONT=:size==SIZE=:Bold
-URxvt.italicFont: xft:=FONT=:size==SIZE=:Italic
-URxvt.boldItalicFont: xft:=FONT=:size==SIZE=:Italic
+URxvt.font: xft:=FONT=:size==SIZE=
+! URxvt.boldFont: xft:=FONT=:size==SIZE=:Bold
+! URxvt.italicFont: xft:=FONT=:size==SIZE=:Italic
+! URxvt.boldItalicFont: xft:=FONT=:size==SIZE=:Italic
 
 URxvt*letterSpace: -1
 
