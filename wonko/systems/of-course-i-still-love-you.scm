@@ -80,8 +80,9 @@
                                                (package-supported-systems p))))
                                 %default-xorg-modules))
                       (extra-config '("Section \"Device\"\n"
-                                      "  Option \"SWcursor\"\n"
                                       "  Identifier \"Card1\"\n"
+                                      "  Option \"SWcursor\"\n"
+                                      "  Option \"AsyncFlipSecondaries\" \"false\"\n"
                                       "EndSection\n")))))
        (cons*
         (service slim-service-type (slim-configuration
