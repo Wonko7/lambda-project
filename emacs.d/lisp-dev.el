@@ -88,16 +88,23 @@
 
 ;; c-q to insert literal character without paredit balancing
 ;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+
 (use-package origami
   :demand t
   :custom
   (origami-fold-replacement "…")
+
   :config
   (global-origami-mode)
+  ;; change emacs lisp parser:
+  (let* ((op origami-parser-alist)
+         (op (assoc-delete-all 'emacs-lisp-mode op))
+         (op (assoc-delete-all 'lisp-interaction-mode op)))
+    (setq origami-parser-alist (append origami-parser-alist
+                                       `((emacs-lisp-mode       . origami-indent-parser)
+                                         (lisp-interaction-mode . origami-indent-parser)))))
   ;; clear up gz for origami:
   (defun my/nuke-all-gz-for-origami ()
-    (evil-collection-define-key 'normal 'evil-cleverparens-mode-map
-      "_" #'origami-toggle-node)
     (mapc
      (lambda (m)
        (evil-collection-define-key 'normal m
@@ -113,7 +120,7 @@
   ;; temp?
   (general-define-key
    :states 'normal
-   "_" #'origami-toggle-node
+   "<TAB>" #'origami-toggle-node
    "gzc" #'origami-close-node
    "gzo" #'origami-open-node-recursively
    "gzC" #'origami-close-all-nodes
