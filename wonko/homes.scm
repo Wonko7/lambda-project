@@ -330,14 +330,13 @@
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (cons*
    (service home-bash-service-type %wonko-bash-config)
+   (simple-service 'dircolors home-shell-profile-service-type
+                   (list
+                    (mixed-text-file
+                     "dircolors"
+                     "eval $(dircolors -b ~/.config/dircolors/dircolors)\n")))
    (simple-service 'sourcing-extra-profiles home-shell-profile-service-type
                    (list
-                    ;; (mixed-text-file
-                    ;;  "force-tramp-shopt"
-                    ;;  "shopt -s autocd\n"
-                    ;;  "shopt -s extglob\n"
-                    ;;  "shopt -s globstar\n"
-                    ;;  "shopt -s nocaseglob\n")
                     (bash-profile-source-profiles (profiles->names %profiles))))
 
    (simple-service 'emacsd-config-files
@@ -407,6 +406,9 @@
       (".config/ripgrep/ripgreprc"
        ,(local-file
          (string-append %lambda-project "/misc/ripgreprc")))
+      (".config/dircolors/dircolors"
+       ,(local-file
+         (string-append %lambda-project "/misc/dircolors")))
       ;; my X stuff:
       (".config/kdeglobals"
        ,(file-append breeze "/share/color-schemes/BreezeDark.colors"))
