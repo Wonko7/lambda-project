@@ -545,6 +545,13 @@ This function could be in the list `comint-output-filter-functions'."
       (my/sudo "halt")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; text stuff
+
+(use-package olivetti
+  :custom
+  (olivetti-minimum-body-width 88))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sub config
 
 ;; (require 'opam-user-setup    "~/.emacs.d/opam-user-setup.el") ;; FIXME
