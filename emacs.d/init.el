@@ -322,20 +322,21 @@ This function could be in the list `comint-output-filter-functions'."
   :demand t
   :init
   (detached-init)
-  :custom ((detached-show-output-on-attach t)
-           (detached-terminal-data-command system-type)
-           (detached-list-config
-            `((:name "Host" :function detached--host-str :length 15 :face detached-host-face)
-              (:name "Command" :function detached-list--command-str :length 75)
-              (:name "Status" :function detached-list--status-str :length 7)
-              ( :name "Directory" :function detached--working-dir-str
-                :length 30 :face detached-working-dir-face)
-              ( :name "Duration" :function detached--duration-str
-                :length 10 :face detached-duration-face)
-              ( :name "Created" :function detached--creation-str
-                :length 20 :face detached-creation-face)
-              ( :name "Metadata" :function detached--metadata-str
-                :length 20 :face detached-metadata-face))))
+  :custom
+  (detached-show-output-on-attach t)
+  (detached-terminal-data-command system-type)
+  (detached-list-config
+   `((:name "Host" :function detached--host-str :length 15 :face detached-host-face)
+     (:name "Command" :function detached-list--command-str :length 75)
+     (:name "Status" :function detached-list--status-str :length 7)
+     ( :name "Directory" :function detached--working-dir-str
+       :length 30 :face detached-working-dir-face)
+     ( :name "Duration" :function detached--duration-str
+       :length 10 :face detached-duration-face)
+     ( :name "Created" :function detached--creation-str
+       :length 20 :face detached-creation-face)
+     ( :name "Metadata" :function detached--metadata-str
+       :length 20 :face detached-metadata-face)))
   :config
   (general-evil-define-key '(normal) detached-list-mode-map
     "a" #'detached-edit-session-annotation
