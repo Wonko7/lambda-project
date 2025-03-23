@@ -475,6 +475,9 @@ This function could be in the list `comint-output-filter-functions'."
 ;; search
 
 (use-package isearch
+  :custom
+  (isearch-allow-scroll t)
+  (isearch-lazy-count t)
   :bind ( :map isearch-mode-map
           ("C-e" . #'isearch-edit-string)))
 
