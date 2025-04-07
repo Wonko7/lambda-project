@@ -309,7 +309,26 @@ EXTRA-FILES can be used to append extra files to the list."
                                                         ;;(:name ".*"
                                                         ;;       :order 999
                                                         ;;       :anything t)
-                                                        )))))))))
+                                                        ))))))))
+
+  ;; moon phases: https://topikettunen.com/blog/emacs-org-agenda-lunar-phases/
+  (require 'cl-lib)
+
+  ;; Pass current day to `org-lunar-phases', which is annoyingly in a stupid format, (MM DD YYYY).
+  (with-no-warnings (defvar date))
+  (defun my/org-lunar-phases ()
+    "Show lunar phase in Agenda buffer."
+    (require 'lunar)
+    (let* ((phase-list (lunar-phase-list (nth 0 date) (nth 2 date)))
+           (phase (cl-find-if (lambda (phase) (equal (car phase) date))
+                              phase-list))
+           (lunar-phase-names '("🌑 New Moon"
+                                "🌓 First Quarter Moon"
+                                "🌕 Full Moon"
+                                "🌗 Last Quarter Moon")))
+      (when phase
+        ;; Return the phase to the agenda file.
+        (setq ret (concat (lunar-phase-name (nth 2 phase))))))))
 
 (use-package org-super-agenda
   :after org-agenda
