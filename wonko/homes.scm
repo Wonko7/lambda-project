@@ -110,7 +110,7 @@
     ("dmesg" . "dmesg -He")
     ("free"  . "free -h")
     ("grep"  . "grep --color=auto")
-    ("ls"    . "ls --color=yes")
+    ("ls"    . "ls --color=auto")
     ("ll"    . "ls -l --color=auto")
     ("la"    . "ls -A --color=auto")
     ("lla"   . "ls -lA --color=auto")
