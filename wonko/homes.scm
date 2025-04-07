@@ -123,6 +123,7 @@
     ("copy"  . "rsy")
     ("nmcli" . "nmcli -c yes")
     ("ip"    . "ip -c -h")
+    ("v"     . "vim")
     ("kys"   . "exit")))
 
 (define-public %profiles
@@ -409,6 +410,9 @@
       (".config/dircolors/dircolors"
        ,(local-file
          (string-append %lambda-project "/misc/dircolors")))
+      (".config/vim/vimrc"
+       ,(local-file
+         (string-append %lambda-project "/misc/vimrc")))
       ;; my X stuff:
       (".config/kdeglobals"
        ,(file-append breeze "/share/color-schemes/BreezeDark.colors"))
