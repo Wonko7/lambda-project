@@ -100,11 +100,11 @@
         ;; emacs-hercules
         ;; emacs-vdiff-magit
 
-        ;; apps
+        ;; apps:
         ;; emacs-elfeed
         ;; emacs-elfeed-org
         ;; emacs-elfeed-goodies
-        emacs-powerline
+        ;; emacs-powerline
         emacs-circe
         emacs-pass
         emacs-magit
@@ -122,8 +122,14 @@
         emacs-dired-rsync
         emacs-dired-hacks
         emacs-dired-toggle-sudo
+        emacs-dired-preview
+        emacs-world-time-mode
         ;; 🗺
         emacs-osm
+        ;; casual:
+        emacs-casual-info
+        emacs-casual-dired
+        emacs-casual-calc
 
         ;; spell
         emacs-flycheck-guile
@@ -133,7 +139,7 @@
         hunspell-dict-fr-toutes-variantes
         hunspell-dict-en-us
         hunspell-dict-en-gb
-        ;; emacs-jinx
+        emacs-jinx
 
         ;; transverse:
         emacs-ibuffer-projectile
@@ -200,6 +206,9 @@
         ripgrep
         emacs-rg
         emacs-wgrep
+
+        ;; word smith
+        emacs-olivetti
 
         ;; simple gui
         emacs-alert
