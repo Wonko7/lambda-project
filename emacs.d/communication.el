@@ -343,23 +343,16 @@
   (general-evil-define-key '(normal) gnus-article-mode-map
     "U" #'gnus-summary-put-mark-as-unread
     "K" #'gnus-summary-prev-article
-    "J" #'gnus-summary-next-article)
-
-  ;;)
-
-  (require 'gnus-topic )
-  (require 'evil-collection-gnus))
+    "J" #'gnus-summary-next-article))
 
 ;; (use-package gnus-topic
 ;;   :after gnus
 ;;   :hook
-;;   (gnus-group-mode-hook . #'gnus-topic-mode)
-;;   :defer t
-;;   )
+;;   ;; (gnus-group-mode-hook . #'gnus-topic-mode)
+;;   :defer t)
 
-;; (use-package evil-collection-gnus
-;;   :after gnus
-;;   :defer t
-;;   )
+(use-package evil-collection-gnus
+  :after gnus
+  :defer t)
 
 (provide 'conf/communication)
