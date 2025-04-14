@@ -314,7 +314,8 @@ EXTRA-FILES can be used to append extra files to the list."
   ;; moon phases: https://topikettunen.com/blog/emacs-org-agenda-lunar-phases/
   (require 'cl-lib)
 
-  ;; Pass current day to `org-lunar-phases', which is annoyingly in a stupid format, (MM DD YYYY).
+  ;; Pass current day to `org-lunar-phases',
+  ;; which is annoyingly in a stupid format, (MM DD YYYY).
   (with-no-warnings (defvar date))
   (defun my/org-lunar-phases ()
     "Show lunar phase in Agenda buffer."
@@ -328,7 +329,22 @@ EXTRA-FILES can be used to append extra files to the list."
                                 "🌗 Last Quarter Moon")))
       (when phase
         ;; Return the phase to the agenda file.
-        (setq ret (concat (lunar-phase-name (nth 2 phase))))))))
+        (setq ret (concat (lunar-phase-name (nth 2 phase)))))))
+
+  ;; holidays:
+  (require 'holidays)
+  (setq holiday-local-holidays t
+        diary-show-holidays-flag t
+        org-agenda-include-diary t)
+  (defvar date)
+  (defun my/org-calendar-holiday ()
+    "List of holidays, for Diary display in Org mode."
+    ;; holy fuck, another different annoying stupid date format:
+    (let* ((y (nth 2 date))
+           (m (nth 1 date))
+           (d (nth 1 date))
+           (hl (calendar-check-holidays (list m d y))))
+      (and hl (mapconcat #'identity hl "; ")))))
 
 (use-package org-super-agenda
   :after org-agenda
