@@ -82,7 +82,7 @@
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
-            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+            (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
             (target "vault")
             (type luks-device-mapping))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
@@ -90,7 +90,7 @@
                     (cons*
                      (file-system
                        (mount-point "/boot")
-                       (device (uuid "6C21-E416"
+                       (device (uuid "4ACA-0700"
                                      'fat32))
                        (type "vfat"))
                      (file-system
