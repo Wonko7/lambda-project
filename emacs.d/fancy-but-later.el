@@ -43,5 +43,4 @@
   :config
   (nyan-mode 1))
 
-
 (provide 'conf/fancy-but-later)

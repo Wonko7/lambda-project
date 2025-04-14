@@ -72,6 +72,39 @@
 ;; (setq doom-modeline-persp-icon nil)
 ;; (doom-modeline-mode)
 
+(setq mode-line-with-margin
+      `(
+        ;;'display '(space :width 1)
+        (:eval
+         (let* ((ml (format-mode-line
+                     '("%e"
+                       mode-line-front-space
+                       (:propertize
+                        ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
+                        ;; display (min-width (5.0))
+                        )
+                       ;;"<" (exwm-get-ws-str) ">"
+                       ;;"<" (number-to-string exwm-workspace-current-index) ">"
+                       ;; (concat "<" (number-to-string exwm-workspace-current-index) ">")
+                       mode-line-frame-identification
+                       mode-line-buffer-identification
+                       "   " mode-line-position evil-mode-line-tag "  " mode-line-modes mode-line-misc-info
+                       mode-line-end-spaces
+                       )))
+                (w  (+ (window-width) 0))
+                (ml (truncate-string-to-width ml w))
+                )
+           (concat
+            (propertize " " 'face 'fringe)
+            ml
+            (propertize " " ;;'face 'holiday
+                        'display `((space :align-to (- (+ right right-fringe right-margin 1) 2))))
+            (propertize " " 'face 'fringe 'display `((space :width 1)))
+            )))))
+
+(setq-default mode-line-format mode-line-with-margin)
+(setq mode-line-format mode-line-with-margin)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows
 
