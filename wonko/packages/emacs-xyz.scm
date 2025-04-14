@@ -160,7 +160,7 @@
     (description "A functional API for org-mode")
     (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-org-sql ;; replace with my fork?
+(define-public emacs-org-sql ;;
   (package
     (name "emacs-org-sql")
     (version "3.0.4")
@@ -169,11 +169,11 @@
        (method git-fetch)
        (uri
         (git-reference
-         (url "https://github.com/ndwarshuis/org-sql")
-         (commit version)))
+         (url "https://github.com/wonko7/org-sql")
+         (commit "777fde3c3f96d626280c7202323f145467491c22")))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0v2bbwxblzpkf57p6d5i0isia90jxw17p9aaslizpcybqsp3c3ha"))))
+        (base32 "1qzmcv3vxrdhxx6qzwmrh4xbjw5xgghz1ddv4jdawlnqkwsmn5dl"))))
     (inputs
      (list emacs-f
            emacs-s
