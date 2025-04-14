@@ -198,7 +198,17 @@
   ;; Otherwise use the default `completion--in-region' function.
   (setq completion-in-region-function
         (lambda (&rest args)
-          (apply #'consult-completion-in-region args))))
+          (apply #'consult-completion-in-region args)))
+  ;; thing at point
+  (consult-customize
+   consult-line
+   :add-history (seq-some #'thing-at-point '(region symbol)))
+
+  (defalias 'consult-line-symbol-at-point 'consult-line)
+  (defalias 'consult-line-word-at-point 'consult-line)
+
+  (consult-customize consult-line-word-at-point :initial (thing-at-point 'word))
+  (consult-customize consult-line-symbol-at-point :initial (thing-at-point 'symbol)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; embark

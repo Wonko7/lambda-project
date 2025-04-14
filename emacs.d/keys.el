@@ -227,6 +227,10 @@
    ;; "-d"   #'delete-trailing-whitespace
    "/"    #'consult-line
    "C-/"  #'evil-search-forward
+   "*"    #'consult-line-word-at-point
+   "C-*"  #'consult-line-symbol-at-point
+   "#"    #'evil-search-word-forward
+   "C-#"  #'evil-search-word-backward
    "z="   #'flyspell-correct-at-point
    ;; "`"    #' FIXME do something with this
    "'"    #'evil-owl-goto-mark
