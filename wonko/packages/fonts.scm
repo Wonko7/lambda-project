@@ -67,7 +67,7 @@ and others.")
         (string-append "https://github.com/ryanoasis/nerd-fonts/releases/download/v" version "/NerdFontsSymbolsOnly.zip"))
        (sha256
         (base32
-         "1nb9bhl16lwvr58phcj0hyrzdxqv45gycj6a1nl95pcqy76a06zz"))))
+         "0rixy2sgmv492ja6g9c27ypdav63wpyp5qzr5wkac8nhfkmc4ndw"))))
     (build-system font-build-system)
     (arguments
      `(#:phases
@@ -99,7 +99,7 @@ and others.")
        ;; (file-name "noto-emoji.zip")
        (sha256
         (base32
-         "0z1sa9bxw11yj79kvjcb29pg92krbznp9szq179cc0w8l1awisif"))))
+         "05qqb405472sddxi9bfm9nf5y3fic4r70cpzp5lrds0hgrc3rvir"))))
     (build-system font-build-system)
 
     (home-page "https://fonts.google.com/noto/specimen/Noto+Emoji")
