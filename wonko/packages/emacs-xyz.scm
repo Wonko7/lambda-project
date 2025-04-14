@@ -61,9 +61,9 @@
        (uri
         (git-reference
          (url "https://github.com/amolv06/zathura-sync-theme")
-         (commit "master")))
+         (commit "92296ec6c8f63d8a13db15039a4694cd2318532e")))
        (sha256
-        (base32 "1l6aaqm5617yq3wyri6f7a2jqh6pzkjpv221k97n3yyavxzq85wk"))))
+        (base32 "1n1g7vaysb725abyvdimhs09zkhxm8zrpva8bds7w5afajlzszmb"))))
     (build-system emacs-build-system)
     (home-page "https://github.com/amolv06/zathura-sync-theme")
     (synopsis "synchronize Zathura’s theme with Emacs")
