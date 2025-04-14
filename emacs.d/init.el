@@ -95,6 +95,8 @@
 (add-hook 'ement-room-list-mode-hook           (lambda () (display-line-numbers-mode 0)))
 (add-hook 'ement-tabulated-room-list-mode-hook (lambda () (display-line-numbers-mode 0)))
 
+(column-number-mode)
+
 (setq custom-file "~/.run/emacs/custom-cache.el")
 (if (file-readable-p custom-file)
     (load custom-file))
