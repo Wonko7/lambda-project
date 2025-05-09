@@ -57,7 +57,7 @@
          (url "https://gitlab.com/nonguix/nonguix")
          (branch "master")
          (commit
-          "210a8d3ae4b9657ce2fdc2143688d8f8a5868dc9")
+          "e899121adbaa13cfcaeae7a5c24921bffa645771")
          (introduction
           (make-channel-introduction
            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -79,7 +79,7 @@
          (url "https://codeberg.org/guix/guix-mirror")
          (branch "master")
          (commit
-          "0502a30d3192c7369a18b1b3bcd61ffe4d7d6acd")
+          "7e5913f90df916d8d9f5c509354d62324f54f481")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
@@ -313,9 +313,9 @@
 
     (swap-devices
      (list (swap-space
-            (target "/mnt/vault/swap/swapfile")
-            (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
-                                  file-systems)))))))
+             (target "/mnt/vault/swap/swapfile")
+             (dependencies (filter (file-system-mount-point-predicate "/mnt/vault")
+                                   file-systems)))))))
 
 (define-public %removable-laptop-os
   (operating-system
