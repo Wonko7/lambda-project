@@ -134,9 +134,12 @@
 
 (use-package gptel
   :config
-  (setq gptel-api-key (lambda ()
-                        (auth-source-pass-get 'secret "web/openai/token/pandora"))))
-
+  (setq gptel-org-convert-response t)
+  (gptel-make-openai "llama-cpp"                  ;; Any name
+    :stream t                                     ;; Stream responses
+    :protocol "http"
+    :host "of-course-i-still-love-you.local:6666" ;; Llama.cpp server location
+    :models '(lol)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql
