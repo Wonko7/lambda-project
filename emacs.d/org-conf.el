@@ -169,7 +169,74 @@
   (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (setq org-roam-completion-everywhere t)
-  (org-roam-db-autosync-mode))
+  (org-roam-db-autosync-mode)
+
+  ;; <!-- FIXME/workaround [2025-04-15 Tue 16:21]
+  ;;      org vs org-roam incompatiblity in guix:
+
+  ;; (defun org-el (key el)
+  ;;   (cond ((eq :begin key) (org-element-begin el))
+  ;;         ((eq :end key) (org-element-end el))
+  ;;         ((eq :type key) (org-element-type el))
+  ;;         ((eq :path key) (org- el))
+  ;;         ))
+
+  (defun org-roam-link-replace-at-point (&optional link)
+    "Replace \"roam:\" LINK at point with an \"id:\" link."
+    (save-excursion
+      (save-match-data
+        (let* ((link (or link (org-element-context)))
+               (type (org-element-property :type link))
+               (path (org-element-property :path link))
+               (desc (and (org-element-property :contents-begin link)
+                          (org-element-property :contents-end link)
+                          (buffer-substring-no-properties
+                           (org-element-property :contents-begin link)
+                           (org-element-property :contents-end link))))
+               node)
+          (goto-char (org-element-begin link))
+          (when (and (org-in-regexp org-link-any-re 1)
+                     (string-equal type "roam")
+                     (setq node (save-match-data (org-roam-node-from-title-or-alias path))))
+            (replace-match (org-link-make-string
+                            (concat "id:" (org-roam-node-id node))
+                            (or desc path))))))))
+
+  (defun org-roam-db-insert-link (link)
+    "Insert link data for LINK at current point into the Org-roam cache."
+    (save-excursion
+      (goto-char (org-element-begin link))
+      (let* ((type (org-element-type link))
+             (path (org-element-property :path link))
+             (option (and (string-match "::\\(.*\\)\\'" path)
+                          (match-string 1 path)))
+             (path (if (not option) path
+                     (substring path 0 (match-beginning 0))))
+             (source (org-roam-id-at-point))
+             (properties (list :outline (ignore-errors
+                                          ;; This can error if link is not under any headline
+                                          (org-get-outline-path 'with-self 'use-cache))))
+             (properties (if option (plist-put properties :search-option option)
+                           properties)))
+        ;; For Org-ref links, we need to split the path into the cite keys
+        (when (and source path)
+          (if (and (boundp 'org-ref-cite-types)
+                   (or (assoc type org-ref-cite-types)
+                       (member type org-ref-cite-types)))
+              (org-roam-db-query
+               [:insert :into citations
+                        :values $v1]
+               (mapcar (lambda (k) (vector source k (point) properties))
+                       (org-roam-org-ref-path-to-keys path)))
+            (org-roam-db-query
+             [:insert :into links
+                      :values $v1]
+             (vector (point) source path type properties)))))))
+
+  ;; this is weird?
+  (org-roam-db-insert-file "/data/org/here-be-dragons/20220104120501-star_trek.org")
+  ;; -->
+  )
 
 (use-package org-roam-dailies
   :commands (org-roam-dailies-latest)
