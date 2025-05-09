@@ -345,7 +345,7 @@
 
 (define-public %web-world
   (list firefox
-        icecat
+        ;; icecat
         ungoogled-chromium
         speedtest-cli
         netcat-openbsd
@@ -372,7 +372,7 @@
 
 (define-public %ocaml-with-opam-world
   (list opam
-        mercurial
+        ;; mercurial
         darcs
         unzip
         ;; gcc
@@ -430,7 +430,7 @@
 ;; 	dune))
 
 (define-public %vcs-world
-  (list mercurial
+  (list ;; mercurial
         darcs
         git
         git-annex))
