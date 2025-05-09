@@ -339,10 +339,10 @@ EXTRA-FILES can be used to append extra files to the list."
   (defvar date)
   (defun my/org-calendar-holiday ()
     "List of holidays, for Diary display in Org mode."
-    ;; holy fuck, another different annoying stupid date format:
     (let* ((y (nth 2 date))
-           (m (nth 1 date))
+           (m (nth 0 date))
            (d (nth 1 date))
+           ;; holy fuck, another different annoying stupid date format:
            (hl (calendar-check-holidays (list m d y))))
       (and hl (mapconcat #'identity hl "; ")))))
 
