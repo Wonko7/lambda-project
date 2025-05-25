@@ -53,17 +53,6 @@
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
   (list (channel
-         (name 'nonguix)
-         (url "https://gitlab.com/nonguix/nonguix")
-         (branch "master")
-         (commit
-          "b9d3169772b45a2457def49318173f8353bb34f9")
-         (introduction
-          (make-channel-introduction
-           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-           (openpgp-fingerprint
-            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
-        (channel
          (name 'guix-forge)
          (url "https://git.systemreboot.net/guix-forge/")
          (branch "main")
@@ -75,11 +64,22 @@
            (openpgp-fingerprint
             "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
         (channel
+         (name 'nonguix)
+         (url "https://gitlab.com/nonguix/nonguix")
+         (branch "master")
+         (commit
+          "7152e92a13edf3e9a356e7b9b759b163aed3044c")
+         (introduction
+          (make-channel-introduction
+           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+           (openpgp-fingerprint
+            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+        (channel
          (name 'guix)
          (url "https://codeberg.org/guix/guix-mirror")
          (branch "master")
          (commit
-          "63088c295d81cc3d0e808c478d4fe479a2c90102")
+          "0c799ea004129c487a0aa8573d2e3e0839c84b2f")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
