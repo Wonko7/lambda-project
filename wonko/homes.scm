@@ -1,6 +1,7 @@
 (define-module (wonko homes)
   #:use-module (guix gexp)
   #:use-module (guix modules)
+  #:use-module (guix packages)
   #:use-module (gnu)
   #:use-module (gnu home)
   #:use-module (gnu system shadow)
@@ -827,3 +828,37 @@
       (list
        pavucontrol
        man-db)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; minimal emacs debug
+
+(define rewrite-emacs-input
+  (package-input-rewriting `((,emacs-minimal . ,emacs))))
+
+(define-public %emacs-debug-home
+  (home-environment
+    (packages (map rewrite-emacs-input
+                   (append
+                    %emacs-debug-world
+                    %xorg-world
+                    %fonts-world)))
+    (services (cons*
+               (simple-service
+                'xsession
+                home-files-service-type
+                `((".xsession"
+                   ,(program-file
+                     "xsession"
+                     #~(begin
+                         (system
+                          (string-append
+                           "source ~/.bash_profile;"
+                           #$xhost "/bin/xhost +SI:localuser:$USER;"
+                           #$xset "/bin/xset r rate 400 30;"
+                           #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
+                           #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
+                           #$xrdb "/bin/xrdb -load ~/.Xresources;"
+                           "~/.x-config;"
+                           #$xset "/bin/xset dpms 600 1200 0;"
+                           "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
+               %bare-skeleton-wonko-services))))

@@ -510,3 +510,21 @@
 
 (define-public %borked-calibre-world
   (list calibre))
+
+(define-public %emacs-debug-world
+  (list emacs-org
+        emacs-org-roam
+        emacs-evil
+        emacs-exwm
+        emacs-exwm-edit
+        emacs-exwm-modeline
+        emacs-exwm-firefox-core
+        emacs-exwm-firefox-evil
+        emacs-exwm-mff
+        emacs-perspective
+        emacs-persp-mode
+        emacs-lemon
+        emacs-window-layout
+        emacs-doom-themes
+        emacs-dash
+        ))
