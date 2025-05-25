@@ -156,11 +156,13 @@
     ;; ("GUILE_LOAD_COMPILED_PATH" .
     ;;  ,(string-append %lambda-project ":/code/w7-guix-channel:/code/nonguix"))
     ("GUILE_LOAD_PATH" .
-     ,(string-append "$GUILE_LOAD_PATH:" %lambda-project
-                     ;; ":/code/w7-guix-channel"
-                     ;; ":/code/nonguix"
-                     ;; ":/code/guix"
-                     ))
+     ,(string-append %lambda-project
+                     ":$HOME/.config/guix/current/share/guile/site/3.0/"
+                     ":$GUILE_LOAD_PATH"))
+    ("GUILE_LOAD_COMPILED_PATH" .
+     ,(string-append "$HOME/.config/guix/current/lib/guile/3.0/site-ccache/"
+                     ":$HOME/.config/guix/current/share/guile/site/3.0/"
+                     ":$GUILE_LOAD_COMPILED_PATH"))
     ("GUIX_LOCPATH"                    . "$HOME/.guix-home/profile/lib/locale")
     ("LANG"                            . "en_GB.utf8")
     ("PASSWORD_STORE_DIR"              . "/data/pass")
