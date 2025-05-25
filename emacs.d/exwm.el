@@ -117,7 +117,7 @@
     ("Firefox" (exwm-workspace-rename-buffer (format "Firefox: %s" exwm-title)))))
 
 (defun efs/configure-window-by-class ()
-  (interactive)
+  ;; unused
   (pcase exwm-class-name
     ("Firefox" (progn
                  (exwm-workspace-move-window 4)
@@ -151,12 +151,11 @@
   (setq my/exwm-workspace-previous-index exwm-workspace-current-index))
 
 (defun my/init-exwm ()
-  ;; FIXME borked
   ;; When window "class" updates, use it to set the buffer name
-  ;; (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
+  (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
   ;; When window title updates, use it to set the buffer name
-  ;; (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
-  ;; Configure windows as they're created
+  (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
+  ;; Configure windows as they're created ;; FIXME borked
   ;; (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
   (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
 
