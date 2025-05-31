@@ -134,12 +134,14 @@
 
 (use-package gptel
   :config
-  (setq gptel-org-convert-response t)
   (gptel-make-openai "llama-cpp"                  ;; Any name
     :stream t                                     ;; Stream responses
     :protocol "http"
     :host "of-course-i-still-love-you.local:6666" ;; Llama.cpp server location
-    :models '(lol)))
+    :models '(lol))
+  (setq gptel-org-convert-response t
+        gptel-default-mode #'org-mode
+        gptel-model 'lol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql
