@@ -310,11 +310,12 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (inherit emacs-exwm)
     (name "emacs-exwm-custom-emacs")
     (arguments
-     (substitute-keyword-arguments (package-arguments emacs)
+     (substitute-keyword-arguments (package-arguments emacs-exwm)
        ((#:emacs _ #f) (package
                          (inherit emacs)
-                         (inputs (modify-inputs (package-inputs emacs)
-                                   (prepend libxaw)))))))))
+                         (inputs
+                          (modify-inputs (package-inputs emacs)
+                            (prepend libxaw)))))))))
 
 (define-public emacs-exwm-custom-emacs-next
   (package
