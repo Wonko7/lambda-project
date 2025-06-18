@@ -236,6 +236,8 @@
     (start #~(make-forkexec-constructor
               (list #$(string-append %guix-extra-profiles-dir
                                      "/communication/bin/pantalaimon")) ;; FIXME borked-comms
+              #:environment-variables (cons "DISPLAY=:9"
+                                            (default-environment-variables))
               #:log-file #$(home-log-path "matrix")))
     (stop #~(make-kill-destructor))
     (documentation "Crypto back-end server for ement.el"))
