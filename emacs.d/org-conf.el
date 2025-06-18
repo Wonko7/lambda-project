@@ -236,7 +236,7 @@
       ;; (load "org-roam-node")
       ;; fn, ins, 2 roam & db load => handmaid is found but the rest is broken
       ))
-  (fuckme/org-fixup)
+  ;; (fuckme/org-fixup)
   ;; -->
   )
 
