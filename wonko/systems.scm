@@ -52,6 +52,7 @@
    %default-channels))
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
+  ;; this works but only with emacs-next + tramp workaround.
   (list (channel
          (name 'guix-forge)
          (url "https://git.systemreboot.net/guix-forge/")
@@ -68,7 +69,7 @@
          (url "https://gitlab.com/nonguix/nonguix")
          (branch "master")
          (commit
-          "fb6696c598f630ff46fe542a0523d47a788abaa0")
+          "473e5a62cd512cc0d5b4ac2c33be0bc0d0379435")
          (introduction
           (make-channel-introduction
            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -79,7 +80,7 @@
          (url "https://codeberg.org/guix/guix-mirror")
          (branch "master")
          (commit
-          "e61800b64ada9c644d0a3d27c0d1fb5806838f36")
+          "bf4b5042fe8e9e1716ecdfebf81d6adc6a0dcdad")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
