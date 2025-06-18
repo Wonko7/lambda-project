@@ -219,7 +219,7 @@
         ([?\s-K] . previous-buffer)
         ([?\s-J] . next-buffer)
 
-        ([?\s-C] . kill-this-buffer)
+        ([?\s-C] . kill-current-buffer)
         ([?\s-c] . (lambda () (interactive) (my/local-async-shell-command "dunstctl close")))
 
         ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))

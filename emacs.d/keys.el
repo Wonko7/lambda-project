@@ -60,7 +60,7 @@
     ;; buffers
     "b"  '("buffers" . (keymap))
     "br" #'rename-buffer
-    "bk" #'kill-this-buffer
+    "bk" #'kill-current-buffer
     "bn" #'evil-buffer-new
     "bo" #'consult-outline
     "bg" #'consult-focus-lines
