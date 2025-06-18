@@ -329,7 +329,7 @@
               #$(if media-station?
                     #~(string-append #$xset "/bin/xset s off -dpms;")
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
-              "exec " #$emacs-exwm-custom-emacs "/bin/exwm"))))))))
+              "exec " #$emacs-exwm-custom-emacs-next "/bin/exwm"))))))))
 
 (define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
   (cons*
