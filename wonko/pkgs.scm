@@ -20,7 +20,7 @@
 (use-package-modules
  fonts fontutils unicode
  ;; emacs
- emacs emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
+ emacs emacs-build emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
  pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz image-viewers
  ;; web
@@ -148,7 +148,7 @@
         emacs-no-littering
 
         ;; code: ()
-        emacs-origami-el
+        emacs-origami
         emacs-rainbow-mode
         emacs-rainbow-blocks
         emacs-rainbow-delimiters
@@ -160,7 +160,7 @@
         emacs-eval-in-repl-ocaml
         emacs-tuareg
         ;; lisps
-        emacs-eval-sexp-fu-el
+        emacs-eval-sexp-fu
         emacs-eval-in-repl-geiser
         emacs-aggressive-indent
         ;; clojure

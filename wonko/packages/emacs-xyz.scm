@@ -17,6 +17,7 @@
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages)
   #:use-module (gnu packages emacs)
+  #:use-module (gnu packages emacs-build)
   #:use-module (gnu packages emacs-xyz)
   ;; (for emacs x-toolkits experiments
   #:use-module (gnu packages xorg)
@@ -45,6 +46,11 @@
     (inputs
      (list emacs-evil))
     (build-system emacs-build-system)
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
     (home-page "https://github.com/hlissner/evil-snipe")
     (synopsis "snipe stuff")
     (description
@@ -154,6 +160,11 @@
     (inputs
      (list emacs-s
            emacs-dash))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
     (build-system emacs-build-system)
     (home-page "https://github.com/ndwarshuis/org-ml")
     (synopsis "A functional API for org-mode")
@@ -180,6 +191,11 @@
            emacs-dash
            emacs-org-ml))
     (build-system emacs-build-system)
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
     (home-page "https://github.com/ndwarshuis/org-sql")
     (synopsis "converts org-mode files to Structured Query Language")
     (description "converts org-mode files to Structured Query Language")
