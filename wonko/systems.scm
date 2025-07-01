@@ -58,7 +58,7 @@
          (url "https://git.systemreboot.net/guix-forge/")
          (branch "main")
          (commit
-          "fe282755ccb96a6153d8e3dba61ad67b14a03ec3")
+          "15b559c2f2e497ed059197f91937798411b8e365")
          (introduction
           (make-channel-introduction
            "0432e37b20dd678a02efee21adf0b9525a670310"
@@ -69,7 +69,7 @@
          (url "https://gitlab.com/nonguix/nonguix")
          (branch "master")
          (commit
-          "473e5a62cd512cc0d5b4ac2c33be0bc0d0379435")
+          "926a17ea317d1f45c9fc06bcf49213eaad286500")
          (introduction
           (make-channel-introduction
            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -80,7 +80,7 @@
          (url "https://codeberg.org/guix/guix-mirror")
          (branch "master")
          (commit
-          "bf4b5042fe8e9e1716ecdfebf81d6adc6a0dcdad")
+          "ef0f67a613dae8f3351d4a50f691eddc51d90a13")
          (introduction
           (make-channel-introduction
            "9edb3f66fd807b096b48283debdcddccfea34bad"
