@@ -22,7 +22,7 @@
  ;; emacs
  emacs emacs-build emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
- pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick gimp pdf kde graphviz image-viewers
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick photo gimp pdf kde graphviz image-viewers
  ;; web
  chromium tor matrix irc bittorrent
  gnuzilla
@@ -67,6 +67,7 @@
         pandoc
         emacs-verbiste
         verbiste
+        emacs-exiftool
 
         ;; office stuff
         emacs-org-jira
@@ -326,6 +327,7 @@
    scrot
    imagemagick
    graphviz
+   perl-image-exiftool
    ;; video
    mpv
    vlc
