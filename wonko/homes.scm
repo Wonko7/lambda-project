@@ -710,8 +710,8 @@
            "feh_symlink_name_is_theme_name"
            "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
            " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font JetBrainsMono-Regular/" fsz
-           " --font JetBrainsMono-Regular/" fsz "\n")))
+           " --menu-font " %font-feh "/" fsz
+           " --font " %font-feh "/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 10)))
       (".config/dunst/dunstrc"
@@ -754,8 +754,8 @@
            "feh_symlink_name_is_theme_name"
            "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
            " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font JetBrainsMono-Regular/" fsz
-           " --font JetBrainsMono-Regular/" fsz "\n")))
+           " --menu-font " %font-feh "/" fsz
+           " --font " %font-feh "/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 10)))
       (".config/dunst/dunstrc"
@@ -795,8 +795,8 @@
            "feh_symlink_name_is_theme_name"
            "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
            " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font JetBrainsMono-Regular/" fsz
-           " --font JetBrainsMono-Regular/" fsz "\n")))
+           " --menu-font " %font-feh "/" fsz
+           " --font " %font-feh "/" fsz "\n")))
       (".Xresources"
        ,(plain-file "Xresources" (xresources-configuration %font 20)))
       (".config/dunst/dunstrc"

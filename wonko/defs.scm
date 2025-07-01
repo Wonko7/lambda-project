@@ -10,6 +10,8 @@
 (define-public %guix-extra-profiles-dir "/home/wonko/.guix-extra-profiles")
 
 (define-public %font "JetBrainsMonoNL NFP Medium")
+(define-public %font-feh "JetBrainsMonoNLNerdFontMono-Regular")
+
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
 (define-public %lock-cmd
   '("/run/setuid-programs/xlock" "-mode" "daisy" "-lockdelay" "10"))
