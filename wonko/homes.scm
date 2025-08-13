@@ -832,7 +832,7 @@
        ,(plain-file "Xresources" (xresources-configuration %font 20)))
       (".config/dunst/dunstrc"
        ,(plain-file "dunstrc"
-                    (dunst-configuration %font 12 300)))))
+                    (dunst-configuration %font 20 500)))))
    %bare-skeleton-wonko-services))
 
 (define-public %media-station-wonko-home
