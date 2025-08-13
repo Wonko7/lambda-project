@@ -401,6 +401,23 @@
       (templates   "$HOME/templates")
       (videos      "$HOME/videos")))
 
+   (service
+    (service-type
+      (name 'home-xdg-desktop-portal)
+      (extensions
+       (list
+        (service-extension
+         home-profile-service-type
+         (const (list xdg-desktop-portal
+                      xdg-desktop-portal-gtk)))
+        (service-extension
+         home-xdg-configuration-files-service-type
+         (const `(("xdg-desktop-portal/portals.conf"
+                   ,(mixed-text-file "xdg-portals"
+                                     "[preferred]\n"
+                                     "default=gtk")))))))
+      (default-value #f)
+      (description "xdg portal")))
 
    (simple-service
     'config-files
