@@ -18,6 +18,7 @@
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services shells)
   #:use-module (gnu home services gnupg)
+  #:use-module (gnu home services xdg)
   #:use-module (gnu services shepherd)
   #:use-module (wonko packages emacs-xyz)
   ;; my stuff
@@ -37,7 +38,7 @@
  bittorrent tor
  haskell-apps compression commencement pkg-config base gdb m4 maths man
  ;; services
- matrix wm compton)
+ freedesktop matrix wm compton)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; home components
@@ -387,6 +388,19 @@
              (pinentry-program
               (file-append pinentry-emacs "/bin/pinentry-emacs"))
              (ssh-support? #t)))
+   (simple-service
+    'xdg-user-directories-config-service
+    home-xdg-user-directories-service-type
+    (home-xdg-user-directories-configuration
+      (desktop     "$HOME/desktop")
+      (documents   "$HOME/documents")
+      (download    "$HOME/downloads")
+      (music       "$HOME/music")
+      (pictures    "$HOME/pictures")
+      (publicshare "$HOME/public")
+      (templates   "$HOME/templates")
+      (videos      "$HOME/videos")))
+
 
    (simple-service
     'config-files
