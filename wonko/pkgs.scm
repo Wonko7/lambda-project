@@ -49,7 +49,6 @@
         emacs-org-books
         emacs-org-noter
         emacs-enlive
-        emacs-seq
         emacs-calfw
         ;; emacs-org-download (images)
         ;;"emacs-org-ref"
