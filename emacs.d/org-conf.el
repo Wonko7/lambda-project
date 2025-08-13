@@ -730,6 +730,9 @@ current time."
                                                        "** 🤘 [[roam:deadhangs]]"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+          ("wd" "🤘 FDP block deadhangs" entry "* 🤘 [[roam:FDP pull blocks]] [[roam:deadhangs]] :wtf:cb:\n%U%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
           ("wh" "🤸 handstands" entry
            ,(string-join '("* 🤸 [[roam:handstands]] :wtf:hs:\n"
                            "%U\n"
@@ -743,6 +746,10 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
           ("wr" "🍚 rice bucket" entry "* 🍚 [[roam:rice bucket]] :wtf:cb:\n%U%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+          ("wR" "👣 Running" entry ,(string-join '("* 👣 [[roam:running]] :wtf:\n"
+                                                   "%U\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
           ("wH" "👣 Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
