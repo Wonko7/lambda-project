@@ -180,7 +180,12 @@
 
 (define-public %laptop-services
   (cons*
-   (simple-service 'fwupd-polkit polkit-service-type (list fwupd-nonfree))
+   (simple-service 'dbus-fwupd
+                   dbus-root-service-type
+                   (list fwupd-nonfree))
+   (simple-service 'polkit-fwupd
+                   polkit-service-type
+                   (list fwupd-nonfree))
 
    (service bluetooth-service-type
             (bluetooth-configuration (auto-enable? #t)))
