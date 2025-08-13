@@ -904,7 +904,17 @@ current time."
          (cons "ALL >7b"
                (list :buffers-files #'my/all-dailies
                      :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
-                     :sort #'my/sort-by-filename-date)))))
+                     :sort #'my/sort-by-filename-date))
+         (cons "Tagged as Flashed"
+               (list :buffers-files #'my/all-dailies
+                     :query '(and (olps "witness" "bouldering" "topped" "")  (tags "flash"))
+                     :sort #'my/sort-by-filename-date))
+         (cons "Maybe flashed"
+               (list :buffers-files #'my/all-dailies
+                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "flash"))
+                     :sort #'my/sort-by-filename-date))
+
+         )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
