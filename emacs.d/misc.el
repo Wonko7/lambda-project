@@ -100,7 +100,7 @@
 
 (defun my/insert-shell-line ()
   (interactive)
-  (let* ((f "/data/org/here-be-dragons/20230412204446-shell.org")
+  (let* ((f "/data/org/here-be-dragons/tech/20230412204446-shell.org")
          (buf-content (split-string
                        (with-temp-buffer
                          (insert-file-contents f)
