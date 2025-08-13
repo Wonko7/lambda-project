@@ -313,7 +313,7 @@
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
         ;; x <3
-        oneko
+        ;; oneko ;; borked FIXME
         xeyes
         ;; bling
         feh
@@ -347,7 +347,7 @@
 (define-public %web-world
   (list firefox
         ;; icecat
-        ungoogled-chromium
+        ;; ungoogled-chromium ;; borked FIXME
         speedtest-cli
         netcat-openbsd
         nmap
@@ -361,7 +361,7 @@
 
 (define-public %image-edition-world
   (list
-   ;; gimp
+   gimp
    ;; kdenlive
    krita))
 
@@ -511,6 +511,10 @@
 
 (define-public %borked-calibre-world
   (list calibre))
+
+(define-public %borked-2025-08
+  (list ungoogled-chromium
+        oneko))
 
 (define-public %emacs-debug-world
   (list emacs-org

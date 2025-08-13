@@ -131,8 +131,10 @@
 (define-public %profiles
   ;; utils: add everything that's in system packages if this
   ;; needs to be deployed on non guix OS
-  `(("borked-comms" . ,%borked-comms-world)
-    ("borked-calibre" . ,%borked-calibre-world)))
+  `(("borked" . ,%borked-2025-08)
+    ;; ("borked-comms" . ,%borked-comms-world)
+    ;; ("borked-calibre" . ,%borked-calibre-world)
+    ))
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -278,7 +280,8 @@
        (shepherd-service
          (provision '(oneko))
          (start #~(make-forkexec-constructor
-                   (list #$(file-append oneko "/bin/oneko") "-dog")
+                   ;; (list #$(file-append oneko "/bin/oneko") "-dog")
+                   (list "~/.guix-extra-profiles/borked/bin/oneko" "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
          (documentation "neko"))
