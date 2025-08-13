@@ -186,31 +186,31 @@
 
    (service guix-publish-service-type
             (guix-publish-configuration
-             (host "0.0.0.0")
-             (port 1337)
-             (advertise? #t)))
+              (host "0.0.0.0")
+              (port 1337)
+              (advertise? #t)))
 
    (simple-service 'fleet-hosts-entries hosts-service-type %fleet-hosts)
 
    (service openssh-service-type
             (openssh-configuration
-             (authorized-keys
-              (cons*
-               (list
-                "root"
-                (local-file
-                 (string-append %lambda-project
-                                "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
-               (append-map (lambda (u)
-                             (map (lambda (hn)
-                                    (list u (local-file
-                                             (string-append %lambda-project
-                                                            "/wonko/data/ssh/" hn ".pub"))))
-                                  (cons "discovery" %fleet-names)))
-                           '("wonko" "media"))))
-             (x11-forwarding? #t)
-             (password-authentication? #f)
-             (permit-root-login #t)))
+              (authorized-keys
+               (cons*
+                (list
+                 "root"
+                 (local-file
+                  (string-append %lambda-project
+                                 "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
+                (append-map (lambda (user)
+                              (map (lambda (hn)
+                                     (list user (local-file
+                                                 (string-append %lambda-project
+                                                                "/wonko/data/ssh/" hn ".pub"))))
+                                   (cons "discovery" %fleet-names)))
+                            '("wonko" "media"))))
+              (x11-forwarding? #t)
+              (password-authentication? #f)
+              (permit-root-login #t)))
 
    (service tor-service-type)
 
@@ -236,26 +236,26 @@
                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (elogind-service-type config =>
                            (elogind-configuration
-                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                            (handle-lid-switch 'suspend)
-                            (handle-lid-switch-docked  'suspend)
-                            (handle-lid-switch-external-power 'suspend)))
+                             (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                             (handle-lid-switch 'suspend)
+                             (handle-lid-switch-docked  'suspend)
+                             (handle-lid-switch-external-power 'suspend)))
      (guix-service-type config =>
                         (guix-configuration
-                         (discover? #t)
-                         (channels %channels)
-                         (guix (guix-for-channels %channels))
-                         (substitute-urls
-                          (cons* "https://substitutes.nonguix.org"
-                                 %default-substitute-urls))
-                         (authorized-keys
-                          (append
-                           (map (lambda (hn)
-                                  (local-file
-                                   (string-append %lambda-project
-                                                  "/wonko/data/substitutes/" hn ".pub")))
-                                (cons "nonguix" %fleet-names))
-                           %default-authorized-guix-keys)))))))
+                          (discover? #t)
+                          (channels %channels)
+                          (guix (guix-for-channels %channels))
+                          (substitute-urls
+                           (cons* "https://substitutes.nonguix.org"
+                                  %default-substitute-urls))
+                          (authorized-keys
+                           (append
+                            (map (lambda (hn)
+                                   (local-file
+                                    (string-append %lambda-project
+                                                   "/wonko/data/substitutes/" hn ".pub")))
+                                 (cons "nonguix" %fleet-names))
+                            %default-authorized-guix-keys)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop-os and declinations

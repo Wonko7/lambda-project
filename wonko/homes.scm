@@ -264,25 +264,25 @@
   (service
    home-shepherd-service-type
    (home-shepherd-configuration
-    (services
-     (cons*
-      (shepherd-service
-       (provision '(xss-lock))
-       (start #~(make-forkexec-constructor
-                 (cons* #$(file-append xss-lock "/bin/xss-lock")
-                        "--"
-                        '#$%lock-cmd)
-                 #:log-file #$(home-log-path "xss-lock")))
-       (stop #~(make-kill-destructor))
-       (documentation "don't touch my stuff"))
-      (shepherd-service
-       (provision '(oneko))
-       (start #~(make-forkexec-constructor
-                 (list #$(file-append oneko "/bin/oneko") "-dog")
-                 #:log-file #$(home-log-path "oneko")))
-       (stop #~(make-kill-destructor))
-       (documentation "neko"))
-      %common-shepherd-wonko-services)))))
+     (services
+      (cons*
+       (shepherd-service
+         (provision '(xss-lock))
+         (start #~(make-forkexec-constructor
+                   (cons* #$(file-append xss-lock "/bin/xss-lock")
+                          "--"
+                          '#$%lock-cmd)
+                   #:log-file #$(home-log-path "xss-lock")))
+         (stop #~(make-kill-destructor))
+         (documentation "don't touch my stuff"))
+       (shepherd-service
+         (provision '(oneko))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append oneko "/bin/oneko") "-dog")
+                   #:log-file #$(home-log-path "oneko")))
+         (stop #~(make-kill-destructor))
+         (documentation "neko"))
+       %common-shepherd-wonko-services)))))
 
 (define-public %media-station-shepherd-wonko-service
   (service
@@ -383,11 +383,12 @@
 
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
-             (default-cache-ttl (* 60 30))
-             (max-cache-ttl (* 60 60 2))
-             (pinentry-program
-              (file-append pinentry-emacs "/bin/pinentry-emacs"))
-             (ssh-support? #t)))
+              (default-cache-ttl (* 60 30))
+              (max-cache-ttl (* 60 60 2))
+              (pinentry-program
+               (file-append pinentry-emacs "/bin/pinentry-emacs"))
+              (ssh-support? #t)))
+
    (simple-service
     'xdg-user-directories-config-service
     home-xdg-user-directories-service-type
