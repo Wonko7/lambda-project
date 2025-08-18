@@ -78,11 +78,3 @@
           file
           `(("=FONT=" . ,font)
             ("=SIZE=" . ,rxvt-font-size)))))
-
-(define-public (pkgs->manifest name ps)
-  `(,(string-append "local/manifests/" name)
-    ,(scheme-file
-      name
-      #~(begin
-          #$(manifest->code
-             (packages->manifest ps))))))

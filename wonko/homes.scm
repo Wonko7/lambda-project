@@ -129,12 +129,41 @@
     ("kys"   . "exit")))
 
 (define-public %profiles
-  ;; utils: add everything that's in system packages if this
-  ;; needs to be deployed on non guix OS
-  `(("borked" . ,%borked-2025-08)
-    ;; ("borked-comms" . ,%borked-comms-world)
-    ;; ("borked-calibre" . ,%borked-calibre-world)
-    ))
+  ;; name, packages, pinned channel.
+  `(("borked" ,%borked-2025-08
+     (list (channel
+             (name 'guix-forge)
+             (url "https://git.systemreboot.net/guix-forge/")
+             (branch "main")
+             (commit
+              "15b559c2f2e497ed059197f91937798411b8e365")
+             (introduction
+              (make-channel-introduction
+               "0432e37b20dd678a02efee21adf0b9525a670310"
+               (openpgp-fingerprint
+                "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+           (channel
+             (name 'nonguix)
+             (url "https://gitlab.com/nonguix/nonguix")
+             (branch "master")
+             (commit
+              "c16a92e3bef67a602bc56b0dd20ecdc8cac8c97f")
+             (introduction
+              (make-channel-introduction
+               "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+               (openpgp-fingerprint
+                "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+           (channel
+             (name 'guix)
+             (url "https://codeberg.org/guix/guix-mirror")
+             (branch "master")
+             (commit
+              "894625f5e8722516bf7d65e82b8dba32c267353c")
+             (introduction
+              (make-channel-introduction
+               "9edb3f66fd807b096b48283debdcddccfea34bad"
+               (openpgp-fingerprint
+                "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))))
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -486,11 +515,24 @@
 
    (simple-service 'guix-manifests
                    home-files-service-type
-                   (map
-                    (lambda (np)
-                      (let-values (((n p) (car+cdr np)))
-                        (pkgs->manifest n p)))
-                    %profiles))
+                   (append
+                    (map
+                     (match-lambda*
+                       (((profile manifest pinned))
+                        `(,(string-append "local/share/guix/" profile "_manifest.scm")
+                          ,(scheme-file
+                            profile
+                            (manifest->code
+                             (packages->manifest manifest))))))
+                     %profiles)
+                    (map
+                     (match-lambda*
+                       (((profile manifest pinned))
+                        `(,(string-append "local/share/guix/" profile "_pinned.scm")
+                          ,(scheme-file
+                            profile
+                            pinned))))
+                     %profiles)))
 
    (simple-service
     'guix-profiles-scripts
@@ -510,35 +552,18 @@
                             (guix build utils)
                             (ice-9 match)
                             (ice-9 regex))
-               (let ((guix "~/.config/guix/current/bin/guix")
-                     (ps   (let ((args (drop (program-arguments) 1)))
-                             (if (null? args)
-                                 '#$(profiles->names %profiles)
-                                 (map (lambda (path)
-                                        (list
-                                         (regexp-substitute/global #f "([^/_]+)_[^_]+.scm"
-                                                                   path 1)
-                                         path))
-                                      args)))))
-                 (map (match-lambda*
-                        (((profile channels))
-                         (display (spock-say
-                                   (string-append "build PROFILE " profile))
-                                  (current-error-port))
-                         (display (string-append "... with pinned channels " channels "\n\n")
-                                  (current-error-port))
-                         (system
-                          (string-append guix " time-machine -C " channels
-                                         " -- package -m ~/local/manifests/" profile
-                                         " -p " #$%guix-extra-profiles-dir  "/" profile)))
-                        ((profile)
-                         (display (spock-say
-                                   (string-append "build PROFILE " profile))
-                                  (current-error-port))
-                         (system
-                          (string-append guix " package -m ~/local/manifests/" profile
-                                         " -p " #$%guix-extra-profiles-dir  "/" profile))))
-                      ps))))))))
+               (let ((guix "~/.config/guix/current/bin/guix"))
+                 (map (lambda (profile)
+                        (display (spock-say
+                                  (string-append "build PROFILE " profile))
+                                 (current-error-port))
+                        (system
+                         (string-append guix " time-machine -C ~/local/share/guix/"
+                                        profile "_pinned.scm"
+                                        " -- package -m ~/local/share/guix/"
+                                        profile "_manifest.scm"
+                                        " -p " #$%guix-extra-profiles-dir  "/" profile)))
+                      '#$(profiles->names %profiles)))))))))
 
    (simple-service
     'home-scripts
