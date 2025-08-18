@@ -58,7 +58,7 @@
           (url "https://git.systemreboot.net/guix-forge/")
           (branch "main")
           (commit
-           "15b559c2f2e497ed059197f91937798411b8e365")
+           "de9b8a84b596a4a8d45e5d329bd29357c8432a3c")
           (introduction
            (make-channel-introduction
             "0432e37b20dd678a02efee21adf0b9525a670310"
@@ -69,7 +69,7 @@
           (url "https://gitlab.com/nonguix/nonguix")
           (branch "master")
           (commit
-           "c16a92e3bef67a602bc56b0dd20ecdc8cac8c97f")
+           "9439574224556ae375ef275b484c517238e227bf")
           (introduction
            (make-channel-introduction
             "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -77,16 +77,15 @@
              "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
           (name 'guix)
-          (url "https://codeberg.org/guix/guix-mirror")
+          (url "https://codeberg.org/guix/guix")
           (branch "master")
           (commit
-           "894625f5e8722516bf7d65e82b8dba32c267353c")
+           "2de40d784e238d4d176704eba4eeacbca238d9c8")
           (introduction
            (make-channel-introduction
             "9edb3f66fd807b096b48283debdcddccfea34bad"
             (openpgp-fingerprint
-             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
-  )
+             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
@@ -273,22 +272,23 @@
     (keyboard-layout %us-kb)
 
     (kernel linux)
+    ;; (kernel (@@ (nongnu packages linux) linux))
     (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
     (bootloader
-     (bootloader-configuration
-      ;; choose wisely:
-      ;; grub-efi-removable-bootloader =>
-      ;;   use when installing on external device:
-      ;;   expects /mnt/boot/efi to exist & be mounted
-      ;; grub-efi-bootloader => for local machine
-      ;;
-      ;; (bootloader grub-efi-removable-bootloader)
-      ;; (targets '("/mnt/tmp-efi/"))
-      (bootloader grub-efi-bootloader)
-      (targets    '("/boot"))
-      (keyboard-layout keyboard-layout)))
+      (bootloader-configuration
+        ;; choose wisely:
+        ;; grub-efi-removable-bootloader =>
+        ;;   use when installing on external device:
+        ;;   expects /mnt/boot/efi to exist & be mounted
+        ;; grub-efi-bootloader => for local machine
+        ;;
+        ;; (bootloader grub-efi-removable-bootloader)
+        ;; (targets '("/mnt/tmp-efi/"))
+        (bootloader grub-efi-bootloader)
+        (targets    '("/boot"))
+        (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
     (issue (string-append (spock-say "live long & prosper!") "\n\n"))
