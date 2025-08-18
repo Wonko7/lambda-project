@@ -32,7 +32,7 @@
  android flashing-tools haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
 (define-public %emacs-world
-  (list emacs
+  (list custom-emacs ;; see emacs-xyz.scm's custom-emacs for why FIXME
         ;; basic (bitches) stuff:
         emacs-general
         emacs-undo-fu
@@ -500,7 +500,7 @@
 
 (define-public %os-misc-world
   (list font-terminus
-        emacs
+        custom-emacs ;; see emacs-xyz.scm's custom-emacs for why FIXME
         vim))
 
 (define-public %os-nonfree

@@ -246,8 +246,8 @@
               (method git-fetch)
               (uri
                (git-reference
-                (url "https://github.com/armindarvish/consult-omni")
-                (commit "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda")))
+                 (url "https://github.com/armindarvish/consult-omni")
+                 (commit "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda")))
               (sha256
                (base32
                 "12jz9hwb1m3ix7zai5qkbyycbaff55yf67pc8q3ijcg5xlks8ckp"))))
@@ -306,8 +306,8 @@ consult-omni can be an open-source free alternative to other omni-search tools s
               (method git-fetch)
               (uri
                (git-reference
-                (url "https://github.com/walseb/exwm-firefox-evil")
-                (commit "ec9e14eca25aea9b7c7169be23843898f46696e7")))
+                 (url "https://github.com/walseb/exwm-firefox-evil")
+                 (commit "ec9e14eca25aea9b7c7169be23843898f46696e7")))
               (sha256
                (base32
                 "1fbxll1ylkrkk6jm4mwcdvpix23dxvfsgl2zs10lr823ndydk1b6"))))
@@ -320,18 +320,40 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (description "")
     (license (@ (guix licenses) gpl3+))))
 
-;; libxaw was needed to get alpha-background working
-(define-public emacs-exwm-custom-emacs
+;; https://issues.guix.gnu.org/issue/73416#4
+;; check if this is still needed when revert patch hits master, in the meantime it means that
+;; the emacs specified with an absolute path in xsession script is replaced by the one in
+;; PATH, so I "fixed" it by removing vanilla emacs from PATH & replacing it by my custom thing
+(define-public custom-emacs
   (package
-    (inherit emacs-exwm)
-    (name "emacs-exwm-custom-emacs")
+    (inherit emacs)
     (arguments
-     (substitute-keyword-arguments (package-arguments emacs-exwm)
-       ((#:emacs _ #f) (package
+     (substitute-keyword-arguments (package-arguments emacs)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (delete 'check))))) ;; lol. why libxaw do that tho? not needed for emacs-next, tmp [2025-08-18 Mon 21:36] FIXME
+    (inputs
+     (modify-inputs (package-inputs emacs)
+       ;; libxaw is needed to get alpha-background working
+       (append libxaw)))))
+
+(define-public emacs-exwm-custom-emacs
+  (let ((_custom-emacs (package
                          (inherit emacs)
+                         (arguments
+                          (substitute-keyword-arguments (package-arguments emacs)
+                            ((#:phases phases)
+                             #~(modify-phases #$phases ;; lol.
+                                 (delete 'check)))))
                          (inputs
                           (modify-inputs (package-inputs emacs)
-                            (prepend libxaw)))))))))
+                            (append libxaw))))))
+    (package
+      (inherit emacs-exwm)
+      (name "emacs-exwm-custom-emacs")
+      (arguments
+       (substitute-keyword-arguments (package-arguments emacs-exwm)
+         ((#:emacs _ #f) custom-emacs))))))
 
 (define-public emacs-exwm-custom-emacs-next
   (package
