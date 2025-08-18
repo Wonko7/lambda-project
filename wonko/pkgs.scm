@@ -351,7 +351,7 @@
         speedtest-cli
         netcat-openbsd
         nmap
-        youtube-dl
+        yt-dlp
         ;; ☠
         ;; onionshare
         `(,transmission "gui")))
