@@ -343,8 +343,23 @@
   (general-evil-define-key '(normal) gnus-article-mode-map
     "U" #'gnus-summary-put-mark-as-unread
     "K" #'gnus-summary-prev-article
-    "J" #'gnus-summary-next-article))
+    "J" #'gnus-summary-next-article)
 
+  (gnus-add-configuration
+   '(article
+     (horizontal 1.0
+                 (vertical 0.34
+                           (group 1.0))
+                 (vertical 1.0
+                           (summary 0.25 point)
+                           (article 1.0)))))
+  (gnus-add-configuration
+   '(summary
+     (horizontal 1.0
+                 (vertical 0.34
+                           (group 1.0))
+                 (vertical 1.0
+                           (summary 1.0 point))))))
 ;; (use-package gnus-topic
 ;;   :after gnus
 ;;   :hook
