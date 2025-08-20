@@ -298,7 +298,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; start exwm
 
-(exwm-enable)
+(exwm-wm-mode)
 (exwm-systemtray-mode)
 (exwm-randr-mode)
 ;; (exwm-xim-mode 1)
