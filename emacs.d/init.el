@@ -604,20 +604,6 @@ This function expects to be in the right *tramp* buffer."
 (require 'conf/fancy-but-later "~/.emacs.d/fancy-but-later.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; end of config stuff:
-
-(use-package diminish
-  :config
-  (diminish 'projectile-mode)
-  (diminish 'org-indent-mode)
-  (diminish 'snipe-mode)
-  (diminish 'evil-org-mode)
-  (diminish 'evil-snipe-local-mode)
-  (diminish 'evil-snipe-mode)
-  (diminish 'evil-escape-mode)
-  (diminish 'evil-owl-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; input method
 
 (use-package quail)

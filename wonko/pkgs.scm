@@ -216,7 +216,6 @@
         emacs-nyan-mode
         emacs-doom-modeline
         emacs-svg-tag-mode
-        emacs-diminish
         emacs-doom-themes
         emacs-nerd-icons
         emacs-nerd-icons-completion
