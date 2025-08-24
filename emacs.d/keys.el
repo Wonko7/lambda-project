@@ -9,7 +9,7 @@
   :config
   (general-evil-setup t)
 
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; leader actions
 
   (evil-leader/set-key
@@ -217,21 +217,19 @@
              "dunstify 'How are we gonna fuck this pig?' \
                      'With enough cologne to upset a Bangkok ladyboy.'")))
 
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; states
 
   (general-define-key
    :states 'normal
    "C-e"  #'embark-act
    "-"    #'mode-line-other-buffer
-   ;; "-d"   #'delete-trailing-whitespace
    "/"    #'consult-line
    "C-/"  #'evil-search-forward
    "*"    #'consult-line-word-at-point
    "C-*"  #'consult-line-symbol-at-point
    "#"    #'evil-search-word-forward
    "C-#"  #'evil-search-word-backward
-   "z="   #'flyspell-correct-at-point
    ;; "`"    #' FIXME do something with this
    "'"    #'evil-owl-goto-mark
    "Y"    (lambda () (interactive) (execute-kbd-macro (kbd "y$"))))
@@ -252,7 +250,7 @@
    :states '(normal emacs visual global motion)
    "C-e"  #'embark-act)
 
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; async shell command
 
   (general-evil-define-key '(normal insert visual) minibuffer-local-shell-command-map

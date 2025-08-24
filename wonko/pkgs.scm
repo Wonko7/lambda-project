@@ -132,9 +132,6 @@
         emacs-casual-calc
 
         ;; spell
-        emacs-flycheck-guile
-        emacs-flyspell-correct
-        emacs-auto-dictionary-mode
         hunspell
         hunspell-dict-fr-toutes-variantes
         hunspell-dict-en-us
@@ -144,8 +141,6 @@
         ;; transverse:
         emacs-ibuffer-projectile
         emacs-projectile
-        emacs-perspective
-        emacs-no-littering
 
         ;; code: ()
         emacs-origami

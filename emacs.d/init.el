@@ -138,23 +138,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spelling
 
-(use-package flyspell-correct
+(use-package jinx
+  :demand t
+  :hook (emacs-startup . global-jinx-mode)
+  :custom
+  (jinx-languages "en_GB-ise fr-toutesvariantes")
   :config
-  ;; (global-spell-fu-mode 0)
-  ;; (setenv "DICTIONARY" "en_GB-ise")
-  (setq ispell-program-name "hunspell")
-  (setq ispell-dictionary "en_GB-ise,en_US,fr-toutesvariantes")
-  (setq ispell-local-dictionary-alist `(("en_GB-ise,en_US,fr-toutesvariantes"
-                                         "[[:alpha:]]" "[^[:alpha:]]" "[0-9']" t
-                                         ("-d" "en_GB-ise,en_GB-ize,fr-toutesvariantes")
-                                         nil utf-8))))
-
-(use-package flyspell
-  :hook
-  ((git-commit-mode-hook . (lambda () (flyspell-mode 1)))
-   (org-mode-hook  . (lambda () (flyspell-mode 1))))
-  :config
-  (setq flyspell-mark-duplications-flag nil))
+  (general-define-key
+   :states 'normal
+   "zsl"   #'jinx-languages
+   "zsn"   #'jinx-next
+   "zsp"   #'jinx-previous
+   "zsj"   #'jinx-next
+   "zsk"   #'jinx-previous
+   "z="    #'jinx-correct))
 
 (use-package verbiste
   :commands (verbiste-deconjugate verbiste-conjugate)
