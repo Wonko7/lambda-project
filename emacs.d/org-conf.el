@@ -936,6 +936,10 @@ current time."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org appear
 
+(use-package org-appear
+  :demand t
+  :custom (org-appear-autolinks t))
+
 ;; see: https://github.com/awth13/org-appear/issues/58
 
 ;; (use-package org-appear
