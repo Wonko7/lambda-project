@@ -938,18 +938,9 @@ current time."
 
 (use-package org-appear
   :demand t
-  :custom (org-appear-autolinks t))
-
-;; see: https://github.com/awth13/org-appear/issues/58
-
-;; (use-package org-appear
-;;   :defer t
-;;   :after org
-;;   :hook
-;;   (org-mode-hook . #'org-appear-mode)
-;;   :config
-;;   (progn
-;;     (setq org-appear-autokeywords t)
-;;     (setq org-appear-autolinks t)))
+  :hook (org-mode-hook . #'org-appear-mode)
+  :custom
+  (org-appear-autolinks t)
+  (org-appear-autokeywords t))
 
 (provide 'conf/org)
