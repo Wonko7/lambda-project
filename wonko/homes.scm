@@ -881,13 +881,18 @@
                       `((".xsession"
                          ,(program-file
                            "xsession"
-                           #~(system #$(file-append xfce "/bin/startxfce4"))))))))
+                           #~(system #$(file-append xfce4-session "/bin/startxfce4"))))))))
     (packages
      (append
       %fonts-world
       %xfce-world
       %web-world
       (list
+       libreoffice
+       hunspell
+       hunspell-dict-fr-toutes-variantes
+       hunspell-dict-en-us
+       hunspell-dict-en-gb
        pavucontrol
        man-db)))))
 
