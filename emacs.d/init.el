@@ -157,7 +157,7 @@
   :commands (verbiste-deconjugate verbiste-conjugate)
   :config
   (general-evil-define-key '(normal) verbiste-mode-keymap
-    "q"    #'kill-this-buffer))
+    "q"    #'kill-current-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
