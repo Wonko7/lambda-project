@@ -254,42 +254,44 @@
 (define-public %common-shepherd-wonko-services
   (list
    (shepherd-service
-    (provision '(picom))
-    (start #~(make-forkexec-constructor
-              (list #$(file-append picom "/bin/picom")
-                    "--backend=glx"
-                    "--corner-radius=20" ;; --rounded-corners-exclude
-                    "--opacity-rule=10:name *= 'oneko'")
-              #:log-file #$(home-log-path "picom")))
-    (stop #~(make-kill-destructor))
-    (documentation "bling"))
+     (provision '(picom))
+     (start #~(make-forkexec-constructor
+               (list #$(file-append picom "/bin/picom")
+                     "--backend=glx"
+                     "--corner-radius=20" ;; --rounded-corners-exclude
+                     "--opacity-rule=10:name *= 'oneko'")
+               #:log-file #$(home-log-path "picom")))
+     (stop #~(make-kill-destructor))
+     (documentation "bling"))
    (shepherd-service
-    (provision '(pantalaimon))
-    (start #~(make-forkexec-constructor
-              (list #$(string-append %guix-extra-profiles-dir
-                                     "/communication/bin/pantalaimon")) ;; FIXME borked-comms
-              #:environment-variables (cons "DISPLAY=:9"
-                                            (default-environment-variables))
-              #:log-file #$(home-log-path "matrix")))
-    (stop #~(make-kill-destructor))
-    (documentation "Crypto back-end server for ement.el"))
+     (provision '(pantalaimon))
+     (start #~(make-forkexec-constructor
+               (list #$(string-append %guix-extra-profiles-dir
+                                      "/communication/bin/pantalaimon")) ;; FIXME borked-comms
+               #:environment-variables (cons "DISPLAY=:9"
+                                             (default-environment-variables))
+               #:log-file #$(home-log-path "matrix")))
+     (stop #~(make-kill-destructor))
+     (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
-    (provision '(dunst))
-    (start #~(make-forkexec-constructor
-              (list #$(file-append dunst "/bin/dunst"))
-              #:log-file #$(home-log-path "dunst")))
-    (stop #~(make-kill-destructor))
-    (documentation "riced notifications"))
+     (provision '(dunst))
+     (start #~(make-forkexec-constructor
+               (list #$(file-append dunst "/bin/dunst"))
+               #:log-file #$(home-log-path "dunst")))
+     (stop #~(make-kill-destructor))
+     (documentation "riced notifications"))
    (shepherd-service
-    (provision '(guix-repl))
-    (start #~(make-forkexec-constructor
-              (list ;; a case could be made for /run/current-system/profile/bin/guix
-               "/home/wonko/.config/guix/current/bin/guix" "repl" "--listen=tcp:37146")
-              #:environment-variables (cons "INSIDE_EMACS=1"
-                                            (default-environment-variables))
-              #:log-file #$(home-log-path "guix-repl")))
-    (stop #~(make-kill-destructor))
-    (documentation "REPL to me, like lovers do"))))
+     (provision '(guix-repl))
+     (start #~(make-forkexec-constructor
+               (list ;; a case could be made for /run/current-system/profile/bin/guix
+                (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
+                ;; "/home/wonko/.config/guix/current/bin/guix"
+                "repl" "--listen=tcp:37146")
+               #:environment-variables (cons "INSIDE_EMACS=1"
+                                             (default-environment-variables))
+               #:log-file #$(home-log-path "guix-repl")))
+     (stop #~(make-kill-destructor))
+     (documentation "REPL to me, like lovers do"))))
 
 (define-public %vanilla-shepherd-wonko-service
   (service
