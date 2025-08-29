@@ -310,7 +310,10 @@
          (provision '(oneko))
          (start #~(make-forkexec-constructor
                    ;; (list #$(file-append oneko "/bin/oneko") "-dog")
-                   (list "~/.guix-extra-profiles/borked/bin/oneko" "-dog")
+                   (list
+                    (string-append (getenv "HOME")
+                                   "/.guix-extra-profiles/borked/bin/oneko")
+                    "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
          (documentation "neko"))
