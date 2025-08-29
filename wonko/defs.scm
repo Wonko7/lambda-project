@@ -7,7 +7,7 @@
 
 (define-public %lambda-project "/code/lambda-project")
 
-(define-public %guix-extra-profiles-dir "/home/wonko/.guix-extra-profiles")
+(define-public %guix-extra-profiles-dir "$HOME/.guix-extra-profiles")
 
 (define-public %font "JetBrainsMonoNL NFP Medium")
 (define-public %font-feh "JetBrainsMonoNLNerdFontMono-Regular")
