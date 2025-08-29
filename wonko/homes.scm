@@ -86,21 +86,6 @@
                                    (circular-list " ")))))
            (provide 'conf/generated-values)))))))
 
-(define-public %vanilla-emacs-values-service
-  (make-emacs-values-service))
-
-(define-public %highdpi-emacs-values-service
-  (make-emacs-values-service
-   #:font-size                          80
-   #:modeline-height                    75
-   #:tag-height                         0.47
-   #:tag-font-size                      4.9
-   #:tag-radius                         6
-   #:tag-padding                        4.0
-   #:org-agenda-tags-column             80
-   #:org-habit-preceding-days           47
-   #:window-divider-default-right-width 5))
-
 (define-public %media-emacs-values-service
   (make-emacs-values-service #:font-size 240
                              #:theme "doom-outrun-electric"))
@@ -371,7 +356,7 @@
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
               "exec " #$emacs-exwm-custom-emacs "/bin/exwm"))))))))
 
-(define-public %bare-skeleton-wonko-services ;; shell, emacs, dotfiles
+(define-public %common-wonko-services ;; shell, emacs, dotfiles
   (cons*
    (service home-bash-service-type %wonko-bash-config)
    (simple-service 'dircolors home-shell-profile-service-type
@@ -734,11 +719,6 @@
 ;;           (list "pinned/borked-comms_10-02-2025.scm"))
 ;;      )
 
-(define-public %skeleton-wonko-services
-  (cons*
-   (make-xsession)
-   %bare-skeleton-wonko-services))
-
 (define-public %skeleton-wonko-home
   (home-environment
     (packages
@@ -757,38 +737,43 @@
        dunst
        ;; yes also man pages plz
        man-db)))
-    (services %skeleton-wonko-services)))
+    (services
+     (cons*
+      (make-xsession)
+      %common-wonko-services))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vanilla config: just needs x-config
 
-(define %just-vanilla-wonko-services
-  (list
-   %vanilla-emacs-values-service
-   (simple-service
-    'config-files
-    home-files-service-type
-    `(;; package this better;
-      (".config/feh/themes"
-       ,(let ((fsz "15"))
-          (mixed-text-file
-           "feh_symlink_name_is_theme_name"
-           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font " %font-feh "/" fsz
-           " --font " %font-feh "/" fsz "\n")))
-      (".Xresources"
-       ,(plain-file "Xresources" (xresources-configuration %font 10)))
-      (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc"
-                    (dunst-configuration %font 12 300)))))))
+(define* (make-font-dep-configs #:key
+                                (feh-sz 15)
+                                (xres-sz 10)
+                                (dunst-font-sz 12)
+                                (dunst-width 300))
+  (simple-service
+   'config-files
+   home-files-service-type
+   `((".config/feh/themes"
+      ,(let ((fsz (number->string feh-sz)))
+         (mixed-text-file
+          "feh_symlink_name_is_theme_name"
+          "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+          " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+          " --menu-font " %font-feh "/" fsz
+          " --font " %font-feh "/" fsz "\n")))
+     (".Xresources"
+      ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
+     (".config/dunst/dunstrc"
+      ,(plain-file "dunstrc"
+                   (dunst-configuration %font dunst-font-sz dunst-width))))))
 
 (define-public %vanilla-wonko-services
   (cons*
+   (make-emacs-values-service)
    %vanilla-shepherd-wonko-service
-   (append
-    %just-vanilla-wonko-services
-    %skeleton-wonko-services)))
+   (make-font-dep-configs)
+   (make-xsession)
+   %common-wonko-services))
 
 (define-public %vanilla-wonko-home
   (home-environment
@@ -800,33 +785,25 @@
 
 (define-public %highdpi-wonko-services
   (cons*
-   %highdpi-emacs-values-service
+   (make-emacs-values-service
+    #:font-size                          80
+    #:modeline-height                    75
+    #:org-agenda-tags-column             80
+    #:org-habit-preceding-days           47
+    #:window-divider-default-right-width 5)
    %vanilla-shepherd-wonko-service
    (simple-service 'highdpi-bash home-bash-service-type
                    (home-bash-extension
-                    (environment-variables
-                     '(("GDK_SCALE" . "2")
-                       ("QT_USE_PHYSICAL_DPI" . "1")
-                       ("QT_SCALE_FACTOR" . "1")
-                       ("GDK_DPI_SCALE" . "1.5")
-                       ("XCURSOR_SIZE" . "64")))))
-   (simple-service
-    'config-files
-    home-files-service-type
-    `((".config/feh/themes"
-       ,(let ((fsz "20"))
-          (mixed-text-file
-           "feh_symlink_name_is_theme_name"
-           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font " %font-feh "/" fsz
-           " --font " %font-feh "/" fsz "\n")))
-      (".Xresources"
-       ,(plain-file "Xresources" (xresources-configuration %font 10)))
-      (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc"
-                    (dunst-configuration %font 8 175)))))
-   %skeleton-wonko-services))
+                     (environment-variables
+                      '(("GDK_SCALE" . "2")
+                        ("QT_USE_PHYSICAL_DPI" . "1")
+                        ("QT_SCALE_FACTOR" . "1")
+                        ("GDK_DPI_SCALE" . "1.5")
+                        ("XCURSOR_SIZE" . "64")))))
+   (make-font-dep-configs #:feh-sz 20
+                          #:dunst-font-sz 8 #:dunst-width 175)
+   (make-xsession)
+   %common-wonko-services))
 
 (define-public %highdpi-wonko-home
   (home-environment
@@ -838,36 +815,25 @@
 
 (define-public %media-station-wonko-services
   (cons*
-   (make-xsession #:media-station? #t)
-   %media-emacs-values-service
+   (make-emacs-values-service #:font-size 240
+                              #:theme "doom-outrun-electric")
    %media-station-shepherd-wonko-service
    (simple-service 'media-bash home-bash-service-type
                    (home-bash-extension
-                    (bashrc (list (mixed-text-file
-                                   "media-umask"
-                                   "umask 0002\n")))
-                    (environment-variables
-                     '(("DISPLAY" . ":11")
-                       ("GDK_SCALE" . "3")
-                       ("QT_SCALE_FACTOR" . "3")
-                       ("XCURSOR_SIZE" . "64")))))
-   (simple-service
-    'config-files
-    home-files-service-type
-    `((".config/feh/themes"
-       ,(let ((fsz "30"))
-          (mixed-text-file
-           "feh_symlink_name_is_theme_name"
-           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-           " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
-           " --menu-font " %font-feh "/" fsz
-           " --font " %font-feh "/" fsz "\n")))
-      (".Xresources"
-       ,(plain-file "Xresources" (xresources-configuration %font 20)))
-      (".config/dunst/dunstrc"
-       ,(plain-file "dunstrc"
-                    (dunst-configuration %font 20 500)))))
-   %bare-skeleton-wonko-services))
+                     (bashrc (list (mixed-text-file
+                                    "media-umask"
+                                    "umask 0002\n")))
+                     (environment-variables
+                      '(("DISPLAY" . ":11")
+                        ("GDK_SCALE" . "3")
+                        ("QT_SCALE_FACTOR" . "3")
+                        ("XCURSOR_SIZE" . "64")))))
+   (make-font-dep-configs #:feh-sz 30
+                          #:xres-sz 20
+                          #:dunst-font-sz 20
+                          #:dunst-width 500)
+   (make-xsession #:media-station? #t)
+   %common-wonko-services))
 
 (define-public %media-station-wonko-home
   (home-environment
@@ -933,4 +899,4 @@
                            "~/.x-config;"
                            #$xset "/bin/xset dpms 600 1200 0;"
                            "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
-               %bare-skeleton-wonko-services))))
+               %common-wonko-services))))
