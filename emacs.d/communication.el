@@ -22,7 +22,7 @@
   :commands (my/ement-init)
   :hook
   ((ement-room-compose-hook . ement-room-compose-org) ;; this isn't working?
-   (ement-room-read-string-setup-hook . flyspell-mode))
+   (ement-room-read-string-setup-hook . jinx-mode))
 
   :config
   (setq ement-room-message-format-spec "%S> %W%B%r%R%t")
