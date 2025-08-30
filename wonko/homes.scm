@@ -117,38 +117,38 @@
   ;; name, packages, pinned channel.
   `(("borked" ,%borked-2025-08
      (list (channel
-             (name 'guix-forge)
-             (url "https://git.systemreboot.net/guix-forge/")
-             (branch "main")
-             (commit
-              "15b559c2f2e497ed059197f91937798411b8e365")
-             (introduction
-              (make-channel-introduction
-               "0432e37b20dd678a02efee21adf0b9525a670310"
-               (openpgp-fingerprint
-                "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+            (name 'guix-forge)
+            (url "https://git.systemreboot.net/guix-forge/")
+            (branch "main")
+            (commit
+             "15b559c2f2e497ed059197f91937798411b8e365")
+            (introduction
+             (make-channel-introduction
+              "0432e37b20dd678a02efee21adf0b9525a670310"
+              (openpgp-fingerprint
+               "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
            (channel
-             (name 'nonguix)
-             (url "https://gitlab.com/nonguix/nonguix")
-             (branch "master")
-             (commit
-              "c16a92e3bef67a602bc56b0dd20ecdc8cac8c97f")
-             (introduction
-              (make-channel-introduction
-               "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-               (openpgp-fingerprint
-                "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+            (name 'nonguix)
+            (url "https://gitlab.com/nonguix/nonguix")
+            (branch "master")
+            (commit
+             "c16a92e3bef67a602bc56b0dd20ecdc8cac8c97f")
+            (introduction
+             (make-channel-introduction
+              "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+              (openpgp-fingerprint
+               "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
            (channel
-             (name 'guix)
-             (url "https://codeberg.org/guix/guix-mirror")
-             (branch "master")
-             (commit
-              "894625f5e8722516bf7d65e82b8dba32c267353c")
-             (introduction
-              (make-channel-introduction
-               "9edb3f66fd807b096b48283debdcddccfea34bad"
-               (openpgp-fingerprint
-                "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))))
+            (name 'guix)
+            (url "https://codeberg.org/guix/guix-mirror")
+            (branch "master")
+            (commit
+             "894625f5e8722516bf7d65e82b8dba32c267353c")
+            (introduction
+             (make-channel-introduction
+              "9edb3f66fd807b096b48283debdcddccfea34bad"
+              (openpgp-fingerprint
+               "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))))
 
 (define-public (profiles->names ps)
   (map car ps))
@@ -282,29 +282,29 @@
   (service
    home-shepherd-service-type
    (home-shepherd-configuration
-     (services
-      (cons*
-       (shepherd-service
-         (provision '(xss-lock))
-         (start #~(make-forkexec-constructor
-                   (cons* #$(file-append xss-lock "/bin/xss-lock")
-                          "--"
-                          '#$%lock-cmd)
-                   #:log-file #$(home-log-path "xss-lock")))
-         (stop #~(make-kill-destructor))
-         (documentation "don't touch my stuff"))
-       (shepherd-service
-         (provision '(oneko))
-         (start #~(make-forkexec-constructor
-                   ;; (list #$(file-append oneko "/bin/oneko") "-dog")
-                   (list
-                    (string-append (getenv "HOME")
-                                   "/.guix-extra-profiles/borked/bin/oneko")
-                    "-dog")
-                   #:log-file #$(home-log-path "oneko")))
-         (stop #~(make-kill-destructor))
-         (documentation "neko"))
-       %common-shepherd-wonko-services)))))
+    (services
+     (cons*
+      (shepherd-service
+       (provision '(xss-lock))
+       (start #~(make-forkexec-constructor
+                 (cons* #$(file-append xss-lock "/bin/xss-lock")
+                        "--"
+                        '#$%lock-cmd)
+                 #:log-file #$(home-log-path "xss-lock")))
+       (stop #~(make-kill-destructor))
+       (documentation "don't touch my stuff"))
+      (shepherd-service
+       (provision '(oneko))
+       (start #~(make-forkexec-constructor
+                 ;; (list #$(file-append oneko "/bin/oneko") "-dog")
+                 (list
+                  (string-append (getenv "HOME")
+                                 "/.guix-extra-profiles/borked/bin/oneko")
+                  "-dog")
+                 #:log-file #$(home-log-path "oneko")))
+       (stop #~(make-kill-destructor))
+       (documentation "neko"))
+      %common-shepherd-wonko-services)))))
 
 (define-public %media-station-shepherd-wonko-service
   (service
@@ -405,42 +405,42 @@
 
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
-              (default-cache-ttl (* 60 30))
-              (max-cache-ttl (* 60 60 2))
-              (pinentry-program
-               (file-append pinentry-emacs "/bin/pinentry-emacs"))
-              (ssh-support? #t)))
+             (default-cache-ttl (* 60 30))
+             (max-cache-ttl (* 60 60 2))
+             (pinentry-program
+              (file-append pinentry-emacs "/bin/pinentry-emacs"))
+             (ssh-support? #t)))
 
    (simple-service
     'xdg-user-directories-config-service
     home-xdg-user-directories-service-type
     (home-xdg-user-directories-configuration
-      (desktop     "$HOME/desktop")
-      (documents   "$HOME/documents")
-      (download    "$HOME/downloads")
-      (music       "$HOME/music")
-      (pictures    "$HOME/pictures")
-      (publicshare "$HOME/public")
-      (templates   "$HOME/templates")
-      (videos      "$HOME/videos")))
+     (desktop     "$HOME/desktop")
+     (documents   "$HOME/documents")
+     (download    "$HOME/downloads")
+     (music       "$HOME/music")
+     (pictures    "$HOME/pictures")
+     (publicshare "$HOME/public")
+     (templates   "$HOME/templates")
+     (videos      "$HOME/videos")))
 
    (service
     (service-type
-      (name 'home-xdg-desktop-portal)
-      (extensions
-       (list
-        (service-extension
-         home-profile-service-type
-         (const (list xdg-desktop-portal
-                      xdg-desktop-portal-gtk)))
-        (service-extension
-         home-xdg-configuration-files-service-type
-         (const `(("xdg-desktop-portal/portals.conf"
-                   ,(mixed-text-file "xdg-portals"
-                                     "[preferred]\n"
-                                     "default=gtk")))))))
-      (default-value #f)
-      (description "xdg portal")))
+     (name 'home-xdg-desktop-portal)
+     (extensions
+      (list
+       (service-extension
+        home-profile-service-type
+        (const (list xdg-desktop-portal
+                     xdg-desktop-portal-gtk)))
+       (service-extension
+        home-xdg-configuration-files-service-type
+        (const `(("xdg-desktop-portal/portals.conf"
+                  ,(mixed-text-file "xdg-portals"
+                                    "[preferred]\n"
+                                    "default=gtk")))))))
+     (default-value #f)
+     (description "xdg portal")))
 
    (simple-service
     'config-files
@@ -721,26 +721,26 @@
 
 (define-public %skeleton-wonko-home
   (home-environment
-    (packages
-     (append
-      %emacs-world
-      %ocaml-minimal
-      %crypto-world
-      %xorg-world
-      %fonts-world
-      %vcs-world
-      %dev-world
-      (list
-       ;; services
-       picom
-       synergy
-       dunst
-       ;; yes also man pages plz
-       man-db)))
-    (services
-     (cons*
-      (make-xsession)
-      %common-wonko-services))))
+   (packages
+    (append
+     %emacs-world
+     %ocaml-minimal
+     %crypto-world
+     %xorg-world
+     %fonts-world
+     %vcs-world
+     %dev-world
+     (list
+      ;; services
+      picom
+      synergy
+      dunst
+      ;; yes also man pages plz
+      man-db)))
+   (services
+    (cons*
+     (make-xsession)
+     %common-wonko-services))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vanilla config: just needs x-config
@@ -794,12 +794,12 @@
    %vanilla-shepherd-wonko-service
    (simple-service 'highdpi-bash home-bash-service-type
                    (home-bash-extension
-                     (environment-variables
-                      '(("GDK_SCALE" . "2")
-                        ("QT_USE_PHYSICAL_DPI" . "1")
-                        ("QT_SCALE_FACTOR" . "1")
-                        ("GDK_DPI_SCALE" . "1.5")
-                        ("XCURSOR_SIZE" . "64")))))
+                    (environment-variables
+                     '(("GDK_SCALE" . "2")
+                       ("QT_USE_PHYSICAL_DPI" . "1")
+                       ("QT_SCALE_FACTOR" . "1")
+                       ("GDK_DPI_SCALE" . "1.5")
+                       ("XCURSOR_SIZE" . "64")))))
    (make-font-dep-configs #:feh-sz 20
                           #:dunst-font-sz 8 #:dunst-width 175)
    (make-xsession)
@@ -807,8 +807,8 @@
 
 (define-public %highdpi-wonko-home
   (home-environment
-    (inherit %skeleton-wonko-home)
-    (services %highdpi-wonko-services)))
+   (inherit %skeleton-wonko-home)
+   (services %highdpi-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; media-station
@@ -820,14 +820,14 @@
    %media-station-shepherd-wonko-service
    (simple-service 'media-bash home-bash-service-type
                    (home-bash-extension
-                     (bashrc (list (mixed-text-file
-                                    "media-umask"
-                                    "umask 0002\n")))
-                     (environment-variables
-                      '(("DISPLAY" . ":11")
-                        ("GDK_SCALE" . "3")
-                        ("QT_SCALE_FACTOR" . "3")
-                        ("XCURSOR_SIZE" . "64")))))
+                    (bashrc (list (mixed-text-file
+                                   "media-umask"
+                                   "umask 0002\n")))
+                    (environment-variables
+                     '(("DISPLAY" . ":11")
+                       ("GDK_SCALE" . "3")
+                       ("QT_SCALE_FACTOR" . "3")
+                       ("XCURSOR_SIZE" . "64")))))
    (make-font-dep-configs #:feh-sz 30
                           #:xres-sz 20
                           #:dunst-font-sz 20
@@ -837,35 +837,35 @@
 
 (define-public %media-station-wonko-home
   (home-environment
-    (inherit %skeleton-wonko-home)
-    (services %media-station-wonko-services)))
+   (inherit %skeleton-wonko-home)
+   (services %media-station-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina
 
 (define-public %tina-home
   (home-environment
-    (services
+   (services
+    (list
+     (simple-service 'x-config-files
+                     home-files-service-type
+                     `((".xsession"
+                        ,(program-file
+                          "xsession"
+                          #~(system #$(file-append xfce4-session "/bin/startxfce4"))))))))
+   (packages
+    (append
+     %fonts-world
+     %xfce-world
+     %web-world
      (list
-      (simple-service 'x-config-files
-                      home-files-service-type
-                      `((".xsession"
-                         ,(program-file
-                           "xsession"
-                           #~(system #$(file-append xfce4-session "/bin/startxfce4"))))))))
-    (packages
-     (append
-      %fonts-world
-      %xfce-world
-      %web-world
-      (list
-       libreoffice
-       hunspell
-       hunspell-dict-fr-toutes-variantes
-       hunspell-dict-en-us
-       hunspell-dict-en-gb
-       pavucontrol
-       man-db)))))
+      libreoffice
+      hunspell
+      hunspell-dict-fr-toutes-variantes
+      hunspell-dict-en-us
+      hunspell-dict-en-gb
+      pavucontrol
+      man-db)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; minimal emacs debug
@@ -875,28 +875,28 @@
 
 (define-public %emacs-debug-home
   (home-environment
-    (packages (map rewrite-emacs-input
-                   (append
-                    %emacs-debug-world
-                    %xorg-world
-                    %fonts-world)))
-    (services (cons*
-               (simple-service
-                'xsession
-                home-files-service-type
-                `((".xsession"
-                   ,(program-file
-                     "xsession"
-                     #~(begin
-                         (system
-                          (string-append
-                           "source ~/.bash_profile;"
-                           #$xhost "/bin/xhost +SI:localuser:$USER;"
-                           #$xset "/bin/xset r rate 400 30;"
-                           #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
-                           #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
-                           #$xrdb "/bin/xrdb -load ~/.Xresources;"
-                           "~/.x-config;"
-                           #$xset "/bin/xset dpms 600 1200 0;"
-                           "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
-               %common-wonko-services))))
+   (packages (map rewrite-emacs-input
+                  (append
+                   %emacs-debug-world
+                   %xorg-world
+                   %fonts-world)))
+   (services (cons*
+              (simple-service
+               'xsession
+               home-files-service-type
+               `((".xsession"
+                  ,(program-file
+                    "xsession"
+                    #~(begin
+                        (system
+                         (string-append
+                          "source ~/.bash_profile;"
+                          #$xhost "/bin/xhost +SI:localuser:$USER;"
+                          #$xset "/bin/xset r rate 400 30;"
+                          #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
+                          #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
+                          #$xrdb "/bin/xrdb -load ~/.Xresources;"
+                          "~/.x-config;"
+                          #$xset "/bin/xset dpms 600 1200 0;"
+                          "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
+              %common-wonko-services))))

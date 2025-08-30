@@ -42,50 +42,50 @@
 (define %channels ;; this will pull latest
   (cons*
    (channel
-    (name 'nonguix)
-    (url "https://gitlab.com/nonguix/nonguix")
-    (introduction
-     (make-channel-introduction
-      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-      (openpgp-fingerprint
-       "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
+     (name 'nonguix)
+     (url "https://gitlab.com/nonguix/nonguix")
+     (introduction
+      (make-channel-introduction
+       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+       (openpgp-fingerprint
+        "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
    %default-channels))
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
   ;; this works but only with emacs-next + tramp workaround.
   (list (channel
-         (name 'guix-forge)
-         (url "https://git.systemreboot.net/guix-forge/")
-         (branch "main")
-         (commit
-          "3c8dc85a584c98bc90088ec1c85933d4d10e7383")
-         (introduction
-          (make-channel-introduction
-           "0432e37b20dd678a02efee21adf0b9525a670310"
-           (openpgp-fingerprint
-            "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+          (name 'guix-forge)
+          (url "https://git.systemreboot.net/guix-forge/")
+          (branch "main")
+          (commit
+           "3c8dc85a584c98bc90088ec1c85933d4d10e7383")
+          (introduction
+           (make-channel-introduction
+            "0432e37b20dd678a02efee21adf0b9525a670310"
+            (openpgp-fingerprint
+             "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
         (channel
-         (name 'nonguix)
-         (url "https://gitlab.com/nonguix/nonguix")
-         (branch "master")
-         (commit
-          "60ffd0353e70d5e371c4bfe2201c9d08c1c05e18")
-         (introduction
-          (make-channel-introduction
-           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-           (openpgp-fingerprint
-            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+          (name 'nonguix)
+          (url "https://gitlab.com/nonguix/nonguix")
+          (branch "master")
+          (commit
+           "60ffd0353e70d5e371c4bfe2201c9d08c1c05e18")
+          (introduction
+           (make-channel-introduction
+            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+            (openpgp-fingerprint
+             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
-         (name 'guix)
-         (url "https://codeberg.org/guix/guix")
-         (branch "master")
-         (commit
-          "6f066e2d438a330ec39720c8cf2c948cafe93a52")
-         (introduction
-          (make-channel-introduction
-           "9edb3f66fd807b096b48283debdcddccfea34bad"
-           (openpgp-fingerprint
-            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+          (name 'guix)
+          (url "https://codeberg.org/guix/guix")
+          (branch "master")
+          (commit
+           "6f066e2d438a330ec39720c8cf2c948cafe93a52")
+          (introduction
+           (make-channel-introduction
+            "9edb3f66fd807b096b48283debdcddccfea34bad"
+            (openpgp-fingerprint
+             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
@@ -191,31 +191,31 @@
 
    (service guix-publish-service-type
             (guix-publish-configuration
-              (host "0.0.0.0")
-              (port 1337)
-              (advertise? #t)))
+             (host "0.0.0.0")
+             (port 1337)
+             (advertise? #t)))
 
    (simple-service 'fleet-hosts-entries hosts-service-type %fleet-hosts)
 
    (service openssh-service-type
             (openssh-configuration
-              (authorized-keys
-               (cons*
-                (list
-                 "root"
-                 (local-file
-                  (string-append %lambda-project
-                                 "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
-                (append-map (lambda (user)
-                              (map (lambda (hn)
-                                     (list user (local-file
-                                                 (string-append %lambda-project
-                                                                "/wonko/data/ssh/" hn ".pub"))))
-                                   (cons "discovery" %fleet-names)))
-                            '("wonko" "media"))))
-              (x11-forwarding? #t)
-              (password-authentication? #f)
-              (permit-root-login #t)))
+             (authorized-keys
+              (cons*
+               (list
+                "root"
+                (local-file
+                 (string-append %lambda-project
+                                "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
+               (append-map (lambda (user)
+                             (map (lambda (hn)
+                                    (list user (local-file
+                                                (string-append %lambda-project
+                                                               "/wonko/data/ssh/" hn ".pub"))))
+                                  (cons "discovery" %fleet-names)))
+                           '("wonko" "media"))))
+             (x11-forwarding? #t)
+             (password-authentication? #f)
+             (permit-root-login #t)))
 
    (service tor-service-type)
 
@@ -241,26 +241,26 @@
                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
      (elogind-service-type config =>
                            (elogind-configuration
-                             (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                             (handle-lid-switch 'suspend)
-                             (handle-lid-switch-docked  'suspend)
-                             (handle-lid-switch-external-power 'suspend)))
+                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                            (handle-lid-switch 'suspend)
+                            (handle-lid-switch-docked  'suspend)
+                            (handle-lid-switch-external-power 'suspend)))
      (guix-service-type config =>
                         (guix-configuration
-                          (discover? #t)
-                          (channels %channels)
-                          (guix (guix-for-channels %channels))
-                          (substitute-urls
-                           (cons* "https://substitutes.nonguix.org"
-                                  %default-substitute-urls))
-                          (authorized-keys
-                           (append
-                            (map (lambda (hn)
-                                   (local-file
-                                    (string-append %lambda-project
-                                                   "/wonko/data/substitutes/" hn ".pub")))
-                                 (cons "nonguix" %fleet-names))
-                            %default-authorized-guix-keys)))))))
+                         (discover? #t)
+                         (channels %channels)
+                         (guix (guix-for-channels %channels))
+                         (substitute-urls
+                          (cons* "https://substitutes.nonguix.org"
+                                 %default-substitute-urls))
+                         (authorized-keys
+                          (append
+                           (map (lambda (hn)
+                                  (local-file
+                                   (string-append %lambda-project
+                                                  "/wonko/data/substitutes/" hn ".pub")))
+                                (cons "nonguix" %fleet-names))
+                           %default-authorized-guix-keys)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop-os and declinations
