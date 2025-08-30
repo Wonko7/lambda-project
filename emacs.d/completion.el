@@ -234,6 +234,9 @@
           ("l" . #'consult-line)
           ("/" . #'consult-ripgrep)
           ("$" . #'shell)
+          :map embark-become-shell-command-map
+          ("r" . #'consult-history)
+          ("i" . #'my/insert-shell-line)
           :map embark-become-match-map
           ("g" . #'magit-file-dispatch)
           ("f" . #'find-file)
