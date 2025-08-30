@@ -251,10 +251,10 @@
    (shepherd-service
      (provision '(pantalaimon))
      (start #~(make-forkexec-constructor
-               (list #$(string-append %guix-extra-profiles-dir
-                                      "/communication/bin/pantalaimon")) ;; FIXME borked-comms
-               #:environment-variables (cons "DISPLAY=:9"
-                                             (default-environment-variables))
+               (list "/run/current-system/comms-profile/bin/pantalaimon")
+               #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
+                                        "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
+                                        (default-environment-variables))
                #:log-file #$(home-log-path "matrix")))
      (stop #~(make-kill-destructor))
      (documentation "Crypto back-end server for ement.el"))

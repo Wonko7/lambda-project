@@ -500,7 +500,7 @@
 (define-public %os-nonfree
   (list fwupd-nonfree))
 
-(define-public %borked-comms-world
+(define-public %comms-world
   (list pantalaimon))
 
 (define-public %borked-calibre-world
