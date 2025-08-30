@@ -758,7 +758,7 @@
          (mixed-text-file
           "feh_symlink_name_is_theme_name"
           "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-          " --fontpath " "/home/wonko/.guix-home/profile/share/fonts/truetype/"
+          " --fontpath " "/run/current-system/fonts-profile/share/fonts/truetype/"
           " --menu-font " %font-feh "/" fsz
           " --font " %font-feh "/" fsz "\n")))
      (".Xresources"

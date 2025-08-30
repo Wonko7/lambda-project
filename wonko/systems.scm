@@ -229,6 +229,7 @@
    (service (make-extra-profile-service-type "desktop") %desktop-world)
    (service (make-extra-profile-service-type "web")     %web-world)
    (service (make-extra-profile-service-type "img")     %image-edition-world)
+   (service (make-extra-profile-service-type "fonts")   %fonts-world)
 
    (modify-services
        %desktop-services
