@@ -640,7 +640,30 @@
 
    %base-home-services))
 
+(define* (make-font-dep-configs #:key
+                                (feh-sz 15)
+                                (xres-sz 10)
+                                (dunst-font-sz 12)
+                                (dunst-width 300))
+  (simple-service
+   'config-files
+   home-files-service-type
+   `((".config/feh/themes"
+      ,(let ((fsz (number->string feh-sz)))
+         (mixed-text-file
+          "feh_symlink_name_is_theme_name"
+          "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
+          " --fontpath " "/run/current-system/fonts-profile/share/fonts/truetype/"
+          " --menu-font " %font-feh "/" fsz
+          " --font " %font-feh "/" fsz "\n")))
+     (".Xresources"
+      ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
+     (".config/dunst/dunstrc"
+      ,(plain-file "dunstrc"
+                   (dunst-configuration %font dunst-font-sz dunst-width))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; skeleton: just needs x-config
 
 (define-public %skeleton-wonko-home
   (home-environment
@@ -666,29 +689,7 @@
      %common-wonko-services))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; vanilla config: just needs x-config
-
-(define* (make-font-dep-configs #:key
-                                (feh-sz 15)
-                                (xres-sz 10)
-                                (dunst-font-sz 12)
-                                (dunst-width 300))
-  (simple-service
-   'config-files
-   home-files-service-type
-   `((".config/feh/themes"
-      ,(let ((fsz (number->string feh-sz)))
-         (mixed-text-file
-          "feh_symlink_name_is_theme_name"
-          "feh --borderless" ;; FIXME gexp %font ttf filename and use that:
-          " --fontpath " "/run/current-system/fonts-profile/share/fonts/truetype/"
-          " --menu-font " %font-feh "/" fsz
-          " --font " %font-feh "/" fsz "\n")))
-     (".Xresources"
-      ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
-     (".config/dunst/dunstrc"
-      ,(plain-file "dunstrc"
-                   (dunst-configuration %font dunst-font-sz dunst-width))))))
+;; vanilla
 
 (define-public %vanilla-wonko-services
   (cons*
@@ -704,7 +705,7 @@
    (services %vanilla-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; highdpi config: just needs x-config
+;; highdpi
 
 (define-public %highdpi-wonko-services
   (cons*
