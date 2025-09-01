@@ -754,8 +754,8 @@
                        ("XCURSOR_SIZE" . "64")))))
    (make-font-dep-configs #:feh-sz 30
                           #:xres-sz 20
-                          #:dunst-font-sz 20
-                          #:dunst-width 500)
+                          #:dunst-font-sz 30
+                          #:dunst-width 800)
    (make-xsession #:media-station? #t)
    %common-wonko-services))
 
