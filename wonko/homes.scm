@@ -49,10 +49,6 @@
                                     (font-size                          120)
                                     (modeline-height                    40)
                                     (theme                              "doom-laserwave")
-                                    (tag-height                         0.95)
-                                    (tag-font-size                      11)
-                                    (tag-radius                         10)
-                                    (tag-padding                        15)
                                     (org-agenda-tags-column             78)
                                     (org-habit-preceding-days           43)
                                     (window-divider-default-right-width 2))
@@ -68,10 +64,6 @@
             my/theme                                #$theme
             my/font-size                            #$font-size
             my/modeline-height                      #$modeline-height
-            my/tag-height                           #$tag-height
-            my/tag-font-size                        #$tag-font-size
-            my/tag-radius                           #$tag-radius
-            my/tag-padding                          #$tag-padding
             my/org-agenda-tags-column               #$org-agenda-tags-column
             my/org-habit-preceding-days             #$org-habit-preceding-days
             my/window-divider-default-right-width   #$window-divider-default-right-width
