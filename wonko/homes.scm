@@ -638,78 +638,9 @@
     #~(let ((mkdir #$(file-append coreutils "/bin/mkdir")))
         (system (string-append mkdir " -p ~/.run/emacs/ ~/.run/log/"))))
 
-   (simple-service
-    'secrets-scripts
-    home-files-service-type
-    `(("local/bin/secrets-backup"
-       ,(program-file
-         "_"
-         (with-imported-modules
-             '((wonko spock)
-               (guix build utils))
-           #~(begin
-               (use-modules (wonko spock)
-                            (guix build utils))
-               (display (spock-say
-                         (string-append "backup SECRETS for " ;; FIXME #$(ship-name %ship)
-                                        ))
-                        (current-error-port))
-               (newline (current-error-port))
-               (let ((pass   #$(file-append password-store "/bin/pass"))
-                     (cat    #$(file-append coreutils "/bin/cat"))
-                     (cp     #$(file-append coreutils "/bin/cp"))
-                     (base64 #$(file-append coreutils "/bin/base64"))
-                     (tar    #$(file-append tar "/bin/tar")))
-                 (system
-                  (string-append "cd && " tar " czf - .ssh/id_ed25519* | "
-                                 base64 " | "
-                                 pass " insert -m fleet/" ;; #$(ship-name %ship) FIXME
-                                 "/backup-ssh"))
-                 (system
-                  (string-append cp " ~/.ssh/id_ed25519.pub "
-                                 ;; #$%project-lambda "/guix/data/ssh/" #$(ship-name %ship)
-                                 ".pub")))))))
-      ("local/bin/secrets-deploy"
-       ,(program-file
-         "_"
-         (with-imported-modules
-             '((wonko spock)
-               (guix build utils))
-           #~(begin
-               (use-modules (wonko spock)
-                            (guix build utils))
-               (display (spock-say
-                         (string-append "deploy SECRETS for "
-                                        ;; #$(ship-name %ship)
-                                        ))
-                        (current-error-port))
-               (newline (current-error-port))
-               (let ((pass   #$(file-append password-store "/bin/pass"))
-                     (base64 #$(file-append coreutils "/bin/base64"))
-                     (tar    #$(file-append tar "/bin/tar")))
-                 (system
-                  (string-append pass " show fleet/" ;; #$(ship-name %ship) "/ssh | " FIXME
-                                 base64 " -d | " tar " xz ")))))))))
-
    %base-home-services))
 
 
-;; (map (match-lambda*
-;;        (((profile channels))
-;;         (string-append " time-machine -C " channels
-;;                        " package -m ~/local/manifests/" profile
-;;                        " -p " %guix-extra-profiles-dir  "/" profile "\n"))
-;;        ((profile)
-;;         (string-append " package -m ~/local/manifests/" profile
-;;                        " -p " %guix-extra-profiles-dir  "/" profile "\n")))
-
-;;      (map (lambda (path)
-;;             (list
-;;              (regexp-substitute/global #f "([^/_]+)_[^_]+.scm"
-;;                                        path 1)
-;;              path))
-;;           (list "pinned/borked-comms_10-02-2025.scm"))
-;;      )
 
 (define-public %skeleton-wonko-home
   (home-environment
