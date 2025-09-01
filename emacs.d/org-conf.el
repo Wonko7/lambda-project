@@ -701,7 +701,7 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
 
-          ("w" "🗿 witness the fitness")
+          ("w" "🦁 witness the fitness")
           ("wb" "🐒 bouldering" entry ,(string-join '("* 🐒 [[roam:bouldering]] %? :wtf:cb:\n"
                                                       "%U\n"
                                                       "** ❤ with :is:\n"
@@ -709,10 +709,10 @@ current time."
                                                       "** 🔥 topped\n"
                                                       "** 🏥 [[roam:injuries]]\n"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("ws" "🐒 sport climbing" entry "* 🐒 [[roam:sport climbing]] %? :wtf:cb:\n%U\n** ❤ with :is:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("ww" "📐 woody" entry ,(string-join '("* 📐 [[roam:woody]] :wtf:woody:\n"
                                                  "%U\n"
                                                  "** 👷 projects\n"
@@ -720,7 +720,7 @@ current time."
                                                  "** 🐒 [[roam:campusing]]\n"
                                                  "** 🏥 [[roam:injuries]]"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wf" "🤘 fingerboard" entry ,(string-join '("* 🤘 [[roam:fingerboard]] :wtf:\n"
                                                        "%U\n"
                                                        "** 🍚 [[roam:rice bucket]]\n"
@@ -729,10 +729,10 @@ current time."
                                                        "** 🐒 [[roam:campusing]]\n"
                                                        "** 🤘 [[roam:deadhangs]]"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wd" "🤘 FDP block deadhangs" entry "* 🤘 [[roam:FDP pull blocks]] [[roam:deadhangs]] :wtf:cb:\n%U%?"
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wh" "🤸 handstands" entry
            ,(string-join '("* 🤸 [[roam:handstands]] :wtf:hs:\n"
                            "%U\n"
@@ -744,18 +744,21 @@ current time."
                            "** 🤸 [[roam:HSPU]]\n"
                            "** 🤸 session max hold:\n"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
-          ("wr" "🍚 rice bucket" entry "* 🍚 [[roam:rice bucket]] :wtf:cb:\n%U%?"
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
+          ("wr" "🍚 rice bucket" entry
+           ,(string-join '("* 🍚 [[roam:rice bucket]] :wtf:cb:\n"
+                           "%U\n"
+                           "- 1x30x / 2 rnd sqz%?"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wR" "👣 Running" entry ,(string-join '("* 👣 [[roam:running]] :wtf:\n"
                                                    "%U\n"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wH" "👣 Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
                                                   "%U\n"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wl" "💪 leg day" entry ,(string-join '("* 💪 leg day :wtf:brutus:\n"
                                                    "%U\n"
                                                    "** 🍚 [[roam:rice bucket]]\n"
@@ -763,16 +766,16 @@ current time."
                                                    "** 💪 [[roam:cossak hip rotations]]\n"
                                                    "** 💪 [[roam:pistol squats]]\n"))
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wB" "💪 brutus" entry "* 💪 %? :wtf:brutus:\n%U"
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wP" "🍃 breath work (Pneuma)" entry "* 🍃 [[roam:breath work]] :wtf:\n%U\n%?\n"
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wi" "🏥 injuries" entry "* 🏥 [[roam:injuries]] :wtf:health:inj:\n%U\n%?\n"
            :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🗿 witness the fitness")))
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
 
           ("t" "🚀 tech")
           ("tg" "🐧 guix" entry "* 🐧 [[roam:guix]] :guix:\n%U\n%?"
