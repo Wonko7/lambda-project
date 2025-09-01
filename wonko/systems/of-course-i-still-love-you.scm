@@ -88,40 +88,29 @@
                           ,@%default-modules)))
     (define zfs-scan
       (shepherd-service
-        (provision '(zfs-scan))
-        (documentation "Scans for ZFS pools.")
-        (requirement '(kernel-module-loader udev))
-        (modules scheme-modules)
-        (start #~(lambda _
-                   (invoke/quiet #$zpool "import" "-a" "-N")))
-        (stop #~(const #f))))
-    (define zfs-load-key
-      (shepherd-service
-        (provision '(zfs-load-key))
-        (documentation "Scans for ZFS pools.")
-        (requirement '(zfs-scan))
-        (modules scheme-modules)
-        (start #~(lambda _
-                   (invoke/quiet #$zfs "load-key"
-                                 "-L" "/root/.one-ring-to-rule-them-all" "babel")))
-        (stop #~(lambda _
-                  (invoke/quiet #$zfs "unload-key" "-r" "babel")))))
+       (provision '(zfs-scan))
+       (documentation "Scans for ZFS pools.")
+       (requirement '(kernel-module-loader udev))
+       (modules scheme-modules)
+       (start #~(lambda _
+                  (invoke/quiet #$zpool "import" "-a" "-N")))
+       (stop #~(const #f))))
     (define zfs-automount
       (shepherd-service
-        (provision '(zfs-automount))
-        (documentation "Automounts ZFS data sets.")
-        (requirement '(zfs-scan zfs-load-key))
-        (modules scheme-modules)
-        (start #~(lambda _
-                   (with-output-to-port (current-error-port)
-                     (lambda ()
-                       (invoke #$zfs "mount" "-a" "-l")))))
-        (stop #~(lambda _
-                  (chdir "/")
-                  (invoke/quiet #$zfs "unmount" "-a" "-f") #f))))
+       (provision '(zfs-automount))
+       (documentation "Automounts ZFS data sets.")
+       (requirement '(zfs-scan))
+       (modules scheme-modules)
+       (start #~(lambda _
+                  (with-output-to-port (current-error-port)
+                    (lambda ()
+                      (invoke #$zfs "mount" "-a" "-l")))))
+       (stop #~(lambda _
+                 (chdir "/")
+                 (invoke/quiet #$zfs "unmount" "-a" "-f") #f))))
     ;; (define zfs-zed
     ;;   (shepherd-service ...))
-    (list zfs-scan zfs-load-key zfs-automount)))
+    (list zfs-scan zfs-automount)))
 
 (define %of-course-i-still-love-you-os
   (operating-system
