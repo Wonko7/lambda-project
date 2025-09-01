@@ -293,6 +293,8 @@ This function could be in the list `comint-output-filter-functions'."
 (use-package coterm
   :after comint
   :demand t
+  :custom
+  (comint-input-autoexpand t)
   :config
   (coterm-mode)
   (defun my/toggle-scroll-to-bottom-on-output ()
@@ -304,7 +306,7 @@ This function could be in the list `comint-output-filter-functions'."
   :after coterm
   :demand t
   :custom
-  (shell-prompt-pattern "^[🍏🍎].*\nλ ")
+  (shell-prompt-pattern "^\([^#$%>\n]*[#$%>] *\|.*[\n]λ \)")
   ;; for tramp shell sessions:
   (explicit-shell-file-name "bash")
   :config
@@ -314,6 +316,8 @@ This function could be in the list `comint-output-filter-functions'."
 (use-package bash-completion
   :after shell
   :demand t
+  :custom
+  (bash-completion-use-separate-processes t) ;; Fixes erratic completion / broken prompt
   :config
   (bash-completion-setup))
 
