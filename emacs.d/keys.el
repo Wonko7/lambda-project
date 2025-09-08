@@ -88,7 +88,8 @@
     "rD" #'org-roam-demote-entire-buffer
     "rf" #'org-roam-node-find
     "rF" #'org-roam-ref-find
-    "rg" #'org-roam-graph
+    ;; "rg" #'org-roam-graph
+    "rg" #'org-roam-dailies-goto-today
     "ri" #'org-roam-node-insert
     "rs" #'org-roam-db-sync
     "rI" #'org-id-get-create
