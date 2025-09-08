@@ -90,12 +90,14 @@
   :demand t
   ;; the equivalent for org-mode-map is in org-conf
   ;; this needs to be set after starting evil-org
-  :hook (org-mode-hook
-         . (lambda ()
-             (evil-org-mode)
-             (evil-define-key 'normal 'evil-org-mode
-               (kbd "<C-return>")  '+org/insert-item-below
-               (kbd "<C-S-return>") '+org/insert-item-above)))
+  :hook ((org-mode-hook
+          . (lambda ()
+              (evil-org-mode)
+              (evil-define-key 'normal 'evil-org-mode
+                (kbd "<C-return>")  '+org/insert-item-below
+                (kbd "<C-S-return>") '+org/insert-item-above)))
+         (org-capture-mode-hook
+          . (lambda () (evil-insert 0))))
   :config
   (setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading calendar))
   (setq evil-org-retain-visual-state-on-shift t)
