@@ -360,11 +360,11 @@
                            (group 1.0))
                  (vertical 1.0
                            (summary 1.0 point))))))
-;; (use-package gnus-topic
-;;   :after gnus
-;;   :hook
-;;   ;; (gnus-group-mode-hook . #'gnus-topic-mode)
-;;   :defer t)
+
+(use-package gnus-topic
+  :after gnus
+  :hook
+  (gnus-group-mode-hook . #'gnus-topic-mode))
 
 (use-package evil-collection-gnus
   :after gnus
