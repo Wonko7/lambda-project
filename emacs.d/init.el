@@ -38,7 +38,6 @@
 
 (setq-default fill-column 80
               indent-tabs-mode nil
-              mode-line-format (remove '(vc-mode vc-mode) mode-line-format)
               scroll-down-aggressively 0
               scroll-up-aggressively 0)
 

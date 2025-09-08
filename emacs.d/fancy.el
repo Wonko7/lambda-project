@@ -113,6 +113,8 @@ mouse-3: Toggle minor modes"
 
 (add-to-list 'mode-line-misc-info exwm-mode-line-format t)
 
+;; mode-line-format (remove '(vc-mode vc-mode) mode-line-format)
+
 (setq mode-line-with-margin
       `(
         ;;'display '(space :width 1)
