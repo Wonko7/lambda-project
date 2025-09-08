@@ -45,18 +45,19 @@
       disabled-command-function nil
       track-eol t
       view-read-only t)
+
 (setq help-enable-variable-value-editing t)
 
 (use-package whitespace
   :demand t
+  :custom
+  (whitespace-action '(auto-cleanup))
+  (whitespace-style '(face
+                      tabs trailing
+                      empty
+                      tab-mark
+                      missing-newline-at-eof))
   :config
-  (setq whitespace-action '(auto-cleanup))
-  (setq whitespace-style
-        '(face
-          tabs trailing
-          empty
-          tab-mark
-          missing-newline-at-eof))
   (global-whitespace-mode 1))
 
 (use-package elec-pair
@@ -124,8 +125,9 @@
 (use-package pinentry
   :demand t
   :after epg
+  :custom
+  (epg-pinentry-mode 'loopback)
   :config
-  (setq epg-pinentry-mode 'loopback)
   (pinentry-start))
 
 (use-package pass)
@@ -163,11 +165,12 @@
 
 (use-package projectile
   :demand t
+  :custom
+  (projectile-project-search-path '(( "/code" . 0) ( "/work" . 0) ("/data" . 0)
+                                    ( "/code/maxi-passat" . 0)))
+  (projectile-sort-order 'recently-active)
+  (projectile-enable-caching t)
   :config
-  (setq projectile-project-search-path '(( "/code" . 0) ( "/work" . 0) ("/data" . 0)
-                                         ( "/code/maxi-passat" . 0)))
-  (setq projectile-sort-order 'recently-active)
-  (setq projectile-enable-caching t)
   (projectile-global-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
