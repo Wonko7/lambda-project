@@ -202,6 +202,12 @@
                 "/home/media/.guix-home/profile/bin/wmctrl -s " (int-to-string i))))
       (_ (exwm-workspace-switch-create i)))))
 
+(defun go-to-screen (i)
+  (pcase user-login-name
+    ("media"
+     (exwm-workspace-switch-create (+ i 10)))
+    (_ (exwm-workspace-switch-create i))))
+
 (setq exwm-input-global-keys
       `(([?\s-r] . exwm-reset)
         ([?\s-i] . exwm-input-toggle-keyboard)
@@ -249,7 +255,7 @@
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
-                        (exwm-workspace-switch-create ,i))))
+                        (go-to-screen ,i))))
                   (number-sequence 0 9))
         ,@(-map-indexed (lambda (i c)
                           `(,(kbd (format "s-%s" c)) .
