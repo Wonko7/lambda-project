@@ -586,6 +586,7 @@ current time."
 
 (use-package org-capture
   :after org
+  :hook (org-capture-mode-hook . (lambda () (evil-insert 0)))
   :config
   ;; firefox integration
   (defun transform-square-brackets-to-round-ones (string-to-transform)
@@ -717,6 +718,7 @@ current time."
                                                  "%U\n"
                                                  "** 👷 projects\n"
                                                  "** 🔥 topped\n"
+                                                 "*** %?\n"
                                                  "** 🐒 [[roam:campusing]]\n"
                                                  "** 🏥 [[roam:injuries]]"))
            :jump-to-captured t
