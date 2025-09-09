@@ -869,11 +869,58 @@ current time."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-ql
 
-(use-package org-ql)
+(use-package org-ql
+  :after org)
+
 (use-package org-ql-search
   :after org-ql
-  :commands (my/all-dailies my/recent-dailies)
+  :commands (my/all-dailies my/recent-dailies org-ql-view)
 
+  :custom
+  (org-ql-views
+   (list
+    (cons "ts-active"
+          (list :buffers-files #'my/recent-dailies
+                :query '(ts-active :from "2025-06-12")
+                :sort #'my/sort-by-filename-date))
+    (cons "ALL >7a"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (regexp "- [7-9][a-c][+]? -"))
+                :sort #'my/sort-by-filename-date))
+    (cons "recent >7a"
+          (list :buffers-files #'org-agenda-files
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (regexp "- [7-9][a-c][+]? -"))
+                :sort #'my/sort-by-filename-date))
+    (cons "recent >7b"
+          (list :buffers-files #'org-agenda-files
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (regexp "- [7][b-c][+]? -"))
+                :sort #'my/sort-by-filename-date))
+    (cons "ALL >7b"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (regexp "- [7][b-c][+]? -"))
+                :sort #'my/sort-by-filename-date))
+    (cons "Tagged as Flashed"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (tags "flash"))
+                :sort #'my/sort-by-filename-date))
+    (cons "Maybe flashed"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "witness" "bouldering" "topped" "")
+                             (regexp "flash"))
+                :sort #'my/sort-by-filename-date))
+    (cons "tv bookmarks"
+          (list :buffers-files (lambda ()
+                                 (cons
+                                  (org-roam-node-file
+                                   (org-roam-node-from-title-or-alias "foreverever"))
+                                  (my/all-dailies)))
+                :query '(and (tags "tv") (tags "bm") (not (tags "done")))
+                :sort #'my/sort-by-filename-date))))
   :config
   (defun my/sort-by-filename-date (a b)
     (cl-flet* ((get-fn (e)
@@ -893,38 +940,7 @@ current time."
     (org-ql-search-directories-files
      :directories (list (concat org-roam-directory "the-road-so-far"))))
 
-  (setq org-ql-views
-        (list
-         (cons "ts-active"
-               (list :buffers-files #'my/recent-dailies
-                     :query '(ts-active :from "2024-06-12")
-                     :sort #'my/sort-by-filename-date))
-         (cons "ALL >7a"
-               (list :buffers-files #'my/all-dailies
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7-9][a-c][+]? -"))
-                     :sort #'my/sort-by-filename-date))
-         (cons "recent >7a"
-               (list :buffers-files #'org-agenda-files
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7-9][a-c][+]? -"))
-                     :sort #'my/sort-by-filename-date))
-         (cons "recent >7b"
-               (list :buffers-files #'org-agenda-files
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
-                     :sort #'my/sort-by-filename-date))
-         (cons "ALL >7b"
-               (list :buffers-files #'my/all-dailies
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "- [7][b-c][+]? -"))
-                     :sort #'my/sort-by-filename-date))
-         (cons "Tagged as Flashed"
-               (list :buffers-files #'my/all-dailies
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (tags "flash"))
-                     :sort #'my/sort-by-filename-date))
-         (cons "Maybe flashed"
-               (list :buffers-files #'my/all-dailies
-                     :query '(and (olps "witness" "bouldering" "topped" "")  (regexp "flash"))
-                     :sort #'my/sort-by-filename-date))
-
-         )))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
