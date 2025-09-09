@@ -78,10 +78,6 @@
                                    (circular-list " ")))))
            (provide 'conf/generated-values)))))))
 
-(define-public %media-emacs-values-service
-  (make-emacs-values-service #:font-size 240
-                             #:theme "doom-outrun-electric"))
-
 (define %aliases
   `(("g"     . "git")
     ("psrg"  . "ps aux | rg -M0")
@@ -157,14 +153,8 @@
     ("DICTIONARY"          . "en_GB-ise") ;; hunspell
     ("DISPLAY"             . ":9")
     ("BLOCK_SIZE"          . "human-readable")
-    ("LIBRARY_PATH"        . "$LIBRARY_PATH:~/.guix-home/profile/lib")
-    ("C_INCLUDE_PATH"      . "$C_INCLUDE_PATH:~/.guix-home/profile/include")
-    ("LD_LIBRARY_PATH"     . "$LD_LIBRARY_PATH:~/.guix-home/profile/lib")
     ("PATH"                . "$HOME/local/bin:$PATH")
-    ;; ("PATH"                . "./_opam/bin:$PATH")
     ("GUIX_EXTRA_PROFILES" . ,%guix-extra-profiles-dir)
-    ;; ("GUILE_LOAD_COMPILED_PATH" .
-    ;;  ,(string-append %lambda-project ":/code/w7-guix-channel:/code/nonguix"))
     ("GUILE_LOAD_PATH" .
      ,(string-append %lambda-project
                      ":$HOME/.config/guix/current/share/guile/site/3.0/"
@@ -177,7 +167,7 @@
     ("LANG"                            . "en_GB.utf8")
     ("PASSWORD_STORE_DIR"              . "/data/pass")
     ("PASSWORD_STORE_GENERATED_LENGTH" . "33")
-    ;; ("PS1"                          . "is in bashrc because I want it after source /etc/bashrc")
+    ;; ("PS1"                          . "in bashrc because I want it after /etc/bashrc")
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
     ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
     ;; ("XMODIFIER"           . "@im=exwm-xim")
@@ -185,7 +175,6 @@
     ;; ("QT_IM_MODULE"        . "xim")
     ;; ("CLUTTER_IM_MODULE"   . "xim")
     ;; xorg appearance:
-    ("CALIBRE_USE_DARK_PALETTE"        . "1")
     ("GTK_THEME"                       . "Breeze-Dark")
     ;; QT: in conjunction with .config/kdeglobals further down:
     ("QT_PLUGIN_PATH"                  . "$HOME/.guix-home/profile/lib/qt6/plugins")
