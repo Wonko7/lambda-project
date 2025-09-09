@@ -102,7 +102,7 @@
     ("kys"   . "exit")))
 
 (define-public %profiles
-  ;; name, packages, pinned channel.
+  ;; ((name, packages, pinned channel))
   `(("borked" ,%borked-2025-08
      (list (channel
             (name 'guix-forge)
