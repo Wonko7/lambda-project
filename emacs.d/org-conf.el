@@ -870,19 +870,10 @@ current time."
 ;; org-ql
 
 (use-package org-ql
-  :after org)
-
-(use-package org-ql-search
-  :after org-ql
-  :commands (my/all-dailies my/recent-dailies org-ql-view)
-
+  :after org
   :custom
   (org-ql-views
    (list
-    (cons "ts-active"
-          (list :buffers-files #'my/recent-dailies
-                :query '(ts-active :from "2025-06-12")
-                :sort #'my/sort-by-filename-date))
     (cons "ALL >7a"
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "witness" "bouldering" "topped" "")
@@ -913,6 +904,10 @@ current time."
                 :query '(and (olps "witness" "bouldering" "topped" "")
                              (regexp "flash"))
                 :sort #'my/sort-by-filename-date))
+    (cons "active timestamps"
+          (list :buffers-files #'my/recent-dailies
+                :query '(ts-active :from "2025-06-12")
+                :sort #'my/sort-by-filename-date))
     (cons "tv bookmarks"
           (list :buffers-files (lambda ()
                                  (cons
@@ -920,7 +915,12 @@ current time."
                                    (org-roam-node-from-title-or-alias "foreverever"))
                                   (my/all-dailies)))
                 :query '(and (tags "tv") (tags "bm") (not (tags "done")))
-                :sort #'my/sort-by-filename-date))))
+                :sort #'my/sort-by-filename-date)))))
+
+(use-package org-ql-search
+  :after org-ql
+  :commands (my/all-dailies my/recent-dailies my/sort-by-filename-date)
+
   :config
   (defun my/sort-by-filename-date (a b)
     (cl-flet* ((get-fn (e)
@@ -938,9 +938,7 @@ current time."
 
   (defun my/recent-dailies ()
     (org-ql-search-directories-files
-     :directories (list (concat org-roam-directory "the-road-so-far"))))
-
-  )
+     :directories (list (concat org-roam-directory "the-road-so-far")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
