@@ -122,8 +122,8 @@
   ((hack-local-variables-hook . buffer-env-update)
    (utop-mode-hook . hack-dir-local-variables-non-file-buffer) ;; this one doesn't work?
    (comint-mode-hook . hack-dir-local-variables-non-file-buffer))
-  :config
-  (setq buffer-env-script-name "guix.scm"))
+  :custom
+  (buffer-env-script-name "guix.scm"))
 
 (use-package inheritenv
   :after buffer-env
@@ -133,15 +133,16 @@
 ;; I, for one, welcome our new ai overlords
 
 (use-package gptel
-  :config
-  (gptel-make-openai "llama-cpp"                  ;; Any name
-    :stream t                                     ;; Stream responses
-    :protocol "http"
-    :host "of-course-i-still-love-you.local:6060" ;; Llama.cpp server location
-    :models '(lol))
-  (setq gptel-org-convert-response t
-        gptel-default-mode #'org-mode
-        gptel-model 'lol))
+  :custom
+  (gptel-backend
+   (gptel-make-openai "skynet"
+     :stream t
+     :protocol "http"
+     :host "of-course-i-still-love-you.local:6060"
+     :models '(lol)))
+  (gptel-org-convert-response t)
+  (gptel-default-mode #'org-mode)
+  (gptel-model 'lol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql
