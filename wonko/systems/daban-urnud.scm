@@ -54,8 +54,8 @@
       (list
        (simple-service 'highdpi-bash home-bash-service-type
                        (home-bash-extension
-                        (environment-variables
-                         '(("XCURSOR_SIZE" . "16"))))))
+                         (environment-variables
+                          '(("XCURSOR_SIZE" . "16"))))))
       machine-home-services
       %vanilla-wonko-services))))
 
@@ -77,8 +77,9 @@
             (service noautostart-slim-service-type media-station-slim-config)
             (service guix-home-service-type
                      `((,(crew-name %wonko) ,%wonko-home)
-                       ;; (,(crew-name %media) ,%media-station-home)
-                       (,(crew-name %media) ,%emacs-debug-home)))
+                       (,(crew-name %media) ,%media-station-home)
+                       ;; (,(crew-name %media) ,%emacs-debug-home)
+                       ))
             (udev-rules-service 'sexy-computer (udev-rule "69-sexy-computer.rules"
                                                           "# (.)(.)\n#  8==o~~"))
             (service kmonad-service-type kmonad-laptop-config)
