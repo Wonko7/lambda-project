@@ -32,7 +32,7 @@
   #:export (%of-course-i-still-love-you-wonko-home
             %of-course-i-still-love-you-os))
 
-(use-package-modules file-systems xorg)
+(use-package-modules file-systems xorg machine-learning)
 (use-service-modules linux nfs)
 
 (define machine-home-services
@@ -112,6 +112,20 @@
     ;;   (shepherd-service ...))
     (list zfs-scan zfs-automount)))
 
+(define skynet-llm-service
+  (list
+   (shepherd-service
+     (provision '(skynet))
+     (requirement '(user-processes networking file-systems))
+     (documentation "start skynet llm")
+     (start #~(make-forkexec-constructor
+               (list (string-append #$llama-cpp "/bin/llama-server")
+                     "--host" "192.168.1.7"
+                     "--port" "6060"
+                     "-ngl" "256"
+                     "-m" "/code/llms/phi-4-q4.gguf")))
+     (stop #~(make-kill-destructor)))))
+
 (define %of-course-i-still-love-you-os
   (operating-system
     (inherit %laptop-os)
@@ -157,11 +171,9 @@
                    (,(crew-name %media) ,%media-station-home)))
         (service kmonad-service-type kmonad-ergodox-config)
         (service kmonad-service-type kmonad-bullshit-config)
-        ;; (service nfs-service-type
-        ;;          (nfs-configuration
-        ;;           (exports
-        ;;            '(("/junkyard/media"
-        ;;               "*(rw,sync,no_root_squash,no_subtree_check)")))))
+        (simple-service 'skynet-llm-service
+                        shepherd-root-service-type
+                        skynet-llm-service)
         %media-station-services)))
     (mapped-devices
      (list (mapped-device
