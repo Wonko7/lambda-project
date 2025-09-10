@@ -88,26 +88,26 @@
                           ,@%default-modules)))
     (define zfs-scan
       (shepherd-service
-       (provision '(zfs-scan))
-       (documentation "Scans for ZFS pools.")
-       (requirement '(kernel-module-loader udev))
-       (modules scheme-modules)
-       (start #~(lambda _
-                  (invoke/quiet #$zpool "import" "-a" "-N")))
-       (stop #~(const #f))))
+        (provision '(zfs-scan))
+        (documentation "Scans for ZFS pools.")
+        (requirement '(kernel-module-loader udev))
+        (modules scheme-modules)
+        (start #~(lambda _
+                   (invoke/quiet #$zpool "import" "-a" "-N")))
+        (stop #~(const #f))))
     (define zfs-automount
       (shepherd-service
-       (provision '(zfs-automount))
-       (documentation "Automounts ZFS data sets.")
-       (requirement '(zfs-scan))
-       (modules scheme-modules)
-       (start #~(lambda _
-                  (with-output-to-port (current-error-port)
-                    (lambda ()
-                      (invoke #$zfs "mount" "-a" "-l")))))
-       (stop #~(lambda _
-                 (chdir "/")
-                 (invoke/quiet #$zfs "unmount" "-a" "-f") #f))))
+        (provision '(zfs-automount))
+        (documentation "Automounts ZFS data sets.")
+        (requirement '(zfs-scan))
+        (modules scheme-modules)
+        (start #~(lambda _
+                   (with-output-to-port (current-error-port)
+                     (lambda ()
+                       (invoke #$zfs "mount" "-a" "-l")))))
+        (stop #~(lambda _
+                  (chdir "/")
+                  (invoke/quiet #$zfs "unmount" "-a" "-f") #f))))
     ;; (define zfs-zed
     ;;   (shepherd-service ...))
     (list zfs-scan zfs-automount)))
@@ -124,19 +124,19 @@
                (operating-system-packages %laptop-os)))
     (services
      (let ((xorg-cfg (xorg-configuration
-                       (keyboard-layout %us-kb)
-                       (modules (filter
-                                 (lambda (p)
-                                   ;; remove amdgpu and non supported by current-system
-                                   (and (not (equal? p xf86-video-amdgpu))
-                                        (member (%current-system)
-                                                (package-supported-systems p))))
-                                 %default-xorg-modules))
-                       (extra-config '("Section \"Device\"\n"
-                                       "  Identifier \"Card1\"\n"
-                                       "  Option \"SWcursor\"\n"
-                                       "  Option \"AsyncFlipSecondaries\" \"false\"\n"
-                                       "EndSection\n")))))
+                      (keyboard-layout %us-kb)
+                      (modules (filter
+                                (lambda (p)
+                                  ;; remove amdgpu and non supported by current-system
+                                  (and (not (equal? p xf86-video-amdgpu))
+                                       (member (%current-system)
+                                               (package-supported-systems p))))
+                                %default-xorg-modules))
+                      (extra-config '("Section \"Device\"\n"
+                                      "  Identifier \"Card1\"\n"
+                                      "  Option \"SWcursor\"\n"
+                                      "  Option \"AsyncFlipSecondaries\" \"false\"\n"
+                                      "EndSection\n")))))
        (cons*
         (simple-service 'zfs-loader kernel-module-loader-service-type '("zfs"))
         (simple-service 'zfs-shepherd-services
@@ -146,12 +146,12 @@
                         user-processes-service-type
                         '(zfs-automount))
         (service slim-service-type (slim-configuration
-                                     (inherit wonko-slim-config)
-                                     (xorg-configuration xorg-cfg)))
+                                    (inherit wonko-slim-config)
+                                    (xorg-configuration xorg-cfg)))
         (service slim-service-type (slim-configuration
-                                     (inherit media-station-slim-config)
-                                     (xorg-configuration xorg-cfg)
-                                     (auto-login? #t)))
+                                    (inherit media-station-slim-config)
+                                    (xorg-configuration xorg-cfg)
+                                    (auto-login? #t)))
         (service guix-home-service-type
                  `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
                    (,(crew-name %media) ,%media-station-home)))
@@ -165,9 +165,9 @@
         %media-station-services)))
     (mapped-devices
      (list (mapped-device
-             (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
-             (target "vault")
-             (type luks-device-mapping))))
+            (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
+            (target "vault")
+            (type luks-device-mapping))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*
