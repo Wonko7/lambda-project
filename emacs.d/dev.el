@@ -142,7 +142,11 @@
      :models '(lol)))
   (gptel-org-convert-response t)
   (gptel-default-mode #'org-mode)
-  (gptel-model 'lol))
+  (gptel-model 'lol)
+  :config
+  (general-evil-define-key '(normal) gptel-mode-map
+    :prefix "RET"
+    "RET" #'gptel-send))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; sql

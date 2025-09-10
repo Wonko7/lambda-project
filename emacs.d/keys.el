@@ -45,12 +45,14 @@
     "ap"  #'proced
     "aE"  #'eww-search-words
     ;; external apps
-    "aa"  '("More apps" . (keymap))
-    "aab" #'bluetooth-list-devices
-    "aaT" (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
-    "aat" #'transmission
-    "aac" (lambda () (interactive) (my/local-async-shell-command "calibre"))
-    "aap" (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
+    "aa"    '("More apps" . (keymap))
+    "aab"   #'bluetooth-list-devices
+    "aaT"   (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
+    "aat"   #'transmission
+    "aac"   (lambda () (interactive) (my/local-async-shell-command "calibre"))
+    "aap"   (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
+    "aallm" #'gptel
+    "aai"   #'gptel
     ;; browsers
     "aB"  '("Browsers" . (keymap))
     "aBf" (lambda () (interactive) (my/local-async-shell-command "firefox"))
@@ -205,7 +207,6 @@
 
     ;; xorg stuff
     "z"  '("Xorg desktop things" . (keymap))
-    "zai" #'gptel-send ;; meh
     "zz"  (lambda () (interactive) (my/local-async-shell-command my/lock-cmd))
     "zl"  #'scroll-lock-mode
     "z'"  '("Notifications" . (keymap))
