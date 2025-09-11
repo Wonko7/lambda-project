@@ -52,7 +52,6 @@
    %default-channels))
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
-  ;; this works but only with emacs-next + tramp workaround.
   (list (channel
          (name 'guix-forge)
          (url "https://git.systemreboot.net/guix-forge/")

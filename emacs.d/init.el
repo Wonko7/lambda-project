@@ -408,35 +408,36 @@ This function could be in the list `comint-output-filter-functions'."
   ;; FIXME/workaround bug introduced with guix's emacs 31.
   ;; without this tramp complains about not finding a suitable ls.
   ;; tl;dr s/command/which/
-  (defun tramp-find-executable
-      (vec progname dirlist &optional ignore-tilde ignore-path)
-    "Search for PROGNAME in $PATH and all directories mentioned in DIRLIST.
-First arg VEC specifies the connection, PROGNAME is the program
-to search for, and DIRLIST gives the list of directories to
-search.  If IGNORE-TILDE is non-nil, directory names starting
-with \"~\" will be ignored.  If IGNORE-PATH is non-nil, searches
-only in DIRLIST.
+  ;; (defun tramp-find-executable
+  ;;       (vec progname dirlist &optional ignore-tilde ignore-path)
+  ;;     "Search for PROGNAME in $PATH and all directories mentioned in DIRLIST.
+  ;; First arg VEC specifies the connection, PROGNAME is the program
+  ;; to search for, and DIRLIST gives the list of directories to
+  ;; search.  If IGNORE-TILDE is non-nil, directory names starting
+  ;; with \"~\" will be ignored.  If IGNORE-PATH is non-nil, searches
+  ;; only in DIRLIST.
 
-Returns the absolute file name of PROGNAME, if found, and nil otherwise.
+  ;; Returns the absolute file name of PROGNAME, if found, and nil otherwise.
 
-This function expects to be in the right *tramp* buffer."
-    (unless ignore-path
-      (setq dirlist (cons "$PATH" dirlist)))
-    (when ignore-tilde
-      ;; Remove all ~/foo directories from dirlist.
-      (let (newdl d)
-        (while dirlist
-	  (setq d (car dirlist)
-	        dirlist (cdr dirlist))
-	  (unless (char-equal ?~ (aref d 0))
-	    (setq newdl (cons d newdl))))
-        (setq dirlist (nreverse newdl))))
-    (when (tramp-send-command-and-check
-           vec (format "(unalias %s; %s which %s)" ;; this works in emacs 31
-                       progname
-                       (if dirlist (concat "PATH=" (string-join dirlist ":")) "")
-                       progname))
-      (string-trim (tramp-get-buffer-string (tramp-get-connection-buffer vec))))))
+  ;; This function expects to be in the right *tramp* buffer."
+  ;;     (unless ignore-path
+  ;;       (setq dirlist (cons "$PATH" dirlist)))
+  ;;     (when ignore-tilde
+  ;;       ;; Remove all ~/foo directories from dirlist.
+  ;;       (let (newdl d)
+  ;;         (while dirlist
+  ;; 	  (setq d (car dirlist)
+  ;; 	        dirlist (cdr dirlist))
+  ;; 	  (unless (char-equal ?~ (aref d 0))
+  ;; 	    (setq newdl (cons d newdl))))
+  ;;         (setq dirlist (nreverse newdl))))
+  ;;     (when (tramp-send-command-and-check
+  ;;            vec (format "(unalias %s; %s which %s)" ;; this works in emacs 31
+  ;;                        progname
+  ;;                        (if dirlist (concat "PATH=" (string-join dirlist ":")) "")
+  ;;                        progname))
+  ;;       (string-trim (tramp-get-buffer-string (tramp-get-connection-buffer vec)))))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
