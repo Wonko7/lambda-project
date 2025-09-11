@@ -78,6 +78,27 @@
                                    (circular-list " ")))))
            (provide 'conf/generated-values)))))))
 
+(define-public %profiles
+  ;; ((name, packages, pinned channel))
+  `(("borked" ,%borked-2025-08
+     (list (channel
+            (name 'guix)
+            (url "https://codeberg.org/guix/guix-mirror")
+            (branch "master")
+            (commit
+             "894625f5e8722516bf7d65e82b8dba32c267353c")
+            (introduction
+             (make-channel-introduction
+              "9edb3f66fd807b096b48283debdcddccfea34bad"
+              (openpgp-fingerprint
+               "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))))
+
+(define-public (profiles->names ps)
+  (map car ps))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; bash
+
 (define %aliases
   `(("g"     . "git")
     ("psrg"  . "ps aux | rg -M0")
@@ -100,27 +121,6 @@
     ("ip"    . "ip -c -h")
     ("v"     . "vim")
     ("kys"   . "exit")))
-
-(define-public %profiles
-  ;; ((name, packages, pinned channel))
-  `(("borked" ,%borked-2025-08
-     (list (channel
-            (name 'guix)
-            (url "https://codeberg.org/guix/guix-mirror")
-            (branch "master")
-            (commit
-             "894625f5e8722516bf7d65e82b8dba32c267353c")
-            (introduction
-             (make-channel-introduction
-              "9edb3f66fd807b096b48283debdcddccfea34bad"
-              (openpgp-fingerprint
-               "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))))
-
-(define-public (profiles->names ps)
-  (map car ps))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; bash
 
 (define-public %wonko-env
   `(("HISTFILESIZE"        . "100000")
@@ -193,49 +193,49 @@
       "bind '\"jj\":vi-movement-mode'\n")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; skeleton config: needs emacs-values & x-config before being used
+;; shepherd
 
 (define-public %common-shepherd-wonko-services
   (list
    (shepherd-service
-     (provision '(picom))
-     (start #~(make-forkexec-constructor
-               (list #$(file-append picom "/bin/picom")
-                     "--backend=glx"
-                     "--corner-radius=20" ;; --rounded-corners-exclude
-                     "--opacity-rule=10:name *= 'oneko'")
-               #:log-file #$(home-log-path "picom")))
-     (stop #~(make-kill-destructor))
-     (documentation "bling"))
+    (provision '(picom))
+    (start #~(make-forkexec-constructor
+              (list #$(file-append picom "/bin/picom")
+                    "--backend=glx"
+                    "--corner-radius=20" ;; --rounded-corners-exclude
+                    "--opacity-rule=10:name *= 'oneko'")
+              #:log-file #$(home-log-path "picom")))
+    (stop #~(make-kill-destructor))
+    (documentation "bling"))
    (shepherd-service
-     (provision '(pantalaimon))
-     (start #~(make-forkexec-constructor
-               (list "/run/current-system/comms-profile/bin/pantalaimon")
-               #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
-                                        "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
-                                        (default-environment-variables))
-               #:log-file #$(home-log-path "matrix")))
-     (stop #~(make-kill-destructor))
-     (documentation "Crypto back-end server for ement.el"))
+    (provision '(pantalaimon))
+    (start #~(make-forkexec-constructor
+              (list "/run/current-system/comms-profile/bin/pantalaimon")
+              #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
+                                       "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
+                                       (default-environment-variables))
+              #:log-file #$(home-log-path "matrix")))
+    (stop #~(make-kill-destructor))
+    (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
-     (provision '(dunst))
-     (start #~(make-forkexec-constructor
-               (list #$(file-append dunst "/bin/dunst"))
-               #:log-file #$(home-log-path "dunst")))
-     (stop #~(make-kill-destructor))
-     (documentation "riced notifications"))
+    (provision '(dunst))
+    (start #~(make-forkexec-constructor
+              (list #$(file-append dunst "/bin/dunst"))
+              #:log-file #$(home-log-path "dunst")))
+    (stop #~(make-kill-destructor))
+    (documentation "riced notifications"))
    (shepherd-service
-     (provision '(guix-repl))
-     (start #~(make-forkexec-constructor
-               (list ;; a case could be made for /run/current-system/profile/bin/guix
-                (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
-                ;; "/home/wonko/.config/guix/current/bin/guix"
-                "repl" "--listen=tcp:37146")
-               #:environment-variables (cons "INSIDE_EMACS=1"
-                                             (default-environment-variables))
-               #:log-file #$(home-log-path "guix-repl")))
-     (stop #~(make-kill-destructor))
-     (documentation "REPL to me, like lovers do"))))
+    (provision '(guix-repl))
+    (start #~(make-forkexec-constructor
+              (list ;; a case could be made for /run/current-system/profile/bin/guix
+               (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
+               ;; "/home/wonko/.config/guix/current/bin/guix"
+               "repl" "--listen=tcp:37146")
+              #:environment-variables (cons "INSIDE_EMACS=1"
+                                            (default-environment-variables))
+              #:log-file #$(home-log-path "guix-repl")))
+    (stop #~(make-kill-destructor))
+    (documentation "REPL to me, like lovers do"))))
 
 (define-public %vanilla-shepherd-wonko-service
   (service
@@ -292,6 +292,9 @@
        (documentation "can't be arsed to move IRL"))
       %common-shepherd-wonko-services)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; xsession
+
 (define* (make-xsession #:key
                         (media-station? #f))
   (simple-service
@@ -314,6 +317,9 @@
                     #~(string-append #$xset "/bin/xset s off -dpms;")
                     #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
               "exec " #$emacs-exwm-custom-emacs "/bin/exwm"))))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dotfiles
 
 (define-public %common-wonko-services ;; shell, emacs, dotfiles
   (cons*
@@ -630,9 +636,17 @@
                    (dunst-configuration %font dunst-font-sz dunst-width))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; skeleton: just needs x-config
+;; vanilla
 
-(define-public %skeleton-wonko-home
+(define-public %vanilla-wonko-services
+  (cons*
+   (make-emacs-values-service)
+   %vanilla-shepherd-wonko-service
+   (make-font-dep-configs)
+   (make-xsession)
+   %common-wonko-services))
+
+(define-public %vanilla-wonko-home
   (home-environment
    (packages
     (append
@@ -650,25 +664,6 @@
       dunst
       ;; yes also man pages plz
       man-db)))
-   (services
-    (cons*
-     (make-xsession)
-     %common-wonko-services))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; vanilla
-
-(define-public %vanilla-wonko-services
-  (cons*
-   (make-emacs-values-service)
-   %vanilla-shepherd-wonko-service
-   (make-font-dep-configs)
-   (make-xsession)
-   %common-wonko-services))
-
-(define-public %vanilla-wonko-home
-  (home-environment
-   (inherit %skeleton-wonko-home)
    (services %vanilla-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -734,7 +729,7 @@
 
 (define-public %media-station-wonko-home
   (home-environment
-   (inherit %skeleton-wonko-home)
+   (inherit %vanilla-wonko-home)
    (services %media-station-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
