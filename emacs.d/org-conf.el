@@ -464,9 +464,10 @@ EXTRA-FILES can be used to append extra files to the list."
         ;; ┋┇ ;; ┃ ;; /;;⋮ ;; | ;; ?│
         ;; ▦ ;; ◼ ;; ▪ ;; ?√ ;; ?◉ ;; ⊘ ;; ◉ ;; ?•
         ;; □ ;; □ ;; ◌ ;; ?○
+        ;; org-habit-today-glyph ?┋
         org-habit-completed-glyph ?●
         org-habit-clear-glyph ?○
-        org-habit-today-glyph ?┋)
+        org-habit-today-glyph ?│)
 
   ;; red boys:
   (set-face-attribute 'org-habit-overdue-face nil :foreground "red")
