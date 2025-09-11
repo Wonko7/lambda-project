@@ -252,64 +252,34 @@ EXTRA-FILES can be used to append extra files to the list."
                                        (alltodo "" )))
                                      ("z" "Super zaen view"
                                       ((agenda "" )
-                                       (alltodo "=" ((org-agenda-overriding-header "")
-                                                     (org-super-agenda-groups
-                                                      '((:name "🤸 [wtf] focus"
-                                                               :and (:tag "wtf" :tag "focus")
-                                                               :order 80)
-                                                        (:name "❤️ fam"
-                                                               :and (:tag "ssdd" :tag "fam")
-                                                               :order 90)
-                                                        (:name "🌄 ssdd"
-                                                               :and (:tag "ssdd" :tag "tt")
-                                                               :order 90)
-                                                        (:name "🐫 [ssdd][work] ocsigen labs"
-                                                               :and (:tag "ssdd" :tag "work" :tag "ol")
-                                                               :order 100)
-                                                        (:name "☮️ [ssdd][work] ivehte"
-                                                               :and (:tag "ssdd" :tag "work" :tag "iv")
-                                                               :order 101)
-                                                        (:name "☮️ [ssdd][work] kimesuis"
-                                                               :and (:tag "ssdd" :tag "work" :tag "ks")
-                                                               :order 102)
-                                                        (:name "☮️ [ssdd][work] entreprise individuelle"
-                                                               :and (:tag "ssdd" :tag "work" :tag "ei")
-                                                               :order 103)
-                                                        (:name "👑 king line hit list"
-                                                               :tag ("kl")
-                                                               :order 110)
-                                                        (:name "🌠 .*"
-                                                               :order 999
-                                                               :anything t)
-                                                        ;; (:name "fun maximization"
-                                                        ;;        :tag ("fun")
-                                                        ;;        :order 40)
-                                                        ;; (:name "wtf"
-                                                        ;;        :tag ("wtf")
-                                                        ;;        :order 520)
-                                                        ;; (:name "innerspace"
-                                                        ;;        :tag ("is" "h" "habit" "focus")
-                                                        ;;        :order 600)
-                                                        ;; (:name "review"
-                                                        ;;        :tag ("review" "r")
-                                                        ;;        :order 70)
-                                                        ;; (:name "next steps"
-                                                        ;;        :tag "next"
-                                                        ;;        :order 80)
-                                                        ;; (:name "Projects"
-                                                        ;;        :todo "PROJ"
-                                                        ;;        :order 90)
-                                                        ;; ;;(:name "don't be a cunt"
-                                                        ;; ;;       :tag "dbac"
-                                                        ;; ;;       :order 100)
-                                                        ;; (:name "repeat after me"
-                                                        ;;  :order 9
-                                                        ;;  :habit t
-                                                        ;;  )
-                                                        ;;(:name ".*"
-                                                        ;;       :order 999
-                                                        ;;       :anything t)
-                                                        ))))))))
+                                       (alltodo
+                                        "="
+                                        ((org-agenda-overriding-header "")
+                                         (org-super-agenda-groups
+                                          '((:name "🤸 [wtf] focus"
+                                                   :and (:tag "wtf" :tag "focus")
+                                                   :order 80)
+                                            (:name "❤️ fam"
+                                                   :and (:tag "ssdd" :tag "fam")
+                                                   :order 90)
+                                            (:name "🌄 ssdd"
+                                                   :and (:tag "ssdd" :tag "tt")
+                                                   :order 90)
+                                            (:name "🐫 [ssdd][work] ocsigen labs"
+                                                   :and (:tag "ssdd" :tag "work" :tag "ol")
+                                                   :order 100)
+                                            (:name "🐝️ [ssdd][work] ivehte"
+                                                   :and (:tag "ssdd" :tag "work" :tag "iv")
+                                                   :order 101)
+                                            (:name "👾️ [ssdd][work] entreprise individuelle"
+                                                   :and (:tag "ssdd" :tag "work" :tag "ei")
+                                                   :order 103)
+                                            (:name "👑 king line hit list"
+                                                   :tag ("kl")
+                                                   :order 110)
+                                            (:name "🌠 .*"
+                                                   :order 999
+                                                   :anything t)))))))))
 
   ;; moon phases: https://topikettunen.com/blog/emacs-org-agenda-lunar-phases/
   (require 'cl-lib)
