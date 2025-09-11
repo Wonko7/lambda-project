@@ -19,71 +19,94 @@
                           '("wip/" "work/" "wtf/" "the-road-so-far/")))
   (setq org-roam-dailies-directory "the-road-so-far")
 
+  :custom
+  (org-startup-indented t)
+  ;; FIXME fix this with guix magic:
+  (org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'"))
+  (org-startup-folded 'content)
+  (org-todo-keywords '((sequence
+                        "NEXT(n/!)" ;; A task that recuring
+                        "TODO(t)"   ;; A task that needs doing & is ready to do
+                        "PROJ(p)"   ;; A project, which usually contains other tasks
+                        "GOGO(g/!)" ;; A task that is in progress
+                        "WAIT(w/!)" ;; Something external is holding up this task
+                        "HOLD(h/!)" ;; This task is paused/on hold because of me
+                        "ADD(a)"    ;; Add
+                        "FIX(f)"    ;; Fix
+                        "BUG(b)"    ;; Bug
+                        "|"
+                        "DONE(d/!)" ;; Task successfully completed
+                        "KILL(k)")  ;; Task was cancelled, aborted or is no longer applicable
+                       (sequence
+                        "[ ](T)" ;; A task that needs doing
+                        "[-](G)" ;; Task is in progress
+                        "[?](W)" ;; Task is being held up or paused
+                        "|"
+                        "[X](D)"))) ;; Task was completed
+  (org-todo-keyword-faces '(("[-]"  . +org-todo-active)
+                            ("NEXT" . +org-todo-active)
+                            ("GOGO" . +org-todo-active)
+                            ("[?]"  . +org-todo-onhold)
+                            ("WAIT" . +org-todo-onhold)
+                            ("HOLD" . +org-todo-onhold)
+                            ("PROJ" . +org-todo-project)))
+
+  ;; agenda/cal dates:
+  (org-extend-today-until              3)
+  (org-agenda-start-on-weekday         1)
+  (calendar-week-start-day             1)
+  (org-log-into-drawer                 t)
+  (org-auto-align-tags                 t)
+  (org-tags-column                     -80)
+  (org-edit-timestamp-down-means-later t)
+  (org-use-sub-superscripts            "{}")
+
+  ;; babel
+  (org-confirm-babel-evaluate nil)
+
+  ;; behaviour
+  (org-catch-invisible-edits 'show-and-error)
+  (org-insert-heading-respect-content t)
+  (org-indent-mode t)
+  ;; org-special-ctrl-a/e t
+  ;; org styling, hide markup etc.
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis "…")
+
+  ;; html export
+  (org-html-postamble nil)
+  (org-footnote-section nil)
+  (org-html-footnotes-section "<div id=\"footnotes\">
+<!--
+<h2 class=\"footnotes\">%s: </h2>
+-->
+<br><br>
+<div id=\"text-footnotes\">
+%s
+</div>
+</div>")
+
   :config
+  (defun my/align-org-tags ()
+    (interactive)
+    (org-align-tags t))
+
   (add-hook 'org-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'my/align-org-tags nil 'local)))
-  ;; FIXME review this:
-  (setq
-   org-catch-invisible-edits 'show-and-error
-   ;; org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
-   org-indent-mode t
 
-   ;; org styling, hide markup etc.
-   org-hide-emphasis-markers t
-   org-pretty-entities t
-   org-ellipsis "…")
   (defface +org-todo-active
     '((t (:inherit link :underline nil)))
     "active todo")
+
   (defface +org-todo-onhold
     '((t (:inherit default :foreground "brown")))
     "active todo")
+
   (set-face-attribute 'org-tag nil :foreground "#EB64B9")
   (set-face-attribute 'org-tag nil :box t)
-  (setq org-startup-indented t
-        ;; FIXME fix this with guix magic:
-        org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'")
-        org-startup-folded 'content
-        org-todo-keywords
-        '((sequence
-           "NEXT(n/!)" ;; A task that recuring
-           "TODO(t)"   ;; A task that needs doing & is ready to do
-           "PROJ(p)"   ;; A project, which usually contains other tasks
-           "GOGO(g/!)" ;; A task that is in progress
-           "WAIT(w/!)" ;; Something external is holding up this task
-           "HOLD(h/!)" ;; This task is paused/on hold because of me
-           "ADD(a)"    ;; Add
-           "FIX(f)"    ;; Fix
-           "BUG(b)"    ;; Bug
-           "|"
-           "DONE(d/!)" ;; Task successfully completed
-           "KILL(k)")  ;; Task was cancelled, aborted or is no longer applicable
-          (sequence
-           "[ ](T)" ;; A task that needs doing
-           "[-](G)" ;; Task is in progress
-           "[?](W)" ;; Task is being held up or paused
-           "|"
-           "[X](D)")) ;; Task was completed
-        org-todo-keyword-faces
-        '(("[-]"  . +org-todo-active)
-          ("NEXT" . +org-todo-active)
-          ("GOGO" . +org-todo-active)
-          ("[?]"  . +org-todo-onhold)
-          ("WAIT" . +org-todo-onhold)
-          ("HOLD" . +org-todo-onhold)
-          ("PROJ" . +org-todo-project))
 
-        ;; agenda/cal dates:
-        org-extend-today-until              3
-        org-agenda-start-on-weekday         1
-        calendar-week-start-day             1
-        org-log-into-drawer                 t
-        org-auto-align-tags                 t
-        org-tags-column                     -80
-        org-edit-timestamp-down-means-later t
-        org-use-sub-superscripts            "{}")
   (general-evil-define-key '(insert) org-mode-map
     "TAB"   #'completion-at-point
     "C-l"   #'org-demote-subtree
@@ -138,26 +161,7 @@
      (shell . t)
      (sql . t)
      (ocaml . t)
-     (org . t)))
-  (setq org-confirm-babel-evaluate nil)
-
-  ;; html export
-  (setq org-html-postamble nil)
-  (setq org-footnote-section nil)
-  (setq org-html-footnotes-section
-        "<div id=\"footnotes\">
-<!--
-<h2 class=\"footnotes\">%s: </h2>
--->
-<br><br>
-<div id=\"text-footnotes\">
-%s
-</div>
-</div>")
-
-  (defun my/align-org-tags ()
-    (interactive)
-    (org-align-tags t)))
+     (org . t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
@@ -165,10 +169,11 @@
 (use-package org-roam
   :after org
   :commands (org-roam-node-open)
+  :custom
+  (org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
+  (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-completion-everywhere t)
   :config
-  (setq org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (setq org-roam-completion-everywhere t)
   (org-roam-db-autosync-mode))
 
 (use-package org-roam-dailies
@@ -211,76 +216,96 @@ EXTRA-FILES can be used to append extra files to the list."
 
 (use-package org-agenda
   :after org
+  :custom
+  (org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
+  (org-agenda-prefix-format (quote
+                             ((agenda . "%-21c%?-12t% s")
+                              (timeline . "% s")
+                              (todo . "%-21c")
+                              (tags . "%-12c")
+                              (search . "%-12c"))))
+  (org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " "")))
+  (org-agenda-scheduled-leaders (quote ("" "S%3d: ")))
+  (org-agenda-compact-blocks t)
+  ;; agenda styling
+  (org-agenda-block-separator ?─)
+  (org-agenda-span 15)
+  (org-agenda-start-with-log-mode t)
+  (org-agenda-skip-scheduled-if-done t)
+  (org-agenda-skip-deadline-if-done t)
+  (org-agenda-include-deadlines t)
+  (org-agenda-tags-column my/org-agenda-tags-column)
+  (org-agenda-custom-commands '(("c" "Simple agenda view"
+                                 ((agenda "")
+                                  (alltodo "" )))
+                                ("z" "Super zaen view"
+                                 ((agenda "" )
+                                  (alltodo
+                                   "="
+                                   ((org-agenda-overriding-header "")
+                                    (org-super-agenda-groups
+                                     '((:name "🤸 [wtf] focus"
+                                              :and (:tag "wtf" :tag "focus")
+                                              :order 80)
+                                       (:name "❤️ fam"
+                                              :and (:tag "ssdd" :tag "fam")
+                                              :order 90)
+                                       (:name "🌄 ssdd"
+                                              :and (:tag "ssdd" :tag "tt")
+                                              :order 90)
+                                       (:name "🐫 [ssdd][work] ocsigen labs"
+                                              :and (:tag "ssdd" :tag "work" :tag "ol")
+                                              :order 100)
+                                       (:name "🐝️ [ssdd][work] ivehte"
+                                              :and (:tag "ssdd" :tag "work" :tag "iv")
+                                              :order 101)
+                                       (:name "👾️ [ssdd][work] entreprise individuelle"
+                                              :and (:tag "ssdd" :tag "work" :tag "ei")
+                                              :order 103)
+                                       (:name "👑 king line hit list"
+                                              :tag ("kl")
+                                              :order 110)
+                                       (:name "🌠 .*"
+                                              :order 999
+                                              :anything t))))))))))
+
+(use-package holidays
+  :after org-agenda
+  :demand t
+  :custom
+  (calendar-holidays
+   `((holiday-fixed 1 1 "🎆 Jour de l'an")
+     (holiday-fixed 1 6 "👑 Épiphanie")
+     (holiday-fixed 2 2 "🥞 Chandeleur")
+     (holiday-fixed 2 14 "💜 Saint Valentin")
+     (holiday-fixed 5 1 "📅 Fête du travail")
+     (holiday-fixed 5 8 "🕊️ Commémoration de la capitulation de l'Allemagne en 1945")
+     (holiday-fixed 6 21 "🎶 Fête de la musique")
+     (holiday-fixed 7 14 "🎆 Fête nationale - Prise de la Bastille")
+     (holiday-fixed 8 15 "👼 Assomption (Religieux)")
+     (holiday-fixed 9 11 "✈️ jet fuel can't melt steel beams")
+     (holiday-fixed 10 31 "🎃️ Halloween")
+     (holiday-fixed 11 11 "🕊️ Armistice de 1918")
+     (holiday-fixed 11 1 "👼 Toussaint")
+     (holiday-fixed 11 2 "💀 Commémoration des fidèles défunts")
+     (holiday-fixed 12 25 "🎄 Noël")
+     ;; fetes a date variable
+     (holiday-easter-etc 0 "🧟 Pâques")
+     (holiday-easter-etc 1 "🧟 Lundi de Pâques")
+     (holiday-easter-etc 39 "👼 Ascension")
+     (holiday-easter-etc 49 "👻 Pentecôte")
+     (holiday-easter-etc -47 "🤡 Mardi gras")
+     (if (not (equal (calendar-nth-named-day -1 0 5 displayed-year)
+                     (caar (holiday-easter-etc 49))))
+         (holiday-float 5 0 -1 "👒 Fête des mères")
+       (holiday-float 6 0 1 "👒 Fête des mères"))
+     ;; dernier dimanche de mai ou premier dimanche de juin si c'est le
+     ;; même jour que la pentecôte TODO
+     (holiday-float 6 0 3 "🎩 Fête des pères"))) ;; troisième dimanche de juin
+  (diary-show-holidays-flag t)
+  (org-agenda-include-diary t)
+
   :config
-  (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'"
-        org-agenda-prefix-format (quote
-                                  ((agenda . "%-21c%?-12t% s")
-                                   (timeline . "% s")
-                                   (todo . "%-21c")
-                                   (tags . "%-12c")
-                                   (search . "%-12c")))
-        org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " ""))
-        org-agenda-scheduled-leaders (quote ("" "S%3d: "))
-        org-agenda-compact-blocks t
-        ;; agenda styling
-        org-agenda-block-separator ?─
-        ;; org-agenda-time-grid
-        ;; '((daily today require-timed)
-        ;;   (800 1000 1200 1400 1600 1800 2000)
-        ;;   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-        ;; org-agenda-current-time-string
-        ;; "⭠ now ─────────────────────────────────────────────────"
-        org-agenda-span 15
-        ;; (setq org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
-        ;;       org-agenda-skip-scheduled-if-done t
-        ;;       org-agenda-skip-deadline-if-done t
-        ;;       org-agenda-include-deadlines t
-        ;;       org-agenda-block-separator nil
-        ;;       org-agenda-compact-blocks t
-        ;;       org-agenda-start-with-log-mode t)
-        ;;
-
-        ;;       org-agenda-start-with-log-mode t)
-        org-agenda-start-with-log-mode t
-        org-agenda-skip-scheduled-if-done t
-        org-agenda-skip-deadline-if-done t
-        org-agenda-include-deadlines t
-        org-agenda-tags-column       my/org-agenda-tags-column
-
-        org-agenda-custom-commands '(("c" "Simple agenda view"
-                                      ((agenda "")
-                                       (alltodo "" )))
-                                     ("z" "Super zaen view"
-                                      ((agenda "" )
-                                       (alltodo
-                                        "="
-                                        ((org-agenda-overriding-header "")
-                                         (org-super-agenda-groups
-                                          '((:name "🤸 [wtf] focus"
-                                                   :and (:tag "wtf" :tag "focus")
-                                                   :order 80)
-                                            (:name "❤️ fam"
-                                                   :and (:tag "ssdd" :tag "fam")
-                                                   :order 90)
-                                            (:name "🌄 ssdd"
-                                                   :and (:tag "ssdd" :tag "tt")
-                                                   :order 90)
-                                            (:name "🐫 [ssdd][work] ocsigen labs"
-                                                   :and (:tag "ssdd" :tag "work" :tag "ol")
-                                                   :order 100)
-                                            (:name "🐝️ [ssdd][work] ivehte"
-                                                   :and (:tag "ssdd" :tag "work" :tag "iv")
-                                                   :order 101)
-                                            (:name "👾️ [ssdd][work] entreprise individuelle"
-                                                   :and (:tag "ssdd" :tag "work" :tag "ei")
-                                                   :order 103)
-                                            (:name "👑 king line hit list"
-                                                   :tag ("kl")
-                                                   :order 110)
-                                            (:name "🌠 .*"
-                                                   :order 999
-                                                   :anything t)))))))))
-
   ;; moon phases: https://topikettunen.com/blog/emacs-org-agenda-lunar-phases/
   (require 'cl-lib)
 
@@ -299,77 +324,39 @@ EXTRA-FILES can be used to append extra files to the list."
                                 "🌗 Last Quarter Moon")))
       (when phase
         ;; Return the phase to the agenda file.
-        (setq ret (concat (lunar-phase-name (nth 2 phase)))))))
-
-  ;; https://www.emacswiki.org/emacs/french-holidays.el
-  ;; holidays:
-  (require 'holidays)
-
-  (defvar holiday-french-holidays nil
-    "French holidays")
-
-  (setq holiday-french-holidays
-        `((holiday-fixed 1 1 "🎆 Jour de l'an")
-          (holiday-fixed 1 6 "👑 Épiphanie")
-          (holiday-fixed 2 2 "🥞 Chandeleur")
-          (holiday-fixed 2 14 "💜 Saint Valentin")
-          (holiday-fixed 5 1 "📅 Fête du travail")
-          (holiday-fixed 5 8 "🕊️ Commémoration de la capitulation de l'Allemagne en 1945")
-          (holiday-fixed 6 21 "🎶 Fête de la musique")
-          (holiday-fixed 7 14 "🎆 Fête nationale - Prise de la Bastille")
-          (holiday-fixed 8 15 "👼 Assomption (Religieux)")
-          (holiday-fixed 9 11 "✈️ jet fuel can't melt steel beams")
-          (holiday-fixed 10 31 "🎃️ Halloween")
-          (holiday-fixed 11 11 "🕊️ Armistice de 1918")
-          (holiday-fixed 11 1 "👼 Toussaint")
-          (holiday-fixed 11 2 "💀 Commémoration des fidèles défunts")
-          (holiday-fixed 12 25 "🎄 Noël")
-          ;; fetes a date variable
-          (holiday-easter-etc 0 "🧟 Pâques")
-          (holiday-easter-etc 1 "🧟 Lundi de Pâques")
-          (holiday-easter-etc 39 "👼 Ascension")
-          (holiday-easter-etc 49 "👻 Pentecôte")
-          (holiday-easter-etc -47 "🤡 Mardi gras")
-          (if (not (equal (calendar-nth-named-day -1 0 5 displayed-year)
-                          (caar (holiday-easter-etc 49))))
-              (holiday-float 5 0 -1 "👒 Fête des mères")
-            (holiday-float 6 0 1 "👒 Fête des mères"))
-          ;; dernier dimanche de mai ou premier dimanche de juin si c'est le
-          ;; même jour que la pentecôte TODO
-          (holiday-float 6 0 3 "🎩 Fête des pères"))) ;; troisième dimanche de juin
-
-  (setq calendar-holidays holiday-french-holidays
-        diary-show-holidays-flag t
-        org-agenda-include-diary t))
+        (setq ret (concat (lunar-phase-name (nth 2 phase))))))))
 
 (use-package org-super-agenda
   :after org-agenda
   :demand t
-  :config
+  :custom
   ;; fixes fucky binding on jk on an agenda header:
   ;; https://github.com/alphapapa/org-super-agenda/issues/50
-  (setq org-super-agenda-header-separator "\n")
-  (setq org-super-agenda-header-map (make-sparse-keymap))
+  (org-super-agenda-header-separator "\n")
+  (org-super-agenda-header-map (make-sparse-keymap))
+  :config
   (org-super-agenda-mode))
 
 (use-package org-habit
   :after org-agenda
-  :config
-  (setq org-habit-graph-column 40
-        org-habit-preceding-days my/org-habit-preceding-days
-        org-habit-show-all-today t
-        org-habit-show-done-always-green t
-        ;; glyphs:
-        ;; │ | ⋮
-        ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙ ○
-        ;; ┋┇ ;; ┃ ;; /;;⋮ ;; | ;; ?│
-        ;; ▦ ;; ◼ ;; ▪ ;; ?√ ;; ?◉ ;; ⊘ ;; ◉ ;; ?•
-        ;; □ ;; □ ;; ◌ ;; ?○
-        ;; org-habit-today-glyph ?┋
-        org-habit-completed-glyph ?●
-        org-habit-clear-glyph ?○
-        org-habit-today-glyph ?│)
+  :custom
+  (org-habit-graph-column 40)
+  (org-habit-preceding-days my/org-habit-preceding-days)
+  (org-habit-show-all-today t)
+  (org-habit-show-done-always-green t)
+  ;; glyphs:
+  ;; │ | ⋮
+  ;; ⊘ ∙ ∘ ⊚ ⋰ √ ∅ ∙ ● ◎ ◉ ╳ ╋ ┼ ╱ | ◌ ⌀ * ∙ ⋰ • ⌾ ⏼ ⊙ ○
+  ;; ┋┇ ;; ┃ ;; /;;⋮ ;; | ;; ?│
+  ;; ▦ ;; ◼ ;; ▪ ;; ?√ ;; ?◉ ;; ⊘ ;; ◉ ;; ?•
+  ;; □ ;; □ ;; ◌ ;; ?○
+  ;; org-habit-today-glyph ?┋
+  ;; (org-habit-clear-glyph ?○)
+  (org-habit-completed-glyph ?●)
+  (org-habit-today-glyph ?│)
 
+  :config
+  (setq org-habit-clear-glyph ?○) ;; because added by me
   ;; red boys:
   (set-face-attribute 'org-habit-overdue-face nil :foreground "red")
   (set-face-attribute 'org-habit-overdue-face nil :background nil)
@@ -502,11 +489,12 @@ current time."
 (use-package org-crypt
   :after org
   :demand t
+  :custom
+  (epa-file-encrypt-to '("william@underage.wang"))
+  (org-tags-exclude-from-inheritance (quote ("crypt")))
+  (org-crypt-disable-auto-save "encrypt")
+  (org-crypt-key "william@underage.wang")
   :config
-  (setq epa-file-encrypt-to '("william@underage.wang")
-        org-tags-exclude-from-inheritance (quote ("crypt"))
-        org-crypt-disable-auto-save "encrypt"
-        org-crypt-key "william@underage.wang")
   (org-crypt-use-before-save-magic))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -726,29 +714,6 @@ current time."
           ("tp" "⚛ physics" entry "* ⚛ [[roam:physics]] :sci:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚀 tech")))
-          ;; ("ts" "ssh session" entry
-          ;;  ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
-          ;;                   "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/junkyard\n"
-          ;;                   "  %?\n"
-          ;;                   "#+end_src\n"))
-          ;;  :jump-to-captured t
-          ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ;; ("tS" "sudo ssh session" entry
-          ;;  ,(string-join '( "* ⚛ [[roam:ssh session]]\n"
-          ;;                   "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local|sudo:rocinante.local:/mnt/trantor/media\n"
-          ;;                   "  %?\n"
-          ;;                   "#+end_src\n"))
-          ;;  :jump-to-captured t
-          ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
-          ;; ("tM" "ssh session" entry
-          ;;  ,(string-join '("* ⚛ [[roam:ssh session]]\n"
-          ;;                  "#+begin_src shell  :results value output :dir /ssh:wonko@rocinante.local:/mnt/trantor/media\n"
-          ;;                  "  export DISPLAY=:9\n"
-          ;;                  "  . $GUIX_EXTRA_PROFILES/desktop/etc/profile\n"
-          ;;                  "  %?\n"
-          ;;                  "#+end_src\n"))
-          ;;  :jump-to-captured t
-          ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("⚛ tech")))
           ("W" "⚒️ work")
           ("We" "👾 entreprise individuelle" entry
            "* 👾 [[roam:entreprise individuelle]] :work:ei:\n%U\n%?"
@@ -768,31 +733,31 @@ current time."
 (use-package calfw-org
   :commands (cfw:org-read-date-command)
   :config
+  ;; https://github.com/kiwanami/emacs-calfw/issues/111
+  ;; https://github.com/kiwanami/emacs-calfw/pull/134/files
+  ;; temporary fix:
+  ;; (defun cfw:org-get-timerange (text)
+  ;;   "Return a range object (begin end text).
+  ;; If TEXT does not have a range, return nil."
+  ;;   (let* ((dotime (cfw:org-tp text 'dotime)))
+  ;;     (and (stringp dotime) (string-match org-ts-regexp dotime)
+  ;;          (let* ((matches  (s-match-strings-all org-ts-regexp dotime))
+  ;;                 (start-date (nth 1 (car matches)))
+  ;;                 (end-date (nth 1 (nth 1 matches)))
+  ;;                 (extra (cfw:org-tp text 'extra)))
+  ;;            (if (string-match "(\\([0-9]+\\)/\\([0-9]+\\)): " extra)
+  ;;                (list (calendar-gregorian-from-absolute
+  ;;                       (time-to-days
+  ;;                        (org-read-date nil t start-date)))
+  ;;                      (calendar-gregorian-from-absolute
+  ;;                       (time-to-days
+  ;;                        (org-read-date nil t end-date))) text))))))
   (setq cfw:org-agenda-schedule-args '(:timestamp))
   (define-key cfw:calendar-mode-map (kbd "<SPC>") nil)
   (general-evil-define-key '(normal insert emacs motion) cfw:calendar-mode-map
     "SPC" evil-leader--default-map)
   (define-key cfw:calendar-mode-map (kbd "<SPC>") evil-leader--default-map))
 
-;; https://github.com/kiwanami/emacs-calfw/issues/111
-;; https://github.com/kiwanami/emacs-calfw/pull/134/files
-;; temporary fix:
-;; (defun cfw:org-get-timerange (text)
-;;   "Return a range object (begin end text).
-;; If TEXT does not have a range, return nil."
-;;   (let* ((dotime (cfw:org-tp text 'dotime)))
-;;     (and (stringp dotime) (string-match org-ts-regexp dotime)
-;;          (let* ((matches  (s-match-strings-all org-ts-regexp dotime))
-;;                 (start-date (nth 1 (car matches)))
-;;                 (end-date (nth 1 (nth 1 matches)))
-;;                 (extra (cfw:org-tp text 'extra)))
-;;            (if (string-match "(\\([0-9]+\\)/\\([0-9]+\\)): " extra)
-;;                (list (calendar-gregorian-from-absolute
-;;                       (time-to-days
-;;                        (org-read-date nil t start-date)))
-;;                      (calendar-gregorian-from-absolute
-;;                       (time-to-days
-;;                        (org-read-date nil t end-date))) text))))))
 
 (use-package org-web-tools)
 
