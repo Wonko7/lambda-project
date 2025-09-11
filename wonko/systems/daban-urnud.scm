@@ -48,24 +48,24 @@
 
 (define %wonko-home
   (home-environment
-    (inherit %vanilla-wonko-home)
-    (services
-     (append
-      (list
-       (simple-service 'highdpi-bash home-bash-service-type
-                       (home-bash-extension
-                         (environment-variables
-                          '(("XCURSOR_SIZE" . "16"))))))
-      machine-home-services
-      %vanilla-wonko-services))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     (list
+      (simple-service 'highdpi-bash home-bash-service-type
+                      (home-bash-extension
+                       (environment-variables
+                        '(("XCURSOR_SIZE" . "16"))))))
+     machine-home-services
+     %lowdpi-wonko-services))))
 
 (define %media-station-home
   (home-environment
-    (inherit %media-station-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %media-station-wonko-services))))
+   (inherit %media-station-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %daban-urnud-os
   (operating-system

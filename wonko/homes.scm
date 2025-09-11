@@ -672,6 +672,17 @@
    (services %vanilla-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lowdpi
+
+(define-public %lowdpi-wonko-services
+  (cons*
+   (make-emacs-values-service #:org-habit-preceding-days 16)
+   %vanilla-shepherd-wonko-service
+   (make-font-dep-configs)
+   (make-xsession)
+   %common-wonko-services))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highdpi
 
 (define-public %highdpi-wonko-services
@@ -695,11 +706,6 @@
                           #:dunst-font-sz 8 #:dunst-width 175)
    (make-xsession)
    %common-wonko-services))
-
-(define-public %highdpi-wonko-home
-  (home-environment
-   (inherit %skeleton-wonko-home)
-   (services %highdpi-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; media-station

@@ -49,32 +49,32 @@
 
 (define %wonko-home
   (home-environment
-    (inherit %highdpi-wonko-home)
-    (services
-     (cons*
-      (simple-service
-       'yggdrasill-shepherd home-shepherd-service-type
-       (list
-        (shepherd-service
-         (provision '(synergy))
-         (start #~(make-forkexec-constructor
-                   (list #$(file-append synergy "/bin/synergy"))
-                   #:log-file #$(home-log-path "synergy")))
-         (stop #~(make-kill-destructor))
-         (documentation "can't be arsed to move IRL"))
-        (shepherd-service
-         (provision '(kdeconnectd))
-         (start #~(make-forkexec-constructor
-                   (list #$(file-append kdeconnect "/bin/kdeconnectd"))
-                   #:log-file #$(home-log-path "kdeconnectd")))
-         (stop #~(make-kill-destructor))
-         (documentation "ET phone home"))))
-      (append
-       machine-home-services
-       %highdpi-wonko-services)))
-    (packages (cons*
-               kdeconnect
-               (home-environment-packages %highdpi-wonko-home)))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (cons*
+     (simple-service
+      'yggdrasill-shepherd home-shepherd-service-type
+      (list
+       (shepherd-service
+        (provision '(synergy))
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append synergy "/bin/synergy"))
+                  #:log-file #$(home-log-path "synergy")))
+        (stop #~(make-kill-destructor))
+        (documentation "can't be arsed to move IRL"))
+       (shepherd-service
+        (provision '(kdeconnectd))
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append kdeconnect "/bin/kdeconnectd"))
+                  #:log-file #$(home-log-path "kdeconnectd")))
+        (stop #~(make-kill-destructor))
+        (documentation "ET phone home"))))
+     (append
+      machine-home-services
+      %highdpi-wonko-services)))
+   (packages (cons*
+              kdeconnect
+              (home-environment-packages %vanilla-wonko-home)))))
 
 (define %media-station-home
   (home-environment
