@@ -671,7 +671,7 @@
 
 (define-public %lowdpi-wonko-services
   (cons*
-   (make-emacs-values-service #:org-habit-preceding-days 16)
+   (make-emacs-values-service #:org-habit-preceding-days 20)
    %vanilla-shepherd-wonko-service
    (make-font-dep-configs)
    (make-xsession)
@@ -685,8 +685,8 @@
    (make-emacs-values-service
     #:font-size                          80
     #:modeline-height                    75
-    #:org-agenda-tags-column             80
-    #:org-habit-preceding-days           47
+    #:org-agenda-tags-column             85
+    #:org-habit-preceding-days           53
     #:window-divider-default-right-width 5)
    %vanilla-shepherd-wonko-service
    (simple-service 'highdpi-bash home-bash-service-type

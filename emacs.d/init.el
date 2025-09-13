@@ -87,6 +87,7 @@
 
 (setq display-line-numbers-type t)
 (global-display-line-numbers-mode 1)
+(add-hook 'org-agenda-mode-hook                (lambda () (display-line-numbers-mode 0)))
 (add-hook 'shell-mode-hook                     (lambda () (display-line-numbers-mode 0)))
 (add-hook 'eshell-mode-hook                    (lambda () (display-line-numbers-mode 0)))
 (add-hook 'elfeed-show-mode-hook               (lambda () (display-line-numbers-mode 0)))
