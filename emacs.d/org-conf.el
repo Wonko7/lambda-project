@@ -330,12 +330,11 @@ EXTRA-FILES can be used to append extra files to the list."
   :after org-agenda
   :demand t
   :custom
-  ;; fixes fucky binding on jk on an agenda header:
-  ;; https://github.com/alphapapa/org-super-agenda/issues/50
   (org-super-agenda-header-separator "\n")
-  (org-super-agenda-header-map (make-sparse-keymap))
   :config
-  (org-super-agenda-mode))
+  (org-super-agenda-mode)
+  ;; https://github.com/alphapapa/org-super-agenda/issues/50
+  (setq org-super-agenda-header-map (make-sparse-keymap)))
 
 (use-package org-habit
   :after org-agenda
