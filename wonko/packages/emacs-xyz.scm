@@ -327,11 +327,6 @@ consult-omni can be an open-source free alternative to other omni-search tools s
 (define-public custom-emacs
   (package
     (inherit emacs)
-    (arguments
-     (substitute-keyword-arguments (package-arguments emacs)
-       ((#:phases phases)
-        #~(modify-phases #$phases
-            (delete 'check))))) ;; lol. why libxaw do that tho? not needed for emacs-next, tmp [2025-08-18 Mon 21:36] FIXME
     (inputs
      (modify-inputs (package-inputs emacs)
                     ;; libxaw is needed to get alpha-background working
