@@ -35,6 +35,7 @@
  glib pulseaudio synergy xorg toys linux xdisorg suckless music image-viewers
  xfce lxde gnome kde-plasma kde-frameworks
  admin databases version-control tmux ssh rust-apps gnupg password-utils bash
+ networking
  bittorrent tor
  haskell-apps compression commencement pkg-config base gdb m4 maths man
  ;; services
@@ -756,6 +757,7 @@
       hunspell-dict-fr-toutes-variantes
       hunspell-dict-en-us
       hunspell-dict-en-gb
+      blueman
       pavucontrol
       man-db)))))
 
