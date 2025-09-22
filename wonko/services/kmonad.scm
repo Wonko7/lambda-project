@@ -47,7 +47,10 @@
                      (map object->string (apply append sexps))))))
 
 (define (setxkb xkb)
-  (let ((setxkb " /run/current-system/profile/bin/setxkbmap -option compose:ralt ")
+  (let ((xkb (if (string= xkb "us")
+                 " -option compose:ralt us"
+                 " -option lv3:ralt_switch fr latin9"))
+        (setxkb " /run/current-system/profile/bin/setxkbmap ")
         (sudo "/run/privileged/bin/sudo -u ")
         (display  " DISPLAY="))
     (apply string-append
