@@ -312,6 +312,10 @@
   (persp-show-modestring nil)
   (persp-initial-frame-name "don't speak unless spoken to")
   :config
+  ;; Perspective provides `persp-consult-source` source that will list
+  ;; buffers in current perspective. You can hide default buffer source
+  ;; and add `persp-consult-source` to `consult-buffer-sources` for consult
+  ;; to only list buffers in current perspective
   (consult-customize consult--source-buffer :hidden t :default nil)
   (add-to-list 'consult-buffer-sources persp-consult-source)
   (persp-mode))
@@ -330,24 +334,19 @@
    (list '((lemon-time :display-opts '(:format " 📅 %a %b %d %H:%M"))
            (lemon-battery)
            (lemon-cpufreq-linux)
-           ;; (lemon-cpu-linux :display-opts '(:sparkline (:type gridded  :lower-bound 0 :upper-bound 1000)))
            (lemon-cpu-linux :display-opts '(:sparkline (:type gridded))) ;; why?
-           ;; (lemon-cpu-linux)
            (lemon-memory-linux)
-           ;;(lemon-swap)
            ;; also add disk space?
            (lemon-linux-network-tx)
            (lemon-linux-network-rx))))
   :config
-  ;; (require 'lemon)
   (require 'lemon-battery)
   (require 'lemon-cpu)
   (require 'lemon-time)
   (require 'lemon-network)
   (require 'lemon-memory)
 
-  ;; (set-face-attribute 'lemon-time-face nil :foreground "#EB64B9") ;; FIXME
-  (set-face-attribute 'lemon-time-face nil :foreground "#ffffff") ;; FIXME
+  (set-face-attribute 'lemon-time-face nil :foreground "#ffffff")
 
   (defun lemon-battery--time-face (charging time-left)
     "Return monitor face based on CHARGING and TIME-LEFT.
