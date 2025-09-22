@@ -1,8 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; workspace layouts:
 
+;; FIXME I don't understand why this isn't defined by the time :after exwm-workspace
+;; [2025-09-22 Mon 00:00]
+(setq exwm-workspace-number 20)
+
 (use-package window-layout
   :commands (ws/set-layout ws/toggle-buffer)
+  :after exwm-workspace
+  :demand t
   :config
   (require 'dash)
 
@@ -309,7 +315,8 @@
 
 (use-package emacs
   :ensure t
-  :after exwm
+  :after exwm-workspace
+  :demand t
   :config
   (defvar ws/auto-start-state (-repeat exwm-workspace-number t))
   ;; disable auto run for nameless projects:
