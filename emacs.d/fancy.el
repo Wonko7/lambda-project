@@ -74,9 +74,8 @@ mouse-3: Toggle minor modes"
 (defcustom exwm-mode-line-format
   `((:propertize " " display (space :align-to (- right 6)))
     (:propertize (:eval (format "🖥️%d" exwm-workspace-current-index))
-                 ;; local-map ,exwm-mode-line-workspace-map
-                 mouse-face mode-line-highlight
-                 ))
+                 ;; local-map exwm-mode-line-workspace-map
+                 mouse-face mode-line-highlight))
   "EXWM workspace in the mode line."
   :type 'sexp)
 
@@ -130,15 +129,15 @@ mouse-3: Toggle minor modes"
                 (w  (+ (window-width) 0))
                 (ml (truncate-string-to-width ml w)))
            (concat
-            (propertize " " 'face 'fringe)
+            (propertize "  " 'face 'fringe)
             ml
             (propertize
              " " ;;'face 'holiday
-             'display `((space :align-to (- (+ right right-fringe right-margin 1) 2))))
-            (propertize " " 'face 'fringe 'display `((space :width 1))))))))
+             'display `((space :align-to (- (+ right right-fringe right-margin 1) 3))))
+            (propertize  "  " 'face 'fringe 'display `((space :width 2))))))))
 
-(setq-default mode-line-format mode-line-with-margin)
 (setq mode-line-format mode-line-with-margin)
+(setq-default mode-line-format mode-line-with-margin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows
