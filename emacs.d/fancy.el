@@ -47,101 +47,97 @@
 ;; ☮ 🐫 📀 📐 ⛰
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; faces
-
-(custom-set-faces
- '(flyspell-incorrect ((t :underline (:style line :color "deep pink")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; modeline
-
-(setq display-time-day-and-date t)
-;; (setq display-time-format "%a|%F|%R")
-(display-time-mode 1)
-
-;; disabled because it was buggy and CPU intensive at some point...
-;; (require 'doom-modeline)
-;; (setq doom-modeline-minor-modes t)
-;; (setq doom-modeline-column-zero-based t)
-;; (setq column-number-mode t)
-;; (setq doom-modeline-height my/modeline-height)
-;; (setq doom-modeline-project-detection 'projectile)
-;; (setq doom-modeline-buffer-encoding 'nondefault)
-;; (setq doom-modeline-persp-name nil)
-;; (setq doom-modeline-workspace-name t)
-;; (setq doom-modeline-persp-icon nil)
-;; (doom-modeline-mode)
 
 ;; just remove minor modes:
 (setq mode-line-modes
       (let ((recursive-edit-help-echo
              "Recursive edit, type C-M-c to get out"))
         (list (propertize "%[" 'help-echo recursive-edit-help-echo)
-	      "("
-	      `(:propertize ("" mode-name)
-			    help-echo "Major mode\n\
+              "("
+              `(:propertize ("" mode-name)
+                            help-echo "Major mode\n\
 mouse-1: Display major mode menu\n\
 mouse-2: Show help for major mode\n\
 mouse-3: Toggle minor modes"
-			    mouse-face mode-line-highlight
-			    local-map ,mode-line-major-mode-keymap)
-	      '("" mode-line-process)
-              ;; 	      `(:propertize ("" minor-mode-alist)
-              ;; 			    mouse-face mode-line-highlight
-              ;; 			    help-echo "Minor mode\n\
-              ;; mouse-1: Display minor mode menu\n\
-              ;; mouse-2: Show help for minor mode\n\
-              ;; mouse-3: Toggle minor modes"
-              ;; 			    local-map ,mode-line-minor-mode-keymap)
-	      (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
-		          'mouse-face 'mode-line-highlight
-		          'local-map (make-mode-line-mouse-map
-				      'mouse-2 #'mode-line-widen))
-	      ")"
-	      (propertize "%]" 'help-echo recursive-edit-help-echo)
-	      " ")))
+                            mouse-face mode-line-highlight
+                            local-map ,mode-line-major-mode-keymap)
+              '("" mode-line-process)
+              (propertize "%n" 'help-echo "mouse-2: Remove narrowing from buffer"
+                          'mouse-face 'mode-line-highlight
+                          'local-map (make-mode-line-mouse-map
+                                      'mouse-2 #'mode-line-widen))
+              ")"
+              (propertize "%]" 'help-echo recursive-edit-help-echo)
+              " ")))
 
-;; add workspace:
 (defcustom exwm-mode-line-format
   `((:propertize " " display (space :align-to (- right 6)))
     (:propertize (:eval (format "🖥️%d" exwm-workspace-current-index))
-		 ;; local-map ,exwm-mode-line-workspace-map
-		 mouse-face mode-line-highlight
+                 ;; local-map ,exwm-mode-line-workspace-map
+                 mouse-face mode-line-highlight
                  ))
   "EXWM workspace in the mode line."
   :type 'sexp)
 
-(add-to-list 'mode-line-misc-info exwm-mode-line-format t)
+(setq my/mode-line-misc
+      (list "🛻🦖"
+            exwm-mode-line-format))
+(put 'my/mode-line-misc 'risky-local-variable t)
 
-;; mode-line-format (remove '(vc-mode vc-mode) mode-line-format)
+(defvar-local my/mode-line-remote
+    `((:propertize
+       (:eval
+        (if (file-remote-p default-directory) "📡" ""))
+       mouse-face mode-line-highlight
+       help-echo (lambda (window _object _point)
+                   (format "%s"
+                           (with-selected-window window
+                             (if (stringp default-directory)
+                                 (concat
+                                  (if (file-remote-p default-directory)
+                                      "Current directory is remote: "
+                                    "Current directory is local: ")
+                                  default-directory)
+                               "Current directory is nil")))))))
+(put 'my/mode-line-remote 'risky-local-variable t)
+
+(defvar-local my/mode-line-modified
+    `((:propertize
+       (:eval (if buffer-read-only "🔒" ""))
+       mouse-face mode-line-highlight
+       help-echo mode-line-read-only-help-echo)
+      (:propertize
+       (:eval (if (and (buffer-file-name) (buffer-modified-p)) "💾" ""))
+       mouse-face mode-line-highlight
+       help-echo mode-line-modified-help-echo)))
+(put 'my/mode-line-modified 'risky-local-variable t)
 
 (setq mode-line-with-margin
-      `(
-        ;;'display '(space :width 1)
-        (:eval
+      `((:eval
          (let* ((ml (format-mode-line
                      '("%e"
                        mode-line-front-space
                        (:propertize
-                        ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
-                        ;; display (min-width (5.0))
-                        )
+                        ("" mode-line-mule-info mode-line-client
+                         my/mode-line-modified
+                         my/mode-line-remote))
                        mode-line-frame-identification
                        mode-line-buffer-identification
-                       "   " mode-line-position evil-mode-line-tag "  " mode-line-modes mode-line-misc-info
-                       mode-line-end-spaces
-                       )))
+                       "   " mode-line-position evil-mode-line-tag mode-line-modes
+                       my/mode-line-misc
+                       mode-line-end-spaces)))
                 (w  (+ (window-width) 0))
-                (ml (truncate-string-to-width ml w))
-                )
+                (ml (truncate-string-to-width ml w)))
            (concat
             (propertize " " 'face 'fringe)
             ml
-            (propertize " " ;;'face 'holiday
-                        'display `((space :align-to (- (+ right right-fringe right-margin 1) 2))))
-            (propertize " " 'face 'fringe 'display `((space :width 1)))
-            )))))
+            (propertize
+             " " ;;'face 'holiday
+             'display `((space :align-to (- (+ right right-fringe right-margin 1) 2))))
+            (propertize " " 'face 'fringe 'display `((space :width 1))))))))
 
+(setq-default mode-line-format mode-line-with-margin)
 (setq mode-line-format mode-line-with-margin)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
