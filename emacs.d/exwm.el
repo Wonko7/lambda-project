@@ -420,12 +420,11 @@ estimated time to depletion, returns `lemon-battery-low-face'."
       :initform '(:index "DISK:" :unit "%"))))
 
   (cl-defmethod lemon-monitor-fetch ((_ lemon-disk-usage))
-    (let* ((output (shell-command-to-string "df / | sed -nre 's/.*[^0-9]([0-9]+)%.*/\\1/p'")))
+    (let* ((default-directory "~/") ;; don't show me remote disk usage
+           (output (shell-command-to-string "df / | sed -nre 's/.*[^0-9]([0-9]+)%.*/\\1/p'")))
       (string-to-number output)))
 
   (lemon-mode 1))
-
-
 
 ;;; exwm.el ends here
 (provide 'conf/exwm)
