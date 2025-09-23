@@ -166,7 +166,10 @@
 
 (defun my/ws-remote-fleet-shell (&optional remote project)
   (interactive)
-  (let* ((pr  (or project (projectile-project-root default-directory) "~/"))
+  (let* ((pr  (or project
+                  (projectile-project-root
+                   (tramp-file-local-name default-directory))
+                  "~/"))
          (rm  (or remote (my/choose-remote-from-fleet)))
          (rpr (concat "/ssh:" rm ":" pr)))
     (projectile-with-default-dir rpr
@@ -180,10 +183,8 @@
   (let* ((ws  exwm-workspace-current-index)
          (rm  (if (or (= ws 2) (= ws 8))
                   "of-course-i-still-love-you.local"))
-         (pr  "/mnt/trantor/media/inbox")
-         (pr  (if (and (= ws 2) (file-readable-p (concat "/ssh:" rm ":" pr)))
-                  pr
-                (or (projectile-project-root default-directory) "~/"))))
+         (pr (when (= 2 ws)
+               "/mnt/trantor/media/inbox")))
     (my/ws-remote-fleet-shell rm pr)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
