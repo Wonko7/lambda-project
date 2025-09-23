@@ -25,9 +25,33 @@
 ;; (require 'exwm-firefox)
 ;; (require 'exwm-mff)
 
-(use-package exwm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; desktop-env
+;; this needs to be activated before we set exwm-input-global-keys
+
+(use-package desktop-environment
   :demand t
 
+  :custom
+  (desktop-environment-screenlock-command my/lock-cmd)
+  (desktop-environment-volume-get-command "pamixer --get-volume")
+  (desktop-environment-volume-set-command "pamixer %s")
+  (desktop-environment-volume-get-regexp "\\([0-9]+\\)")
+  (desktop-environment-volume-normal-increment "-i 5 --allow-boost")
+  (desktop-environment-volume-normal-decrement "-d 5")
+  (desktop-environment-volume-toggle-command "pamixer -t")
+  (desktop-environment-update-exwm-global-keys :global)
+
+  :config
+  (define-key desktop-environment-mode-map (kbd "s-l") nil)
+  (desktop-environment-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exwm
+
+(use-package exwm
+  :demand t
+  :after desktop-environment
   :config
 
   (setq exwm-input-prefix-keys
@@ -401,26 +425,6 @@ estimated time to depletion, returns `lemon-battery-low-face'."
 
   (lemon-mode 1))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; desktop-env
-;; this needs to be activated before we set exwm-input-global-keys
-
-(use-package desktop-environment
-  :demand t
-
-  :custom
-  (desktop-environment-screenlock-command my/lock-cmd)
-  (desktop-environment-volume-get-command "pamixer --get-volume")
-  (desktop-environment-volume-set-command "pamixer %s")
-  (desktop-environment-volume-get-regexp "\\([0-9]+\\)")
-  (desktop-environment-volume-normal-increment "-i 5 --allow-boost")
-  (desktop-environment-volume-normal-decrement "-d 5")
-  (desktop-environment-volume-toggle-command "pamixer -t")
-  (desktop-environment-update-exwm-global-keys :global)
-
-  :config
-  (define-key desktop-environment-mode-map (kbd "s-l") nil)
-  (desktop-environment-mode))
 
 
 ;;; exwm.el ends here
