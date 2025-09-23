@@ -356,7 +356,9 @@
                       "keys.el"
                       "misc.el"
                       "org-conf.el"
-                      "workspaces.el")))
+                      "workspaces.el"
+                      "transient/levels.el"
+                      "transient/values.el")))
 
    (simple-service 'emacsd-snippets-config-files
                    home-files-service-type
