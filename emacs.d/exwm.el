@@ -331,12 +331,13 @@
   (lemon-refresh-rate 2)
   (lemon-sparkline-use-xpm 1)
   (lemon-monitors
-   (list '((lemon-time :display-opts '(:format " 📅 %a %b %d %H:%M"))
+   (list '((lemon-time :display-opts '(:format "  📅 %a %b %d %H:%M"))
            (lemon-battery)
            (lemon-cpufreq-linux)
-           (lemon-cpu-linux :display-opts '(:sparkline (:type gridded))) ;; why?
+           (lemon-cpu-linux :display-opts '(:sparkline (:type gridded)))
            (lemon-memory-linux)
            ;; also add disk space?
+           (lemon-disk-usage)
            (lemon-linux-network-tx)
            (lemon-linux-network-rx))))
   :config
@@ -347,6 +348,9 @@
   (require 'lemon-memory)
 
   (set-face-attribute 'lemon-time-face nil :foreground "#ffffff")
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; battery
 
   (defun lemon-battery--time-face (charging time-left)
     "Return monitor face based on CHARGING and TIME-LEFT.
@@ -384,6 +388,17 @@ estimated time to depletion, returns `lemon-battery-low-face'."
                     (if (string= time-left "N/A")
                         "" (concat (lemon-battery--indicator this charging) time-left))))
           (propertize 'face (lemon-battery--face charging percent time-left))))))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; disk usage
+
+  (defclass lemon-disk-usage (lemon-monitor-history)
+    ((default-display-opts
+      :initform '(:index "DISK:" :unit "%"))))
+
+  (cl-defmethod lemon-monitor-fetch ((_ lemon-disk-usage))
+    (let* ((output (shell-command-to-string "df / | sed -nre 's/.*[^0-9]([0-9]+)%.*/\\1/p'")))
+      (string-to-number output)))
 
   (lemon-mode 1))
 
