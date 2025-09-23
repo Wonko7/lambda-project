@@ -110,8 +110,10 @@ Also used in `exwm-mode-line-workspace-map'."
   "Local keymap for EXWM mode line string.  See `exwm-mode-line-format'.")
 
 (defcustom exwm-mode-line-format
-  `((:propertize " " display (space :align-to (- right 6)))
-    (:propertize (:eval (format "🖥️%d" exwm-workspace-current-index))
+  `((:propertize " " display (space :align-to (- right 7)))
+    (:propertize (:eval (if (>= exwm-workspace-current-index 10)
+                            (format "🖥️%d" exwm-workspace-current-index)
+                          (format " 🖥️%d" exwm-workspace-current-index)))
                  local-map ,exwm-mode-line-workspace-map
                  mouse-face mode-line-highlight))
   "EXWM workspace in the mode line."
