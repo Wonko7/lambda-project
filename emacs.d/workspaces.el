@@ -20,7 +20,7 @@
                        left
                        right)
             :buffers ((:name left  :buffer-f (magit-status))
-                      (:name right :buffer-f (projectile-run-shell) :hide-your-kids t)))
+                      (:name right :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
 
           ( :layout code2-bottom-shell
             :recipe (- (:upper-size-ratio 0.8)
@@ -30,7 +30,7 @@
                        shell)
             :buffers ((:name right :buffer-f (buffer-name))
                       (:name left  :buffer-f (magit-status))
-                      (:name shell :buffer-f (projectile-run-shell) :hide-your-kids t)))
+                      (:name shell :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
 
           ( :layout code3
             :recipe (| (:left-size-ratio 0.3)
@@ -40,7 +40,7 @@
                           left))
             :buffers ((:name center :buffer-f (buffer-name))
                       (:name right  :buffer-f (magit-status))
-                      (:name left   :buffer-f (projectile-run-shell) :hide-your-kids t)))
+                      (:name left   :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
 
           ( :layout tramp4
             :recipe (| (:left-size-ratio 0.5)
@@ -57,15 +57,10 @@
                            (:name remote-code :buffer-f (magit-status ,rpr))
                            ( :name local-shell
                              :hide-your-kids t
-                             :buffer-f (projectile-with-default-dir ,pr
-                                         (shell
-                                          (projectile-generate-process-name "shell" nil ,pr))))
+                             :buffer-f (my/ws-proj-shell ,pr))
                            ( :name remote-shell
                              :hide-your-kids t
-                             :buffer-f (projectile-with-default-dir ,rpr
-                                         (shell
-                                          (projectile-generate-process-name
-                                           "remote-shell" nil ,rpr)))))))
+                             :buffer-f (my/ws-remote-fleet-shell ,rm ,pr)))))
 
           ( :layout grid9
             :recipe (| (:left-size-ratio 0.3)
@@ -111,10 +106,7 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
-                        :buffer-f (let ((d "~/")) ;; remote on init was annoying
-                                    (projectile-with-default-dir d
-                                      (shell (projectile-generate-process-name
-                                              "media-shell" nil d)))))
+                        :buffer-f (my/ws-proj-shell "/data/org"))
                       ( :name right
                         :buffer-f (org-roam-node-open
                                    (org-roam-node-from-title-or-alias my/current-media)))))
@@ -124,10 +116,9 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
-                        :buffer-f (let ((d "/ssh:wonko@of-course-i-still-love-you.local:/mnt/trantor/media/"))
-                                    (projectile-with-default-dir d
-                                      (shell (projectile-generate-process-name
-                                              "remote-media-shell" nil d)))))
+                        :buffer-f (my/ws-remote-fleet-shell
+                                   "of-course-i-still-love-you.local"
+                                   "/mnt/trantor/media/inbox"))
                       ( :name right
                         :buffer-f (org-roam-node-open
                                    (org-roam-node-from-title-or-alias my/current-media)))))

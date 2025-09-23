@@ -35,13 +35,21 @@
     "yp" (lambda () (interactive) (kill-new (buffer-file-name)))
     "yP" #'consult-yank-pop
 
+    ;; regroup shells / tmp
+    "ts"  #'my/ws-proj-shell
+    "tt"  #'my/ws-proj-shell
+    "tr"  #'my/ws-remote-fleet-shell-with-default
+    "tR"  #'my/ws-remote-fleet-shell
+
     ;; emacs apps
     "a"   '("Apps" . (keymap))
     "ab"  #'ibuffer
     "ac"  #'calc
     "ad"  #'dired
     "aD"  #'dictionary-lookup-definition
-    "as"  #'shell
+    ;; "as"  #'shell
+    "as"  #'my/ws-proj-shell
+    "aS"  #'my/ws-remote-fleet-shell-with-default
     "ap"  #'proced
     "aE"  #'eww-search-words
     ;; external apps
@@ -133,7 +141,8 @@
     "pD"  #'projectile-discover-projects-in-search-path
     "pK"  #'projectile-kill-buffers
     "pS"  #'projectile-save-project-buffers
-    "ps"  #'projectile-run-shell
+    ;; "ps"  #'projectile-run-shell
+    "ps"  #'my/ws-proj-shell
     "pb"  #'projectile-ibuffer
     "pd"  #'projectile-dired
     "pm"  #'persp-merge

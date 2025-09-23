@@ -152,6 +152,41 @@
       'confirm fn))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; per workspace shells
+
+(defun my/ws-proj-shell (&optional project)
+  (interactive)
+  (let* ((pr (or project (projectile-project-root default-directory) "~/")))
+    (projectile-with-default-dir pr
+      (shell
+       (projectile-generate-process-name
+        (concat
+         ;; (file-name-base pr) ":"
+         (int-to-string exwm-workspace-current-index)) nil pr)))))
+
+(defun my/ws-remote-fleet-shell (&optional remote project)
+  (interactive)
+  (let* ((pr  (or project (projectile-project-root default-directory) "~/"))
+         (rm  (or remote (my/choose-remote-from-fleet)))
+         (rpr (concat "/ssh:" rm ":" pr)))
+    (projectile-with-default-dir rpr
+      (shell
+       (projectile-generate-process-name
+        (concat (int-to-string exwm-workspace-current-index) ":"
+                (string-remove-suffix ".local" rm)) nil rpr)))))
+
+(defun my/ws-remote-fleet-shell-with-default ()
+  (interactive)
+  (let* ((ws  exwm-workspace-current-index)
+         (rm  (if (or (= ws 2) (= ws 8))
+                  "of-course-i-still-love-you.local"))
+         (pr  "/mnt/trantor/media/inbox")
+         (pr  (if (and (= ws 2) (file-readable-p (concat "/ssh:" rm ":" pr)))
+                  pr
+                (or (projectile-project-root default-directory) "~/"))))
+    (my/ws-remote-fleet-shell rm pr)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exec helper
 
 (defun my/local-async-shell-command (command)
