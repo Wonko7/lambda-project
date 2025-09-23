@@ -336,7 +336,6 @@
            (lemon-cpufreq-linux)
            (lemon-cpu-linux :display-opts '(:sparkline (:type gridded)))
            (lemon-memory-linux)
-           ;; also add disk space?
            (lemon-disk-usage)
            (lemon-linux-network-tx)
            (lemon-linux-network-rx))))
@@ -407,6 +406,8 @@ estimated time to depletion, returns `lemon-battery-low-face'."
 ;; this needs to be activated before we set exwm-input-global-keys
 
 (use-package desktop-environment
+  :demand t
+
   :custom
   (desktop-environment-screenlock-command my/lock-cmd)
   (desktop-environment-volume-get-command "pamixer --get-volume")
