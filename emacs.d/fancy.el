@@ -161,19 +161,20 @@ Also used in `exwm-mode-line-workspace-map'."
 
 (setq mode-line-with-margin
       `((:eval
-         (let ((ml (format-mode-line
-                    '("%e"
-                      mode-line-front-space
-                      mode-line-mule-info mode-line-client
-                      my/mode-line-modified
-                      my/mode-line-remote
-                      mode-line-frame-identification
-                      mode-line-buffer-identification
-                      evil-mode-line-tag
-                      my/mode-line-major-mode
-                      mode-line-position
-                      my/mode-line-misc
-                      mode-line-end-spaces))))
+         (let* ((ml (format-mode-line
+                     '("%e"
+                       mode-line-front-space
+                       mode-line-mule-info mode-line-client
+                       my/mode-line-modified
+                       my/mode-line-remote
+                       mode-line-frame-identification
+                       mode-line-buffer-identification
+                       evil-mode-line-tag
+                       my/mode-line-major-mode
+                       mode-line-position
+                       my/mode-line-misc
+                       mode-line-end-spaces)))
+                (ml (truncate-string-to-width ml (window-width))))
            (concat
             (propertize "  " 'face 'fringe)
             ml
