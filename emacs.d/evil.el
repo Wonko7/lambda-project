@@ -51,12 +51,30 @@
   (setq evil-collection-calendar-want-org-bindings t)
   (setq evil-collection-setup-minibuffer t)
   (setq evil-collection-outline-bind-tab-p t)
-  (setq evil-collection-key-blacklist '("SPC" "C-SPC"))
+  (setq evil-collection-key-blacklist '("SPC" "C-SPC" "-"))
   :config
   (evil-collection-init)
   (setq evil-want-keybinding t)
   ;; (setq evil-want-C-i-jump nil)
-  )
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; readonly / view mode:
+
+  (evil-collection-define-key 'normal 'view-mode-map
+    "q" 'quit-window
+    (kbd "SPC") 'View-scroll-page-forward
+    (kbd "S-SPC") 'View-scroll-page-backward
+
+    ;; zoom
+    "C-+" 'text-scale-increase
+    "C-=" 'text-scale-increase
+    "C-0" 'text-scale-adjust
+    "C--" 'text-scale-decrease
+    "0" nil ;; free this for normal state's general binding
+    "-" nil ;; free this for normal state's general binding
+
+    ;; refresh
+    (kbd "gr") 'revert-buffer))
 
 
 (use-package evil-escape

@@ -5,7 +5,7 @@
 
 (use-package general
   :demand t
-  :after evil-leader
+  :after (evil-leader evil-collection evil-collection-view)
   :config
   (general-evil-setup t)
 
@@ -260,6 +260,9 @@
   (general-define-key
    :states '(normal emacs visual global motion)
    "C-e"  #'embark-act)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; readonly / view mode: in evil-collection
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; async shell command
