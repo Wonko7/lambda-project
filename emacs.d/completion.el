@@ -23,6 +23,10 @@
     (when (string-suffix-p "=" pattern)
       `(orderless-literal . ,(substring pattern 0 -1))))
 
+  (defun metadata-if-at (pattern _index _total)
+    (when (string-prefix-p "@" pattern)
+      `(orderless-annotation . ,(substring pattern 1))))
+
   (defun flex-if-quote (pattern _index _total)
     (when (string-suffix-p "'" pattern)
       `(orderless-flex . ,(substring pattern 0 -1))))
@@ -42,6 +46,7 @@
                                     char-fold-to-regexp
                                     orderless-regexp)
         orderless-style-dispatchers '(;; regex-if-twiddle
+                                      metadata-if-at
                                       flex-if-quote
                                       literal-if-equal
                                       without-if-bang)
@@ -193,6 +198,8 @@
 (use-package consult
   :after vertico
   :demand t
+  :custom
+  (consult-narrow-key ">")
   :config
   ;; Use `consult-completion-in-region' if Vertico is enabled.
   ;; Otherwise use the default `completion--in-region' function.
