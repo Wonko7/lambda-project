@@ -187,11 +187,16 @@
   (magit-log-margin '(t age magit-log-margin-width t 18))
   (magit-format-file-function #'magit-format-file-nerd-icons)
   (magit-diff-refine-hunk 'all)
+  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 
   :hook
   (magit-refresh-buffer-hook . magit-status-goto-initial-section)
 
   :config
+  (general-evil-define-key '(normal) magit-log-mode-map
+    "J"    #'magit-diff-show-or-scroll-up
+    "K"    #'magit-diff-show-or-scroll-down)
+
   (general-evil-define-key '(normal) magit-diff-mode-map
     "("      #'diff-hunk-prev
     ")"      #'diff-hunk-next
