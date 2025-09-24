@@ -7,11 +7,13 @@
 ;;
 ;;; Code:
 
-(use-package undo-fu)
+(use-package undo-fu
+  :demand t)
 (use-package vundo)
 
 ;; 😈
 (use-package evil
+  :defer nil
   :demand t
   :after undo-fu
 
@@ -45,7 +47,9 @@
         (forward-line (1- count))))))
 
 (use-package evil-collection
+  :defer nil
   :demand t
+  :after evil
   :init
   (setq evil-want-keybinding nil)
   (setq evil-collection-calendar-want-org-bindings t)
@@ -79,6 +83,7 @@
 
 (use-package evil-escape
   :demand t
+  :after evil
   :config
   (evil-escape)
   (evil-escape-mode 1)
@@ -90,22 +95,26 @@
 
 (use-package evil-matchit
   :demand t
+  :after evil
   :config
   (global-evil-matchit-mode 1))
 
 (use-package evil-surround
   :demand t
+  :after evil
   :config
   (global-evil-surround-mode))
 
 (use-package evil-exchange
   :demand t
+  :after evil
   :config
   (setq evil-exchange-key (kbd "zx"))
   (evil-exchange-install))
 
 (use-package evil-org
   :demand t
+  :after evil
   ;; the equivalent for org-mode-map is in org-conf
   ;; this needs to be set after starting evil-org
   :hook (org-mode-hook
@@ -121,11 +130,13 @@
 
 (use-package evil-org-agenda
   :demand t
+  :after evil
   :config
   (evil-org-agenda-set-keys))
 
 (use-package evil-snipe
   :demand t
+  :after evil
   :hook (magit-mode-hook . turn-off-evil-snipe-override-mode)
   :config
   (setq evil-snipe-scope 'whole-visible)
@@ -136,12 +147,14 @@
 
 (use-package evil-leader
   :demand t
+  :after evil
   :config
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>"))
 
 (use-package evil-goggles
   :demand t
+  :after evil
   :custom
   (evil-goggles-duration 0.500)
   (evil-goggles-pulse nil)
@@ -158,23 +171,27 @@
 
 (use-package evil-commentary
   :demand t
+  :after evil
   :config
   (evil-commentary-mode t))
 
 ;; <zoo
 (use-package evil-lion
   :demand t
+  :after evil
   :config
   (evil-lion-mode))
 
 (use-package evil-owl
   :demand t
+  :after evil
   :config
   (evil-owl-mode))
 ;; zoo>
 
 (use-package evil-mc
   :demand t
+  :after evil
   :init
   (setq evil-mc-cursors-map (make-sparse-keymap)) ;; FIXME: workaround on zonked req evil-mc
   :config

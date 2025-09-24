@@ -5,7 +5,7 @@
 
 (use-package general
   :demand t
-  ;; :after (evil-leader evil-collection evil-collection-view)
+  :after (evil-leader evil-collection)
   :config
   (general-evil-setup t)
 
@@ -274,7 +274,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; lisps
+;; FIXME lisps
 
 (general-evil-define-key '(normal) emacs-lisp-mode-map
   :prefix "RET"
