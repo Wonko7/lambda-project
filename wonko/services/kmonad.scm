@@ -47,6 +47,7 @@
                      (map object->string (apply append sexps))))))
 
 (define (setxkb xkb)
+  ;; FIXME: see zzull's "setxkbmap -device $(xinput list --id-only keyboard:'%s') fr bepo"
   (let ((xkb (if (string= xkb "us")
                  " -option compose:ralt us"
                  " -option lv3:ralt_switch fr latin9"))

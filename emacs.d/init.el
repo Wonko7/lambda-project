@@ -201,7 +201,7 @@
     "K"    #'git-rebase-move-line-up
     "J"    #'git-rebase-move-line-down)
 
-  ;; => whaaat, overrides org :/
+  ;; FIXME: whaaat, overrides org :/
   ;; (general-evil-define-key '(normal) diff-hl-mode-map
   ;;   "grk" #'smerge-prev
   ;;   "grj" #'smerge-next
