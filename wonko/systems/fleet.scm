@@ -31,14 +31,19 @@
                                  (port 22))))))
  (filter
   (match-lambda ((hn os key)
-                 (not (string= hn (gethostname)))))
+                 (and (not (string= hn (gethostname)))
+                      (or (member hn '(;; just to make it easier to pick deployment:
+                                       ;; "daban-urnud"
+                                       ;; "enterprise"
+                                       ;; "rocinante"
+                                       "yggdrasill"
+                                       ))))))
   `(;; ("192.168.1.8" . ,%discovery-os)
-    ;; ("daban-urnud" ,%daban-urnud-os
-    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
+    ("daban-urnud" ,%daban-urnud-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGP9vPQIofNGYfOT7AOqqmZ6TiM06f/84wYsHPDrKLVr")
     ("enterprise" ,%enterprise-os
      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIx0IZ0N7CqF431lNvKGzmX4la95DRo25AirEeB+YkyH")
-    ;; ("yggdrasill" ,%yggdrasill-os
-    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBy585dRrMhGrilQX03YBntgKPGcUlP7WM1ET+uknMus")
-    ;; ("rocinante" ,%rocinante-os
-    ;;  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0IndtUDb/hlus4gfsySCoRrN+qR1LTkDT1UXzVu42h")
-    )))
+    ("yggdrasill" ,%yggdrasill-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBy585dRrMhGrilQX03YBntgKPGcUlP7WM1ET+uknMus")
+    ("rocinante" ,%rocinante-os
+     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0IndtUDb/hlus4gfsySCoRrN+qR1LTkDT1UXzVu42h"))))
