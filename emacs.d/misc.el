@@ -162,7 +162,7 @@
        (projectile-generate-process-name
         (concat
          ;; (file-name-base pr) ":"
-         (int-to-string exwm-workspace-current-index)) nil pr)))))
+         (int-to-string exwm-workspace-current-index) ":") nil pr)))))
 
 (defun my/ws-remote-fleet-shell (&optional remote project)
   (interactive)

@@ -46,8 +46,8 @@
             :recipe (| (:left-size-ratio 0.5)
                        local-code
                        (- (:upper-size-ratio 0.7)
-                          remote-code
-                          remote-shell))
+                          remote-shell
+                          remote-code))
             :buffers-f (let* ((pr  (projectile-acquire-root))
                               (rm  (my/choose-remote-from-fleet))
                               (rpr (concat "/ssh:" rm ":" pr)))
@@ -112,7 +112,7 @@
                        right)
             :buffers-f (progn
                          (bluetooth-list-devices)
-                         '((:name right :buffer-f (shell))
+                         '((:name right :buffer-f (my/ws-proj-shell "~/"))
                            (:name left  :buffer-f "*Bluetooth*" :hide-your-kids t))))
 
           ( :layout media2
