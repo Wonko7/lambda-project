@@ -40,6 +40,7 @@
     "tt"  #'my/ws-proj-shell
     "tr"  #'my/ws-remote-fleet-shell-with-default
     "tR"  #'my/ws-remote-fleet-shell
+    "tl"  #'my/consult-shell
 
     ;; emacs apps
     "a"   '("Apps" . (keymap))
