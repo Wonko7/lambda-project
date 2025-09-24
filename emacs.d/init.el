@@ -449,6 +449,8 @@
 ;; dired
 
 (use-package dired
+  :hook
+  (dired-mode-hook . #'auto-revert-mode)
   :config
   (general-evil-define-key '(normal) dired-mode-map
     "ï"    #'dired-up-directory))
@@ -461,7 +463,6 @@
 (use-package dired-collapse)
 
 (setq dired-dwim-target t)
-(add-hook 'dired-mode-hook #'auto-revert-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ibuffer
