@@ -42,6 +42,21 @@
                       (:name right  :buffer-f (magit-status))
                       (:name left   :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
 
+          ( :layout tramp3
+            :recipe (| (:left-size-ratio 0.5)
+                       local-code
+                       (- (:upper-size-ratio 0.7)
+                          remote-code
+                          remote-shell))
+            :buffers-f (let* ((pr  (projectile-acquire-root))
+                              (rm  (my/choose-remote-from-fleet))
+                              (rpr (concat "/ssh:" rm ":" pr)))
+                         `((:name local-code  :buffer-f (magit-status ,pr))
+                           (:name remote-code :buffer-f (magit-status ,rpr))
+                           ( :name remote-shell
+                             :hide-your-kids t
+                             :buffer-f (my/ws-remote-fleet-shell ,rm ,pr)))))
+
           ( :layout tramp4
             :recipe (| (:left-size-ratio 0.5)
                        (- (:upper-size-ratio 0.7)
