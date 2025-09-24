@@ -178,9 +178,13 @@
 ;; magit
 
 (use-package magit
+  ;; also emacs.d/transient/*
   :custom
   (magit-status-initial-section '(((unstaged) (status))))
+  (magit-log-margin '(t age magit-log-margin-width t 18))
   (magit-format-file-function #'magit-format-file-nerd-icons)
+  (magit-diff-refine-hunk 'all)
+
   :hook
   (magit-refresh-buffer-hook . magit-status-goto-initial-section)
 
