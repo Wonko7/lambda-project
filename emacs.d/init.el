@@ -4,6 +4,12 @@
 (require 'conf/generated-values "~/.emacs.d/generated-values.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; use-package:
+
+(setq use-package-hook-name-suffix nil)
+(setq use-package-always-defer t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic UI stuff:
 
 (require 'conf/fancy "~/.emacs.d/fancy.el")
@@ -13,9 +19,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; emacs general config:
-
-(setq use-package-hook-name-suffix nil)
-(setq use-package-always-defer t)
 
 (require 'savehist)
 (savehist-mode)

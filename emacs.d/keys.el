@@ -5,7 +5,7 @@
 
 (use-package general
   :demand t
-  :after (evil-leader evil-collection evil-collection-view)
+  ;; :after (evil-leader evil-collection evil-collection-view)
   :config
   (general-evil-setup t)
 
