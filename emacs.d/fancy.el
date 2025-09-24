@@ -76,53 +76,10 @@ mouse-3: Toggle minor modes")))
 (put 'my/mode-line-major-mode 'risky-local-variable t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; modeline: exwm workspace / misc mood
+;; modeline: misc mood
 
-(easy-menu-define exwm-workspace-menu nil
-  "Menu for Exwm Workspace.
-
-Also used in `exwm-mode-line-workspace-map'."
-  '("Exwm Workspace"
-    ["Add workspace" exwm-workspace-add]
-    ["Delete current workspace" exwm-workspace-delete]
-    ["Move workspace to" exwm-workspace-move]
-    ["Swap workspaces" exwm-workspace-swap]
-    ["Move X window to" exwm-workspace-move-window]
-    ["Move X window from" exwm-workspace-switch-to-buffer]
-    ["Toggle minibuffer" exwm-workspace-toggle-minibuffer]
-    ["Switch workspace" exwm-workspace-switch]
-    ;; Place this entry at bottom to avoid selecting others by accident.
-    ("Switch to" :filter
-     (lambda (&rest _args)
-       (mapcar (lambda (i)
-                 `[,(format "workspace %d" i)
-                   (lambda ()
-                     (interactive)
-                     (exwm-workspace-switch ,i))
-                   (/= ,i exwm-workspace-current-index)])
-               (number-sequence 0 (1- (exwm-workspace--count))))))))
-
-(defvar exwm-mode-line-workspace-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [mode-line mouse-1] 'exwm-workspace-switch)
-    (define-key map [mode-line mouse-3] exwm-workspace-menu)
-    map)
-  "Local keymap for EXWM mode line string.  See `exwm-mode-line-format'.")
-
-(defcustom exwm-mode-line-format
-  `((:propertize " " display (space :align-to (- right 7)))
-    (:propertize (:eval (if (>= exwm-workspace-current-index 10)
-                            (format "🖥️%d" exwm-workspace-current-index)
-                          (format " 🖥️%d" exwm-workspace-current-index)))
-                 local-map ,exwm-mode-line-workspace-map
-                 mouse-face mode-line-highlight))
-  "EXWM workspace in the mode line."
-  :type 'sexp)
-
-(setq my/mode-line-misc
-      (list "🌻🐝️"
-            ;; "🛻🦖"
-            exwm-mode-line-format))
+;; exwm.el will add to this:
+(setq my/mode-line-misc (list "🌻🐝️")) ;; "🛻🦖"
 (put 'my/mode-line-misc 'risky-local-variable t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
