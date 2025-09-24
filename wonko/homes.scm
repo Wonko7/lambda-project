@@ -50,8 +50,8 @@
                                     (font-size                          120)
                                     (modeline-height                    40)
                                     (theme                              "doom-laserwave")
-                                    (org-agenda-tags-column             78)
-                                    (org-habit-preceding-days           43)
+                                    (org-agenda-tags-column             80)
+                                    (org-habit-preceding-days           48)
                                     (window-divider-default-right-width 2))
   (simple-service
    'emacsd-generated-config-files
