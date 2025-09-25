@@ -194,6 +194,9 @@
   (magit-refresh-buffer-hook . magit-status-goto-initial-section)
 
   :config
+  ;; as per https://github.com/magit/magit/issues/5220
+  (setq magit-tramp-pipe-stty-settings 'pty) ;; ends up nil if in :custom
+
   (general-evil-define-key '(normal) magit-log-mode-map
     "J"    #'magit-diff-show-or-scroll-up
     "K"    #'magit-diff-show-or-scroll-down)
@@ -413,13 +416,35 @@
 ;; tramp
 
 (use-package tramp
+  :custom
+  (tramp-terminal-type "tramp")
+  ;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
+  (remote-file-name-inhibit-locks t)
+  (tramp-use-scp-direct-remote-copying t)
+  (remote-file-name-inhibit-auto-save-visited t)
+  (tramp-copy-size-limit (* 1024 1024)) ;; 1MB ;; test and move this around
+  (tramp-verbose 2)
+
   :config
-  (setq tramp-terminal-type "tramp")
+  ;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (setq tramp-ssh-controlmaster-options
-	(concat
-	 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-	 "-o ControlMaster=auto -o ControlPersist=yes"))
+  (setq tramp-ssh-controlmaster-options ;; ends up nil if in :custom
+        (concat "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+                "-o ControlMaster=auto -o ControlPersist=yes"))
+
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scp")
+   'remote-direct-async-process)
+
+  (with-eval-after-load 'compile
+    (remove-hook 'compilation-mode-hook #'tramp-compile-disable-ssh-controlmaster-options))
+
+  ;; when this fails:
+  ;; (setq connection-local-criteria-alist nil)
 
   ;; FIXME/workaround bug introduced with guix's emacs 31.
   ;; without this tramp complains about not finding a suitable ls.
