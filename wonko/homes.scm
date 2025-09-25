@@ -124,8 +124,8 @@
     ("kys"   . "exit")))
 
 (define-public %wonko-env
-  `(("HISTFILESIZE"        . "100000")
-    ("HISTSIZE"            . "100000")
+  `(("HISTFILESIZE"        . "1000")
+    ("HISTSIZE"            . "1000")
     ("HISTFILE"            . "$XDG_CACHE_HOME/.bash_history")
     ("HISTCONTROL"         . "ignorespace")
     ("PAGER"               . "")
