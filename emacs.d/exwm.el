@@ -156,6 +156,19 @@
       (message "setting window dedication to %s" dedicated)
       (set-window-dedicated-p (selected-window) dedicated)))
 
+  (defun my/raise-new ()
+    ;; new windows (think dialogs) should be raised over current window, even when fullscreen
+    (let ((selected-window (frame-selected-window exwm--frame))) ;; current focused window
+      (if (window-dedicated-p selected-window)
+          (progn
+            (toggle-window-dedicated)
+            (set-window-buffer selected-window (exwm--id->buffer exwm--id)) ;; new window
+            (when nil ;; this might end up being annoying, not sure yet.
+              (message "hey beautiful")
+              (exwm-layout-set-fullscreen exwm--id)
+              (set-window-dedicated-p exwm--id t)))
+        (set-window-buffer selected-window (exwm--id->buffer exwm--id)))))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; previous workspace
 
@@ -169,8 +182,8 @@
     (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
     ;; When window title updates, use it to set the buffer name
     (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
-    ;; Configure windows as they're created ;; FIXME borked
-    ;; (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+    ;; raise new windows:
+    (add-hook 'exwm-manage-finish-hook #'my/raise-new)
     (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
 
   (add-hook 'exwm-init-hook #'my/init-exwm)
