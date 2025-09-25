@@ -2,6 +2,7 @@
 ;; guix home gives us stuff:
 
 (require 'conf/generated-values "~/.emacs.d/generated-values.el")
+(require 'conf/values "~/.emacs.d/values.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; use-package:

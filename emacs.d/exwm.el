@@ -20,6 +20,7 @@
 ;;; Code:
 
 (require 'cl)
+(require 'conf/values "~/.emacs.d/values.el")
 
 ;; (require 'exwm-modeline)
 ;; (require 'exwm-firefox)
@@ -65,7 +66,7 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; fullscreen / toggle window config
 
-  (setq my/worskpace-window-configs (-repeat exwm-workspace-number nil))
+  (setq my/worskpace-window-configs (-repeat my/exwm-workspace-number nil))
 
   (defun my/set-workspace-window-configuration ()
     (setf (nth exwm-workspace-current-index my/worskpace-window-configs)
@@ -312,15 +313,14 @@
   (setq exwm-randr-workspace-monitor-plist
         (mapcan (lambda (i)
                   (list i "HDMI-A-0"))
-                (number-sequence 10 20)))
+                (number-sequence 10 my/exwm-workspace-number)))
   (exwm-randr-mode))
 
 (use-package exwm-workspace
   :demand t
   :custom
-  (exwm-workspace-number 20) ;; see workspaces.el:6, why?
+  (exwm-workspace-number my/exwm-workspace-number)
   :config
-  ;;(setq exwm-workspace-number 20) ;; 10-20 for external monitors.
   (setq exwm-workspace-warp-cursor t
         mouse-autoselect-window nil
         focus-follows-mouse nil)

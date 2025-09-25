@@ -1,10 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; workspace layouts:
 
-;; FIXME I don't understand why this isn't defined by the time :after exwm-workspace
-;; [2025-09-22 Mon 00:00]
-(setq exwm-workspace-number 20)
-
 (use-package window-layout
   :commands (ws/set-layout ws/toggle-buffer)
   :after exwm-workspace
@@ -12,7 +8,7 @@
   :config
   (require 'dash)
 
-  (defvar ws/current-layout (-repeat exwm-workspace-number nil))
+  (defvar ws/current-layout (-repeat my/exwm-workspace-number nil))
 
   (setq ws/layouts
         `(( :layout code2
@@ -324,7 +320,7 @@
   :after exwm-workspace
   :demand t
   :config
-  (defvar ws/auto-start-state (-repeat exwm-workspace-number t))
+  (defvar ws/auto-start-state (-repeat my/exwm-workspace-number t))
   ;; disable auto run for nameless projects:
   (setf (nth 5 ws/auto-start-state) nil)
   (setf (nth 3 ws/auto-start-state) nil)

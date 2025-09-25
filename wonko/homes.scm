@@ -356,6 +356,7 @@
                       "keys.el"
                       "misc.el"
                       "org-conf.el"
+                      "values.el"
                       "workspaces.el"
                       "transient/levels.el"
                       "transient/values.el")))
