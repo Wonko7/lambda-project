@@ -228,6 +228,7 @@
 
 (use-package magit-todos
   :after magit
+  :demand t
   :config
   (setq magit-todos-ignore-case t)
   (setq magit-todos-max-items 1000)
