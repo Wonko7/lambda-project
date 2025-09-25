@@ -222,32 +222,23 @@
     (consult-buffer `(( :name     "shells"
                         :category buffer
                         :face     consult-buffer
+                        :history  buffer-name-history
                         :state    ,#'consult--buffer-state
                         :items    ,(lambda ()
                                      (consult--buffer-query
                                       :predicate #'persp-is-current-buffer
                                       :mode 'shell-mode :as #'consult--buffer-pair))))))
 
-  (defun wip-nearly-there/exwm-buffers ()
+  (defun my/consult-exwm-buffer ()
     (interactive)
-    (let* ((exwm-workspace-show-all-buffers t)
-           (exwm-layout-show-all-buffers t))
-      ;; FIXME: this doesn't work, so I'd need to set that globally, hide them (except current ws) from default buffer sources, so that this function would show all exwm buffers from all ws.
-      (consult-buffer  `(( :name      "EXWM"
-                           ;; :narrow    ?x
-                           ;; :hidden t
-                           :category  buffer
-                           :face      consult-buffer
-                           :history   buffer-name-history
-                           ;; Specify either :action or :state
-                           :action    ,#'consult--buffer-action ;; No preview
-                           ;; :state  ,#'consult--buffer-state  ;; Preview
-                           :items
-                           ,(lambda () (consult--buffer-query
-                                        ;; :sort 'visibility
-                                        :as #'buffer-name
-                                        ;; :exclude (remq "\\`\\*EXWM" consult-buffer-filter)
-                                        :mode 'exwm-mode))))))))
+    (consult-buffer `(( :name      "EXWM"
+                        :category  buffer
+                        :face      consult-buffer
+                        :history   buffer-name-history
+                        :action    ,#'exwm-workspace-switch-to-buffer
+                        :items     ,(mapcar (lambda (b)
+                                              (buffer-name (cdr b)))
+                                            exwm--id-buffer-alist))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; embark

@@ -203,6 +203,7 @@
     ;; windows
     ;; TODO: use W for other windows mirror of this map.
     "w"  '("Windows" . (keymap))
+    "wl" #'my/consult-exwm-buffer
     "wg" #'ace-select-window
     "wx" #'ace-swap-window
     "ws" #'switch-window-then-swap-buffer
