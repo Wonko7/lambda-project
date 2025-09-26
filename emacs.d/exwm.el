@@ -327,10 +327,10 @@
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; modeline: exwm workspace
+  ;; based on this: https://github.com/ch11ng/exwm/issues/638
 
   (easy-menu-define exwm-workspace-menu nil
     "Menu for Exwm Workspace.
-
 Also used in `exwm-mode-line-workspace-map'."
     '("Exwm Workspace"
       ["Add workspace" exwm-workspace-add]
