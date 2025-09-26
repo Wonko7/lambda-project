@@ -144,6 +144,8 @@
   (gptel-default-mode #'org-mode)
   (gptel-model 'lol)
   :config
+  (general-evil-define-key '(normal insert) gptel-mode-map
+    "C-c C-c" #'gptel-send)
   (general-evil-define-key '(normal) gptel-mode-map
     :prefix "RET"
     "RET" #'gptel-send))
