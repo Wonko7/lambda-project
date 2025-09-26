@@ -781,12 +781,12 @@ current time."
     (cons "recent >7b"
           (list :buffers-files #'org-agenda-files
                 :query '(and (olps "witness" "bouldering" "topped" "")
-                             (regexp "- [7][b-c][+]? -"))
+                             (regexp "- \\([7][b-c][+]?\\|[8-9][a-c][+]?\\) -"))
                 :sort #'my/sort-by-filename-date))
     (cons "ALL >7b"
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "witness" "bouldering" "topped" "")
-                             (regexp "- [7][b-c][+]? -"))
+                             (regexp "- \\([7][b-c][+]?\\|[8-9][a-c][+]?\\) -"))
                 :sort #'my/sort-by-filename-date))
     (cons "Tagged as Flashed"
           (list :buffers-files #'my/all-dailies
@@ -808,7 +808,41 @@ current time."
                                   (org-roam-node-file
                                    (org-roam-node-from-title-or-alias "foreverever"))
                                   (my/all-dailies)))
-                :query '(and (tags "tv") (tags "bm") (not (tags "done")))
+                :query '(and (tags "tv") (tags "bm") (not (tags "meh")) (not (tags "done")))
+                :sort #'my/sort-by-filename-date))
+    (cons "finished tv bookmarks"
+          (list :buffers-files (lambda ()
+                                 (cons
+                                  (org-roam-node-file
+                                   (org-roam-node-from-title-or-alias "foreverever"))
+                                  (my/all-dailies)))
+                :query '(and (tags "tv") (tags "bm") (tags "done"))
+                :sort #'my/sort-by-filename-date))
+    (cons "abadonned tv bookmarks"
+          (list :buffers-files (lambda ()
+                                 (cons
+                                  (org-roam-node-file
+                                   (org-roam-node-from-title-or-alias "foreverever"))
+                                  (my/all-dailies)))
+                :query '(and (tags "tv") (tags "bm") (tags "meh"))
+                :sort #'my/sort-by-filename-date))
+    (cons "movies"
+          (list :buffers-files (lambda ()
+                                 (cons
+                                  (org-roam-node-file
+                                   (org-roam-node-from-title-or-alias "foreverever"))
+                                  (my/all-dailies)))
+                :query '(and (tags "tv") (tags "film"))
+                :sort #'my/sort-by-filename-date))
+    (cons "broken2 tv bookmarks"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "media" "📺")
+                             (not (tags "meh" "done" "bm" "movie" "yt")))
+                :sort #'my/sort-by-filename-date))
+    (cons "broken tv bookmarks"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (olps "media" "📺")
+                             (not (tags "tv")))
                 :sort #'my/sort-by-filename-date)))))
 
 (use-package org-ql-search
