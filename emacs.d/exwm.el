@@ -22,7 +22,6 @@
 (require 'cl-lib)
 (require 'conf/values "~/.emacs.d/values.el")
 
-;; (require 'exwm-modeline)
 ;; (require 'exwm-firefox)
 ;; (require 'exwm-mff)
 
@@ -32,7 +31,6 @@
 
 (use-package desktop-environment
   :demand t
-
   :custom
   (desktop-environment-screenlock-command my/lock-cmd)
   (desktop-environment-volume-get-command "pamixer --get-volume")
@@ -42,7 +40,6 @@
   (desktop-environment-volume-normal-decrement "-d 5")
   (desktop-environment-volume-toggle-command "pamixer -t")
   (desktop-environment-update-exwm-global-keys :global)
-
   :config
   (define-key desktop-environment-mode-map (kbd "s-l") nil)
   (desktop-environment-mode))
@@ -53,16 +50,72 @@
 (use-package exwm
   :demand t
   :after desktop-environment
+
+  :custom
+  (exwm-manage-force-tiling t)
+  (exwm-input-prefix-keys `(?\s-i
+                            ?\s-I
+                            ?\C-\  ;; I want whitespace here
+                            ?\C-\\ ;; xim
+                            ?\s-\  ;; yep
+                            ?\M-:))
+  (exwm-input-global-keys
+   `(([?\s-r] . exwm-reset)
+     ([?\s-i] . exwm-input-toggle-keyboard)
+     ([?\s-I] . coterm-char-mode-cycle)
+
+     ;; Move between windows
+     ([?\s-h] . windmove-left)
+     ([?\s-l] . windmove-right)
+     ([?\s-k] . windmove-up)
+     ([?\s-j] . windmove-down)
+     ([?\s-g] . ace-select-window)
+
+     ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
+     ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
+     ([?\s-K] . previous-buffer)
+     ([?\s-J] . next-buffer)
+
+     ([?\s-C] . kill-current-buffer)
+     ([?\s-c] . (lambda () (interactive) (my/local-async-shell-command "dunstctl close")))
+
+     ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
+     ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
+     ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
+     ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
+     ([?\s-\C-&] . async-shell-command)
+
+     ([?\s-f] . my/toggle-fullscreen)
+     ([?\s-F] . exwm-layout-toggle-fullscreen)
+     ;; ([?\s-d] . my/set-window-dedicated)
+
+     ;; Launch applications via shell command
+     ([?\s-:] . (lambda (command)
+                  (interactive (list (read-shell-command "$ ")))
+                  (start-process-shell-command command nil command)))
+     ([?\s-y] . ws/force-run-auto-start)
+
+     ([?\s-\C-\ ] . my/force-main-menu)
+     ([?\C-\ ] . my/force-main-menu) ;; => see keys.el exwm-mode-map.
+
+     ;; Switch workspace
+     ([?\s-w] . exwm-workspace-switch)
+     ([?\s- ] . my/exwm-workspace-switch-to-previous)
+     ([?\s-M] . exwm-workspace-move-window)
+     ,@(mapcar (lambda (i)
+                 `(,(kbd (format "s-%d" i)) .
+                   (lambda ()
+                     (interactive)
+                     (go-to-screen ,i))))
+               (number-sequence 0 9))
+     ,@(-map-indexed (lambda (i c)
+                       `(,(kbd (format "s-%s" c)) .
+                         (lambda ()
+                           (interactive)
+                           (go-to-external-screen ,i))))
+                     (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
+
   :config
-
-  (setq exwm-input-prefix-keys
-        `(?\s-i
-          ?\s-I
-          ?\C-\  ;; I want whitespace here
-          ?\C-\\ ;; xim
-          ?\s-\  ;; yep
-          ?\M-:))
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; fullscreen / toggle window config
 
@@ -218,82 +271,26 @@
        (exwm-workspace-switch-create (+ i 10)))
       (_ (exwm-workspace-switch-create i))))
 
-  (setq exwm-input-global-keys
-        `(([?\s-r] . exwm-reset)
-          ([?\s-i] . exwm-input-toggle-keyboard)
-          ([?\s-I] . coterm-char-mode-cycle)
-
-          ;; Move between windows
-          ([?\s-h] . windmove-left)
-          ([?\s-l] . windmove-right)
-          ([?\s-k] . windmove-up)
-          ([?\s-j] . windmove-down)
-          ([?\s-g] . ace-select-window)
-
-          ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
-          ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
-          ([?\s-K] . previous-buffer)
-          ([?\s-J] . next-buffer)
-
-          ([?\s-C] . kill-current-buffer)
-          ([?\s-c] . (lambda () (interactive) (my/local-async-shell-command "dunstctl close")))
-
-          ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
-          ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
-          ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
-          ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
-          ([?\s-\C-&] . async-shell-command)
-
-          ([?\s-f] . my/toggle-fullscreen)
-          ([?\s-F] . exwm-layout-toggle-fullscreen)
-          ;; ([?\s-d] . my/set-window-dedicated)
-
-          ;; Launch applications via shell command
-          ([?\s-:] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
-                       (start-process-shell-command command nil command)))
-          ([?\s-y] . ws/force-run-auto-start)
-
-          ([?\s-\C-\ ] . my/force-main-menu)
-          ([?\C-\ ] . my/force-main-menu) ;; => see keys.el exwm-mode-map.
-
-          ;; Switch workspace
-          ([?\s-w] . exwm-workspace-switch)
-          ([?\s- ] . my/exwm-workspace-switch-to-previous)
-          ([?\s-M] . exwm-workspace-move-window)
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (go-to-screen ,i))))
-                    (number-sequence 0 9))
-          ,@(-map-indexed (lambda (i c)
-                            `(,(kbd (format "s-%s" c)) .
-                              (lambda ()
-                                (interactive)
-                                (go-to-external-screen ,i))))
-                          (list "!" "@" "#" "$" "%" "^" "&" "*" "(" ")"))))
-
   ;; WTF: both this & the exwm mapping are needed for this to work.
   (general-evil-define-key '(normal insert visual global emacs) exwm-mode-map
     (kbd "C-SPC") #'my/force-main-menu)
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; exwm settings
-
-  (setq exwm-manage-force-tiling t)
-
+  ;; lift off
   (exwm-wm-mode))
 
 
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; more exwm
 
 (use-package exwm-xim)
 
 (use-package exwm-randr
   :demand t
+  :custom
+  (exwm-randr-workspace-monitor-plist (mapcan (lambda (i)
+                                                (list i "HDMI-A-0"))
+                                              (number-sequence 10 my/exwm-workspace-number)))
   :config
   (defun my/run-autorandr ()
     (async-shell-command "autorandr --change --force")
@@ -310,21 +307,17 @@
   ;; autorandr --save work-monitor
   ;; autorandr --save obama-s-elf
   ;; (system-name) pcase, or based on `autorandr --current`, change this on hook, then run exwm-randr-refresh
-  (setq exwm-randr-workspace-monitor-plist
-        (mapcan (lambda (i)
-                  (list i "HDMI-A-0"))
-                (number-sequence 10 my/exwm-workspace-number)))
   (exwm-randr-mode))
 
 (use-package exwm-workspace
   :demand t
   :custom
   (exwm-workspace-number my/exwm-workspace-number)
-  :config
-  (setq exwm-workspace-warp-cursor t
-        mouse-autoselect-window nil
-        focus-follows-mouse nil)
+  (exwm-workspace-warp-cursor t)
+  (mouse-autoselect-window nil)
+  (focus-follows-mouse nil)
 
+  :config
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; modeline: exwm workspace
   ;; based on this: https://github.com/ch11ng/exwm/issues/638
@@ -373,14 +366,15 @@ Also used in `exwm-mode-line-workspace-map'."
 
 (use-package exwm-systemtray
   :demand t
+  :custom
+  (exwm-systemtray-background-color 'transparent)
   :config
-  (setq exwm-systemtray-background-color 'transparent)
   (exwm-systemtray-mode))
 
 (use-package exwm-edit
   :demand t
-  :config
-  (setq exwm-edit-split 'left))
+  :custom
+  (exwm-edit-split 'left))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; perspepctive
