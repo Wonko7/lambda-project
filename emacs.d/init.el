@@ -327,7 +327,7 @@
   :after coterm
   :demand t
   :custom
-  (shell-prompt-pattern "^\([^#$%>\n]*[#$%>] *\|.*[\n]λ \)")
+  (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]λ \\)")
   ;; for tramp shell sessions:
   (explicit-shell-file-name "bash")
   :config
