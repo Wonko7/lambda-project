@@ -1,3 +1,5 @@
+;;; keys.el  -*- lexical-binding: t; -*-
+
 (use-package which-key
   :demand t
   :config

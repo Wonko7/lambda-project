@@ -1,3 +1,5 @@
+;;; doom.el  -*- lexical-binding: t; -*-
+
 ;; code from doom emacs; see autoload/org.el
 
 

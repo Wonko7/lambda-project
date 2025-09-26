@@ -1,10 +1,12 @@
+;;; maxipassat.el  -*- lexical-binding: t; -*-
+
 (org-ql-sparse-tree '(org-ql-query
 
-                     :select nil
-                     :from   '("/data/org/here-be-dragons/20210825151927-mont_ussy.org"
-                               "/data/org/here-be-dragons/the-road-so-far/2024-05-28.org")
-                     :where '(and (tags "pub")
-                                  (tags "mp"))))
+                       :select nil
+                       :from   '("/data/org/here-be-dragons/20210825151927-mont_ussy.org"
+                                 "/data/org/here-be-dragons/the-road-so-far/2024-05-28.org")
+                       :where '(and (tags "pub")
+                                    (tags "mp"))))
 
 (let ((maxi-passat (org-ql-query
                      :select nil

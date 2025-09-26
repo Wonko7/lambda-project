@@ -1,3 +1,5 @@
+;;; early-init.el  -*- lexical-binding: t; -*-
+
 (setq default-frame-alist '((background-color . "#27212E")
                             (ns-appearance . dark)
                             (fullscreen . maximized)

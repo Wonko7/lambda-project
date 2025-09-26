@@ -1,3 +1,5 @@
+;;; opam-user-setup.el  -*- lexical-binding: t; -*-
+
 ;; ## added by OPAM user-setup for emacs / base ## cfd3c9b7837c85cffd0c59de521990f0 ## you can edit, but keep this line
 (provide 'opam-user-setup)
 

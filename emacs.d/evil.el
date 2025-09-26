@@ -1,11 +1,5 @@
-;;; evil.el -*- lexical-binding: t; -*-
-;;
-;;
-;;; Commentary:
-;;
+;;; evil.el  -*- lexical-binding: t; -*-
 ;;  the evil stuff
-;;
-;;; Code:
 
 (use-package undo-fu
   :demand t)

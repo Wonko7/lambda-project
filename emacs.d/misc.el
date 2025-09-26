@@ -1,3 +1,5 @@
+;;; misc.el  -*- lexical-binding: t; -*-
+
 (defun my/insert-inactive-timestamp ()
   (interactive)
   (insert (format-time-string "[%F %a %H:%M]")))
@@ -223,5 +225,18 @@
                        emoji-search
                        org-web-tools-insert-link-for-url
                        my/insert-inactive-timestamp)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; misc
+
+(defun my/insert-elisp-header ()
+  (interactive)
+  (progn ;; save-excursion
+    (goto-char 0)
+    (insert (concat ";;; "
+                    (file-name-nondirectory buffer-file-name)
+                    "  -*- lexical-binding: t; -*-\n\n"))))
+
 
 (provide 'conf/misc)

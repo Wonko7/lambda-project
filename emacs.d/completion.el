@@ -1,3 +1,5 @@
+;;; completion.el  -*- lexical-binding: t; -*-
+
 (use-package marginalia
   :demand t
   :config
