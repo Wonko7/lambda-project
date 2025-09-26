@@ -360,27 +360,27 @@ EXTRA-FILES can be used to append extra files to the list."
   (setq org-habit-clear-glyph ?○) ;; because added by me
   ;; red boys:
   (set-face-attribute 'org-habit-overdue-face nil :foreground "red")
-  (set-face-attribute 'org-habit-overdue-face nil :background nil)
+  (set-face-attribute 'org-habit-overdue-face nil :background 'unspecified)
   (set-face-attribute 'org-habit-overdue-future-face nil :foreground "red")
-  (set-face-attribute 'org-habit-overdue-future-face nil :background nil)
+  (set-face-attribute 'org-habit-overdue-future-face nil :background 'unspecified)
 
   ;; golden boys:
-  (set-face-attribute 'org-habit-alert-future-face nil :background nil)
+  (set-face-attribute 'org-habit-alert-future-face nil :background 'unspecified)
   (set-face-attribute 'org-habit-alert-future-face nil :foreground "gold")
-  (set-face-attribute 'org-habit-alert-face nil :background nil)
+  (set-face-attribute 'org-habit-alert-face nil :background 'unspecified)
   (set-face-attribute 'org-habit-alert-face nil :foreground "gold")
 
   ;; grey boys: ;; grey:#4E415C  dvio: #6b4d76 vio: #B381C5
   (set-face-attribute 'org-habit-clear-future-face nil :foreground "#B381C5")
-  (set-face-attribute 'org-habit-clear-future-face nil :background nil)
+  (set-face-attribute 'org-habit-clear-future-face nil :background 'unspecified)
   (set-face-attribute 'org-habit-clear-face nil :foreground "#B381C5")
-  (set-face-attribute 'org-habit-clear-face nil :background nil)
+  (set-face-attribute 'org-habit-clear-face nil :background 'unspecified)
 
   ;; pink boys: #EB64B9 pink  cyan: #74DFC4
   (set-face-attribute 'org-habit-ready-future-face nil :foreground "#EB64B9") ;; forestgreen
   (set-face-attribute 'org-habit-ready-face nil :foreground "#EB64B9")
-  (set-face-attribute 'org-habit-ready-future-face nil :background nil)
-  (set-face-attribute 'org-habit-ready-face nil :background nil)
+  (set-face-attribute 'org-habit-ready-future-face nil :background 'unspecified)
+  (set-face-attribute 'org-habit-ready-face nil :background 'unspecified)
 
   ;; add clear glyphs:
   (defun org-habit-build-graph (habit starting current ending)
