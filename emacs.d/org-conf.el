@@ -195,13 +195,13 @@ EXTRA-FILES can be used to append extra files to the list."
 
   (defun org-roam-dailies-latest ()
     "Find latest dailies that is not in the future."
-    (first (last (-filter (lambda (f)
-                            (let ((fn    (file-name-base f))
-                                  (ext   (file-name-extension f))
-                                  (today (format-time-string "%Y-%m-%d")))
-                              (and (string= "org" (file-name-extension f))
-                                   (not (string< today fn)))))
-                          (org-roam-dailies--list-active-files))))))
+    (cl-first (last (-filter (lambda (f)
+                               (let ((fn    (file-name-base f))
+                                     (ext   (file-name-extension f))
+                                     (today (format-time-string "%Y-%m-%d")))
+                                 (and (string= "org" (file-name-extension f))
+                                      (not (string< today fn)))))
+                             (org-roam-dailies--list-active-files))))))
 
 (use-package consult-org-roam
   :after org-roam

@@ -300,7 +300,7 @@
                                 (-filter
                                  #'identity
                                  (mapcar (lambda (topic)
-                                           (let ((x (first topic)))
+                                           (let ((x (cl-first topic)))
                                              (if (string= x "Gnus")
                                                  nil
                                                `((,x visible)))))

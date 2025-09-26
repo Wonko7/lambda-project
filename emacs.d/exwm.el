@@ -19,7 +19,7 @@
 ;;
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 (require 'conf/values "~/.emacs.d/values.el")
 
 ;; (require 'exwm-modeline)

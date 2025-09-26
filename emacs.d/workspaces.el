@@ -6,7 +6,7 @@
   :after exwm-workspace
   :demand t
   :config
-  (require 'dash)
+  (require 'dash) ;; FIXME replace by cl-lib?
 
   (defvar ws/current-layout (-repeat my/exwm-workspace-number nil))
 
@@ -181,10 +181,10 @@
                   :buffer-f ,(progn (ement-notify-switch-to-notifications-buffer)
                                     "*Ement Notifications*"))
                 ( :name a
-                  :buffer-f ,(my/ement-get-buf-for-named-room (first my/ement-ws-init)))
+                  :buffer-f ,(my/ement-get-buf-for-named-room (cl-first my/ement-ws-init)))
 
                 ( :name b
-                  :buffer-f ,(my/ement-get-buf-for-named-room (second my/ement-ws-init))))))
+                  :buffer-f ,(my/ement-get-buf-for-named-room (cl-second my/ement-ws-init))))))
 
           ( :layout ement3
             :recipe (| (:left-max-size 38)
@@ -200,12 +200,12 @@
                 :buffer-f ,(progn (ement-tabulated-room-list)
                                   "*Ement Rooms*"))
               ( :name a
-                :buffer-f ,(my/ement-get-buf-for-named-room (first my/ement-ws-init)))
+                :buffer-f ,(my/ement-get-buf-for-named-room (cl-first my/ement-ws-init)))
 
               ( :name b
-                :buffer-f ,(my/ement-get-buf-for-named-room (second my/ement-ws-init)))
+                :buffer-f ,(my/ement-get-buf-for-named-room (cl-second my/ement-ws-init)))
               ( :name c
-                :buffer-f ,(my/ement-get-buf-for-named-room (third my/ement-ws-init)))))))
+                :buffer-f ,(my/ement-get-buf-for-named-room (cl-third my/ement-ws-init)))))))
 
   (defun ws/init-layout-buffers (layout)
     (mapcar
@@ -229,9 +229,9 @@
                              :sort nil
                              :require-match t)
                           (symbol-name layout)))
-           (layout      (first (-filter (lambda (lo)
-                                          (string= layout-name (plist-get lo ':layout)))
-                                        ws/layouts)))
+           (layout      (cl-first (-filter (lambda (lo)
+                                             (string= layout-name (plist-get lo ':layout)))
+                                           ws/layouts)))
            (buffs       (plist-get layout ':buffers-f))
            (layout      (if buffs
                             (plist-put layout ':buffers (eval buffs))
@@ -245,7 +245,7 @@
 
   (defun ws/layout-reinit ()
     (interactive)
-    (let* ((layout      (first (nth exwm-workspace-current-index ws/current-layout))))
+    (let* ((layout      (cl-first (nth exwm-workspace-current-index ws/current-layout))))
       (setf (nth exwm-workspace-current-index ws/current-layout)
             (list
              layout
@@ -256,8 +256,8 @@
   (defun ws/save-buffer-config ()
     (interactive)
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
-           (layout (first lo))
-           (wm     (second lo))
+           (layout (cl-first lo))
+           (wm     (cl-second lo))
            (buffs  (-filter (lambda (bi)
                               (not (plist-get bi ':hide-your-kids)))
                             (plist-get layout ':buffers)))
@@ -273,8 +273,8 @@
   (defun ws/toggle-buffer ()
     (interactive)
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
-           (layout (first lo))
-           (wm     (second lo))
+           (layout (cl-first lo))
+           (wm     (cl-second lo))
            (buffs  (mapcar (lambda (bi)
                              (plist-get bi ':name))
                            (plist-get layout ':buffers)))
@@ -289,8 +289,8 @@
     (interactive)
     (ws/save-buffer-config)
     (let* ((lo     (nth exwm-workspace-current-index ws/current-layout))
-           (layout (first lo))
-           (wm     (second lo))
+           (layout (cl-first lo))
+           (wm     (cl-second lo))
            (buffs  (-filter (lambda (bi)
                               (plist-get bi ':hide-your-kids))
                             (plist-get layout ':buffers)))
@@ -304,13 +304,13 @@
   (defun ws/layout-reset ()
     (interactive)
     (wlf:reset-init
-     (second
+     (cl-second
       (nth exwm-workspace-current-index ws/current-layout))))
 
   (defun unused/filter-project-buffs (name)
-    (first (-filter (lambda (b)
-                      (string-prefix-p name (buffer-name b)))
-                    (projectile-project-buffers)))))
+    (cl-first (-filter (lambda (b)
+                         (string-prefix-p name (buffer-name b)))
+                       (projectile-project-buffers)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto start workspaces:
