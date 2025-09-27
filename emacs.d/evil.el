@@ -189,6 +189,21 @@
   :init
   (setq evil-mc-cursors-map (make-sparse-keymap)) ;; FIXME: workaround on zonked req evil-mc
   :config
+  (define-key evil-motion-state-map "gm" nil)
+  (evil-define-key '(normal visual) 'global
+    "gmm" #'evil-mc-make-all-cursors
+    "gmu" #'evil-mc-undo-all-cursors
+
+    "gmr" #'evil-mc-pause-cursors
+    "gmR" #'evil-mc-resume-cursors
+    "gmh" #'evil-mc-make-cursor-here
+    "gmj" #'evil-mc-make-cursor-move-next-line
+    "gmk" #'evil-mc-make-cursor-move-prev-line
+
+    "gmn" #'evil-mc-make-and-goto-next-match
+    "gmN" #'evil-mc-skip-and-goto-next-match
+    "gmp" #'evil-mc-make-and-goto-prev-match
+    "gmP" #'evil-mc-skip-and-goto-prev-match)
   (global-evil-mc-mode))
 
 (provide 'conf/evil)
