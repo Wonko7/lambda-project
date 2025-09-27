@@ -70,6 +70,11 @@
   (org-catch-invisible-edits 'show-and-error)
   (org-insert-heading-respect-content t)
   (org-indent-mode t)
+  ;; also see org-crypt. btw, this works but needs roam db rebuild.
+  (org-use-tag-inheritance '("is" "priv" ;; pub?
+                             "wtf" "kl" "focus"
+                             "ssdd" "fam" "tt"
+                             "ei" "ol" "iv"))
   ;; org-special-ctrl-a/e t
   ;; org styling, hide markup etc.
   (org-hide-emphasis-markers t)
@@ -256,13 +261,13 @@ EXTRA-FILES can be used to append extra files to the list."
                                               :and (:tag "ssdd" :tag "tt")
                                               :order 90)
                                        (:name "🐫 [ssdd][work] ocsigen labs"
-                                              :and (:tag "ssdd" :tag "work" :tag "ol")
+                                              :and (:tag "ssdd" :tag "ol")
                                               :order 100)
                                        (:name "🐝️ [ssdd][work] ivehte"
-                                              :and (:tag "ssdd" :tag "work" :tag "iv")
+                                              :and (:tag "ssdd" :tag "iv")
                                               :order 101)
                                        (:name "👾️ [ssdd][work] entreprise individuelle"
-                                              :and (:tag "ssdd" :tag "work" :tag "ei")
+                                              :and (:tag "ssdd" :tag "ei")
                                               :order 103)
                                        (:name "👑 king line hit list"
                                               :tag ("kl")
