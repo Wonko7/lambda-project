@@ -163,12 +163,12 @@
       (shell
        (projectile-generate-process-name
         (concat
-         ;; (file-name-base pr) ":"
          (int-to-string exwm-workspace-current-index) ":") nil pr)))))
 
 (defun my/ws-remote-fleet-shell (&optional remote project)
   (interactive)
-  (let* ((pr  (or project
+  (let* ((pr  (or (and project
+                       (tramp-file-local-name project))
                   (projectile-project-root
                    (tramp-file-local-name default-directory))
                   "~/"))
@@ -186,7 +186,10 @@
          (rm  (if (or (= ws 2) (= ws 8))
                   "of-course-i-still-love-you.local"))
          (pr (when (= 2 ws)
-               "/mnt/trantor/media/inbox")))
+               "/mnt/trantor/media/inbox"))
+         (pr (if (= 8 ws)
+                 "/code/lambda-project"
+               pr)))
     (my/ws-remote-fleet-shell rm pr)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
