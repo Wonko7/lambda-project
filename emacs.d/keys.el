@@ -43,6 +43,12 @@
     "tr"  #'my/ws-remote-fleet-shell-with-default
     "tR"  #'my/ws-remote-fleet-shell
     "tl"  #'my/consult-shell
+    "tfd" (lambda () (interactive) (my/ws-remote-fleet-shell "daban-urnud.local" nil))
+    "tfe" (lambda () (interactive) (my/ws-remote-fleet-shell "enterprise.local" nil))
+    "tfy" (lambda () (interactive) (my/ws-remote-fleet-shell "yggdrasill.local" nil))
+    "tfo" (lambda ()
+            (interactive)
+            (my/ws-remote-fleet-shell "of-course-i-still-love-you.local" nil))
 
     ;; emacs apps
     "a"   '("Apps" . (keymap))
