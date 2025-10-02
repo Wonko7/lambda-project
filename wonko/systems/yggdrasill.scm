@@ -28,7 +28,7 @@
   #:use-module (wonko services kmonad)
   #:export (%yggdrasill-os))
 
-(use-package-modules xorg kde synergy)
+(use-package-modules xorg kde-internet synergy)
 
 (define machine-home-services
   (list
