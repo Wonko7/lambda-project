@@ -34,7 +34,7 @@
 
     ;; yank
     "y"  '("yank" . (keymap))
-    "yp" (lambda () (interactive) (kill-new (buffer-file-name)))
+    "yp" (li (kill-new (buffer-file-name)))
     "yP" #'consult-yank-pop
 
     ;; regroup shells / tmp
@@ -43,12 +43,10 @@
     "tr"  #'my/ws-remote-fleet-shell-with-default
     "tR"  #'my/ws-remote-fleet-shell
     "tl"  #'my/consult-shell
-    "tfd" (lambda () (interactive) (my/ws-remote-fleet-shell "daban-urnud.local" nil))
-    "tfe" (lambda () (interactive) (my/ws-remote-fleet-shell "enterprise.local" nil))
-    "tfy" (lambda () (interactive) (my/ws-remote-fleet-shell "yggdrasill.local" nil))
-    "tfo" (lambda ()
-            (interactive)
-            (my/ws-remote-fleet-shell "of-course-i-still-love-you.local" nil))
+    "tfd" (li (my/ws-remote-fleet-shell "daban-urnud.local"))
+    "tfe" (li (my/ws-remote-fleet-shell "enterprise.local"))
+    "tfy" (li (my/ws-remote-fleet-shell "yggdrasill.local"))
+    "tfo" (li (my/ws-remote-fleet-shell "of-course-i-still-love-you.local"))
 
     ;; emacs apps
     "a"   '("Apps" . (keymap))
@@ -64,16 +62,16 @@
     ;; external apps
     "aa"    '("More apps" . (keymap))
     "aab"   #'bluetooth-list-devices
-    "aaT"   (lambda () (interactive) (my/local-async-shell-command my/term-cmd))
+    "aaT"   (li (my/local-async-shell-command my/term-cmd))
     "aat"   #'transmission
-    "aac"   (lambda () (interactive) (my/local-async-shell-command "calibre"))
-    "aap"   (lambda () (interactive) (my/local-async-shell-command "pavucontrol"))
+    "aac"   (li (my/local-async-shell-command "calibre"))
+    "aap"   (li (my/local-async-shell-command "pavucontrol"))
     "aallm" #'gptel
     "aai"   #'gptel
     ;; browsers
     "aB"  '("Browsers" . (keymap))
-    "aBf" (lambda () (interactive) (my/local-async-shell-command "firefox"))
-    "aBc" (lambda () (interactive) (my/local-async-shell-command "chromium"))
+    "aBf" (li (my/local-async-shell-command "firefox"))
+    "aBc" (li (my/local-async-shell-command "chromium"))
     "aBt" #'my/tbb
 
     ;; buffers
@@ -86,7 +84,7 @@
 
     ;; org
     "o"   '("org" . (keymap))
-    "oa"  (lambda () (interactive) (org-agenda nil "z"))
+    "oa"  (li (org-agenda nil "z"))
     "oc"  #'cfw:open-org-calendar ;; FIXME use this as date picker?
     "oi"  '("insert" . (keymap))
     "oib" (lambda ()
@@ -166,10 +164,10 @@
     "g." #'magit-file-dispatch
     "gg" #'magit-status
     "gb" #'magit-blame
-    "graa" (lambda () (interactive) (async-shell-command "git-add-remotes -lf"))
-    "graf" (lambda () (interactive) (async-shell-command "git-add-remotes -f"))
-    "gral" (lambda () (interactive) (async-shell-command "git-add-remotes -l"))
-    "grah" (lambda () (interactive) (async-shell-command "git-add-remotes -h"))
+    "graa" (li (async-shell-command "git-add-remotes -lf"))
+    "graf" (li (async-shell-command "git-add-remotes -f"))
+    "gral" (li (async-shell-command "git-add-remotes -l"))
+    "grah" (li (async-shell-command "git-add-remotes -h"))
     "grap" (lambda ()
              (interactive)
              (shell-command-to-string "git remote")
@@ -226,13 +224,13 @@
 
     ;; xorg stuff
     "z"  '("Xorg desktop things" . (keymap))
-    "zz"  (lambda () (interactive) (my/local-async-shell-command my/lock-cmd))
+    "zz"  (li (my/local-async-shell-command my/lock-cmd))
     "zl"  #'scroll-lock-mode
     "z'"  '("Notifications" . (keymap))
-    "z''" (lambda () (interactive) (my/local-async-shell-command "dunstctl set-paused toggle"))
-    "z'c" (lambda () (interactive) (my/local-async-shell-command "dunstctl close"))
-    "z'C" (lambda () (interactive) (my/local-async-shell-command "dunstctl close-all"))
-    "z'h" (lambda () (interactive) (my/local-async-shell-command "dunstctl history"))
+    "z''" (li (my/local-async-shell-command "dunstctl set-paused toggle"))
+    "z'c" (li (my/local-async-shell-command "dunstctl close"))
+    "z'C" (li (my/local-async-shell-command "dunstctl close-all"))
+    "z'h" (li (my/local-async-shell-command "dunstctl history"))
     "z't" (lambda () (interactive)
             (my/local-async-shell-command
              "dunstify 'How are we gonna fuck this pig?' \
@@ -253,7 +251,7 @@
    "C-#"  #'evil-search-word-backward
    ;; "`"    #' FIXME do something with this
    "'"    #'evil-owl-goto-mark
-   "Y"    (lambda () (interactive) (execute-kbd-macro (kbd "y$"))))
+   "Y"    (li (execute-kbd-macro (kbd "y$"))))
   ;; TODO: sentence & paragraph motions.
 
   (general-define-key
@@ -261,7 +259,7 @@
    "C-e"   #'emoji-search
    "C-S-H" #'term-send-invisible
    "C-v"   #'evil-paste-after
-   "C-S-V" (lambda () (interactive) (evil-paste-after 1 ?\*)))
+   "C-S-V" (li (evil-paste-after 1 ?\*)))
 
   (general-define-key
    :states '(normal emacs insert visual global motion)
