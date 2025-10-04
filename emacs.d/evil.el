@@ -38,7 +38,33 @@
       (if (null count)
           (goto-char (- (point-max) 1))
         (goto-char (point-min))
-        (forward-line (1- count))))))
+        (forward-line (1- count)))))
+
+  ;; extend n/N cycle search results to consult-line:
+  (setq my/current-search-fn 'isearch)
+
+  (advice-add #'evil-search-function :after
+              (lambda (&rest _)
+                (setq my/current-search-fn 'isearch)))
+
+  (advice-add #'consult-line :after
+              (lambda (&rest _)
+                (setq my/current-search-fn 'consult)))
+
+  (defun my/search-prev ()
+    (interactive)
+    (if (eq my/current-search-fn 'consult)
+        (call-interactively (kmacro "SPC . C-k <return>"))
+      (evil-search-previous)))
+
+  (defun my/search-next ()
+    (interactive)
+    (if (eq my/current-search-fn 'consult)
+        (call-interactively (kmacro "SPC . C-j <return>"))
+      (evil-search-next)))
+
+  (define-key evil-motion-state-map "n" #'my/search-next)
+  (define-key evil-motion-state-map "N" #'my/search-prev))
 
 (use-package evil-collection
   :defer nil
