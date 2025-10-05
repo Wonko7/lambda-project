@@ -1,5 +1,11 @@
 ;;; keys.el  -*- lexical-binding: t; -*-
 
+;; code golf helper:
+(defmacro li (&rest body) ;; FIXME use in exwm too.
+  `(lambda ()
+     (interactive)
+     ,@body))
+
 (use-package which-key
   :demand t
   :config

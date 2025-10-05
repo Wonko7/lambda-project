@@ -52,18 +52,18 @@
      ([?\s-j] . windmove-down)
      ([?\s-g] . ace-select-window)
 
-     ([?\s-H] . (li (my/tune-workspace "down")))
-     ([?\s-L] . (li (my/tune-workspace "up")))
+     ([?\s-H] . (lambda () (interactive) (my/tune-workspace "down")))
+     ([?\s-L] . (lambda () (interactive) (my/tune-workspace "up")))
      ([?\s-K] . previous-buffer)
      ([?\s-J] . next-buffer)
 
      ([?\s-C] . kill-current-buffer)
-     ([?\s-c] . (li (my/local-async-shell-command "dunstctl close")))
+     ([?\s-c] . (lambda () (interactive) (my/local-async-shell-command "dunstctl close")))
 
-     ([?\s-,] . (li (my/tune-alpha "down")))
-     ([?\s-.] . (li (my/tune-alpha "up")))
-     ([?\s--] . (li (evil-window-split) (next-buffer)))
-     ([?\s-|] . (li (evil-window-vsplit) (next-buffer)))
+     ([?\s-,] . (lambda () (interactive) (my/tune-alpha "down")))
+     ([?\s-.] . (lambda () (interactive) (my/tune-alpha "up")))
+     ([?\s--] . (lambda () (interactive) (evil-window-split) (next-buffer)))
+     ([?\s-|] . (lambda () (interactive) (evil-window-vsplit) (next-buffer)))
      ([?\s-\C-&] . async-shell-command)
 
      ([?\s-f] . my/toggle-fullscreen)
