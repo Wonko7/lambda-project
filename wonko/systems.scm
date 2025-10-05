@@ -53,38 +53,38 @@
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
   (list (channel
-         (name 'guix-forge)
-         (url "https://git.systemreboot.net/guix-forge/")
-         (branch "main")
-         (commit
-          "e43fd9a4d73654d3876e2c698af7da89f3408f89")
-         (introduction
-          (make-channel-introduction
-           "0432e37b20dd678a02efee21adf0b9525a670310"
-           (openpgp-fingerprint
-            "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+          (name 'guix-forge)
+          (url "https://git.systemreboot.net/guix-forge/")
+          (branch "main")
+          (commit
+           "e43fd9a4d73654d3876e2c698af7da89f3408f89")
+          (introduction
+           (make-channel-introduction
+            "0432e37b20dd678a02efee21adf0b9525a670310"
+            (openpgp-fingerprint
+             "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
         (channel
-         (name 'nonguix)
-         (url "https://gitlab.com/nonguix/nonguix")
-         (branch "master")
-         (commit
-          "25d7a8091c2c9678a8694f073d846a7001165169")
-         (introduction
-          (make-channel-introduction
-           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-           (openpgp-fingerprint
-            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+          (name 'nonguix)
+          (url "https://gitlab.com/nonguix/nonguix")
+          (branch "master")
+          (commit
+           "150e5e5b63d70ed92783965b22617a8c7f4da369")
+          (introduction
+           (make-channel-introduction
+            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+            (openpgp-fingerprint
+             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
-         (name 'guix)
-         (url "https://codeberg.org/guix/guix")
-         (branch "master")
-         (commit
-          "ba6369c85b9c63749d36a56e4afd28cd0fc5fb3b")
-         (introduction
-          (make-channel-introduction
-           "9edb3f66fd807b096b48283debdcddccfea34bad"
-           (openpgp-fingerprint
-            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+          (name 'guix)
+          (url "https://codeberg.org/guix/guix")
+          (branch "master")
+          (commit
+           "4dccdcdd5ede900ddd9b45cef133440b7228fa70")
+          (introduction
+           (make-channel-introduction
+            "9edb3f66fd807b096b48283debdcddccfea34bad"
+            (openpgp-fingerprint
+             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
