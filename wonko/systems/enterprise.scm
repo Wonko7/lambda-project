@@ -64,8 +64,14 @@
 
 (define %enterprise-os
   (operating-system
-    (inherit %media-station-os)
+    (inherit %laptop-os)
+    ;; (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps"))
     (host-name "enterprise")
+    (bootloader
+      (bootloader-configuration
+        (bootloader grub-efi-bootloader)
+        (targets    '("/boot"))
+        (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("caps:return")))))
     (services
      (cons*
       (service slim-service-type wonko-slim-config)
@@ -79,9 +85,9 @@
       %laptop-services))
     (mapped-devices
      (list (mapped-device
-            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
-            (target "vault")
-            (type luks-device-mapping))))
+             (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+             (target "vault")
+             (type luks-device-mapping))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*
