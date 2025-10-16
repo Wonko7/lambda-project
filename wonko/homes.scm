@@ -161,10 +161,10 @@
     ;; ("PS1"                          . "in bashrc because I want it after /etc/bashrc")
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
     ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-    ;; ("XMODIFIER"           . "@im=exwm-xim")
-    ;; ("GTK_IM_MODULE"       . "xim")
-    ;; ("QT_IM_MODULE"        . "xim")
-    ;; ("CLUTTER_IM_MODULE"   . "xim")
+    ("XMODIFIER"           . "@im=exwm-xim")
+    ("GTK_IM_MODULE"       . "xim")
+    ("QT_IM_MODULE"        . "xim")
+    ("CLUTTER_IM_MODULE"   . "xim")
     ;; xorg appearance:
     ("GTK_THEME"                       . "Breeze-Dark")
     ;; QT: in conjunction with .config/kdeglobals further down:

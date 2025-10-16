@@ -264,7 +264,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; more exwm
 
-(use-package exwm-xim)
+(use-package exwm-xim
+  :demand t)
 
 (use-package exwm-randr
   :demand t
