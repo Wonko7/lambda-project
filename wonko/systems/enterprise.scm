@@ -67,11 +67,6 @@
     (inherit %laptop-os)
     ;; (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps"))
     (host-name "enterprise")
-    (bootloader
-      (bootloader-configuration
-        (bootloader grub-efi-bootloader)
-        (targets    '("/boot"))
-        (keyboard-layout (keyboard-layout "us" "dvorak" #:options '("caps:return")))))
     (services
      (cons*
       (service slim-service-type wonko-slim-config)

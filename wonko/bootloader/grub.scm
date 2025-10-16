@@ -27,7 +27,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-module (gnu bootloader grub)
+(define-module (wonko bootloader grub)
   #:use-module (guix build union)
   #:use-module (guix deprecation)
   #:use-module (guix records)
@@ -49,32 +49,20 @@
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-2)
   #:use-module (srfi srfi-26)
-  #:export (grub-theme
-            grub-theme?
-            grub-theme-image
-            grub-theme-resolution
-            grub-theme-color-normal
-            grub-theme-color-highlight
-            grub-theme-gfxmode
-
-            install-grub-efi-removable
-            make-grub-efi-installer
-            make-grub-efi-netboot-installer
-
-            grub-bootloader
-            grub-efi-bootloader
-            grub-efi-removable-bootloader
-            grub-efi32-bootloader
-            grub-efi-netboot-bootloader
-            grub-efi-netboot-removable-bootloader
-            grub-mkrescue-bootloader
-            grub-minimal-bootloader
-
-            grub-configuration))
+  #:export (my-grub-efi-bootloader))
 
 ;;; Commentary:
 ;;;
-;;; Configuration of GNU GRUB.
+;;; wanted a custom keyboard because of a broken return key, won't work without
+;;; copying over kb file to initrd (this for entering luks password).
+;;;
+;;; (bootloader ;; this was the plan
+;;;   (bootloader-configuration
+;;;     (bootloader my-grub-efi-bootloader)
+;;;     (targets    '("/boot"))
+;;;     (keyboard-layout (keyboard-layout "us" "dvorak"))))
+;;;
+;;; see my-keyboard-layout-file
 ;;;
 ;;; Code:
 
@@ -238,9 +226,9 @@ fi~%"
 ;;; Configuration file.
 ;;;
 
-(define* (keyboard-layout-file layout
-                               #:key
-                               (grub grub))
+(define* (my-keyboard-layout-file layout
+                                  #:key
+                                  (grub grub))
   "Process the X keyboard layout description LAYOUT, a <keyboard-layout> record,
 and return a file in the format for GRUB keymaps.  LAYOUT must be present in
 the 'share/X11/xkb/symbols/' directory of 'xkeyboard-config'."
@@ -248,14 +236,15 @@ the 'share/X11/xkb/symbols/' directory of 'xkeyboard-config'."
     (with-imported-modules '((guix build utils))
       #~(begin
           (use-modules (guix build utils))
-
           ;; 'grub-kbdcomp' passes all its arguments but '-o' to 'ckbcomp'
           ;; (from the 'console-setup' package).
           (invoke #+(file-append grub "/bin/grub-mklayout")
                   "-i" #+(keyboard-layout->console-keymap layout)
-                  "-o" #$output))))
+                  "-o" #$output)
+          ;; 10/10 hack except that gnu store isn't available yet, lol.
+          (substitute* #$output (("F5") "Return")))))
 
-  (computed-file (string-append "grub-keymap."
+  (computed-file (string-append "grub-TEST-keymap."
                                 (string-map (match-lambda
                                               (#\, #\-)
                                               (chr chr))
@@ -370,13 +359,13 @@ code."
   (let ((device-name (canonicalize-device-spec device-spec)))
     (device-name->hurd-device-name device-name #:disk disk)))
 
-(define* (make-grub-configuration grub config entries
-                                  #:key
-                                  (locale #f)
-                                  (system (%current-system))
-                                  (old-entries '())
-                                  (store-crypto-devices '())
-                                  store-directory-prefix)
+(define* (my-make-grub-configuration grub config entries
+                                     #:key
+                                     (locale #f)
+                                     (system (%current-system))
+                                     (old-entries '())
+                                     (store-crypto-devices '())
+                                     store-directory-prefix)
   "Return the GRUB configuration file corresponding to CONFIG, a
 <bootloader-configuration> object, and where the store is available at
 STORE-FS, a <file-system> object.  OLD-ENTRIES is taken to be a list of menu
@@ -385,6 +374,7 @@ STORE-CRYPTO-DEVICES contain the UUIDs of the encrypted units that must
 be unlocked to access the store contents.
 STORE-DIRECTORY-PREFIX may be used to specify a store prefix, as is required
 when booting a root file system on a Btrfs subvolume."
+  (pk "so am i")
   (define all-entries
     (append entries (bootloader-configuration-menu-entries config)))
   (define (menu-entry->gexp entry)
@@ -502,10 +492,10 @@ set lang=~a~%"
                     locales
                     locale)))))
 
-  (define keyboard-layout-config
+  (define my-keyboard-layout-config
     (let* ((layout (bootloader-configuration-keyboard-layout config))
            (keymap* (and layout
-                         (keyboard-layout-file layout #:grub grub)))
+                         (my-keyboard-layout-file layout #:grub grub)))
            (entry (first all-entries))
            (device (menu-entry-device entry))
            (mount-point (menu-entry-device-mount-point entry))
@@ -527,7 +517,7 @@ keymap ~a~%" #$keymap))))
           #$@(crypto-devices)
           #$(sugar)
           #$locale-config
-          #$keyboard-layout-config
+          #$my-keyboard-layout-config
           (format port "
 set default=~a
 set timeout=~a~%"
@@ -554,13 +544,14 @@ fi~%"))))
                  #:options '(#:local-build? #t
                              #:substitutable? #f)))
 
-(define (grub-configuration-file config . args)
+(define (my-grub-configuration-file config . args)
+  (pk "i am called")
   (let* ((bootloader (bootloader-configuration-bootloader config))
          (grub (bootloader-package bootloader)))
-    (apply make-grub-configuration grub config args)))
+    (apply my-make-grub-configuration grub config args)))
 
-(define (grub-efi-configuration-file . args)
-  (apply make-grub-configuration grub-efi args))
+(define (my-grub-efi-configuration-file . args)
+  (apply my-make-grub-configuration grub-efi args))
 
 (define grub-cfg "/boot/grub/grub.cfg")
 
@@ -808,90 +799,13 @@ symlink to the store is not needed in this case."
 ;;; break 'guix system delete-generations', 'guix system switch-generation',
 ;;; and 'guix system roll-back'.
 
-(define grub-bootloader
+(define my-grub-efi-bootloader
   (bootloader
-    (name 'grub)
-    (package grub)
-    (installer install-grub)
-    (disk-image-installer install-grub-disk-image)
-    (configuration-file grub-cfg)
-    (configuration-file-generator grub-configuration-file)))
-
-(define grub-minimal-bootloader
-  (bootloader
-    (inherit grub-bootloader)
-    (package grub-minimal)))
-
-(define grub-efi-bootloader
-  (bootloader
-    (name 'grub-efi)
-    (package grub-efi)
-    (installer (make-grub-efi-installer))
-    (disk-image-installer #f)
-    (configuration-file grub-cfg)
-    (configuration-file-generator grub-configuration-file)))
-
-(define grub-efi-removable-bootloader
-  (bootloader
-    (inherit grub-efi-bootloader)
-    (name 'grub-efi-removable-bootloader)
-    (installer (make-grub-efi-installer #:removable? #t))))
-
-(define grub-efi32-bootloader
-  (bootloader
-    (inherit grub-efi-bootloader)
-    (installer (make-grub-efi-installer #:efi32? #t))
-    (name 'grub-efi32)
-    (package grub-efi32)))
-
-(define (make-grub-efi-netboot-bootloader name subdir)
-  (bootloader
-    (name name)
-    (package (make-grub-efi-netboot (symbol->string name) subdir))
-    (installer (make-grub-efi-netboot-installer grub-efi grub-cfg subdir))
-    (disk-image-installer #f)
-    (configuration-file grub-cfg)
-    (configuration-file-generator grub-efi-configuration-file)))
-
-(define grub-efi-netboot-bootloader
-  (make-grub-efi-netboot-bootloader 'grub-efi-netboot-bootloader
-                                    "efi/Guix"))
-
-(define grub-efi-netboot-removable-bootloader
-  (make-grub-efi-netboot-bootloader 'grub-efi-netboot-removable-bootloader
-                                    "efi/boot"))
-
-(define grub-mkrescue-bootloader
-  (bootloader
-    (inherit grub-efi-bootloader)
-    (package grub-hybrid)))
-
-
-;;;
-;;; Compatibility macros.
-;;;
-
-(define-syntax grub-configuration
-  (syntax-rules (grub)
-    ((_ (grub package) fields ...)
-     (if (eq? package grub)
-         (bootloader-configuration
-           (bootloader grub-bootloader)
-           fields ...)
-         (bootloader-configuration
-           (bootloader grub-efi-bootloader)
-           fields ...)))
-    ((_ fields ...)
-     (bootloader-configuration
-       (bootloader grub-bootloader)
-       fields ...))))
-
-
-;;;
-;;; Deprecated bootloader and installer variables.
-;;;
-
-(define-deprecated/alias install-grub-efi-removable
-  (make-grub-efi-installer #:removable? #t))
+   (name "my-grub-efi")
+   (package grub-efi)
+   (installer (make-grub-efi-installer))
+   (disk-image-installer #f)
+   (configuration-file grub-cfg)
+   (configuration-file-generator my-grub-configuration-file)))
 
 ;;; grub.scm ends here
