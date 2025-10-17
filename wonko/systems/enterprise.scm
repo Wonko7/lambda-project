@@ -26,6 +26,7 @@
   #:use-module (wonko systems)
   #:use-module (wonko services xorg)
   #:use-module (wonko services kmonad)
+  #:use-module (wonko bootloader grub)
   #:export (%enterprise-os))
 
 (use-package-modules xorg)
@@ -67,6 +68,10 @@
     (inherit %laptop-os)
     ;; (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps"))
     (host-name "enterprise")
+    (bootloader
+      (bootloader-configuration
+        (bootloader my-grub-efi-bootloader)
+        (targets    '("/boot"))))
     (services
      (cons*
       (service slim-service-type wonko-slim-config)
