@@ -68,7 +68,7 @@
           (url "https://gitlab.com/nonguix/nonguix")
           (branch "master")
           (commit
-           "150e5e5b63d70ed92783965b22617a8c7f4da369")
+           "3f4a1907cae9b0def09d1549c491bb4e307b9097")
           (introduction
            (make-channel-introduction
             "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -79,7 +79,7 @@
           (url "https://codeberg.org/guix/guix")
           (branch "master")
           (commit
-           "4dccdcdd5ede900ddd9b45cef133440b7228fa70")
+           "26ec96c9b5807a89d2581924dc501ce7deef8e1d")
           (introduction
            (make-channel-introduction
             "9edb3f66fd807b096b48283debdcddccfea34bad"
