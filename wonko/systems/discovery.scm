@@ -71,21 +71,22 @@
   (operating-system
     (inherit %removable-laptop-os)
     (host-name "discovery")
-    (keyboard-layout %us-kb)
-    (services (cons* (service noautostart-slim-service-type wonko-slim-config)
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
-                              `((,(crew-name %wonko) ,%wonko-home)
-                                (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type kmonad-laptop-config)
-                     (service kmonad-service-type kmonad-ergodox-config)
-                     (service kmonad-service-type kmonad-bullshit-config)
-                     %laptop-services))
+    (services
+     (cons*
+      (service slim-service-type wonko-slim-config)
+      (service noautostart-slim-service-type media-station-slim-config)
+      (service guix-home-service-type
+               `((,(crew-name %wonko) ,%wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      (service kmonad-service-type kmonad-laptop-config)
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      %laptop-services))
     (mapped-devices
      (list (mapped-device
-            (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
-            (target "vault")
-            (type luks-device-mapping))))
+             (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
+             (target "vault")
+             (type luks-device-mapping))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*

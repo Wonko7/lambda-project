@@ -45,7 +45,7 @@
   (package
     (inherit grub-efi)
     (name "my-grub-efi")
-    (synopsis "GRand Unified Boot loader (UEFI version) + s/F5/Return")
+    (synopsis "GRand Unified Boot loader (UEFI + s/insert/return)")
     (arguments
      (substitute-keyword-arguments (package-arguments grub-efi)
        ((#:phases phases)
@@ -66,4 +66,10 @@
   (bootloader
     (inherit grub-efi-bootloader)
     (name "my-grub-efi")
+    (package my-grub-efi)))
+
+(define-public my-grub-efi-removable-bootloader
+  (bootloader
+    (inherit grub-efi-removable-bootloader)
+    (name "my-grub-efi-removable")
     (package my-grub-efi)))

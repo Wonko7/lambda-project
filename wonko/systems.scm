@@ -23,6 +23,7 @@
   #:use-module (wonko pkgs)
   #:use-module (wonko services xorg)
   #:use-module (wonko services file-sharing)
+  #:use-module (wonko bootloader grub)
   #:export (%laptop-os
             wonko-slim-config
             %laptop-services
@@ -328,19 +329,18 @@
   (operating-system
     (inherit %laptop-os)
     (bootloader
-     (bootloader-configuration
-      (bootloader grub-efi-removable-bootloader)
-      (targets    '("/boot"))
-      (keyboard-layout %us-kb)))))
+      (bootloader-configuration
+        (bootloader my-grub-efi-removable-bootloader)
+        (targets    '("/boot"))))))
 
 (define-public %removable-laptop-os-init-from-external
   (operating-system
     (inherit %laptop-os)
     (bootloader
-     (bootloader-configuration
-      (bootloader grub-efi-removable-bootloader)
-      (targets '("/mnt/tmp-efi/"))
-      (keyboard-layout %us-kb)))))
+      (bootloader-configuration
+        (bootloader my-grub-efi-removable-bootloader)
+        (targets '("/mnt/tmp-efi/"))
+        (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
   (cons*
