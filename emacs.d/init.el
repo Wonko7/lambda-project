@@ -110,6 +110,14 @@
     (load custom-file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; async-shell-command
+
+(setq async-shell-command-buffer 'new-buffer)
+
+(add-to-list 'display-buffer-alist
+             '("*Async Shell Command*" display-buffer-no-window (nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; windows
 
 (use-package ace-window
@@ -505,37 +513,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ibuffer
 
-(setq ibuffer-save-with-custom nil
-      ibuffer-saved-filter-groups
-      '(("default"
-	 ("code"     (and (or (derived-mode . prog-mode)
-			      (mode . yaml-mode))
-			  (not (name . "^\\*scratch\\*$"))))
-	 ("exwm"     (mode . exwm-mode))
-	 ("dired"    (mode . dired-mode))
-	 ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
-	 ("org"      (derived-mode . org-mode))
-	 ("ement"    (derived-mode . ement-room-mode))
-	 ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
-	 ("scratch"  (name . "^\\*scratch\\*$")))))
-
-(add-hook 'ibuffer-mode-hook
-	  (lambda ()
-	    (ibuffer-switch-to-saved-filter-groups "default")))
+(use-package ibuffer
+  :demand t
+  :hook (ibuffer-mode-hook
+         . (lambda ()
+             (ibuffer-switch-to-saved-filter-groups "default")))
+  :custom
+  (ibuffer-save-with-custom nil)
+  (ibuffer-saved-filter-groups
+   '(("default"
+      ("code"     (and (or (derived-mode . prog-mode)
+                           (mode . yaml-mode))
+                       (not (name . "^\\*scratch\\*$"))))
+      ("exwm"     (mode . exwm-mode))
+      ("dired"    (mode . dired-mode))
+      ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
+      ("org"      (derived-mode . org-mode))
+      ("ement"    (derived-mode . ement-room-mode))
+      ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
+      ("scratch"  (name . "^\\*scratch\\*$"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; apps
 
 (use-package osm
   :defer t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; async-shell-command
-
-(setq async-shell-command-buffer 'new-buffer)
-
-(add-to-list 'display-buffer-alist
-	     '("*Async Shell Command*" display-buffer-no-window (nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; calc
@@ -577,12 +579,6 @@
   (autoload 'wgrep-rg-setup "wgrep-rg"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; mentor
-
-(setq mentor-rtorrent-download-directory "/mnt/trantor/media")
-(setq mentor-rtorrent-external-rpc "~/.pirate-radio.socket")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; firefox
 
 (use-package exwm-firefox-evil
@@ -609,7 +605,7 @@
   :config
   (setq bluetooth-battery-display-warning nil))
 
-(use-package pulseaudio-control)
+(use-package pulseaudio-control) ;; FIXME not using this yet
 
 (defun my/brace-for-impact ()
   (interactive)
