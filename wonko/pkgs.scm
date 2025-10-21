@@ -123,7 +123,7 @@
         emacs-dired-hacks
         emacs-dired-toggle-sudo
         emacs-dired-preview
-        emacs-world-time-mode
+        emacs-world-time-mode ;; FIXME https://xenodium.com/emacs-time-zones-mode
         ;; 🗺
         emacs-osm
         ;; casual:
@@ -325,7 +325,7 @@
    mpv
    vlc
    ;; webcam
-   ;; guvcview ;; FIXME borked, haven't used this in a long time though.
+   guvcview
    ;; ebooks & pdf
    calibre
    mcomix
@@ -505,9 +505,6 @@
 
 (define-public %borked-2025-08
   (list oneko))
-
-(define-public %borked-2025-10
-  (list guvcview))
 
 (define-public %emacs-debug-world
   (list emacs-org
