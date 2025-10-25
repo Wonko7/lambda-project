@@ -580,13 +580,13 @@ current time."
           ("ib" "🧘 Buddhism" entry "* 🧘 [[roam:Buddhism]] :is:bud:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("ic" "☕ coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
+          ("is" "🌙 sleep / dreams" entry "* 🌙 sleep / [[roam:dreams]] :is:3e:dreams:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ie" "👁 third eye" entry "* 👁 [[roam:prying open my third eye]] :is:neop:3e:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("ii" "🧘 innerspace   :is:" entry "* 🧘 %?\n%U"
+          ("ii" "🧘 innerspace" entry "* 🧘 %?\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("if" "❤ fam" entry "* ❤ %? :is:fam:\n%U"
@@ -596,31 +596,26 @@ current time."
            "* 🚀 [[roam:rocket go brrr]] :is:fam:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("ih" "🏡 home" entry "* 🏡 [[roam:home]] %? :is:home:\n%U"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("iH" "🏥 Health" entry "* 🏥 [[roam:health]] %? :is:health:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("iw" "⚖ weight" entry "* ⚖ [[roam:weight]] %? :is:health:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("im" "❤ metta" entry "* ❤ metta :is:3e:metta:\n%U\n%?"
+
+          ("ic" "☕ coffee" entry "* ☕ [[roam:coffee]]\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("in" "🧘 neoplatonism" entry "* 🧘 [[roam:neoplatonism]] :is:3e:neop:\n%U\n%?"
+          ("iC" "🚲 biCycle" entry "* 🚲 %?\n%U\n"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
+          ("ih" "🏡 home" entry "* 🏡 [[roam:home]] %? :is:home:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ip" "☠ piracy" entry "* ☠ %? :is:arr:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("iv" "🧘 vipassana" entry "* 🧘 [[roam:vipassana]] :is:3e:vip:\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("is" "🌙 sleep / dreams" entry "* 🌙 sleep / [[roam:dreams]] :is:3e:dreams:\n%U\n%?"
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("it" "🌳 trees" entry "* 🌳 trees / [[roam:brocoli]] :is:junky:\n%U\n%?"
+          ("iB" "🐗 Boring" entry "* 🐗 %?\n%U\n"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
 
