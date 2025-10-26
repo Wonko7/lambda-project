@@ -241,5 +241,4 @@
                     (file-name-nondirectory buffer-file-name)
                     "  -*- lexical-binding: t; -*-\n\n"))))
 
-
 (provide 'conf/misc)

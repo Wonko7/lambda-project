@@ -354,7 +354,8 @@
   (list
    gimp
    ;; kdenlive
-   krita))
+   ;; krita ;; borked FIXME [2025-10-26 Sun 18:30]
+   ))
 
 (define-public %fonts-world
   (list font-nerd-jetbrains
@@ -502,6 +503,9 @@
 
 (define-public %borked-2025-08
   (list oneko))
+
+(define-public %borked-2025-10
+  (list krita))
 
 (define-public %emacs-debug-world
   (list emacs-org
