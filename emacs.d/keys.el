@@ -91,7 +91,7 @@
     ;; org
     "o"   '("org" . (keymap))
     "oa"  (li (org-agenda nil "z"))
-    "oc"  #'cfw:open-org-calendar ;; FIXME use this as date picker?
+    "oc"  #'cfw:open-org-calendar
     "oi"  '("insert" . (keymap))
     "oib" (lambda ()
             (interactive)
@@ -217,8 +217,8 @@
     "w"  '("Windows" . (keymap))
     "wl" #'my/consult-exwm-buffer
     "wg" #'ace-select-window
-    "wx" #'ace-swap-window
-    "ws" #'switch-window-then-swap-buffer
+    "ws" #'ace-swap-window
+    "wd" #'ace-delete-window
     "wo" #'other-window
     ;; layouts
     "l"  '("Layouts" . (keymap))
