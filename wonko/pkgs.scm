@@ -124,12 +124,9 @@
         emacs-dired-toggle-sudo
         emacs-dired-preview
         emacs-world-time-mode ;; FIXME https://xenodium.com/emacs-time-zones-mode
+        emacs-casual
         ;; 🗺
         emacs-osm
-        ;; casual:
-        emacs-casual-info
-        emacs-casual-dired
-        emacs-casual-calc
 
         ;; spell
         hunspell
