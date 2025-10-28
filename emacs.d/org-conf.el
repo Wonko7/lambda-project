@@ -376,9 +376,9 @@ EXTRA-FILES can be used to append extra files to the list."
   (set-face-attribute 'org-habit-alert-face nil :foreground "gold")
 
   ;; grey boys: ;; grey:#4E415C  dvio: #6b4d76 vio: #B381C5
-  (set-face-attribute 'org-habit-clear-future-face nil :foreground "#B381C5")
+  (set-face-attribute 'org-habit-clear-future-face nil :foreground "steel blue")
   (set-face-attribute 'org-habit-clear-future-face nil :background 'unspecified)
-  (set-face-attribute 'org-habit-clear-face nil :foreground "#B381C5")
+  (set-face-attribute 'org-habit-clear-face nil :foreground "steel blue")
   (set-face-attribute 'org-habit-clear-face nil :background 'unspecified)
 
   ;; pink boys: #EB64B9 pink  cyan: #74DFC4
