@@ -138,9 +138,9 @@
     ;; (defalias SA (tap-hold-next-release 200
     ;;                                     (layer-next symbols)
     ;;                                     (layer-toggle symbols)))
-    (defalias SA  (layer-toggle symbols))
+    (defalias SA  (layer-toggle xim-symbols))
     (defalias SYS (layer-next system))
-    (defalias Tsy (layer-toggle symbols))
+    (defalias Tsy (layer-toggle xim-symbols))
     (defalias SDV (layer-switch dvorak-some-bullshit))
     (defalias SDC (layer-switch dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
@@ -162,8 +162,8 @@
     (defalias W5 (tap-hold-next-release 200 5 (layer-toggle whitespace)))
     (defalias W6 (tap-hold-next-release 200 6 (layer-toggle whitespace)))
     (defalias W7 (tap-hold-next-release 200 7 (layer-toggle whitespace)))
-    (defalias S2 (tap-hold-next-release 200 2 (layer-toggle symbols)))
-    (defalias S9 (tap-hold-next-release 200 9 (layer-toggle symbols)))
+    (defalias S2 (tap-hold-next-release 200 2 (layer-toggle xim-symbols)))
+    (defalias S9 (tap-hold-next-release 200 9 (layer-toggle xim-symbols)))
     (defalias m3 (tap-hold-next-release 200 3 lmet))
     (defalias m8 (tap-hold-next-release 200 8 lmet))))
 
@@ -176,16 +176,16 @@
     (defalias ls (tap-hold-next-release 200 l rsft))
     (defalias qs (tap-hold-next-release 200 q lsft))
     (defalias vs (tap-hold-next-release 200 v rsft))
-    (defalias oS (tap-hold-next-release 200 o (layer-toggle symbols)))
-    (defalias nS (tap-hold-next-release 200 n (layer-toggle symbols)))
+    (defalias oS (tap-hold-next-release 200 o (layer-toggle xim-symbols)))
+    (defalias nS (tap-hold-next-release 200 n (layer-toggle xim-symbols)))
     (defalias em (tap-hold-next-release 200 e lmet))
     (defalias tm (tap-hold-next-release 200 t lmet))
     (defalias Smc (tap-hold-next-release 200 @smc lsft))
     (defalias Sz (tap-hold-next-release 200 z lsft))
     (defalias yW (tap-hold-next-release 200 y (layer-toggle whitespace)))
     (defalias fW (tap-hold-next-release 200 f (layer-toggle whitespace)))
-    (defalias qS (tap-hold-next-release 200 q (layer-toggle symbols)))
-    (defalias vS (tap-hold-next-release 200 v (layer-toggle symbols)))))
+    (defalias qS (tap-hold-next-release 200 q (layer-toggle xim-symbols)))
+    (defalias vS (tap-hold-next-release 200 v (layer-toggle xim-symbols)))))
 
 (define kmonad-whitespce-aliases
   '((defalias Cn C-n)
@@ -248,10 +248,10 @@
 (define kmonad-xim-symbols-layer
   '(deflayer xim-symbols
      @SYS @ä   @ö   @ë   @ü   @ï   @ÿ   f7   f8   f9   f10  f11  @SYS
-     grv  @â   @ô   @ê   @ù   @î   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+     grv  @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
-     @EC  @à   @œ   @é   &    @p   \    @op  @cp  \    XX   -    @RC
-     lsft +    \_   XX   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
+     @EC  @à   @ô   @é   &    @p   \    @op  @cp  \    XX   -    @RC
+     lsft +    \_   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define kmonad-system-layer
