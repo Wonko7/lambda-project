@@ -714,18 +714,17 @@
   (setq default-input-method "minimal-im")
   (set-input-method "minimal-im")
 
-  (defun set-inp-meth! ()
-    ;; (set-input-method "minimal-im")
-    (activate-input-method default-input-method))
   (defun hook-set-inp-meth! ()
-    ;; (set-input-method "minimal-im")
     (activate-input-method default-input-method))
 
-  (add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
-  (add-hook 'comint-mode-hook #'hook-set-inp-meth!)
-  (add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
-  (add-hook 'minibuffer-setup-hook #'hook-set-inp-meth!)
   ;; (evil-set-initial-state 'exwm-mode 'emacs)
-  )
+  (add-hook 'after-change-major-mode-hook #'hook-set-inp-meth!)
+  (add-hook 'minibuffer-setup-hook #'hook-set-inp-meth!)
+
+  ;; shell: input method only works in line mode:
+  (defun my-enable-term-line-mode (&rest ignored)
+    (term-line-mode))
+  (advice-add 'ansi-term :after #'my-enable-term-line-mode)
+  (advice-add 'term :after #'my-enable-term-line-mode))
 
 (provide 'init)
