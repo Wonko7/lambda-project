@@ -652,9 +652,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; input method
 
-(use-package quail)
+(use-package quail
+  :demand t)
 
 (use-package robin
+  :demand t
   :config
   (robin-define-package "minimal-im"
                         "minimal desc"
@@ -709,20 +711,20 @@
                          "λ"
                          "minimal doc str")
 
-  ;; (setq default-input-method "minimal-im")
+  (setq default-input-method "minimal-im")
+  (set-input-method "minimal-im")
 
   (defun set-inp-meth! ()
-    ;; (activate-input-method default-input-method)
-    (set-input-method "minimal-im"))
+    ;; (set-input-method "minimal-im")
+    (activate-input-method default-input-method))
   (defun hook-set-inp-meth! ()
-    ;; (activate-input-method default-input-method)
-    (set-input-method "minimal-im"))
+    ;; (set-input-method "minimal-im")
+    (activate-input-method default-input-method))
 
-  ;; (add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
-  ;; (add-hook 'comint-mode-hook #'hook-set-inp-meth!)
-  ;; (add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
-  ;; (add-hook 'minibuffer-setup-hook #'set-inp-meth!)
-  ;;
+  (add-hook 'change-major-mode-hook #'hook-set-inp-meth!)
+  (add-hook 'comint-mode-hook #'hook-set-inp-meth!)
+  (add-hook 'lisp-mode-hook #'hook-set-inp-meth!)
+  (add-hook 'minibuffer-setup-hook #'hook-set-inp-meth!)
   ;; (evil-set-initial-state 'exwm-mode 'emacs)
   )
 

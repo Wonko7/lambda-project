@@ -265,7 +265,9 @@
 ;; more exwm
 
 (use-package exwm-xim
-  :demand t)
+  :demand t
+  :config
+  (exwm-xim-mode 1))
 
 (use-package exwm-randr
   :demand t
