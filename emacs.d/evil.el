@@ -19,6 +19,16 @@
 
   :config
   (evil-mode 1)
+  ;; FIXME GREP xim/input-method: trying this before activating evil:
+  ;; (evil-set-initial-state 'exwm-mode 'emacs)
+  (define-advice evil-disabled-buffer-p (:before-until () no-exwm)
+    (eq major-mode 'exwm-mode))
+  (evil-put-property 'evil-state-properties 'normal :input-method t)
+  (evil-put-property 'evil-state-properties 'motion :input-method t)
+  (evil-put-property 'evil-state-properties 'replace :input-method t)
+  (evil-put-property 'evil-state-properties 'operator :input-method t)
+  (evil-put-property 'evil-state-properties 'visual :input-method t)
+
   (setq evil-undo-system 'undo-fu)
   (evil-set-undo-system evil-undo-system) ;; FIXME: this shouldn't be needed)
   ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods

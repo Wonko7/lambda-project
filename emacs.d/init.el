@@ -717,9 +717,16 @@
   (defun hook-set-inp-meth! ()
     (activate-input-method default-input-method))
 
-  ;; (evil-set-initial-state 'exwm-mode 'emacs)
   (add-hook 'after-change-major-mode-hook #'hook-set-inp-meth!)
   (add-hook 'minibuffer-setup-hook #'hook-set-inp-meth!)
+
+  ;; evil
+  (evil-put-property 'evil-state-properties 'normal :input-method t)
+  (evil-put-property 'evil-state-properties 'motion :input-method t)
+  (evil-put-property 'evil-state-properties 'replace :input-method t)
+  (evil-put-property 'evil-state-properties 'operator :input-method t)
+  (evil-put-property 'evil-state-properties 'visual :input-method t)
+  (evil-set-initial-state 'exwm-mode 'emacs)
 
   ;; shell: input method only works in line mode:
   (defun my-enable-term-line-mode (&rest ignored)
