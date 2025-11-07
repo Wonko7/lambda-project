@@ -516,7 +516,7 @@ current time."
     (concat
      (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform)))
 
-  (defvar my/daily-header "#+title: %<%Y-%m-%d>\n#+category: %<%Y-%m-%d>")
+  (defvar my/daily-header "#+title: %<%Y-%m-%d>\n#+category: 📅 %<%Y-%m-%d>")
   (defvar my/daily-file "%<%Y-%m-%d>.org")
   (defun my/make-daily-capture (key desc entry jump)
     (list key desc 'entry entry
