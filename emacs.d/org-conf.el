@@ -226,9 +226,9 @@ EXTRA-FILES can be used to append extra files to the list."
   :custom
   (org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
   (org-agenda-prefix-format (quote
-                             ((agenda . "%-21c%?-12t% s")
+                             ((agenda . "  %-21c%?-12t% s")
                               (timeline . "% s")
-                              (todo . "%-21c")
+                              (todo . "  %-21c")
                               (tags . "%-12c")
                               (search . "%-12c"))))
   (org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " "")))
@@ -242,6 +242,8 @@ EXTRA-FILES can be used to append extra files to the list."
   (org-agenda-skip-deadline-if-done t)
   (org-agenda-include-deadlines t)
   (org-agenda-tags-column my/org-agenda-tags-column)
+  (org-agenda-remove-tags t)
+  (org-super-agenda-header-prefix "")
   (org-agenda-custom-commands '(("c" "Simple agenda view"
                                  ((agenda "")
                                   (alltodo "" )))
