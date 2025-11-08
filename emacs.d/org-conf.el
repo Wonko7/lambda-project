@@ -315,7 +315,9 @@ EXTRA-FILES can be used to append extra files to the list."
   (org-agenda-include-diary t)
 
   :config
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; moon phases: https://topikettunen.com/blog/emacs-org-agenda-lunar-phases/
+
   (require 'cl-lib)
 
   ;; Pass current day to `org-lunar-phases',
@@ -333,7 +335,30 @@ EXTRA-FILES can be used to append extra files to the list."
                                 "🌗 Last Quarter Moon")))
       (when phase
         ;; Return the phase to the agenda file.
-        (setq ret (concat (lunar-phase-name (nth 2 phase))))))))
+        (setq ret (concat (lunar-phase-name (nth 2 phase)))))))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; s/diary/holiday category in agenda:
+
+  (defun my/change-diary-category (entries)
+    "change category from Diary to holiday."
+    (mapcar
+     (lambda (entry)
+       (let ((cat "📜 Holiday"))
+         (store-substring entry 2 cat)
+         ;; remove one space between category and item because emoji = 2 spaces
+         (let ((len1 (- (length entry) 1))
+               (i    (+ 2 (length cat))))
+           (while (< i len1)
+             (aset entry i (aref entry (+ 1 i)))
+             (setq i (+ 1 i)))
+           (aset entry len1 ? )
+           entry)))
+     entries))
+
+  (advice-add #'org-get-entries-from-diary
+              :filter-return
+              #'my/change-diary-category))
 
 (use-package org-super-agenda
   :after org-agenda
