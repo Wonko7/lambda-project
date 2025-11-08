@@ -240,12 +240,27 @@
                                          . ,(file-append font-terminus
                                                          "/share/consolefonts/ter-132n")))
                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
-     (elogind-service-type config =>
-                           (elogind-configuration
-                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                            (handle-lid-switch 'suspend)
-                            (handle-lid-switch-docked  'suspend)
-                            (handle-lid-switch-external-power 'suspend)))
+     (elogind-service-type
+      config =>
+      (elogind-configuration
+        (system-sleep-hook-files
+         `(,(program-file
+             "_"
+             (with-imported-modules
+                 '((srfi srfi-1)
+                   (guix build utils))
+               #~(begin
+                   (use-modules (srfi srfi-1)
+                                (guix build utils))
+                   (let ((arg (second (program-arguments))))
+                     (if (string= arg "post")
+                         (let ((port (open-file "/tmp/wakeup" "w")))
+                           (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                           (close-port port)))))))))
+        (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+        (handle-lid-switch 'suspend)
+        (handle-lid-switch-docked  'suspend)
+        (handle-lid-switch-external-power 'suspend)))
      (guix-service-type config =>
                         (guix-configuration
                          (discover? #t)
