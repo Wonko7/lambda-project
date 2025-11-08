@@ -519,6 +519,33 @@ current time."
 	      index (1+ index)))
       graph)))
 
+(use-package appt
+  :after org-agenda
+  :demand t
+  :custom
+  (appt-message-warning-time 12)
+  (appt-display-interval 3)
+  (appt-audible nil)
+  (appt-disp-window-function #'my/notify)
+  :config
+  (appt-activate)
+  (defun my/idle-org-agenda-to-appt ()
+    (run-with-idle-timer 10 nil #'org-agenda-to-appt))
+  (run-at-time "00:01" 3600 #'my/idle-org-agenda-to-appt))
+
+(use-package notifications
+  :demand t
+  :commands (my/notify)
+  :config
+  (defun my/notify (remaining new-time msg)
+    (notifications-notify
+     :title msg
+     :body (if (string= remaining "0")
+               "\nTADADADAAAAA"
+             (format "\nTHE FINAL COUNTDOWN: %sm" remaining))
+     :timeout (* 10 1000)
+     :urgency 'normal)))
+
 (use-package org-crypt
   :after org
   :demand t
