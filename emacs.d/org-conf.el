@@ -531,7 +531,19 @@ current time."
   (appt-activate)
   (defun my/idle-org-agenda-to-appt ()
     (run-with-idle-timer 10 nil #'org-agenda-to-appt))
-  (run-at-time "00:01" 3600 #'my/idle-org-agenda-to-appt))
+  (run-at-time "00:01" 3600 #'my/idle-org-agenda-to-appt)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; on wake up / resume from suspend
+  ;; ... might put this somewhere else if other uses show up
+
+  (setq my/wakeup-counter 0)
+  (file-notify-add-watch
+   "/tmp/wakeup" '(change) ;; see system.scm elogind config
+   (lambda (_ev)
+     (setq my/wakeup-counter (+ 1 my/wakeup-counter))
+     (message "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP #%i" my/wakeup-counter)
+     (my/idle-org-agenda-to-appt))))
 
 (use-package notifications
   :demand t
