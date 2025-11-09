@@ -629,6 +629,20 @@
   (if (my/brace-for-impact)
       (my/sudo "halt")))
 
+;; system wake up hook:
+
+(setq my/wake-up-counter 0)
+(setq system/wake-up-hook (list
+                           (lambda ()
+                             (setq my/wake-up-counter (+ 1 my/wake-up-counter))
+                             (message "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP #%i"
+                                      my/wake-up-counter))))
+
+(file-notify-add-watch
+ my/wake-up-notification-file '(change) ;; see system.scm elogind config
+ (lambda (_ev)
+   (run-hooks 'system/wake-up-hook)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; text stuff
 
