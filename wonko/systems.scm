@@ -243,24 +243,18 @@
      (elogind-service-type
       config =>
       (elogind-configuration
-        (system-sleep-hook-files
-         `(,(program-file
-             "_"
-             (with-imported-modules
-                 '((srfi srfi-1)
-                   (guix build utils))
-               #~(begin
-                   (use-modules (srfi srfi-1)
-                                (guix build utils))
-                   (let ((arg (second (program-arguments))))
-                     (if (string= arg "post")
-                         (let ((port (open-file #$%wake-up-notification-file "w")))
-                           (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
-                           (close-port port)))))))))
-        (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-        (handle-lid-switch 'suspend)
-        (handle-lid-switch-docked  'suspend)
-        (handle-lid-switch-external-power 'suspend)))
+       (system-sleep-hook-files
+        `(,(program-file
+            "wake-up"
+            #~(let ((arg (cadr (program-arguments))))
+                (if (string= arg "post")
+                    (let ((port (open-file #$%wake-up-notification-file "w")))
+                      (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                      (close-port port)))))))
+       (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+       (handle-lid-switch 'suspend)
+       (handle-lid-switch-docked  'suspend)
+       (handle-lid-switch-external-power 'suspend)))
      (guix-service-type config =>
                         (guix-configuration
                          (discover? #t)
