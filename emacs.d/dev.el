@@ -81,7 +81,7 @@
 ;; (use-package utop
 ;;   :defer t
 ;;   :hook
-;;   (tuareg-mode-hook . #'utop-minor-mode)
+;;   (tuareg-mode-hook . utop-minor-mode)
 ;;   :config
 ;;   (progn
 ;;     (setq utop-command "dune utop . -- -emacs")

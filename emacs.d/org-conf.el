@@ -940,7 +940,7 @@ current time."
 
 (use-package org-appear
   :demand t
-  :hook (org-mode-hook . #'org-appear-mode)
+  :hook (org-mode-hook . org-appear-mode)
   :custom
   (org-appear-autolinks t)
   (org-appear-autokeywords t))

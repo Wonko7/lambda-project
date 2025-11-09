@@ -495,14 +495,13 @@
 ;; dired
 
 (use-package dired
-  :hook
-  (dired-mode-hook . #'auto-revert-mode)
+  :hook (dired-mode-hook . auto-revert-mode)
   :config
   (general-evil-define-key '(normal) dired-mode-map
     "ï"    #'dired-up-directory))
 
 (use-package diredfl
-  :hook (dired-mode-hook . #'diredfl-mode))
+  :hook (dired-mode-hook . diredfl-mode))
 (use-package dired-toggle-sudo)
 (use-package dired-rsync)
 (use-package dired-open)
@@ -574,7 +573,7 @@
 (use-package wgrep
   :defer t
   :hook
-  (rg-mode-hook . #'wgrep-rg-setup)
+  (rg-mode-hook . wgrep-rg-setup)
   :config
   (autoload 'wgrep-rg-setup "wgrep-rg"))
 
@@ -584,7 +583,7 @@
 (use-package exwm-firefox-evil
   :defer t
   :hook
-  (exwm-manage-finish-hook . #'exwm-firefox-evil-activate-if-firefox))
+  (exwm-manage-finish-hook . exwm-firefox-evil-activate-if-firefox))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; transmission

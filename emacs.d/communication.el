@@ -366,7 +366,7 @@
 ;; (use-package gnus-topic
 ;;   :after gnus
 ;;   :hook
-;;   (gnus-group-mode-hook . #'gnus-topic-mode))
+;;   (gnus-group-mode-hook . gnus-topic-mode))
 
 (use-package evil-collection-gnus
   :after gnus
