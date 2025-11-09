@@ -539,7 +539,7 @@ current time."
 
   (setq my/wakeup-counter 0)
   (file-notify-add-watch
-   "/tmp/wakeup" '(change) ;; see system.scm elogind config
+   my/wake-up-notification-file '(change) ;; see system.scm elogind config
    (lambda (_ev)
      (setq my/wakeup-counter (+ 1 my/wakeup-counter))
      (message "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP #%i" my/wakeup-counter)

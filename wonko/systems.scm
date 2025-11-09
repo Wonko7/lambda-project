@@ -254,7 +254,7 @@
                                 (guix build utils))
                    (let ((arg (second (program-arguments))))
                      (if (string= arg "post")
-                         (let ((port (open-file "/tmp/wakeup" "w")))
+                         (let ((port (open-file #$%wake-up-notification-file "w")))
                            (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
                            (close-port port)))))))))
         (handle-power-key 'ignore) ;; FIXME: 'hibernate?

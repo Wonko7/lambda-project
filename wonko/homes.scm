@@ -68,6 +68,7 @@
             my/org-agenda-tags-column               #$org-agenda-tags-column
             my/org-habit-preceding-days             #$org-habit-preceding-days
             my/window-divider-default-right-width   #$window-divider-default-right-width
+            my/wake-up-notification-file            #$%wake-up-notification-file
             my/font           #$%font
             my/lambda-project #$%lambda-project
             my/term-cmd       #$%term-cmd
