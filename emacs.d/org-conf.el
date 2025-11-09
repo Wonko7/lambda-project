@@ -535,7 +535,6 @@ current time."
   (run-at-time "00:01" 3600 #'my/idle-org-agenda-to-appt))
 
 (use-package notifications
-  :demand t
   :commands (my/notify)
   :config
   (defun my/notify (remaining new-time msg)
