@@ -527,7 +527,7 @@ current time."
   (appt-message-warning-time 12)
   (appt-display-interval 3)
   (appt-audible nil)
-  (appt-disp-window-function #'my/notify)
+  (appt-disp-window-function #'my/appt-notify)
   :config
   (appt-activate)
   (defun my/idle-org-agenda-to-appt ()
@@ -535,16 +535,18 @@ current time."
   (run-at-time "00:01" 3600 #'my/idle-org-agenda-to-appt))
 
 (use-package notifications
-  :commands (my/notify)
+  :commands (my/appt-notify)
+  :after appt
   :config
-  (defun my/notify (remaining new-time msg)
-    (notifications-notify
-     :title msg
-     :body (if (string= remaining "0")
-               "\nTADADADAAAAA"
-             (format "\nTHE FINAL COUNTDOWN: %sm" remaining))
-     :timeout (* 10 1000)
-     :urgency 'normal)))
+  (defun my/appt-notify (remaining new-time msg)
+    (if (string= remaining "0")
+        (notifications-notify :title msg
+                              :body "\nTADADADAAAAA"
+                              :urgency 'normal)
+      (notifications-notify :title msg
+                            :body (format "\nTHE FINAL COUNTDOWN: %sm" remaining)
+                            :timeout (* appt-display-interval 60 1000)
+                            :urgency 'normal))))
 
 (use-package org-crypt
   :after org
