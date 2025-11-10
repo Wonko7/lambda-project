@@ -138,22 +138,31 @@
     ;; (defalias SA (tap-hold-next-release 200
     ;;                                     (layer-next symbols)
     ;;                                     (layer-toggle symbols)))
-    (defalias SA  (layer-toggle xim-symbols))
+    (defalias SA  (layer-toggle symbols))
+    (defalias xSA  (layer-toggle xim-symbols))
     (defalias SYS (layer-next system))
-    (defalias Tsy (layer-toggle xim-symbols))
+    (defalias Tsy (layer-toggle symbols))
+    (defalias xTsy (layer-toggle xim-symbols))
     (defalias SDV (layer-switch dvorak-some-bullshit))
+    (defalias SDx (layer-switch xim-dvorak-some-bullshit))
     (defalias SDC (layer-switch dance-commander))
+    (defalias SDX (layer-switch xim-dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
     (defalias XDV #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
+    (defalias XDx #((cmd-button ,(setxkb "us")) (layer-switch xim-dvorak-some-bullshit)))
     (defalias XDC #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
+    (defalias XDX #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
     (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
     (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
     (defalias LLL (layer-next meta))
-    (defalias shV (tap-hold-next-release 200 @SDV lsft))
-    (defalias shC (tap-hold-next-release 200 @SDC lsft))
+    ;; (defalias shV (tap-hold-next-release 200 @SDV lsft))
+    ;; (defalias shC (tap-hold-next-release 200 @SDC lsft))
     (defalias mtV (tap-hold-next-release 200 @SDV lmet))
-    (defalias mtC (tap-hold-next-release 200 @SDC lmet))))
+    (defalias mtC (tap-hold-next-release 200 @SDC lmet))
+    (defalias mxV (tap-hold-next-release 200 @SDx lmet))
+    (defalias mxC (tap-hold-next-release 200 @SDX lmet))
+    ))
 
 (define kmonad-numrow-modifier-aliases
   '((defalias c1 (tap-hold-next-release 200 1 lctl))
@@ -162,10 +171,13 @@
     (defalias W5 (tap-hold-next-release 200 5 (layer-toggle whitespace)))
     (defalias W6 (tap-hold-next-release 200 6 (layer-toggle whitespace)))
     (defalias W7 (tap-hold-next-release 200 7 (layer-toggle whitespace)))
-    (defalias S2 (tap-hold-next-release 200 2 (layer-toggle xim-symbols)))
-    (defalias S9 (tap-hold-next-release 200 9 (layer-toggle xim-symbols)))
-    (defalias m3 (tap-hold-next-release 200 3 lmet))
-    (defalias m8 (tap-hold-next-release 200 8 lmet))))
+    ;; (defalias S2 (tap-hold-next-release 200 2 (layer-toggle symbols)))
+    ;; (defalias xS2 (tap-hold-next-release 200 2 (layer-toggle xim-symbols)))
+    ;; (defalias S9 (tap-hold-next-release 200 9 (layer-toggle symbols)))
+    ;; (defalias xS9 (tap-hold-next-release 200 9 (layer-toggle xim-symbols)))
+    ;; (defalias m3 (tap-hold-next-release 200 3 lmet))
+    ;; (defalias m8 (tap-hold-next-release 200 8 lmet))
+    ))
 
 (define kmonad-dance-commander-modifier-aliases
   '((defalias ac (tap-hold-next-release 200 a lctl))
@@ -176,16 +188,21 @@
     (defalias ls (tap-hold-next-release 200 l rsft))
     (defalias qs (tap-hold-next-release 200 q lsft))
     (defalias vs (tap-hold-next-release 200 v rsft))
-    (defalias oS (tap-hold-next-release 200 o (layer-toggle xim-symbols)))
-    (defalias nS (tap-hold-next-release 200 n (layer-toggle xim-symbols)))
+    (defalias oS (tap-hold-next-release 200 o (layer-toggle symbols)))
+    (defalias xoS (tap-hold-next-release 200 o (layer-toggle xim-symbols)))
+    (defalias nS (tap-hold-next-release 200 n (layer-toggle symbols)))
+    (defalias xnS (tap-hold-next-release 200 n (layer-toggle xim-symbols)))
     (defalias em (tap-hold-next-release 200 e lmet))
     (defalias tm (tap-hold-next-release 200 t lmet))
     (defalias Smc (tap-hold-next-release 200 @smc lsft))
     (defalias Sz (tap-hold-next-release 200 z lsft))
     (defalias yW (tap-hold-next-release 200 y (layer-toggle whitespace)))
     (defalias fW (tap-hold-next-release 200 f (layer-toggle whitespace)))
-    (defalias qS (tap-hold-next-release 200 q (layer-toggle xim-symbols)))
-    (defalias vS (tap-hold-next-release 200 v (layer-toggle xim-symbols)))))
+    ;; (defalias qS (tap-hold-next-release 200 q (layer-toggle symbols)))
+    ;; (defalias xqS (tap-hold-next-release 200 q (layer-toggle xim-symbols)))
+    ;; (defalias vS (tap-hold-next-release 200 v (layer-toggle symbols)))
+    ;; (defalias xvS (tap-hold-next-release 200 v (layer-toggle xim-symbols)))
+    ))
 
 (define kmonad-whitespce-aliases
   '((defalias Cn C-n)
@@ -202,16 +219,25 @@
 
 (define kmonad-dance-commander-layer
   '(deflayer dance-commander
-     esc  @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
      tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
-     @shV @Smc q    j    k    x    b    m    w    v    @Sz  @shV                 up
+     lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
      @SA  @Tsy @mtV           spc            @mtV ralt cmp  @Tsy            left down rght))
+
+(define kmonad-xim-dance-commander-layer
+  '(deflayer xim-dance-commander
+     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+     grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
+     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
+     @EC  @ac  @xoS @em  u    i    d    h    @tm  @xnS @sc  -    @RC
+     lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
+     @xSA @xTsy @mxV          spc            @mxV ralt cmp  @xTsy            left down rght))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
-     @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  f12
+     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
      grv  1    2    3    4    5    6    7    8    9    0    @SDC @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
@@ -220,12 +246,21 @@
 
 (define kmonad-dvorak-some-bullshit-layer
   '(deflayer dvorak-some-bullshit
-     @SDC @SDC @SDV @SDN f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  @c1  @S2  @m3  @W4  @W5  @W6  @W7  @m8  @S9  0    @SDC @csb bspc  ins  home pgup
+     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDC @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-     @shC @smc q    j    k    x    b    m    w    v    z    @shC                 up
+     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
      @SA  @Tsy @mtC           spc            @mtC ralt cmp  @Tsy            left down rght))
+
+(define kmonad-xim-dvorak-some-bullshit-layer
+  '(deflayer xim-dvorak-some-bullshit
+     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDC @csb bspc  ins  home pgup
+     tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
+     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
+     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
+     @SA  @xTsy @mxC          spc            @mxC ralt cmp  @xTsy           left down rght))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
@@ -252,7 +287,7 @@
      tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
      @EC  @à   @ô   @é   &    @p   \    @op  @cp  \    XX   -    @RC
      lsft +    \_   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+     lalt @xSA  lmet           spc            rmet ralt cmp  @xSA             left down rght))
 
 (define kmonad-system-layer
   '(deflayer system
@@ -269,7 +304,7 @@
      XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   @XFR XX   XX   @XUS XX   @XDC XX   XX   @XDN XX   -    @RC
-     lsft XX   @XUS XX   XX   XX   XX   XX   XX   @XDV XX   rsft                 up
+     lsft XX   @XUS XX   XX   XX   @XDX XX   XX   @XDV XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define kmonad-fr-layer
@@ -313,8 +348,10 @@
       (delete-duplicates
        (list default-layer
              kmonad-dance-commander-layer
+             kmonad-xim-dance-commander-layer
              kmonad-dvorak-no-bullshit-layer
              kmonad-dvorak-some-bullshit-layer
+             kmonad-xim-dvorak-some-bullshit-layer
              kmonad-whitespace-layer
              kmonad-symbols-layer
              kmonad-system-layer
