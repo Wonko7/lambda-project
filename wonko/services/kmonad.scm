@@ -264,11 +264,11 @@
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
-     XX   mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   home XX   XX   end  del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ins  brup pgup
+     esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   home XX   XX   end  del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ret  brup pgup
      tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
      caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
-     lsft XX   XX   @Cn  @Cp  @Csp @Csp XX   XX   XX   XX   rsft                 brup
+     lsft XX   XX   down up   tab  tab  XX   XX   XX   XX   rsft                 brup
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left brdn rght))
 
 (define kmonad-symbols-layer
@@ -304,7 +304,7 @@
      XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   @XFR XX   XX   @XUS XX   @XDC XX   XX   @XDN XX   -    @RC
-     lsft XX   @XUS XX   XX   XX   @XDX XX   XX   @XDV XX   rsft                 up
+     lsft XX   @XUS XX   XX   @XDX @XDX XX   XX   @XDV XX   rsft                 up
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
 
 (define kmonad-fr-layer
