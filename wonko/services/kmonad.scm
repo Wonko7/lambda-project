@@ -23,22 +23,29 @@
   (let ((id          (first config))
         (config-path (second config)))
     (list (shepherd-service
-           (documentation "Run the kmonad daemon.")
-           (provision (list (string->symbol (string-append "kmonad-" id))))
-           (requirement '(udev user-processes))
-           (start #~(make-forkexec-constructor
-                     (list #$(file-append kmonad "/bin/kmonad")
-                           #$config-path)))
-           (stop #~(make-kill-destructor))))))
+            (documentation "Run the kmonad daemon.")
+            (provision (list (string->symbol (string-append "kmonad-" id))))
+            (requirement '(udev user-processes))
+            (start #~(make-forkexec-constructor
+                      (list #$(file-append kmonad "/bin/kmonad")
+                            #$config-path)))
+            (stop #~(make-kill-destructor))))))
 
 (define kmonad-service-type
   ;; Extend the shepherd root into a new type of service that takes a single string
   (service-type
-   (name 'kmonad)
-   (description "Run the kmonad daemon.")
-   (extensions
-    (list (service-extension shepherd-root-service-type
-                             kmonad-shepherd-service)))))
+    (name 'kmonad)
+    (description "Run the kmonad daemon.")
+    (extensions
+     (list (service-extension shepherd-root-service-type
+                              kmonad-shepherd-service)))))
+
+(define (kmonad/merge-layers l1 l2)
+  "replace l1 keys w/ non XX keys from l2"
+  (map (lambda (k1 k2)
+         (if (equal? k2 'XX) k1 k2))
+       l1
+       l2))
 
 (define* (sexps-to-string #:rest sexps)
   (apply string-append
@@ -220,25 +227,27 @@
 (define kmonad-dance-commander-layer
   '(deflayer dance-commander
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
-     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
+     grv  1    2    3    4    5    6    7    8    9    0    @Csp @CP  bspc  ins  home pgup
+     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    =    \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
      @SA  @Tsy @mtV           spc            @mtV ralt cmp  @Tsy            left down rght))
 
 (define kmonad-xim-dance-commander-layer
-  '(deflayer xim-dance-commander
-     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    4    5    6    7    8    9    0    @SDV @CP  bspc  ins  home pgup
-     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @SDV \     del  end  pgdn
-     @EC  @ac  @xoS @em  u    i    d    h    @tm  @xnS @sc  -    @RC
-     lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
-     @xSA @xTsy @mxV          spc            @mxV ralt cmp  @xTsy            left down rght))
+  (kmonad/merge-layers
+   kmonad-dance-commander-layer
+   '(deflayer xim-dance-commander
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   @xoS XX   XX   XX   XX   XX   XX   @xnS XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
+      @xSA @xTsy @mxV          XX             @mxV XX   XX   @xTsy          XX   XX   XX )))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
      @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-     grv  1    2    3    4    5    6    7    8    9    0    @SDC @csb bspc  ins  home pgup
+     grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
@@ -247,20 +256,22 @@
 (define kmonad-dvorak-some-bullshit-layer
   '(deflayer dvorak-some-bullshit
      @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDC @csb bspc  ins  home pgup
+     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @Csp @CP  bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
      @SA  @Tsy @mtC           spc            @mtC ralt cmp  @Tsy            left down rght))
 
 (define kmonad-xim-dvorak-some-bullshit-layer
-  '(deflayer xim-dvorak-some-bullshit
-     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDC @csb bspc  ins  home pgup
-     tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
-     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     @SA  @xTsy @mxC          spc            @mxC ralt cmp  @xTsy           left down rght))
+  (kmonad/merge-layers
+   kmonad-dvorak-some-bullshit-layer
+   '(deflayer xim-dvorak-some-bullshit
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
+      @xSA @xTsy @mxC          XX             @mxC XX   XX   @xTsy          XX   XX   XX )))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
@@ -268,7 +279,7 @@
      XX   home XX   XX   end  del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ret  brup pgup
      tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
      caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
-     lsft XX   XX   down up   tab  tab  XX   XX   XX   XX   rsft                 brup
+     lsft XX   XX   pgdn pgup tab  tab  XX   XX   XX   XX   rsft                 brup
      lalt @SA  lmet           spc            rmet ralt cmp  @SA             left brdn rght))
 
 (define kmonad-symbols-layer
