@@ -156,7 +156,9 @@
   :config
   (setq evil-org-key-theme '(navigation insert textobjects additional shift todo heading calendar))
   (setq evil-org-retain-visual-state-on-shift t)
-  (setq evil-org-special-o/O nil))
+  (setq evil-org-special-o/O nil)
+  (general-evil-define-key '(visual) org-mode-map
+    "$" #'evil-end-of-line))
 
 (use-package evil-org-agenda
   :demand t
