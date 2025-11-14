@@ -22,7 +22,7 @@
  ;; emacs
  emacs emacs-build emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
  ;; desktop stuff
- pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde kde-plasma kde-frameworks lxqt qt terminals ebook video imagemagick photo gimp pdf graphviz image-viewers
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks kde-graphics lxqt qt terminals ebook video imagemagick photo gimp pdf graphviz image-viewers
  ;; web
  chromium tor matrix irc bittorrent
  gnuzilla
@@ -354,8 +354,7 @@
   (list
    gimp
    ;; kdenlive
-   ;; krita ;; borked FIXME [2025-10-26 Sun 18:30]
-   ))
+   krita))
 
 (define-public %fonts-world
   (list font-nerd-jetbrains
