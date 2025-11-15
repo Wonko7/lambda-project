@@ -145,30 +145,30 @@
     ;; (defalias SA (tap-hold-next-release 200
     ;;                                     (layer-next symbols)
     ;;                                     (layer-toggle symbols)))
-    (defalias SA  (layer-toggle symbols))
-    (defalias xSA  (layer-toggle xim-symbols))
+    ;;(defalias SA  (layer-toggle symbols))
+    ;;(defalias xSA (layer-toggle xim-symbols))
     (defalias SYS (layer-next system))
     (defalias Tsy (layer-toggle symbols))
-    (defalias xTsy (layer-toggle xim-symbols))
-    (defalias SDV (layer-switch dvorak-some-bullshit))
-    (defalias SDx (layer-switch xim-dvorak-some-bullshit))
-    (defalias SDC (layer-switch dance-commander))
-    (defalias SDX (layer-switch xim-dance-commander))
+    (defalias Tsx (layer-toggle xim-symbols))
+    (defalias SDB (layer-switch dvorak-some-bullshit))
+    (defalias SDD (layer-switch dance-commander))
+    (defalias SXB (layer-switch xim-dvorak-some-bullshit))
+    (defalias SXD (layer-switch xim-dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
-    (defalias XDV #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
-    (defalias XDx #((cmd-button ,(setxkb "us")) (layer-switch xim-dvorak-some-bullshit)))
-    (defalias XDC #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
+    (defalias XDB #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
+    (defalias XDD #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
-    (defalias XDX #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
+    (defalias XXB #((cmd-button ,(setxkb "us")) (layer-switch xim-dvorak-some-bullshit)))
+    (defalias XXD #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
     (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
     (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
     (defalias LLL (layer-next meta))
     ;; (defalias shV (tap-hold-next-release 200 @SDV lsft))
     ;; (defalias shC (tap-hold-next-release 200 @SDC lsft))
-    (defalias mtV (tap-hold-next-release 200 @SDV lmet))
-    (defalias mtC (tap-hold-next-release 200 @SDC lmet))
-    (defalias mxV (tap-hold-next-release 200 @SDx lmet))
-    (defalias mxC (tap-hold-next-release 200 @SDX lmet))
+    (defalias mDB (tap-hold-next-release 200 @SDB lmet))
+    (defalias mDD (tap-hold-next-release 200 @SDD lmet))
+    (defalias mXB (tap-hold-next-release 200 @SXB lmet))
+    (defalias mXD (tap-hold-next-release 200 @SXD lmet))
     ))
 
 (define kmonad-numrow-modifier-aliases
@@ -224,6 +224,7 @@
     (defalias v10 (cmd-button "/run/current-system/profile/bin/chvt 10"))
     (defalias v11 (cmd-button "/run/current-system/profile/bin/chvt 11"))))
 
+;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
 (define kmonad-dance-commander-layer
   '(deflayer dance-commander
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
@@ -231,7 +232,7 @@
      tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    =    \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
-     @SA  @Tsy @mtV           spc            @mtV ralt cmp  @Tsy            left down rght))
+     @Tsy @Tsy @mDB           spc            @mDB ralt @Tsy  @Tsy            left down rght))
 
 (define kmonad-xim-dance-commander-layer
   (kmonad/merge-layers
@@ -242,45 +243,45 @@
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   XX   @xoS XX   XX   XX   XX   XX   XX   @xnS XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
-      @xSA @xTsy @mxV          XX             @mxV XX   XX   @xTsy          XX   XX   XX )))
+      @Tsx @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx          XX   XX   XX )))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
-     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
      grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     @SA  @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     @Tsy @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-dvorak-some-bullshit-layer
   '(deflayer dvorak-some-bullshit
-     @SDC f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
+     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @Csp @CP  bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     @SA  @Tsy @mtC           spc            @mtC ralt cmp  @Tsy            left down rght))
+     @Tsy @Tsy @mDD           spc            @mDD ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-dvorak-some-bullshit-layer
   (kmonad/merge-layers
    kmonad-dvorak-some-bullshit-layer
    '(deflayer xim-dvorak-some-bullshit
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
-      @xSA @xTsy @mxC          XX             @mxC XX   XX   @xTsy          XX   XX   XX )))
+      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                   XX
+      @Tsx @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX )))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
      esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   home XX   XX   end  del  del  @SDV XX   XX   XX   @SDC @CP  bspc  ret  brup pgup
-     tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    @SDC \     del  brdn pgdn
+     XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
+     tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
      caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
      lsft XX   XX   pgdn pgup tab  tab  XX   XX   XX   XX   rsft                 brup
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left brdn rght))
+     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left brdn rght))
 
 (define kmonad-symbols-layer
   '(deflayer symbols
@@ -289,7 +290,7 @@
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
      @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
      lsft +    \_   XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+     @Tsy @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
   '(deflayer xim-symbols
@@ -298,7 +299,7 @@
      tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
      @EC  @à   @ô   @é   &    @p   \    @op  @cp  \    XX   -    @RC
      lsft +    \_   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
-     lalt @xSA  lmet           spc            rmet ralt cmp  @xSA             left down rght))
+     @Tsx @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx             left down rght))
 
 (define kmonad-system-layer
   '(deflayer system
@@ -307,16 +308,16 @@
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+     @Tsy @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
 (define kmonad-meta-layer
   '(deflayer meta
      XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @XFR
-     XX   @XDC @XDV @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+     XX   @XDD @XDB @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
-     XX   @XFR XX   XX   @XUS XX   @XDC XX   XX   @XDN XX   -    @RC
-     lsft XX   @XUS XX   XX   @XDX @XDX XX   XX   @XDV XX   rsft                 up
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+     XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   @XDN XX   -    @RC
+     lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   @XDB XX   rsft                 up
+     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
 (define kmonad-fr-layer
   ;; kmonad sets it as us, then we let xorg take care of it.
@@ -335,7 +336,7 @@
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
-     lalt @SA  lmet           spc            rmet ralt cmp  @SA             left down rght))
+     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
 (define (kmonad-make-config-file input output default-layer)
   (let ((xkb (if (equal? default-layer kmonad-fr-layer)
