@@ -243,7 +243,7 @@
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   XX   @xoS XX   XX   XX   XX   XX   XX   @xnS XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
-      @Tsx @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx          XX   XX   XX )))
+      @Tsx @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx           XX   XX   XX)))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
@@ -272,7 +272,7 @@
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                   XX
-      @Tsx @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX )))
+      @Tsx @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX)))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
@@ -293,13 +293,15 @@
      @Tsy @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
-  '(deflayer xim-symbols
-     @SYS @ä   @ö   @ë   @ü   @ï   @ÿ   f7   f8   f9   f10  f11  @SYS
-     grv  @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-     tab  ^    -    @è   =    @ocb /    XX   @ç   /    @λ   /    =    \     del  end  pgdn
-     @EC  @à   @ô   @é   &    @p   \    @op  @cp  \    XX   -    @RC
-     lsft +    \_   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                 up
-     @Tsx @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx             left down rght))
+  (kmonad/merge-layers
+   kmonad-symbols-layer
+   '(deflayer xim-symbols
+      XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
+      XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
+      XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
+      XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
+      @Tsx @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX)))
 
 (define kmonad-system-layer
   '(deflayer system
