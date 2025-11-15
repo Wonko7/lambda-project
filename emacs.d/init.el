@@ -168,7 +168,8 @@
    "zsp"   #'jinx-previous
    "zsj"   #'jinx-next
    "zsk"   #'jinx-previous
-   "z="    #'jinx-correct))
+   "z="    #'jinx-correct)
+  (set-face-attribute 'jinx-misspelled nil :underline '(:style dashes :color "green")))
 
 (use-package verbiste
   :commands (verbiste-deconjugate verbiste-conjugate)
