@@ -157,7 +157,7 @@
 
 (use-package jinx
   :demand t
-  :hook (emacs-startup . global-jinx-mode)
+  :hook (emacs-startup-hook . global-jinx-mode)
   :custom
   (jinx-languages "en_GB-ise fr-toutesvariantes")
   :config
