@@ -72,8 +72,8 @@
 
 (defun my/set-date ()
   (interactive)
-  (pcase-let ((`(,m ,d ,y) (cfw:org-read-date-command)))
-    (my/sudo (format "date %02d%02d1300%i" m d y))))
+  (pcase-let ((`(,y ,m ,d) (split-string (org-read-date) "-" )))
+    (my/sudo (format "date %s%s1300%s" m d y))))
 
 (defun my/format-time-delta (time1 time2)
   "Return difference between TIME1 & TIME2 as a readable string."
