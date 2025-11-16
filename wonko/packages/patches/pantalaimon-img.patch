@@ -1,0 +1,50 @@
+commit 2bf65951e4273d8f4034011aff3290a397f02b75
+Author: William <william@underage.wang>
+Date:   Sun Nov 16 16:56:45 2025 +0100
+
+    lol2
+
+diff --git a/pantalaimon/daemon.py b/pantalaimon/daemon.py
+index 6d47b36..bf313d3 100755
+--- a/pantalaimon/daemon.py
++++ b/pantalaimon/daemon.py
+@@ -1353,11 +1353,11 @@ class ProxyDaemon:
+             )
+ 
+             if response is None and decrypted_file is None:
+-                return await self.forward_to_web(request)
++                return await self.forward_to_web(request, token=client.access_token)
+         except ClientConnectionError as e:
+             return web.Response(status=500, text=str(e))
+         except KeyError:
+-            return await self.forward_to_web(request)
++            return await self.forward_to_web(request, token=client.access_token)
+ 
+         if not isinstance(response, DownloadResponse):
+             return web.Response(
+diff --git a/pantalaimon/main.py b/pantalaimon/main.py
+index 741937e..803adb5 100644
+--- a/pantalaimon/main.py
++++ b/pantalaimon/main.py
+@@ -95,17 +95,17 @@ async def init(data_dir, server_conf, send_queue, recv_queue):
+             web.options("/_matrix/client/r0/search", proxy.search_opts),
+             web.options("/_matrix/client/v3/search", proxy.search_opts),
+             web.get(
+-                "/_matrix/media/v1/download/{server_name}/{media_id}", proxy.download
++                "/_matrix/client/v1/media/download/{server_name}/{media_id}", proxy.download
+             ),
+             web.get(
+-                "/_matrix/media/v3/download/{server_name}/{media_id}", proxy.download
++                "/_matrix/client/v3/media/download/{server_name}/{media_id}", proxy.download
+             ),
+             web.get(
+-                "/_matrix/media/v1/download/{server_name}/{media_id}/{file_name}",
++                "/_matrix/client/v1/media/download/{server_name}/{media_id}/{file_name}",
+                 proxy.download,
+             ),
+             web.get(
+-                "/_matrix/media/v3/download/{server_name}/{media_id}/{file_name}",
++                "/_matrix/client/v3/media/download/{server_name}/{media_id}/{file_name}",
+                 proxy.download,
+             ),
+             web.get(

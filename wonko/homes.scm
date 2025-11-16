@@ -21,6 +21,7 @@
   #:use-module (gnu home services xdg)
   #:use-module (gnu services shepherd)
   #:use-module (wonko packages emacs-xyz)
+  #:use-module (wonko packages matrix)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko fleet)
@@ -210,15 +211,16 @@
      (stop #~(make-kill-destructor))
      (documentation "bling"))
    (shepherd-service
-    (provision '(pantalaimon))
-    (start #~(make-forkexec-constructor
-              (list "/run/current-system/comms-profile/bin/pantalaimon")
-              #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
-                                       "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
-                                       (default-environment-variables))
-              #:log-file #$(home-log-path "matrix")))
-    (stop #~(make-kill-destructor))
-    (documentation "Crypto back-end server for ement.el"))
+     (provision '(pantalaimon))
+     (start #~(make-forkexec-constructor
+               ;; (list "/run/current-system/comms-profile/bin/pantalaimon")
+               #$(file-append pantalaimon "/bin/pantalaimon")
+               #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
+                                        "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
+                                        (default-environment-variables))
+               #:log-file #$(home-log-path "matrix")))
+     (stop #~(make-kill-destructor))
+     (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
      (provision '(dunst))
      (start #~(make-forkexec-constructor
