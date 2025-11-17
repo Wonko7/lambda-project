@@ -127,6 +127,8 @@
         emacs-casual
         ;; 🗺
         emacs-osm
+        ;; multimedia apps
+        emacs-emms
 
         ;; spell
         hunspell
@@ -221,7 +223,7 @@
         ;; exwm
         emacs-exwm
         emacs-exwm-edit
-        emacs-exwm-modeline
+        ;; emacs-exwm-modeline
         emacs-exwm-firefox-core
         emacs-exwm-firefox-evil
         emacs-exwm-mff
