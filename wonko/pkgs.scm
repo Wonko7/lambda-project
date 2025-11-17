@@ -110,6 +110,7 @@
         emacs-magit
         emacs-magit-annex
         emacs-magit-todos
+        emacs-git-timemachine
         emacs-git-link
         emacs-forge
         emacs-diff-hl

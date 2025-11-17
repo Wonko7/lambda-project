@@ -260,6 +260,15 @@
           (string= root "/work/guix/guix")
           (string= root "/code/guix/guix")))))
 
+(use-package git-timemachine
+  :hook
+  (git-timemachine-mode-hook . font-lock-mode) ;; see doom's modules/emacs/vc/config.el
+  :config
+  (general-evil-define-key '(normal visual) git-timemachine-mode-map
+    "C-b" #'git-timemachine-blame
+    "C-k" #'git-timemachine-show-previous-revision
+    "C-j" #'git-timemachine-show-next-revision))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell
 

@@ -170,6 +170,7 @@
     "g." #'magit-file-dispatch
     "gg" #'magit-status
     "gb" #'magit-blame
+    "gt" #'git-timemachine-toggle
     "graa" (li (async-shell-command "git-add-remotes -lf"))
     "graf" (li (async-shell-command "git-add-remotes -f"))
     "gral" (li (async-shell-command "git-add-remotes -l"))
