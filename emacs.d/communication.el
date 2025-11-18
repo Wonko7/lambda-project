@@ -208,73 +208,7 @@
   :defer t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; email
-
-;; (use-package gnus
-;;   :defer t
-;;   :requires f
-;;   :config
-;;   (let ((gnus "/data/org/emacs/gnus.el")) ;; this sets gnus-topic-alist
-;;     (if (f-file-p gnus)
-;;         (load-file gnus)
-;;       (setq my/gnus-topic-alist '(("tech" ;; the key of topic
-;;                                    "nntp+news.gwene.org:gwene.com.schneier"
-;;                                    "nntp+news.gwene.org:gwene.org.slashdot"
-;;                                    "nntp+news.gwene.org:gwene.cat.sizeof")
-;;                                   ("dev"
-;;                                    "nntp+news.gwene.org:gwene.org.ocsigen.news")
-;;                                   ("work"
-;;                                    "nntp+news.gwene.org:gwene.fr.linuxjobs")
-;;                                   ("comics"
-;;                                    "nntp+news.gwene.org:gwene.com.smbc-comics"
-;;                                    "nntp+news.gwene.org:gwene.com.xkcd")
-;;                                   ("Feeds")))))
-
-;;   (setq gnus-use-cache t
-;;         gnus-save-newsrc-file nil
-;;         gnus-read-newsrc-file nil
-;;         ;; gnus-article-over-scroll t
-;;         ;; gnus-article-skip-boring t
-;;         gnus-asynchronous t)
-
-;;   (setq gnus-select-method
-;;         '(nnimap "gmail"
-;;                  (nnimap-address "imap.gmail.com")  ; it could also be imap.googlemail.com if that's your server.
-;;                  (nnimap-server-port "imaps")
-;;                  (nnimap-stream ssl)))
-
-;;   (setq smtpmail-smtp-server "smtp.gmail.com"
-;;         smtpmail-smtp-service 587
-;;         gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-
-;;   (add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
-
-;;   (setq my/gnus-topic-topology '(("Gnus" visible)
-;;                                  (("tech" visible))
-;;                                  (("dev" visible))
-;;                                  (("work" visible))
-;;                                  (("comics" visible))
-;;                                  (("gmail" visible))))
-
-;;   (setq gnus-topic-alist my/gnus-topic-alist)
-;;   (setq gnus-topic-topology my/gnus-topic-topology)
-
-;;   (defun my/gnus-subscribe-to-my-stuff ()
-;;     ;; check or force gnus-topic-topology & gnus-topic-alist before calling this.
-;;     (interactive)
-;;     (setq gnus-topic-alist my/gnus-topic-alist)
-;;     (setq gnus-topic-topology my/gnus-topic-topology)
-;;     (mapcar (lambda (topic)
-;;               (message "topic: %s\n" (car topic))
-;;               (mapcar
-;;                (lambda (s)
-;;                  (when (and (> (length s) 7)
-;;                             (or (string= "nntp+" (substring s 0 5))
-;;                                 (string= "nnimap+" (substring s 0 7))))
-;;                    (message "subscribing to: %s\n" s)
-;;                    (gnus-subscribe-group s)))
-;;                topic))
-;;             gnus-topic-alist)))
+;; email / rss
 
 (use-package gnus
   :config
@@ -287,7 +221,8 @@
 
   (setq gnus-select-method
         '(nnimap "gmail"
-                 (nnimap-address "imap.gmail.com") ; it could also be imap.googlemail.com if that's your server.
+                 ;; it could also be imap.googlemail.com if that's your server.
+                 (nnimap-address "imap.gmail.com")
                  (nnimap-server-port "imaps")
                  (nnimap-stream ssl)))
 
@@ -308,8 +243,6 @@
                                                `((,x visible)))))
                                          my/gnus-topic-alist))))
 
-
-
   (setq gnus-topic-alist my/gnus-topic-alist)
   (setq gnus-topic-topology my/gnus-topic-topology)
 
@@ -322,12 +255,9 @@
               (message "topic: %s\n" (car topic))
               (mapcar
                (lambda (s)
-                 (when (and (> (length s) 7)
-                            (or (string= "nntp+" (substring s 0 5))
-                                (string= "nnimap+" (substring s 0 7))))
-                   (message "subscribing to: %s\n" s)
-                   (gnus-subscribe-group s)))
-               topic))
+                 (message "subscribing to: %s\n" s)
+                 (gnus-subscribe-group s))
+               (cdr topic)))
             gnus-topic-alist))
 
   (setq gnus-thread-sort-functions '((not gnus-thread-sort-by-date)))
@@ -369,7 +299,6 @@
   (gnus-group-mode-hook . gnus-topic-mode))
 
 (use-package evil-collection-gnus
-  :after gnus
-  :defer t)
+  :after gnus)
 
 (provide 'conf/communication)
