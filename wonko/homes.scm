@@ -211,10 +211,10 @@
     (stop #~(make-kill-destructor))
     (documentation "bling"))
    (shepherd-service
-               #$(file-append pantalaimon "/bin/pantalaimon")
     (provision '(pantalaimon))
     (start #~(make-forkexec-constructor
               ;; (list "/run/current-system/comms-profile/bin/pantalaimon")
+              (list #$(file-append img-pantalaimon "/bin/pantalaimon"))
               #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
                                        "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
                                        (default-environment-variables))

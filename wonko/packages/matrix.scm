@@ -9,7 +9,6 @@
   #:use-module (ice-9 match)
   #:use-module (wonko defs))
 
-;; ement.el: does not fix images in encrypted rooms
 (define-public img-pantalaimon
   (let ((commit "e4a14b0a9b876abb1913b953457de15a9fc06d32")
         (revision "0"))
@@ -22,8 +21,8 @@
        (origin
          (method git-fetch)
          (uri (git-reference
-                (url "https://github.com/matrix-org/pantalaimon")
-                (commit commit)))
+               (url "https://github.com/matrix-org/pantalaimon")
+               (commit commit)))
          (file-name (git-file-name name version))
          (patches (list
                    (local-file
@@ -35,5 +34,3 @@
        (substitute-keyword-arguments (package-arguments pantalaimon)
          ((#:phases phases) #~(modify-phases #$phases
                                 (delete 'check))))))))
-
-;; img-pantalaimon
