@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; prelude, load some definitions:
 
-(let ((comms "/data/org/emacs/comms.el")) ;; this sets gnus-topic-alist
+(let ((comms "/data/org/emacs/comms.el")) ;; this sets gnus-topic-alist & friends
   (if (file-readable-p comms)
       (load-file comms)
     (setq my/ement-ws-init '("i" "hate" "sand"))
@@ -204,8 +204,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mastodon
 
-(use-package mastodon
-  :defer t)
+(use-package mastodon)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; email / rss
@@ -246,11 +245,35 @@
   (setq gnus-topic-alist my/gnus-topic-alist)
   (setq gnus-topic-topology my/gnus-topic-topology)
 
-  (defun my/gnus-subscribe-to-my-stuff ()
-    ;; check or force gnus-topic-topology & gnus-topic-alist before calling this.
+  (defun my/old-gnus-subscribe-to-my-stuff ()
+    "might be useful"
     (interactive)
     (setq gnus-topic-alist my/gnus-topic-alist)
     (setq gnus-topic-topology my/gnus-topic-topology)
+    (mapcar (lambda (topic)
+              (message "topic: %s\n" (car topic))
+              (mapcar
+               (lambda (s)
+                 (message "subscribing to: %s\n" s)
+                 (gnus-subscribe-group s))
+               (cdr topic)))
+            gnus-topic-alist))
+
+  (defun my/gnus-subscribe-to-my-stuff ()
+    "reset gnus subscriptions, folders, topics. rm ~/.news* might help"
+    (interactive)
+    (setq gnus-topic-alist my/gnus-topic-alist)
+    (setq gnus-topic-topology my/gnus-topic-topology)
+    (setq gnus-newsrc-alist
+          (append
+           (mapcar (lambda (news)
+                     (list news 3 nil nil "nntp:news.gwene.org" nil))
+                   (seq-filter (lambda (s)
+                                 (and (> (length s) 19)
+                                      (string= (substring s 0 19) "nntp+news.gwene.org")))
+                               (flatten-list my/gnus-topic-alist)))
+           ;; example: '(("nnvirtual:comics" 3 nil nil (nnvirtual "smbc\\|xkcd"))...)
+           my/gnus-virtual-folders))
     (mapcar (lambda (topic)
               (message "topic: %s\n" (car topic))
               (mapcar
