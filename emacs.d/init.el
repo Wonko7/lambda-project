@@ -557,7 +557,7 @@
     "-"    #'calc-minus ;; FIXME why do I need set this?
     "i"    (lambda ()
              (interactive) ;; avoid having info popping up all the time.
-             (message "beep boop - I'm a robot"))))
+             (message "I'm sorry, Dave. I'm afraid I can't do that."))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; info
