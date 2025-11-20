@@ -229,17 +229,15 @@
     "K"    #'git-rebase-move-line-up
     "J"    #'git-rebase-move-line-down)
 
-  ;; FIXME: whaaat, overrides org :/
-  ;; (general-evil-define-key '(normal) diff-hl-mode-map
-  ;;   "grk" #'smerge-prev
-  ;;   "grj" #'smerge-next
-  ;;   "C-k" #'smerge-prev
-  ;;   "C-j" #'smerge-next
-  ;;   "("   #'smerge-prev
-  ;;   ")"   #'smerge-next
-  ;;   "Ku"  #'smerge-keep-upper
-  ;;   "Kl"  #'smerge-keep-lower)
-  )
+  (general-evil-define-key '(normal) diff-hl-mode-map
+    "grk" #'smerge-prev
+    "grj" #'smerge-next
+    "C-k" #'smerge-prev
+    "C-j" #'smerge-next
+    "("   #'smerge-prev
+    ")"   #'smerge-next
+    "Ku"  #'smerge-keep-upper
+    "Kl"  #'smerge-keep-lower))
 
 (use-package magit-todos
   :after magit
