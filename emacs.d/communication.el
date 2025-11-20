@@ -261,6 +261,8 @@
 
   (defun my/gnus-subscribe-to-my-stuff ()
     "reset gnus subscriptions, folders, topics. rm ~/.news* might help"
+    ;; *sigh*: exec this, copy gnus-newsrc-alist, exit gnus, edit .newsrc.eld
+    ;; and set gnus-newsrc-alist manually 🤷
     (interactive)
     (setq gnus-topic-alist my/gnus-topic-alist)
     (setq gnus-topic-topology my/gnus-topic-topology)
@@ -276,11 +278,10 @@
            my/gnus-virtual-folders))
     (mapcar (lambda (topic)
               (message "topic: %s\n" (car topic))
-              (mapcar
-               (lambda (s)
-                 (message "subscribing to: %s\n" s)
-                 (gnus-subscribe-group s))
-               (cdr topic)))
+              (mapcar (lambda (s)
+                        (message "subscribing to: %s\n" s)
+                        (gnus-subscribe-group s))
+                      (cdr topic)))
             gnus-topic-alist))
 
   (setq gnus-thread-sort-functions '((not gnus-thread-sort-by-date)))
