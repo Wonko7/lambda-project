@@ -215,6 +215,7 @@
   '((defalias Cn C-n)
     (defalias Cp C-p)
     (defalias Csp C-spc)
+    (defalias C:  #(C-spc :))
     (defalias CP  #(C-spc P))))
 
 (define kmonad-system-actions-aliases
@@ -229,7 +230,7 @@
   '(deflayer dance-commander
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    4    5    6    7    8    9    0    @Csp @CP  bspc  ins  home pgup
-     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    =    \     del  end  pgdn
+     tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @C:  \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
      @Tsy @Tsy @mDB           spc            @mDB ralt @Tsy  @Tsy            left down rght))
