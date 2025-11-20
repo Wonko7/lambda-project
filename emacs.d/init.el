@@ -506,6 +506,8 @@
 
 (use-package dired
   :hook (dired-mode-hook . auto-revert-mode)
+  :custom
+  (dired-dwim-target t)
   :config
   (general-evil-define-key '(normal) dired-mode-map
     "ï"    #'dired-up-directory))
@@ -517,7 +519,6 @@
 (use-package dired-open)
 (use-package dired-collapse)
 
-(setq dired-dwim-target t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ibuffer
@@ -545,8 +546,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; apps
 
-(use-package osm
-  :defer t)
+(use-package osm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; calc
@@ -577,11 +577,9 @@
   :bind ( :map isearch-mode-map
           ("C-e" . #'isearch-edit-string)))
 
-(use-package rg
-  :defer t)
+(use-package rg)
 
 (use-package wgrep
-  :defer t
   :hook
   (rg-mode-hook . wgrep-rg-setup)
   :config
