@@ -40,16 +40,16 @@
    (kb %dvorak-kb)))
 
 (define-public (crew->user-account crew)
- (user-account
-  (name (crew-name crew))
-  (uid (crew-uid crew))
-  (group "users")
-  (home-directory (string-append "/home/" (crew-name crew)))
-  (shell (file-append bash "/bin/bash"))
-  (supplementary-groups
-   (append '("lp" "netdev" "audio" "video")
-           (if (crew-admin? crew)
-               '("wheel")
-               '())))))
+  (user-account
+   (name (crew-name crew))
+   (uid (crew-uid crew))
+   (group "users")
+   (home-directory (string-append "/home/" (crew-name crew)))
+   (shell (file-append bash "/bin/bash"))
+   (supplementary-groups
+    (append '("lp" "netdev" "audio" "video")
+            (if (crew-admin? crew)
+                '("wheel" "kvm")
+                '())))))
 
 (define-public %crew (list %wonko %tina %media))
