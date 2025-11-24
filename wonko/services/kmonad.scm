@@ -56,7 +56,9 @@
 (define (setxkb xkb)
   ;; FIXME: see zzull's "setxkbmap -device $(xinput list --id-only keyboard:'%s') fr bepo"
   (let ((xkb (if (string= xkb "us")
-                 " -option compose:ralt us"
+                 (string-append
+                  " -option compose:menu,compose:ralt,shift:breaks_caps,shift:both_capslock"
+                  " -variant altgr-intl us")
                  " -option lv3:ralt_switch fr latin9"))
         (setxkb " /run/current-system/profile/bin/setxkbmap ")
         (sudo "/run/privileged/bin/sudo -u ")
@@ -64,7 +66,9 @@
     (apply string-append
            (map (match-lambda
                   ((user . disp)
-                   (string-append sudo user display disp setxkb xkb ";\n")))
+                   (string-append
+                    sudo user display disp setxkb " us -option" ";\n" ;; reset options
+                    sudo user display disp setxkb xkb ";\n")))
                 '(("wonko" . ":9")
                   ("media" . ":11")
                   ("tina"  . ":10"))))))
