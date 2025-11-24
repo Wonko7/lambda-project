@@ -229,7 +229,7 @@
     "K"    #'git-rebase-move-line-up
     "J"    #'git-rebase-move-line-down)
 
-  (general-evil-define-key '(normal) diff-hl-mode-map
+  (general-evil-define-key '(normal) magit-hunk-section-smerge-map
     "grk" #'smerge-prev
     "grj" #'smerge-next
     "C-k" #'smerge-prev
