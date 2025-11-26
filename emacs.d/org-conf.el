@@ -97,7 +97,8 @@
   :config
   (defun my/align-org-tags ()
     (interactive)
-    (org-align-tags t))
+    (when org-auto-align-tags
+      (org-align-tags t)))
 
   (add-hook 'org-mode-hook
             (lambda ()
@@ -876,7 +877,7 @@ current time."
                                   (my/all-dailies)))
                 :query '(and (tags "tv") (tags "bm") (tags "done"))
                 :sort #'my/sort-by-filename-date))
-    (cons "abadonned tv bookmarks"
+    (cons "abandoned tv bookmarks"
           (list :buffers-files (lambda ()
                                  (cons
                                   (org-roam-node-file
@@ -892,6 +893,12 @@ current time."
                                   (my/all-dailies)))
                 :query '(and (tags "tv") (tags "film"))
                 :sort #'my/sort-by-filename-date))
+    (cons "dangling/empty titles"
+          (list :buffers-files #'my/all-dailies
+                :query '(and (heading "injuries")
+                             (not (children))
+                             (no-prop-entry-regexp "\\`.*[ \t\r\n]*\\'"))
+                :sort #'my/sort-by-filename-date))
     (cons "broken2 tv bookmarks"
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "media" "📺")
@@ -901,7 +908,40 @@ current time."
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "media" "📺")
                              (not (tags "tv")))
-                :sort #'my/sort-by-filename-date)))))
+                :sort #'my/sort-by-filename-date))))
+
+  :config
+  (org-ql-defpred no-prop-entry-regexp (&rest regexps)
+    "based on regexp, matching \\` & \\' was broken because of text properties."
+    :coalesce t
+    :normalizers ((`(,predicate-names . ,args)
+                   `(no-prop-entry-regexp ,@args)))
+    :preambles ((`(,predicate-names ,regexp)
+                 (list :case-fold t :regexp regexp :query t))
+                (`(,predicate-names . ,regexps)
+                 ;; Search for first regexp, then confirm with predicate.
+                 (list :case-fold t :regexp (car regexps) :query query)))
+    :body
+    (let ((end (or (save-excursion
+                     (outline-next-heading))
+                   (point-max))))
+      (save-excursion
+        (goto-char (line-beginning-position))
+        (cl-loop for regexp in regexps
+                 always (save-excursion
+                          (s-match-strings-all
+                           regexp
+                           (buffer-substring-no-properties (point) end)))))))
+
+  (when nil
+    ;; I will be looking for this in the future.
+    ;; you can do cool stuff like this:
+    (setq org-auto-align-tags nil)
+    (org-ql-query :select #'delete-line
+                  :from #'my/all-dailies ;; (current-buffer)
+                  :where '(and (heading "campusing")
+                               (not (children))
+                               (no-prop-entry-regexp "\\`.*[ \t\r\n]*\\'")))))
 
 (use-package org-ql-search
   :after org-ql
