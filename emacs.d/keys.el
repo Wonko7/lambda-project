@@ -192,6 +192,7 @@
     "is" #'my/insert-shell-line
     "it" #'consult-yasnippet
     "ip" #'embark-insert-relative-path
+    "il" #'my/insert-line
     ;; rm stuff
     "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 

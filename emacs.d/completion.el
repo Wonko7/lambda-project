@@ -249,6 +249,8 @@
   :commands (embark-insert-relative-path)
   :bind ( :map embark-general-map
           ("$" . #'shell)
+          ("i l" . #'my/insert-line)
+          ("/" . #'consult-ripgrep)
           :map embark-library-map
           ("$" . #'shell)
           :map embark-buffer-map
@@ -264,6 +266,7 @@
           ("F" . #'my/remote-fleet-find-file)
           ("b" . #'consult-buffer)
           ("l" . #'consult-line)
+          ("i l" . #'my/insert-line)
           ("/" . #'consult-ripgrep)
           ("$" . #'shell)
           :map embark-become-shell-command-map
@@ -275,6 +278,7 @@
           ("F" . #'my/remote-fleet-find-file)
           ("b" . #'consult-buffer)
           ("l" . #'consult-line)
+          ("i l" . #'my/insert-line)
           ("/" . #'consult-ripgrep)
           ("u" . #'flush-lines))
   :after consult

@@ -121,14 +121,29 @@
                              :require-match t)))
     (insert cmd)))
 
-
-;; (general-evil-define-key '(normal) embark-general-map
-;;                     "gP" (lambda (file)
-;;                            (interactive "f") ;; binds =file= to result of (read-file-name ...), when called interactively
-;;                            (message "I will git")
-;;                            (message file))
-
-;;                     )
+(defun my/insert-line ()
+  (interactive)
+  (let* ((ln          (line-number-at-pos))
+         (b           (current-buffer))
+         (buf-content (split-string
+                       (with-temp-buffer
+                         (insert-buffer b)
+                         (buffer-string))
+                       "\n"))
+         (buf-content (remove "" buf-content))
+         (under       (reverse (take ln buf-content)))
+         (over        (drop ln buf-content))
+         (n           (min (length under) (length over)))
+         (buf-content (flatten-list
+                       (-zip (take n under)
+                             (take n over))))
+         (buf-content (append buf-content (drop n over) (drop n under)))
+         (line        (consult--read buf-content
+                                     :prompt "insert line: "
+                                     :sort nil
+                                     :require-match t)))
+    (evil-open-above 1)
+    (insert line)))
 
 (defun my/choose-remote-from-fleet ()
   (consult--read
