@@ -656,7 +656,7 @@ current time."
           ("iH" "🏥 Health" entry "* 🏥 [[roam:health]] %? :is:health:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("iw" "⚖ weight" entry "* ⚖ [[roam:weight]] %? :is:health:\n%U"
+          ("iw" "⚖ weight" entry "* ⚖ [[roam:weight]] :is:health:\n%U%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
 
@@ -681,8 +681,7 @@ current time."
                                                       "%U\n"
                                                       "** ❤ with :is:\n"
                                                       "** 👷 projects\n"
-                                                      "** 🔥 topped\n"
-                                                      "** 🏥 [[roam:injuries]]\n"))
+                                                      "** 🔥 topped\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("ws" "🐒 sport climbing" entry "* 🐒 [[roam:sport climbing]] %? :wtf:cb:\n%U\n** ❤ with :is:\n** 🔥 topped\n** 👷 projects\n** 🏥 [[roam:injuries]]\n"
@@ -692,21 +691,20 @@ current time."
                                                  "%U\n"
                                                  "** 👷 projects\n"
                                                  "** 🔥 topped\n"
-                                                 "*** %?\n"
-                                                 "** 🐒 [[roam:campusing]]\n"
-                                                 "** 🏥 [[roam:injuries]]"))
+                                                 "*** %?\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
-          ("wf" "🤘 fingerboard" entry ,(string-join '("* 🤘 [[roam:fingerboard]] :wtf:\n"
+          ("wf" "🤘 FDP block deadhangs" entry
+           ,(string-join '("* 🤘 [[roam:FDP pull blocks]] "
+                           "[[roam:deadhangs]] :wtf:cb:\n"
+                           "%U\n"
+                           "- %?"))
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
+          ("wF" "🤘 fingerboard" entry ,(string-join '("* 🤘 [[roam:fingerboard]] :wtf:\n"
                                                        "%U\n"
-                                                       "** 🍚 [[roam:rice bucket]]\n"
-                                                       "- %?\n"
-                                                       "** 💪 [[roam:pull-ups]]\n"
-                                                       "** 🐒 [[roam:campusing]]\n"
-                                                       "** 🤘 [[roam:deadhangs]]"))
-           :jump-to-captured t
-           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
-          ("wd" "🤘 FDP block deadhangs" entry "* 🤘 [[roam:FDP pull blocks]] [[roam:deadhangs]] :wtf:cb:\n%U%?"
+                                                       "** 🤘 [[roam:deadhangs]]\n"
+                                                       "- %?"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wh" "🤸 handstands" entry
@@ -717,7 +715,6 @@ current time."
                            "** 🤸 straddle [[roam:press]]\n"
                            "- %?\n"
                            "** 🤸 [[roam:press]]\n"
-                           "** 🤸 [[roam:HSPU]]\n"
                            "** 🤸 session max hold:\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
@@ -728,11 +725,11 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wR" "👣 Running" entry ,(string-join '("* 👣 [[roam:running]] :wtf:\n"
-                                                   "%U\n"))
+                                                   "%U\n%?"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wH" "👣 Hiking" entry ,(string-join '("* 👣 [[roam:hiking]] :wtf:\n"
-                                                  "%U\n"))
+                                                  "%U\n%?"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wl" "💪 leg day" entry ,(string-join '("* 💪 leg day :wtf:brutus:\n"
