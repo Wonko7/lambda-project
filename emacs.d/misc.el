@@ -121,16 +121,14 @@
                              :require-match t)))
     (insert cmd)))
 
-(defun my/insert-line ()
-  (interactive)
+(defun my/insert-line-from-buffer (buffer)
   (let* ((ln          (line-number-at-pos))
-         (b           (current-buffer))
+         (b           buffer)
          (buf-content (split-string
                        (with-temp-buffer
                          (insert-buffer b)
                          (buffer-string))
                        "\n"))
-         (buf-content (remove "" buf-content))
          (under       (reverse (take ln buf-content)))
          (over        (drop ln buf-content))
          (n           (min (length under) (length over)))
@@ -138,12 +136,26 @@
                        (-zip (take n under)
                              (take n over))))
          (buf-content (append buf-content (drop n over) (drop n under)))
+         (buf-content (remove "" buf-content))
          (line        (consult--read buf-content
-                                     :prompt "insert line: "
+                                     :prompt (string-join `("insert line from "
+                                                            ,(buffer-name b)
+                                                            ": "))
                                      :sort nil
                                      :require-match t)))
     (evil-open-above 1)
     (insert line)))
+
+(defun my/insert-line ()
+  (interactive)
+  (my/insert-line-from-buffer (current-buffer)))
+
+(defun my/insert-line-other ()
+  (interactive)
+  (my/insert-line-from-buffer (other-buffer (current-buffer) t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fleet / remote operations:
 
 (defun my/choose-remote-from-fleet ()
   (consult--read

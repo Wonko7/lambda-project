@@ -189,6 +189,7 @@
     "it" #'consult-yasnippet
     "ip" #'embark-insert-relative-path
     "il" #'my/insert-line
+    "iL" #'my/insert-line-other
     ;; rm stuff
     "-d" #'delete-trailing-whitespace ;; :desc "trailing whitespace"
 
