@@ -109,6 +109,8 @@
 (if (file-readable-p custom-file)
     (load custom-file))
 
+(setq warning-suppress-types '((undo discard-info)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async-shell-command
 
