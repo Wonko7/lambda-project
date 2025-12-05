@@ -256,4 +256,14 @@
                     (file-name-nondirectory buffer-file-name)
                     "  -*- lexical-binding: t; -*-\n\n"))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; insert link
+
+(defun my/bleau-link-insert ()
+  (interactive)
+  (execute-kbd-macro (kbd "^wD"))
+  (org-web-tools-insert-link-for-url (current-kill 0 t))
+  (org-id-get-create)
+  (evil-next-line 2))
+
 (provide 'conf/misc)

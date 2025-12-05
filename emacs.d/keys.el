@@ -93,12 +93,7 @@
     "oa"  (li (org-agenda nil "z"))
     "oc"  #'cfw:open-org-calendar
     "oi"  '("insert" . (keymap))
-    "oib" (lambda ()
-            (interactive)
-            (execute-kbd-macro (kbd "^wD"))
-            (org-web-tools-insert-link-for-url (current-kill 0 t))
-            (org-id-get-create)
-            (evil-next-line 2))
+    "oib" #'my/bleau-link-insert
     "oiw"  '("web" . (keymap))
     "oiwe" #'org-web-tools-insert-web-page-as-entry ;; :desc "web: insert entry"
     "oiwu" #'org-web-tools-insert-link-for-url      ;; :desc "web: insert url"
