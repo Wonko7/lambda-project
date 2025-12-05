@@ -235,15 +235,14 @@
   `(progn
      ,@(mapcar
         (lambda (f)
-          ;; If in evil normal mode and cursor is on a whitespace
-          ;; character, then go into append mode first before inserting
-          ;; the link. This is to put the link after the space rather
-          ;; than before.
+          ;; If in evil normal mode and cursor is on a whitespace til EOL
+          ;; then go into append mode first before inserting the thing.
+          ;; This is to put the thing after the space rather than before.
           `(defadvice ,f (around append-if-in-evil-normal-mode activate compile)
              (let ((is-in-evil-normal-mode (and (bound-and-true-p evil-mode)
                                                 (not (bound-and-true-p
                                                       evil-insert-state-minor-mode))
-                                                (looking-at "[[:blank:]]"))))
+                                                (looking-at "[[:blank:]]*$"))))
                (if (not is-in-evil-normal-mode)
                    ad-do-it
                  (evil-append 0)
@@ -255,7 +254,6 @@
                        emoji-search
                        org-web-tools-insert-link-for-url
                        my/insert-inactive-timestamp)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc
