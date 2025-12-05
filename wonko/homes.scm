@@ -286,7 +286,7 @@
        (stop #~(make-kill-destructor))
        (documentation "don't touch my stuff"))
       (shepherd-service
-       (provision '(synergy))
+       (provision '(synergyc))
        (start #~(make-forkexec-constructor
                  (list #$(file-append synergy "/bin/synergyc")
                        "-n" "media-station"

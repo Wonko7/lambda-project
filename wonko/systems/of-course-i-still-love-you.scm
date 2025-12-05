@@ -32,7 +32,7 @@
   #:export (%of-course-i-still-love-you-wonko-home
             %of-course-i-still-love-you-os))
 
-(use-package-modules file-systems xorg machine-learning)
+(use-package-modules file-systems xorg machine-learning synergy)
 (use-service-modules linux nfs)
 
 (define machine-home-services
@@ -49,11 +49,25 @@
 
 (define %of-course-i-still-love-you-wonko-home
   (home-environment
-    (inherit %vanilla-wonko-home)
-    (services
+   (inherit %vanilla-wonko-home)
+   (services
+    (cons*
+     (simple-service
+      'of-course-i-still-love-you-shepherd home-shepherd-service-type
+      (list
+       (shepherd-service
+        (provision '(synergyc))
+        (auto-start? #f)
+        (start #~(make-forkexec-constructor
+                  (list #$(file-append synergy "/bin/synergyc")
+                        "-n" "media-station"
+                        "-f" "yggdrasill.local")
+                  #:log-file #$(home-log-path "synergy")))
+        (stop #~(make-kill-destructor))
+        (documentation "can't be arsed to move IRL"))))
      (append
       machine-home-services
-      %vanilla-wonko-services))))
+      %vanilla-wonko-services)))))
 
 (define %media-station-home
   (home-environment

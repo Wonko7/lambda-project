@@ -56,7 +56,7 @@
       'yggdrasill-shepherd home-shepherd-service-type
       (list
        (shepherd-service
-        (provision '(synergy))
+        (provision '(synergyd))
         (start #~(make-forkexec-constructor
                   (list #$(file-append synergy "/bin/synergy"))
                   #:log-file #$(home-log-path "synergy")))
