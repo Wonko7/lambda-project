@@ -61,6 +61,8 @@
               (lambda (&rest _)
                 (setq my/current-search-fn 'consult)))
 
+  ;; generalise next/previous:
+
   (defun my/search-prev ()
     (interactive)
     (if (eq my/current-search-fn 'consult)
@@ -73,8 +75,12 @@
         (call-interactively (kmacro "SPC . C-j <return>"))
       (evil-search-next)))
 
+  (evil-declare-ignore-repeat 'my/search-next)
+  (evil-declare-ignore-repeat 'my/search-prev)
+
   (define-key evil-motion-state-map "n" #'my/search-next)
   (define-key evil-motion-state-map "N" #'my/search-prev))
+
 
 (use-package evil-collection
   :defer nil
