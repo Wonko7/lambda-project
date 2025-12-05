@@ -182,6 +182,7 @@
 
     ;; insert stuff
     "i"  '("insert" . (keymap))
+    "id" #'consult-dir
     "ie" #'emoji-search                 ;;  :desc "Emoji"
     "in" #'my/insert-inactive-timestamp ;;  :desc "date (now)"
     "is" #'my/insert-shell-line
@@ -195,6 +196,7 @@
     "f"  '("files" . (keymap))
     "fr" #'consult-recent-file ;; :desc "file recent"
     "ff" #'find-file
+    "fd" #'consult-dir
 
     ;; use this for something else here
     "ss" #'consult-outline ;; :desc "filter line"
