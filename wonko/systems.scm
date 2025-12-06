@@ -287,18 +287,19 @@
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
     (bootloader
-      (bootloader-configuration
-        ;; choose wisely:
-        ;; grub-efi-removable-bootloader =>
-        ;;   use when installing on external device:
-        ;;   expects /mnt/boot/efi to exist & be mounted
-        ;; grub-efi-bootloader => for local machine
-        ;;
-        ;; (bootloader grub-efi-removable-bootloader)
-        ;; (targets '("/mnt/tmp-efi/"))
-        (bootloader grub-efi-bootloader)
-        (targets    '("/boot"))
-        (keyboard-layout keyboard-layout)))
+     (bootloader-configuration
+      ;; choose wisely:
+      ;; grub-efi-removable-bootloader =>
+      ;;   use when installing on external device:
+      ;;   expects /mnt/boot/efi to exist & be mounted
+      ;; grub-efi-bootloader => for local machine
+      ;;
+      ;; (bootloader grub-efi-removable-bootloader)
+      ;; (targets '("/mnt/tmp-efi/"))
+      (bootloader grub-efi-bootloader)
+      (targets    '("/boot"))
+      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
+      (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
     (issue (string-append (spock-say "live long & prosper!") "\n\n"))

@@ -193,7 +193,8 @@
      (list (mapped-device
             (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
             (target "vault")
-            (type luks-device-mapping))))
+            (type luks-device-mapping)
+            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*
