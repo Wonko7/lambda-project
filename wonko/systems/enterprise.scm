@@ -69,9 +69,10 @@
     ;; (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps"))
     (host-name "enterprise")
     (bootloader
-      (bootloader-configuration
-        (bootloader my-grub-efi-bootloader)
-        (targets    '("/boot"))))
+     (bootloader-configuration
+      (bootloader   my-grub-efi-bootloader)
+      (targets      '("/boot"))
+      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
     (services
      (cons*
       (service slim-service-type wonko-slim-config)
@@ -85,9 +86,10 @@
       %laptop-services))
     (mapped-devices
      (list (mapped-device
-             (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
-             (target "vault")
-             (type luks-device-mapping))))
+            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+            (target "vault")
+            (type luks-device-mapping)
+            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*
