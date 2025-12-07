@@ -438,8 +438,10 @@
 
 (use-package tramp
   :custom
+  (tramp-default-method "rsync")
   (tramp-terminal-type "tramp")
   ;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
+  ;; TODO: try this https://github.com/jsadusk/tramp-hlo
   (remote-file-name-inhibit-locks t)
   (tramp-use-scp-direct-remote-copying t)
   (remote-file-name-inhibit-auto-save-visited t)
@@ -458,7 +460,7 @@
    '((tramp-direct-async-process . t)))
 
   (connection-local-set-profiles
-   '(:application tramp :protocol "scp")
+   '(:application tramp :protocol "rsync")
    'remote-direct-async-process)
 
   (with-eval-after-load 'compile
