@@ -211,6 +211,18 @@
 
 (use-package gnus
   :config
+  (setq gnus-directory "~/gnus"
+        gnus-startup-file (concat gnus-directory "/.newsrc")
+        gnus-cache-directory (concat gnus-directory  "/news/cache")
+        gnus-article-save-directory (concat gnus-directory "/news")
+        gnus-kill-files-directory (concat gnus-directory "/news")
+        nndraft-directory (concat gnus-directory "/mail/draft")
+        nnfolder-directory (concat gnus-directory "/mail/archive"))
+
+  (setq gnus-cloud-synced-files
+        '("~/.authinfo.gpg" "~/gnus/.newsrc" "~/gnus/.newsrc.eld"
+          (:directory "~/gnus/news" :match ".*.SCORE\\'")))
+
   (setq gnus-use-cache t
         gnus-save-newsrc-file nil
         gnus-read-newsrc-file nil
