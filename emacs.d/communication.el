@@ -304,7 +304,7 @@
   (gnus-add-configuration
    '(article
      (horizontal 1.0
-                 (vertical 0.34
+                 (vertical 0.32
                            (group 1.0))
                  (vertical 1.0
                            (summary 0.25 point)
@@ -312,10 +312,30 @@
   (gnus-add-configuration
    '(summary
      (horizontal 1.0
-                 (vertical 0.34
+                 (vertical 0.32
                            (group 1.0))
                  (vertical 1.0
-                           (summary 1.0 point))))))
+                           (summary 1.0 point)))))
+
+  ;; summary
+  (setq gnus-sum-thread-tree-false-root "  "
+        gnus-sum-thread-tree-indent "  "
+        gnus-sum-thread-tree-root "○ "
+        gnus-sum-thread-tree-single-indent "◌ "
+        gnus-sum-thread-tree-vertical        "│" ;; |
+        gnus-sum-thread-tree-leaf-with-other "├─► "
+        gnus-sum-thread-tree-single-leaf     "╰─► "
+
+        ;; │06-Jan│  Sender Name  │ Email Subject
+        gnus-summary-line-format (concat "%0{%U%R%z%}"
+                                         "%3{│%}" "%1{%d%}" "%3{│%}"
+                                         "  "
+                                         "%4{%-20,20f%}"
+                                         "  "
+                                         "%3{│%}"
+                                         " "
+                                         "%1{%B%}"
+                                         "%s\n")))
 
 (use-package gnus-topic
   :after gnus

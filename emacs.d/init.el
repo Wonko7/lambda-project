@@ -102,6 +102,8 @@
 (add-hook 'ement-room-mode-hook                (lambda () (display-line-numbers-mode 0)))
 (add-hook 'ement-room-list-mode-hook           (lambda () (display-line-numbers-mode 0)))
 (add-hook 'ement-tabulated-room-list-mode-hook (lambda () (display-line-numbers-mode 0)))
+(add-hook 'gnus-summary-mode-hook              (lambda () (display-line-numbers-mode 0)))
+(add-hook 'gnus-group-mode-hook                (lambda () (display-line-numbers-mode 0)))
 
 (column-number-mode)
 
