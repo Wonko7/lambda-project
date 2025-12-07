@@ -245,6 +245,7 @@
         ;; x stuff
         emacs-desktop-environment
         emacs-zathura-sync-theme
+        ;; https://codeberg.org/tusharhero/emacs-reader pdf reader
 
         ;; communication
         emacs-ement
