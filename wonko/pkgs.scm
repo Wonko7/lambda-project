@@ -50,6 +50,7 @@
         emacs-org-noter
         emacs-enlive
         emacs-calfw
+        emacs-nano-calendar
         ;; emacs-org-download (images)
         ;;"emacs-org-ref"
         ;;"emacs-org-static-blog"

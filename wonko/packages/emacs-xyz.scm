@@ -218,6 +218,26 @@
     (description "verbiste for emacs")
     (license (@ (guix licenses) gpl3+))))
 
+(define-public emacs-nano-calendar
+  (let ((commit "9baab985541f83e85e421b53b9d397f9c31e68d3"))
+    (package
+      (name "emacs-nano-calendar")
+      (version "1.0.0")
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/rougier/nano-calendar")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "136rpk0p9zsg897isbzfhs0951gcsa24wiyfv57p5qgz22hnjd1p"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/rougier/nano-calendar")
+      (synopsis "NANO calendar")
+      (description "This library offers an alternative to calendar. It’s very similar and offer only a few options, like the possibility to color day according to the number of item in the org-agenda")
+      (license (@ (guix licenses) gpl3+)))))
+
 (define-public emacs-browser-hist
   (package
     (name "emacs-browser-hist")
