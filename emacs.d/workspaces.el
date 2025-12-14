@@ -135,7 +135,8 @@
                       ( :name right
                         :buffer-f (org-roam-node-open
                                    (org-roam-node-from-title-or-alias my/current-media)))))
-          ( :layout org2
+
+          ( :layout org2-latest-agenda
             :recipe (| (:left-size-ratio 0.5)
                        left
                        right)
@@ -143,7 +144,36 @@
                         :buffer-f (find-file (org-roam-dailies-latest)))
                       ( :name right
                         :hide-your-kids t
-                        :buffer-f (org-agenda nil "z"))))
+                        :buffer-f (progn (org-agenda nil "z")
+                                        "*Org Agenda*"))))
+
+          ( :layout org2-cal-agenda
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers (( :name left
+                        :buffer-f (progn (nano-calendar)
+                                         "*nano-calendar*"))
+                      ( :name right
+                        :hide-your-kids t
+                        :buffer-f (progn (org-agenda nil "z")
+                                         "*Org Agenda*"))))
+
+          ( :layout org3-latest-cal-agenda
+            :recipe (| (:left-size-ratio 0.5)
+                       (- (:upper-size-ratio 0.4)
+                          left-top
+                          left-bot)
+                       right)
+            :buffers (( :name left-top
+                        :buffer-f (find-file (org-roam-dailies-latest)))
+                      ( :name right
+                        :buffer-f (progn (org-agenda nil "z")
+                                         "*Org Agenda*"))
+                      ( :name left-bot
+                        :hide-your-kids t
+                        :buffer-f (progn (nano-calendar)
+                                         "*nano-calendar*"))))
 
           ( :layout ement-notifs-4
             :recipe (| (:left-max-size 38)
@@ -344,7 +374,7 @@
                 ((run-init-p 8)
                  (projectile-switch-project-by-name my/lambda-project))
                 ((run-init-p 7)
-                 (ws/set-layout 'org2))
+                 (ws/set-layout 'org3-latest-cal-agenda))
                 ((run-init-p 6)
                  (gnus))
                 ((run-init-p 5)

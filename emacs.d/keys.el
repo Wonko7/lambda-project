@@ -89,17 +89,20 @@
     "bg" #'consult-focus-lines
 
     ;; org
-    "o"   '("org" . (keymap))
-    "oa"  (li (org-agenda nil "z"))
-    "oc"  #'cfw:open-org-calendar
-    "oi"  '("insert" . (keymap))
-    "oib" #'my/bleau-link-insert
+    "o"    '("org" . (keymap))
+    "oa"   (li (org-agenda nil "z"))
+    "oc"   #'nano-calendar
+    "oi"   '("insert" . (keymap))
+    "oib"  #'my/bleau-link-insert
     "oiw"  '("web" . (keymap))
     "oiwe" #'org-web-tools-insert-web-page-as-entry ;; :desc "web: insert entry"
     "oiwu" #'org-web-tools-insert-link-for-url      ;; :desc "web: insert url"
-    "ow"  '("insert web" . (keymap))
-    "owe" #'org-web-tools-insert-web-page-as-entry
-    "owu" #'org-web-tools-insert-link-for-url
+    "ow"   '("insert web" . (keymap))
+    "owe"  #'org-web-tools-insert-web-page-as-entry
+    "owu"  #'org-web-tools-insert-link-for-url
+    "o1"   (li (ws/set-layout 'org2-latest-agenda))
+    "o2"   (li (ws/set-layout 'org2-cal-agenda))
+    "o3"   (li (ws/set-layout 'org3-latest-cal-agenda))
 
     ;; roam
     "r"  '("roam" . (keymap))

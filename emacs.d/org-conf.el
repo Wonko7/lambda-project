@@ -810,6 +810,53 @@ current time."
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
            :jump-to-captured t))))
 
+(use-package nano-calendar
+  :custom
+  (nano-calendar-workload-detail nil)
+  (nano-calendar-workload-compact nil)
+  (nano-calendar-workload-symbol t)
+  (nano-calendar-layout '(3 . 4))
+  (nano-calendar-workload-palette (let* ((def-fg (face-foreground 'default nil 'default))
+                                         (def-bg (face-background 'default nil 'default)))
+                                    (list (cons def-fg def-bg) ;; Base entry
+                                          (cons def-bg "SteelBlue1")
+                                          (cons def-bg "SteelBlue2")
+                                          (cons def-bg "SteelBlue3")
+                                          (cons def-bg "DodgerBlue2")
+                                          (cons def-bg "DodgerBlue3")
+                                          (cons def-bg "DodgerBlue4")
+                                          (cons def-fg "purple1")
+                                          (cons def-fg "purple2")
+                                          (cons def-fg "purple3")
+                                          (cons def-fg "purple4"))))
+  :config
+  (general-evil-define-key '(normal) nano-calendar-mode-map
+    "<left>"    #'nano-calendar-goto-prev-day
+    "<right>"   #'nano-calendar-goto-next-day
+    "<up>"      #'nano-calendar-goto-prev-week
+    "<down>"    #'nano-calendar-goto-next-week
+    "<S-left>"  #'nano-calendar-goto-prev-month
+    "<S-right>" #'nano-calendar-goto-next-month
+    "<S-down>"  #'nano-calendar-goto-next-year
+    "<S-up>"    #'nano-calendar-goto-prev-year
+    ;; jk hl / eviler:
+    "H"         #'nano-calendar-goto-prev-day
+    "L"         #'nano-calendar-goto-next-day
+    "K"         #'nano-calendar-goto-prev-week
+    "J"         #'nano-calendar-goto-next-week
+    "B"         #'nano-calendar-goto-prev-month
+    "W"         #'nano-calendar-goto-next-month
+    ">"         #'nano-calendar-goto-next-year
+    "<"         #'nano-calendar-goto-prev-year
+    ;;
+    "v"         #'nano-calendar-show-org-agenda-entries
+    "<RET>"     #'nano-calendar-goto-org-agenda
+    "<SPC>"     #'nano-calendar-show-org-agenda-entries
+    "m"         #'nano-calendar-workload-menu
+    "."         #'nano-calendar-goto-today
+    "r"         #'nano-calendar-workload-update-all
+    "q"         #'nano-calendar-quit))
+
 (use-package calfw-org
   :commands (cfw:org-read-date-command)
   :config
