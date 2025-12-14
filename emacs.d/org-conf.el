@@ -225,6 +225,7 @@ EXTRA-FILES can be used to append extra files to the list."
 (use-package org-agenda
   :after org
   :custom
+  (org-agenda-window-setup 'current-window)
   (org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
   (org-agenda-prefix-format (quote
                              ((agenda . "  %-21c%?-12t% s")
