@@ -237,6 +237,7 @@
   (evil-define-key '(normal visual) 'global
     "gmm" #'evil-mc-make-all-cursors
     "gmu" #'evil-mc-undo-all-cursors
+    "gmq" #'evil-mc-undo-all-cursors
 
     "gmr" #'evil-mc-pause-cursors
     "gmR" #'evil-mc-resume-cursors
