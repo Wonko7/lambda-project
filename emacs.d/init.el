@@ -602,6 +602,7 @@
 
 (use-package transmission
   :custom
+  (transmission-torrent-functions '(transmission-ffap-last-killed))
   (transmission-host "of-course-i-still-love-you.local")
   (transmission-refresh-modes '(transmission-mode
                                 transmission-files-mode
