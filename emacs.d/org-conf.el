@@ -618,12 +618,13 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ("mt" "📺 tv bookmark" entry
-           ,(string-join '("* 📺 %? :bm:tv:\n"
-                           "#+begin_src shell :dir "
-                           "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media "
-                           ":results value output\n"
-                           "  (vlc */*s01e01* &)\n"
-                           "#+end_src\n"))
+           ,(string-join
+             '("* 📺 %? :bm:tv:\n"
+               "#+begin_src shell :dir "
+               "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media/inbox "
+               ":results value output\n"
+               "  (vlc */*s01e01* &)\n"
+               "#+end_src\n"))
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ;; ("mB" "book" entry "* 📚 %?\n%U"
