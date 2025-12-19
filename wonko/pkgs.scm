@@ -476,6 +476,7 @@
 
 (define-public %os-net-world ;; complements %utils-world
   (list
+   tcpdump
    openntpd
    wireguard-tools
    iproute
