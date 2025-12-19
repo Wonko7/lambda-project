@@ -33,14 +33,15 @@
  emacs emacs-xyz
  gnupg
  aspell hunspell libreoffice
- glib pulseaudio synergy xorg toys linux xdisorg suckless music image-viewers
+ glib pulseaudio xorg toys linux xdisorg suckless music image-viewers
  xfce lxde gnome kde-plasma kde-frameworks
  admin databases version-control tmux ssh rust-apps gnupg password-utils bash
  networking
  bittorrent tor
  haskell-apps compression commencement pkg-config base gdb m4 maths man
  ;; services
- freedesktop matrix wm compton)
+ freedesktop matrix wm compton
+ kde-internet synergy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; home components
@@ -269,6 +270,25 @@
        (documentation "neko"))
       %common-shepherd-wonko-services)))))
 
+(define-public %dance-commander-shepherd-service
+  (simple-service
+   'yggdrasill-shepherd home-shepherd-service-type
+   (list
+    (shepherd-service
+     (provision '(synergyd))
+     (start #~(make-forkexec-constructor
+               (list #$(file-append synergy "/bin/synergy"))
+               #:log-file #$(home-log-path "synergy")))
+     (stop #~(make-kill-destructor))
+     (documentation "can't be arsed to move IRL"))
+    (shepherd-service
+     (provision '(kdeconnectd))
+     (start #~(make-forkexec-constructor
+               (list #$(file-append kdeconnect "/bin/kdeconnectd"))
+               #:log-file #$(home-log-path "kdeconnectd")))
+     (stop #~(make-kill-destructor))
+     (documentation "ET phone home")))))
+
 (define-public %media-station-shepherd-wonko-service
   (service
    home-shepherd-service-type
@@ -291,6 +311,16 @@
                  (list #$(file-append synergy "/bin/synergyc")
                        "-n" "media-station"
                        "-f" "yggdrasill.local")
+                 #:log-file #$(home-log-path "synergy")))
+       (stop #~(make-kill-destructor))
+       (documentation "can't be arsed to move IRL"))
+      (shepherd-service
+       (auto-start? #f)
+       (provision '(synergyc-enterprise))
+       (start #~(make-forkexec-constructor
+                 (list #$(file-append synergy "/bin/synergyc")
+                       "-n" "media-station"
+                       "-f" "enterprise.local")
                  #:log-file #$(home-log-path "synergy")))
        (stop #~(make-kill-destructor))
        (documentation "can't be arsed to move IRL"))
@@ -666,6 +696,7 @@
      %dev-world
      (list
       ;; services
+      kdeconnect
       picom
       synergy
       dunst

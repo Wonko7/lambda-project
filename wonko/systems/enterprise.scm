@@ -49,11 +49,12 @@
 
 (define %wonko-home
   (home-environment
-    (inherit %vanilla-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %vanilla-wonko-services))))
+   (inherit %vanilla-wonko-home)
+   (services
+    (append
+     (list %dance-commander-shepherd-service)
+     machine-home-services
+     %vanilla-wonko-services))))
 
 (define %media-station-home
   (home-environment

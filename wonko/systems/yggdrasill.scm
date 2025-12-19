@@ -28,7 +28,7 @@
   #:use-module (wonko services kmonad)
   #:export (%yggdrasill-os))
 
-(use-package-modules xorg kde-internet synergy)
+(use-package-modules xorg)
 
 (define machine-home-services
   (list
@@ -51,38 +51,18 @@
   (home-environment
    (inherit %vanilla-wonko-home)
    (services
-    (cons*
-     (simple-service
-      'yggdrasill-shepherd home-shepherd-service-type
-      (list
-       (shepherd-service
-        (provision '(synergyd))
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append synergy "/bin/synergy"))
-                  #:log-file #$(home-log-path "synergy")))
-        (stop #~(make-kill-destructor))
-        (documentation "can't be arsed to move IRL"))
-       (shepherd-service
-        (provision '(kdeconnectd))
-        (start #~(make-forkexec-constructor
-                  (list #$(file-append kdeconnect "/bin/kdeconnectd"))
-                  #:log-file #$(home-log-path "kdeconnectd")))
-        (stop #~(make-kill-destructor))
-        (documentation "ET phone home"))))
-     (append
-      machine-home-services
-      %highdpi-wonko-services)))
-   (packages (cons*
-              kdeconnect
-              (home-environment-packages %vanilla-wonko-home)))))
+    (append
+     (list %dance-commander-shepherd-service)
+     machine-home-services
+     %highdpi-wonko-services))))
 
 (define %media-station-home
   (home-environment
-    (inherit %media-station-wonko-home)
-    (services
-     (append
-      machine-home-services
-      %media-station-wonko-services))))
+   (inherit %media-station-wonko-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-wonko-services))))
 
 (define %yggdrasill-os
   (operating-system
