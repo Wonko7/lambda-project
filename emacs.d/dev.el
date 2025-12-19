@@ -33,7 +33,18 @@
 ;; (setq eglot-autoshutdown t)
 ;; FIXME: eglot doesn't seem to like ocsigen.
 
-(use-package ocamlformat)
+(use-package ocamlformat
+  :commands (ocamlformat-before-save ocamlformat)
+  :config
+  (defun my/hack-ocamlformat-version (version)
+    "workarond guix's ocamlformat not knowing what version it is"
+    (if (string= "unknown" version)
+        "0.24.1"
+      version))
+  (advice-add #'ocamlformat-version
+              :filter-return
+              #'my/hack-ocamlformat-version))
+
 (use-package tuareg
   :defer t
   :hook
@@ -76,8 +87,6 @@
   ;; Hack to open files like Makefile.local with the right mode.
   (add-to-list 'auto-mode-alist '("\\.[^\\.].*\\'" nil t) t))
 
-(use-package ocamlformat)
-
 ;; (use-package utop
 ;;   :defer t
 ;;   :hook
@@ -91,8 +100,6 @@
 ;;       "RET" #'utop-eval-phrase
 ;;       "b"   #'utop-eval-buffer
 ;;       "K"   #'utop-kill)))
-
-;; (use-package tuareg :ensure t)
 
 (use-package diff-hl
   :demand t
