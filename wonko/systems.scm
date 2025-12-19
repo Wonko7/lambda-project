@@ -145,6 +145,33 @@
 ;;                           (keyboard-layout (crew-kb %tina))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fleet keep-alive service
+
+(define (range start end step)
+  (if (> start end)
+      '()
+      (cons start (range (+ start step) end step))))
+
+(define fleet-keep-alive-service-type
+  (shepherd-service-type
+   'fleet-keep-alive
+   (lambda (host)
+     (shepherd-service
+       (documentation (string-append "periodically ping " host))
+       (provision
+        (list (string->symbol (string-append "fleet-keep-alive-" host))))
+       (requirement '(networking user-processes guix-daemon))
+       (modules '((shepherd service timer)))
+       (start #~(make-timer-constructor
+                 (calendar-event #:minutes '#$(range 0 59 3))
+                 (command
+                  (list "/run/privileged/bin/ping" "-c3" #$host))
+                 #:wait-for-termination? #t))
+       (stop #~(make-timer-destructor))))
+   #t
+   (description "periodically ping local hosts")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; extra-profiles-service:
 
 (define (make-extra-profile-service-type profile-name)
@@ -232,49 +259,53 @@
    (service (make-extra-profile-service-type "img")     %image-edition-world)
    (service (make-extra-profile-service-type "fonts")   %fonts-world)
 
-   (modify-services
-       %desktop-services
-     (delete gdm-service-type)
-     (console-font-service-type config => ;; TODO: separate services for highdpi?
-                                (map (lambda (tty)
-                                       `(,tty
-                                         . ,(file-append font-terminus
-                                                         "/share/consolefonts/ter-132n")))
-                                     '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
-     (elogind-service-type
-      config =>
-      (elogind-configuration
-        (system-sleep-hook-files
-         `(,(program-file
-             "wake-up"
-             #~(let ((arg (cadr (program-arguments))))
-                 (if (string= arg "post")
-                     (let ((port (open-file #$%wake-up-notification-file "w")))
-                       (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
-                       (close-port port)))))))
-        (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-        (handle-lid-switch 'suspend)
-        (handle-lid-switch-docked  'suspend)
-        (handle-lid-switch-external-power 'suspend)))
-     (guix-service-type config =>
-                        (guix-configuration
-                          (discover? #t)
-                          (channels %channels)
-                          (guix (guix-for-channels %channels))
-                          (substitute-urls
-                           (cons* "https://substitutes.nonguix.org"
-                                  %default-substitute-urls))
-                          (authorized-keys
-                           (append
-                            (map (lambda (hn)
-                                   (local-file
-                                    (string-append %lambda-project
-                                                   "/wonko/data/substitutes/" hn ".pub")))
-                                 (cons "nonguix" %fleet-names))
-                            %default-authorized-guix-keys)))))))
+   (append
+    (map (lambda (h)
+           (service fleet-keep-alive-service-type (host-canonical-name h)))
+         %fleet-hosts)
+    (modify-services
+        %desktop-services
+      (delete gdm-service-type)
+      (console-font-service-type config => ;; TODO: separate services for highdpi?
+                                 (map (lambda (tty)
+                                        `(,tty
+                                          . ,(file-append font-terminus
+                                                          "/share/consolefonts/ter-132n")))
+                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
+      (elogind-service-type
+       config =>
+       (elogind-configuration
+         (system-sleep-hook-files
+          `(,(program-file
+              "wake-up"
+              #~(let ((arg (cadr (program-arguments))))
+                  (if (string= arg "post")
+                      (let ((port (open-file #$%wake-up-notification-file "w")))
+                        (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                        (close-port port)))))))
+         (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+         (handle-lid-switch 'suspend)
+         (handle-lid-switch-docked  'suspend)
+         (handle-lid-switch-external-power 'suspend)))
+      (guix-service-type config =>
+                         (guix-configuration
+                           (discover? #t)
+                           (channels %channels)
+                           (guix (guix-for-channels %channels))
+                           (substitute-urls
+                            (cons* "https://substitutes.nonguix.org"
+                                   %default-substitute-urls))
+                           (authorized-keys
+                            (append
+                             (map (lambda (hn)
+                                    (local-file
+                                     (string-append %lambda-project
+                                                    "/wonko/data/substitutes/" hn ".pub")))
+                                  (cons "nonguix" %fleet-names))
+                             %default-authorized-guix-keys))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; laptop-os and declinations
+;; laptop-os and friends
 
 (define-public %laptop-os
   (operating-system
@@ -342,9 +373,9 @@
   (operating-system
     (inherit %laptop-os)
     (bootloader
-     (bootloader-configuration
-      (bootloader my-grub-efi-removable-bootloader)
-      (targets    '("/boot"))))))
+      (bootloader-configuration
+        (bootloader my-grub-efi-removable-bootloader)
+        (targets    '("/boot"))))))
 
 (define-public %removable-laptop-os-init-from-external
   (operating-system
