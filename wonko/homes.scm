@@ -104,7 +104,8 @@
 ;; bash
 
 (define %aliases
-  `(("g"     . "git")
+  `(("sudo"  . "sudo ") ;; makes aliases available when sudoing
+    ("g"     . "git")
     ("psrg"  . "ps aux | rg -M0")
     ("df"    . "df -h")
     ("dmesg" . "dmesg -He")
