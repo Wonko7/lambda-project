@@ -375,16 +375,18 @@
     (bootloader
       (bootloader-configuration
         (bootloader my-grub-efi-removable-bootloader)
+        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
         (targets    '("/boot"))))))
 
 (define-public %removable-laptop-os-init-from-external
   (operating-system
     (inherit %laptop-os)
     (bootloader
-     (bootloader-configuration
-      (bootloader my-grub-efi-removable-bootloader)
-      (targets '("/mnt/tmp-efi/"))
-      (keyboard-layout %us-kb)))))
+      (bootloader-configuration
+        (bootloader my-grub-efi-removable-bootloader)
+        ;; (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio") FIXME
+        (targets '("/mnt/tmp-efi/"))
+        (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
   (cons*
