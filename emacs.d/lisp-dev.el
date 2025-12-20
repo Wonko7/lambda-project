@@ -33,8 +33,6 @@
   (my/nuke-all-gz-for-origami))
 
 (use-package geiser-mode
-  :hook
-  (scheme-mode-hook . geiser-mode)
   :config
   (my/nuke-all-gz-for-origami))
 
