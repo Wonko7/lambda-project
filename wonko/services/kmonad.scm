@@ -7,6 +7,8 @@
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
+  ;; my stuff
+  #:use-module (wonko misc)
   #:export (kmonad-dance-commander-layer
             kmonad-fr-layer
             kmonad-service-type
@@ -223,11 +225,13 @@
     (defalias CP  #(C-spc P))))
 
 (define kmonad-system-actions-aliases
-  '((defalias vt2 (cmd-button "/run/current-system/profile/bin/chvt 2"))
-    (defalias vt3 (cmd-button "/run/current-system/profile/bin/chvt 3"))
-    (defalias vt9 (cmd-button "/run/current-system/profile/bin/chvt 9"))
-    (defalias v10 (cmd-button "/run/current-system/profile/bin/chvt 10"))
-    (defalias v11 (cmd-button "/run/current-system/profile/bin/chvt 11"))))
+  (map
+   (lambda (i)
+     (let ((n (number->string i)))
+       `(defalias
+          ,(string->symbol (string-append (if (> i 9) "v" "vt") n))
+          (cmd-button ,(string-append "/run/current-system/profile/bin/chvt " n)))))
+   (range 1 12)))
 
 ;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
 (define kmonad-dance-commander-layer
@@ -310,8 +314,8 @@
 
 (define kmonad-system-layer
   '(deflayer system
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 XX
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @osb @csb bspc  ins  home pgup
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @v12
+     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @v12 bspc  ins  home pgup
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
@@ -319,8 +323,8 @@
 
 (define kmonad-meta-layer
   '(deflayer meta
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @XFR
-     XX   @XDD @XDB @XDN XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @XFR
+     XX   @XDD @XDB @XDN XX   XX   XX   XX   XX   @vt9 @v10 @v11 @csb bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   @XDN XX   -    @RC
      lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   @XDB XX   rsft                 up
