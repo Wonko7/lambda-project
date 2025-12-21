@@ -353,7 +353,7 @@
   :demand t
   :config
   (defvar ws/auto-start-state (-repeat my/exwm-workspace-number t))
-  ;; disable auto run for nameless projects:
+  ;; disable auto run for nameless project spaces:
   (setf (nth 5 ws/auto-start-state) nil)
   (setf (nth 3 ws/auto-start-state) nil)
   (setf (nth 0 ws/auto-start-state) nil)
