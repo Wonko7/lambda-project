@@ -17,6 +17,7 @@
   #:use-module (gnu system setuid)
   ;; my stuff
   #:use-module (wonko defs)
+  #:use-module (wonko misc)
   #:use-module (wonko spock)
   #:use-module (wonko crew)
   #:use-module (wonko fleet)
@@ -147,11 +148,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fleet keep-alive service
 
-(define (range start end step)
-  (if (> start end)
-      '()
-      (cons start (range (+ start step) end step))))
-
 (define fleet-keep-alive-service-type
   (shepherd-service-type
    'fleet-keep-alive
@@ -163,7 +159,7 @@
        (requirement '(networking user-processes guix-daemon))
        (modules '((shepherd service timer)))
        (start #~(make-timer-constructor
-                 (calendar-event #:minutes '#$(range 0 59 3))
+                 (calendar-event #:minutes '#$(range 0 59 #:step 3))
                  (command
                   (list "/run/privileged/bin/ping" "-c3" #$host))
                  #:wait-for-termination? #t))

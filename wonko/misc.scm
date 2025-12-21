@@ -1,0 +1,11 @@
+(define-module (wonko misc)
+  #:use-module (guix gexp)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-11)
+  #:use-module (ice-9 match)
+  #:export (range))
+
+(define* (range start end #:key (step 1))
+  (if (> start end)
+      '()
+      (cons start (range (+ start step) end #:step step))))
