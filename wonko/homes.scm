@@ -376,7 +376,7 @@
                         ,(local-file
                           (string-append %lambda-project "/emacs.d/" file))))
                     '("completion.el"
-                      "communication.el"
+                      "comms.el"
                       "dev.el"
                       "opam-user-setup.el"
                       "doom.el"

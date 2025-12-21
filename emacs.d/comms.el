@@ -1,4 +1,4 @@
-;;; communication.el  -*- lexical-binding: t; -*-
+;;; comms.el  -*- lexical-binding: t; -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; prelude, load some definitions:
@@ -359,4 +359,4 @@
 (use-package evil-collection-gnus
   :after gnus)
 
-(provide 'conf/communication)
+(provide 'conf/comms)

@@ -672,7 +672,7 @@
 (require 'conf/lisp            "~/.emacs.d/lisp-dev.el")
 (require 'conf/dev             "~/.emacs.d/dev.el")
 (require 'conf/doom            "~/.emacs.d/doom.el")
-(require 'conf/communication   "~/.emacs.d/communication.el")
+(require 'conf/comms           "~/.emacs.d/comms.el")
 (require 'conf/fancy-but-later "~/.emacs.d/fancy-but-later.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

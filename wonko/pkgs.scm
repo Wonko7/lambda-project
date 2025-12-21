@@ -248,7 +248,7 @@
         emacs-zathura-sync-theme
         ;; https://codeberg.org/tusharhero/emacs-reader pdf reader
 
-        ;; communication
+        ;; comms
         emacs-ement
         emacs-mastodon
         emacs-slack
