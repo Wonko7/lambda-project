@@ -304,14 +304,16 @@
     "s" #'gnus-group-subscribe)
 
   (general-evil-define-key '(normal) gnus-summary-mode-map
-    "U" #'gnus-summary-put-mark-as-unread
-    "K" #'gnus-summary-prev-article
-    "J" #'gnus-summary-next-article)
+    "gu" #'gnus-summary-browse-url
+    "U"  #'gnus-summary-put-mark-as-unread
+    "K"  #'gnus-summary-prev-article
+    "J"  #'gnus-summary-next-article)
 
   (general-evil-define-key '(normal) gnus-article-mode-map
-    "U" #'gnus-summary-put-mark-as-unread
-    "K" #'gnus-summary-prev-article
-    "J" #'gnus-summary-next-article)
+    "gu" #'gnus-summary-browse-url
+    "U"  #'gnus-summary-put-mark-as-unread
+    "K"  #'gnus-summary-prev-article
+    "J"  #'gnus-summary-next-article)
 
   (gnus-add-configuration
    '(article
