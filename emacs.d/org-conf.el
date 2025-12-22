@@ -533,6 +533,11 @@ current time."
   :config
   (appt-activate)
   (defun my/idle-org-agenda-to-appt ()
+    (let ((t1  (pp (org-today)))
+          (_ (sleep-for (* 60 2)))
+          (t2 (pp (org-today))))
+      (if (not (equal t1 t2))
+          (message "FOUND THE BUG")))
     (run-with-idle-timer 10 nil #'org-agenda-to-appt))
   (run-at-time nil 3600 #'my/idle-org-agenda-to-appt))
 
