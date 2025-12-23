@@ -512,6 +512,7 @@
   :hook (dired-mode-hook . auto-revert-mode)
   :custom
   (dired-dwim-target t)
+  (wdired-allow-to-change-permissions t)
   :config
   (general-evil-define-key '(normal) dired-mode-map
     "ï"    #'dired-up-directory))
