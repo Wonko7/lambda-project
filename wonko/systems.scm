@@ -44,49 +44,49 @@
 (define %channels ;; this will pull latest
   (cons*
    (channel
-     (name 'nonguix)
-     (url "https://gitlab.com/nonguix/nonguix")
-     (introduction
-      (make-channel-introduction
-       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-       (openpgp-fingerprint
-        "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
+    (name 'nonguix)
+    (url "https://gitlab.com/nonguix/nonguix")
+    (introduction
+     (make-channel-introduction
+      "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+      (openpgp-fingerprint
+       "2A39 3FFF 68F4 EF7A 3D29 12AF 6F51 20A0 22FB B2D5"))))
    %default-channels))
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
   (list (channel
-          (name 'guix-forge)
-          (url "https://git.systemreboot.net/guix-forge/")
-          (branch "main")
-          (commit
-           "ea30fe6a654bc519a6b527d37788fd615f35f0ec")
-          (introduction
-           (make-channel-introduction
-            "0432e37b20dd678a02efee21adf0b9525a670310"
-            (openpgp-fingerprint
-             "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+         (name 'guix-forge)
+         (url "https://git.systemreboot.net/guix-forge/")
+         (branch "main")
+         (commit
+          "ea30fe6a654bc519a6b527d37788fd615f35f0ec")
+         (introduction
+          (make-channel-introduction
+           "0432e37b20dd678a02efee21adf0b9525a670310"
+           (openpgp-fingerprint
+            "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
         (channel
-          (name 'nonguix)
-          (url "https://gitlab.com/nonguix/nonguix")
-          (branch "master")
-          (commit
-           "82be0b7adaaaa7a98d47382d7f72dd2e31d8e6d8")
-          (introduction
-           (make-channel-introduction
-            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-            (openpgp-fingerprint
-             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+         (name 'nonguix)
+         (url "https://gitlab.com/nonguix/nonguix")
+         (branch "master")
+         (commit
+          "82be0b7adaaaa7a98d47382d7f72dd2e31d8e6d8")
+         (introduction
+          (make-channel-introduction
+           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+           (openpgp-fingerprint
+            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
-          (name 'guix)
-          (url "https://codeberg.org/guix/guix")
-          (branch "master")
-          (commit
-           "0fc08ce2bd8b59a12e6f100e8ff2d145d607e879")
-          (introduction
-           (make-channel-introduction
-            "9edb3f66fd807b096b48283debdcddccfea34bad"
-            (openpgp-fingerprint
-             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+         (name 'guix)
+         (url "https://codeberg.org/guix/guix")
+         (branch "master")
+         (commit
+          "0fc08ce2bd8b59a12e6f100e8ff2d145d607e879")
+         (introduction
+          (make-channel-introduction
+           "9edb3f66fd807b096b48283debdcddccfea34bad"
+           (openpgp-fingerprint
+            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
@@ -114,24 +114,24 @@
 
 (define-public wonko-slim-config
   (slim-configuration
-    (display ":9")
-    (vt "vt9")
-    (auto-login? #t)
-    (default-user (crew-name %wonko))
-    ;; FIXME: this should break nothing, xsession does setxkbmap.
-    (xorg-configuration (xorg-configuration
-                          (keyboard-layout %us-kb)))
-    ))
+   (display ":9")
+   (vt "vt9")
+   (auto-login? #t)
+   (default-user (crew-name %wonko))
+   ;; FIXME: this should break nothing, xsession does setxkbmap.
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout %us-kb)))
+   ))
 
 (define-public media-station-slim-config
   (slim-configuration
-    (display ":11")
-    (vt "vt11")
-    (auto-login? #t)
-    (default-user (crew-name %media))
-    (xorg-configuration (xorg-configuration
-                          (keyboard-layout %us-kb)))
-    ))
+   (display ":11")
+   (vt "vt11")
+   (auto-login? #t)
+   (default-user (crew-name %media))
+   (xorg-configuration (xorg-configuration
+                        (keyboard-layout %us-kb)))
+   ))
 
 ;; (service noautostart-slim-service-type wonko-slim-config)
 ;; (service slim-service-type wonko-slim-config)
@@ -153,17 +153,17 @@
    'fleet-keep-alive
    (lambda (host)
      (shepherd-service
-       (documentation (string-append "periodically ping " host))
-       (provision
-        (list (string->symbol (string-append "fleet-keep-alive-" host))))
-       (requirement '(networking user-processes guix-daemon))
-       (modules '((shepherd service timer)))
-       (start #~(make-timer-constructor
-                 (calendar-event #:minutes '#$(range 0 59 #:step 3))
-                 (command
-                  (list "/run/privileged/bin/ping" "-c3" #$host))
-                 #:wait-for-termination? #t))
-       (stop #~(make-timer-destructor))))
+      (documentation (string-append "periodically ping " host))
+      (provision
+       (list (string->symbol (string-append "fleet-keep-alive-" host))))
+      (requirement '(networking user-processes guix-daemon))
+      (modules '((shepherd service timer)))
+      (start #~(make-timer-constructor
+                (calendar-event #:minutes '#$(range 0 59 #:step 3))
+                (command
+                 (list "/run/privileged/bin/ping" "-c3" #$host))
+                #:wait-for-termination? #t))
+      (stop #~(make-timer-destructor))))
    #t
    (description "periodically ping local hosts")))
 
@@ -184,7 +184,7 @@
     (mlet %store-monad ((_ (current-target-system)))
       (return `((,(string-append profile-name "-profile")
                  ,(profile
-                    (content (packages->manifest packages))))))))
+                   (content (packages->manifest packages))))))))
   (service-type (name (string->symbol
                        (string-append profile-name "-extra-profile")))
                 (extensions
@@ -214,32 +214,32 @@
 
    (service guix-publish-service-type
             (guix-publish-configuration
-              (host "0.0.0.0")
-              (port 1337)
-              (advertise? #t)))
+             (host "0.0.0.0")
+             (port 1337)
+             (advertise? #t)))
 
    (simple-service 'fleet-hosts-entries hosts-service-type %fleet-hosts)
 
    (service openssh-service-type
             (openssh-configuration
-              (authorized-keys
-               (cons*
-                (list
-                 "root"
-                 (local-file
-                  (string-append %lambda-project
-                                 "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
-                (append-map (lambda (user)
-                              (map (lambda (hn)
-                                     (list user (local-file
-                                                 (string-append %lambda-project
-                                                                "/wonko/data/ssh/"
-                                                                hn ".pub"))))
-                                   (cons "discovery" %fleet-names)))
-                            '("wonko" "media"))))
-              (x11-forwarding? #t)
-              (password-authentication? #f)
-              (permit-root-login #t)))
+             (authorized-keys
+              (cons*
+               (list
+                "root"
+                (local-file
+                 (string-append %lambda-project
+                                "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
+               (append-map (lambda (user)
+                             (map (lambda (hn)
+                                    (list user (local-file
+                                                (string-append %lambda-project
+                                                               "/wonko/data/ssh/"
+                                                               hn ".pub"))))
+                                  (cons "discovery" %fleet-names)))
+                           '("wonko" "media"))))
+             (x11-forwarding? #t)
+             (password-authentication? #f)
+             (permit-root-login #t)))
 
    (service tor-service-type)
 
@@ -267,38 +267,41 @@
                                         `(,tty
                                           . ,(file-append font-terminus
                                                           "/share/consolefonts/ter-132n")))
-                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
+                                      '("tty1" "tty2" "tty3" "tty4" "tty5"
+                                        "tty6")))
       (elogind-service-type
        config =>
        (elogind-configuration
-         (system-sleep-hook-files
-          `(,(program-file
-              "wake-up"
-              #~(let ((arg (cadr (program-arguments))))
-                  (if (string= arg "post")
-                      (let ((port (open-file #$%wake-up-notification-file "w")))
-                        (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
-                        (close-port port)))))))
-         (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-         (handle-lid-switch 'suspend)
-         (handle-lid-switch-docked  'suspend)
-         (handle-lid-switch-external-power 'suspend)))
+        (system-sleep-hook-files
+         `(,(program-file
+             "wake-up"
+             #~(let ((arg (cadr (program-arguments))))
+                 (if (string= arg "post")
+                     (let ((port (open-file #$%wake-up-notification-file "w")))
+                       (display
+                        "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                       (close-port port)))))))
+        (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+        (handle-lid-switch 'suspend)
+        (handle-lid-switch-docked  'suspend)
+        (handle-lid-switch-external-power 'suspend)))
       (guix-service-type config =>
                          (guix-configuration
-                           (discover? #t)
-                           (channels %channels)
-                           (guix (guix-for-channels %channels))
-                           (substitute-urls
-                            (cons* "https://substitutes.nonguix.org"
-                                   %default-substitute-urls))
-                           (authorized-keys
-                            (append
-                             (map (lambda (hn)
-                                    (local-file
-                                     (string-append %lambda-project
-                                                    "/wonko/data/substitutes/" hn ".pub")))
-                                  (cons "nonguix" %fleet-names))
-                             %default-authorized-guix-keys))))))))
+                          (discover? #t)
+                          (channels %channels)
+                          (guix (guix-for-channels %channels))
+                          (substitute-urls
+                           (cons* "https://substitutes.nonguix.org"
+                                  %default-substitute-urls))
+                          (authorized-keys
+                           (append
+                            (map (lambda (hn)
+                                   (local-file
+                                    (string-append %lambda-project
+                                                   "/wonko/data/substitutes/" hn
+                                                   ".pub")))
+                                 (cons "nonguix" %fleet-names))
+                            %default-authorized-guix-keys))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop-os and friends
@@ -315,19 +318,19 @@
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
     (bootloader
-      (bootloader-configuration
-        ;; choose wisely:
-        ;; grub-efi-removable-bootloader =>
-        ;;   use when installing on external device:
-        ;;   expects /mnt/boot/efi to exist & be mounted
-        ;; grub-efi-bootloader => for local machine
-        ;;
-        ;; (bootloader grub-efi-removable-bootloader)
-        ;; (targets '("/mnt/tmp-efi/"))
-        (bootloader grub-efi-bootloader)
-        (targets    '("/boot"))
-        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
-        (keyboard-layout keyboard-layout)))
+     (bootloader-configuration
+      ;; choose wisely:
+      ;; grub-efi-removable-bootloader =>
+      ;;   use when installing on external device:
+      ;;   expects /mnt/boot/efi to exist & be mounted
+      ;; grub-efi-bootloader => for local machine
+      ;;
+      ;; (bootloader grub-efi-removable-bootloader)
+      ;; (targets '("/mnt/tmp-efi/"))
+      (bootloader grub-efi-bootloader)
+      (targets    '("/boot"))
+      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
+      (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
     (issue (string-append (spock-say "live long & prosper!") "\n\n"))
@@ -360,49 +363,49 @@
 
     (swap-devices
      (list (swap-space
-             (target "/mnt/vault/swap/swapfile")
-             (dependencies (filter
-                            (file-system-mount-point-predicate "/mnt/vault")
-                            file-systems)))))))
+            (target "/mnt/vault/swap/swapfile")
+            (dependencies (filter
+                           (file-system-mount-point-predicate "/mnt/vault")
+                           file-systems)))))))
 
 (define-public %removable-laptop-os
   (operating-system
     (inherit %laptop-os)
     (bootloader
-      (bootloader-configuration
-        (bootloader my-grub-efi-removable-bootloader)
-        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
-        (targets    '("/boot"))))))
+     (bootloader-configuration
+      (bootloader my-grub-efi-removable-bootloader)
+      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
+      (targets    '("/boot"))))))
 
 (define-public %removable-laptop-os-init-from-external
   (operating-system
     (inherit %laptop-os)
     (bootloader
-      (bootloader-configuration
-        (bootloader my-grub-efi-removable-bootloader)
-        ;; (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio") FIXME
-        (targets '("/mnt/tmp-efi/"))
-        (keyboard-layout %us-kb)))))
+     (bootloader-configuration
+      (bootloader my-grub-efi-removable-bootloader)
+      ;; (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio") FIXME
+      (targets '("/mnt/tmp-efi/"))
+      (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
   (cons*
    (service noautostart-transmission-daemon-service-type
             (transmission-daemon-configuration
-              (rpc-authentication-required? #f)
-              (rpc-whitelist-enabled? #t)
-              (rpc-host-whitelist (map (lambda (hn)
-                                         (string-append hn ".local"))
-                                       %fleet-names))
-              (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
-              (umask #o000)
-              (download-dir "/mnt/trantor/media/inbox")))
+             (rpc-authentication-required? #f)
+             (rpc-whitelist-enabled? #t)
+             (rpc-host-whitelist (map (lambda (hn)
+                                        (string-append hn ".local"))
+                                      %fleet-names))
+             (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
+             (umask #o000)
+             (download-dir "/mnt/trantor/media/inbox")))
    (modify-services %laptop-services
      (elogind-service-type config =>
                            (elogind-configuration
-                             (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-                             (handle-lid-switch 'ignore)
-                             (handle-lid-switch-docked 'ignore)
-                             (handle-lid-switch-external-power 'ignore))))))
+                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+                            (handle-lid-switch 'ignore)
+                            (handle-lid-switch-docked 'ignore)
+                            (handle-lid-switch-external-power 'ignore))))))
 
 (define-public %media-station-os
   (operating-system
