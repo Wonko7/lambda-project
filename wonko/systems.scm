@@ -243,6 +243,17 @@
 
    (service tor-service-type)
 
+   (service noautostart-transmission-daemon-service-type
+            (transmission-daemon-configuration
+             (rpc-authentication-required? #f)
+             (rpc-whitelist-enabled? #t)
+             (rpc-host-whitelist (map (lambda (hn)
+                                        (string-append hn ".local"))
+                                      %fleet-names))
+             (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
+             (umask #o000)
+             (download-dir "/junkyard/downloads/inbox")))
+
    (service (make-extra-profile-service-type "comms")   %comms-world)
    ;; I want this to be used rather than the old utils in extra-profiles
    ;; ... which is still a useful fallback, but isn't often updated.
