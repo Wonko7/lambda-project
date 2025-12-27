@@ -863,7 +863,7 @@ current time."
     ;;
     "v"         #'nano-calendar-show-org-agenda-entries
     "<RET>"     #'nano-calendar-goto-org-agenda
-    "<SPC>"     #'nano-calendar-show-org-agenda-entries
+    "<SPC>"     nil
     "m"         #'nano-calendar-workload-menu
     "."         #'nano-calendar-goto-today
     "r"         #'nano-calendar-workload-update-all
