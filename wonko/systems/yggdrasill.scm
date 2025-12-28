@@ -49,20 +49,20 @@
 
 (define %wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (append
-     (list %dance-commander-shepherd-service)
-     machine-home-services
-     %highdpi-wonko-services))))
+    (inherit %vanilla-wonko-home)
+    (services
+     (append
+      (list %dance-commander-shepherd-service)
+      machine-home-services
+      %highdpi-wonko-services))))
 
 (define %media-station-home
   (home-environment
-   (inherit %media-station-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %media-station-wonko-services))))
+    (inherit %media-station-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-wonko-services))))
 
 (define %yggdrasill-os
   (operating-system
@@ -80,10 +80,10 @@
                      %laptop-services))
     (mapped-devices
      (list (mapped-device
-            (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
-            (target "vault")
-            (type luks-device-mapping)
-            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
+             (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
+             (target "vault")
+             (type luks-device-mapping)
+             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (let ((btrfs-vault-subvol (lambda (args)
                                               (make-vault-subvolume args mapped-devices))))
                     (cons*

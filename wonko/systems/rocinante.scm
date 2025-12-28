@@ -72,12 +72,12 @@
     (locale "fr_FR.utf8")
     (services (cons* (service slim-service-type
                               (slim-configuration
-                                (display ":10")
-                                (vt "vt10")
-                                (auto-login? #t)
-                                (default-user (crew-name %tina))
-                                (xorg-configuration (xorg-configuration
-                                                      (keyboard-layout %fr-kb))))) ;; FIXME
+                               (display ":10")
+                               (vt "vt10")
+                               (auto-login? #t)
+                               (default-user (crew-name %tina))
+                               (xorg-configuration (xorg-configuration
+                                                    (keyboard-layout %fr-kb))))) ;; FIXME
                      (service xfce-desktop-service-type)
                      (service noautostart-slim-service-type wonko-slim-config)
                      (service noautostart-slim-service-type media-station-slim-config)

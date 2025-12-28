@@ -114,14 +114,14 @@
 
 (define-public wonko-slim-config
   (slim-configuration
-   (display ":9")
-   (vt "vt9")
-   (auto-login? #t)
-   (default-user (crew-name %wonko))
-   ;; FIXME: this should break nothing, xsession does setxkbmap.
-   (xorg-configuration (xorg-configuration
-                        (keyboard-layout %us-kb)))
-   ))
+    (display ":9")
+    (vt "vt9")
+    (auto-login? #t)
+    (default-user (crew-name %wonko))
+    ;; FIXME: this should break nothing, xsession does setxkbmap.
+    (xorg-configuration (xorg-configuration
+                          (keyboard-layout %us-kb)))
+    ))
 
 (define-public media-station-slim-config
   (slim-configuration
@@ -214,45 +214,45 @@
 
    (service guix-publish-service-type
             (guix-publish-configuration
-             (host "0.0.0.0")
-             (port 1337)
-             (advertise? #t)))
+              (host "0.0.0.0")
+              (port 1337)
+              (advertise? #t)))
 
    (simple-service 'fleet-hosts-entries hosts-service-type %fleet-hosts)
 
    (service openssh-service-type
             (openssh-configuration
-             (authorized-keys
-              (cons*
-               (list
-                "root"
-                (local-file
-                 (string-append %lambda-project
-                                "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
-               (append-map (lambda (user)
-                             (map (lambda (hn)
-                                    (list user (local-file
-                                                (string-append %lambda-project
-                                                               "/wonko/data/ssh/"
-                                                               hn ".pub"))))
-                                  (cons "discovery" %fleet-names)))
-                           '("wonko" "media"))))
-             (x11-forwarding? #t)
-             (password-authentication? #f)
-             (permit-root-login #t)))
+              (authorized-keys
+               (cons*
+                (list
+                 "root"
+                 (local-file
+                  (string-append %lambda-project
+                                 "/wonko/data/ssh/one-ring-to-rule-them-all.pub")))
+                (append-map (lambda (user)
+                              (map (lambda (hn)
+                                     (list user (local-file
+                                                 (string-append %lambda-project
+                                                                "/wonko/data/ssh/"
+                                                                hn ".pub"))))
+                                   (cons "discovery" %fleet-names)))
+                            '("wonko" "media"))))
+              (x11-forwarding? #t)
+              (password-authentication? #f)
+              (permit-root-login #t)))
 
    (service tor-service-type)
 
    (service noautostart-transmission-daemon-service-type
             (transmission-daemon-configuration
-             (rpc-authentication-required? #f)
-             (rpc-whitelist-enabled? #t)
-             (rpc-host-whitelist (map (lambda (hn)
-                                        (string-append hn ".local"))
-                                      %fleet-names))
-             (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
-             (umask #o000)
-             (download-dir "/junkyard/downloads/inbox")))
+              (rpc-authentication-required? #f)
+              (rpc-whitelist-enabled? #t)
+              (rpc-host-whitelist (map (lambda (hn)
+                                         (string-append hn ".local"))
+                                       %fleet-names))
+              (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
+              (umask #o000)
+              (download-dir "/junkyard/downloads/inbox")))
 
    (service (make-extra-profile-service-type "comms")   %comms-world)
    ;; I want this to be used rather than the old utils in extra-profiles
@@ -283,36 +283,36 @@
       (elogind-service-type
        config =>
        (elogind-configuration
-        (system-sleep-hook-files
-         `(,(program-file
-             "wake-up"
-             #~(let ((arg (cadr (program-arguments))))
-                 (if (string= arg "post")
-                     (let ((port (open-file #$%wake-up-notification-file "w")))
-                       (display
-                        "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
-                       (close-port port)))))))
-        (handle-power-key 'ignore) ;; FIXME: 'hibernate?
-        (handle-lid-switch 'suspend)
-        (handle-lid-switch-docked  'suspend)
-        (handle-lid-switch-external-power 'suspend)))
+         (system-sleep-hook-files
+          `(,(program-file
+              "wake-up"
+              #~(let ((arg (cadr (program-arguments))))
+                  (if (string= arg "post")
+                      (let ((port (open-file #$%wake-up-notification-file "w")))
+                        (display
+                         "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                        (close-port port)))))))
+         (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+         (handle-lid-switch 'suspend)
+         (handle-lid-switch-docked  'suspend)
+         (handle-lid-switch-external-power 'suspend)))
       (guix-service-type config =>
                          (guix-configuration
-                          (discover? #t)
-                          (channels %channels)
-                          (guix (guix-for-channels %channels))
-                          (substitute-urls
-                           (cons* "https://substitutes.nonguix.org"
-                                  %default-substitute-urls))
-                          (authorized-keys
-                           (append
-                            (map (lambda (hn)
-                                   (local-file
-                                    (string-append %lambda-project
-                                                   "/wonko/data/substitutes/" hn
-                                                   ".pub")))
-                                 (cons "nonguix" %fleet-names))
-                            %default-authorized-guix-keys))))))))
+                           (discover? #t)
+                           (channels %channels)
+                           (guix (guix-for-channels %channels))
+                           (substitute-urls
+                            (cons* "https://substitutes.nonguix.org"
+                                   %default-substitute-urls))
+                           (authorized-keys
+                            (append
+                             (map (lambda (hn)
+                                    (local-file
+                                     (string-append %lambda-project
+                                                    "/wonko/data/substitutes/" hn
+                                                    ".pub")))
+                                  (cons "nonguix" %fleet-names))
+                             %default-authorized-guix-keys))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop-os and friends
