@@ -67,49 +67,50 @@
 
 (define %rocinante-os
   (operating-system
+
     (inherit %laptop-os)
     (host-name "rocinante")
     (locale "fr_FR.utf8")
-    (services (cons* (service slim-service-type
-                              (slim-configuration
-                               (display ":10")
-                               (vt "vt10")
-                               (auto-login? #t)
-                               (default-user (crew-name %tina))
-                               (xorg-configuration (xorg-configuration
-                                                    (keyboard-layout %fr-kb))))) ;; FIXME
-                     (service xfce-desktop-service-type)
-                     (service noautostart-slim-service-type wonko-slim-config)
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
-                              `((,(crew-name %tina)  ,%tina-home)
-                                (,(crew-name %wonko) ,%wonko-home)
-                                (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type kmonad-fr-laptop-config)
-                     (service kmonad-service-type kmonad-ergodox-config)
-                     (service kmonad-service-type kmonad-bullshit-config)
-                     %laptop-services))
+    (kernel-arguments (append '("resume_offset=5591216")
+                              (operating-system-user-kernel-arguments %laptop-os)))
+
+    (services
+     (cons* (service slim-service-type
+                     (slim-configuration
+                      (display ":10")
+                      (vt "vt10")
+                      (auto-login? #t)
+                      (default-user (crew-name %tina))
+                      (xorg-configuration (xorg-configuration
+                                           (keyboard-layout %fr-kb))))) ;; FIXME
+            (service xfce-desktop-service-type)
+            (service noautostart-slim-service-type wonko-slim-config)
+            (service noautostart-slim-service-type media-station-slim-config)
+            (service guix-home-service-type
+                     `((,(crew-name %tina)  ,%tina-home)
+                       (,(crew-name %wonko) ,%wonko-home)
+                       (,(crew-name %media) ,%media-station-home)))
+            (service kmonad-service-type kmonad-fr-laptop-config)
+            (service kmonad-service-type kmonad-ergodox-config)
+            (service kmonad-service-type kmonad-bullshit-config)
+            %laptop-services))
+
     (mapped-devices
      (list (mapped-device
-             (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
-             (target "vault")
-             (type luks-device-mapping))))
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "918C-B182"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+            (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
+            (target "vault")
+            (type luks-device-mapping))))
+    (file-systems (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "918C-B182"
+                                   'fat32))
+                     (type "vfat"))
+                   (append
+                    (make-vault-subvolumes mapped-devices)
+                    %base-file-systems)))
+    (swap-devices
+     (list (make-default-swap file-systems)))))
 
 %wonko-home
 %rocinante-os
