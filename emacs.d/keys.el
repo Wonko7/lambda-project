@@ -104,6 +104,7 @@
     "o1"   (li (ws/set-layout 'org2-latest-agenda))
     "o2"   (li (ws/set-layout 'org2-cal-agenda))
     "o3"   (li (ws/set-layout 'org3-latest-cal-agenda))
+    "or"   #'org-refile
 
     ;; roam
     "r"  '("roam" . (keymap))
@@ -120,6 +121,9 @@
     "rn" #'org-roam-capture
     "rr" #'org-roam-refile
     "rR" #'org-roam-link-replace-all
+    "ra"  '("alias" . (keymap))
+    "raa" #'org-roam-alias-add
+    "rar" #'org-roam-alias-remove
 
     ;; roam dailies:
     "rd"  '("roam dailies" . (keymap))
