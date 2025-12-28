@@ -292,7 +292,7 @@
                         (display
                          "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
                         (close-port port)))))))
-         (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+         (handle-power-key 'hibernate)
          (handle-lid-switch 'suspend)
          (handle-lid-switch-docked  'suspend)
          (handle-lid-switch-external-power 'suspend)))
