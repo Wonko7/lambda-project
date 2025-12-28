@@ -66,9 +66,12 @@
 
 (define %yggdrasill-os
   (operating-system
+
     (inherit %removable-laptop-os) ;; internal drive but EFI discovery is wonky
     (host-name "yggdrasill")
-    (keyboard-layout %us-kb)
+    (kernel-arguments (append '("resume_offset=93852928")
+                              (operating-system-user-kernel-arguments %laptop-os)))
+
     (services (cons* (service slim-service-type wonko-slim-config)
                      (service noautostart-slim-service-type media-station-slim-config)
                      (service guix-home-service-type
@@ -78,28 +81,24 @@
                      (service kmonad-service-type kmonad-ergodox-config)
                      (service kmonad-service-type kmonad-bullshit-config)
                      %laptop-services))
+
     (mapped-devices
      (list (mapped-device
              (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
              (target "vault")
              (type luks-device-mapping)
              (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "77DE-0AE2"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+    (file-systems (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "77DE-0AE2"
+                                   'fat32))
+                     (type "vfat"))
+                   (append
+                    (make-vault-subvolumes mapped-devices)
+                    %base-file-systems)))
+    (swap-devices
+     (list (make-default-swap file-systems)))))
 
 %wonko-home
 %yggdrasill-os
