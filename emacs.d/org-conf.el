@@ -214,7 +214,7 @@ EXTRA-FILES can be used to append extra files to the list."
 (use-package consult-org-roam
   :after org-roam
   :config
-  (consult-org-roam-mode 1)) ;; meh.
+  (consult-org-roam-mode 1))
 
 (use-package org-roam-protocol
   :after org-roam)
@@ -611,7 +611,7 @@ current time."
            :immediate-finish t))
 
         org-roam-dailies-capture-templates
-        `(,(my/make-daily-capture "n" "🗒️ note" "* %?\n%U\n" t)
+        `(,(my/make-daily-capture "n" "🗒️ note" "* 🗒️ %?\n%U\n" t)
 
           ("g" "👣 go" plain "%?" :jump-to-captured t :if-new (file ,my/daily-file))
 
