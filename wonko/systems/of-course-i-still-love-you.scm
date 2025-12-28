@@ -142,14 +142,19 @@
 
 (define %of-course-i-still-love-you-os
   (operating-system
+
     (inherit %laptop-os)
     (kernel linux-lts)
     (kernel-loadable-modules (list (list zfs-lts "module")))
+    (kernel-arguments (append '("resume_offset=215422318")
+                              (operating-system-user-kernel-arguments %laptop-os)))
     (host-name "of-course-i-still-love-you")
     (keyboard-layout %us-kb)
+
     (packages (cons*
                zfs-lts
                (operating-system-packages %laptop-os)))
+
     (services
      (let ((xorg-cfg (xorg-configuration
                        (keyboard-layout %us-kb)
@@ -196,22 +201,15 @@
              (target "vault")
              (type luks-device-mapping)
              (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "3073-DA9D"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+    (file-systems (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "3073-DA9D"
+                                   'fat32))
+                     (type "vfat"))
+                   (append
+                    (make-vault-subvolumes mapped-devices)
+                    %base-file-systems)))))
 
 %of-course-i-still-love-you-wonko-home
 %of-course-i-still-love-you-os
