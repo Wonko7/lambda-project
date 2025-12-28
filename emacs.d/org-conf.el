@@ -81,6 +81,11 @@
   (org-pretty-entities t)
   (org-ellipsis "…")
 
+  ;; refile
+  (org-refile-targets '((nil . (:maxlevel . 9))))
+  (org-refile-use-outline-path t)
+  (org-outline-path-complete-in-steps nil)
+
   ;; html export
   (org-html-postamble nil)
   (org-footnote-section nil)
