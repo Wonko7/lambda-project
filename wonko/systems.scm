@@ -409,24 +409,18 @@
       (keyboard-layout %us-kb)))))
 
 (define-public %media-station-services
-  (cons*
-   (service noautostart-transmission-daemon-service-type
-            (transmission-daemon-configuration
-             (rpc-authentication-required? #f)
-             (rpc-whitelist-enabled? #t)
-             (rpc-host-whitelist (map (lambda (hn)
-                                        (string-append hn ".local"))
-                                      %fleet-names))
-             (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
-             (umask #o000)
-             (download-dir "/mnt/trantor/media/inbox")))
-   (modify-services %laptop-services
-     (elogind-service-type config =>
-                           (elogind-configuration
-                            (handle-power-key 'ignore) ;; FIXME: 'hibernate?
+  (modify-services %laptop-services
+    (noautostart-transmission-daemon-service-type
+     config =>
+     (transmission-daemon-configuration
+       (inherit config)
+       (download-dir "/mnt/trantor/media/inbox")))
+    (elogind-service-type config =>
+                          (elogind-configuration
+                            (inherit config)
                             (handle-lid-switch 'ignore)
                             (handle-lid-switch-docked 'ignore)
-                            (handle-lid-switch-external-power 'ignore))))))
+                            (handle-lid-switch-external-power 'ignore)))))
 
 (define-public %media-station-os
   (operating-system
