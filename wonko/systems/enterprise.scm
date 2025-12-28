@@ -66,18 +66,17 @@
 
 (define %enterprise-os
   (operating-system
+
     (inherit %laptop-os)
-    ;; (keyboard-layout "us" "dvorak" #:options '("ctrl:nocaps"))
     (host-name "enterprise")
     (bootloader
       (bootloader-configuration
         (bootloader   my-grub-efi-bootloader)
         (targets      '("/boot"))
         (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
-    (kernel-arguments (append '("resume_offset=5841087"
-                                ;; "resume=UUID=0e69cd8a-bd30-4ebf-8c87-f178669f8b73"
-                                "resume=/dev/mapper/vault")
+    (kernel-arguments (append '("resume_offset=5841087")
                               (operating-system-user-kernel-arguments %laptop-os)))
+
     (services
      (cons*
       (service slim-service-type wonko-slim-config)
@@ -89,42 +88,24 @@
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
       %laptop-services))
+
     (mapped-devices
      (list (mapped-device
              (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
              (target "vault")
              (type luks-device-mapping)
              (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args
-                                                                    mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "6C21-E416"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (file-system
-                       (mount-point "/swap")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices)
-                       (options "subvol=_live/@swap,compress=no,space_cache=v2"))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))
+    (file-systems (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "6C21-E416"
+                                   'fat32))
+                     (type "vfat"))
+                   (append
+                    (make-vault-subvolumes mapped-devices)
+                    %base-file-systems)))
     (swap-devices
-     (list
-      (swap-space
-        (target "/swap/swapfile")
-        (dependencies (filter (file-system-mount-point-predicate "/swap")
-                              file-systems)))))
-    ))
+     (list (make-default-swap file-systems)))))
 
 %wonko-home
 %enterprise-os

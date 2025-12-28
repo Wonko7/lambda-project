@@ -92,22 +92,40 @@
 ;; vault subvolumes
 
 (define-public (make-vault-subvolumes mapped-devices)
-  (map (lambda (args)
-         (let-values (((mount-p sv-name) (car+cdr args)))
-           (file-system
-             (device "/dev/mapper/vault")
-             (mount-point mount-p)
-             (type "btrfs")
-             (options (string-append "subvol=_live/@"
-                                     sv-name))
-             (needed-for-boot? (equal? "/" mount-p))
-             (dependencies mapped-devices))))
-       `(("/" . "guix-root")
-         ("/home" . "guix-home")
-         ("/code" . "code")
-         ("/data" . "data")
-         ("/work" . "work")
-         ("/junkyard" . "junkyard"))))
+  (cons*
+   (file-system
+     (mount-point "/mnt/vault")
+     (device "/dev/mapper/vault")
+     (type "btrfs")
+     (dependencies mapped-devices))
+   (file-system
+     (mount-point "/swap")
+     (device "/dev/mapper/vault")
+     (type "btrfs")
+     (dependencies mapped-devices)
+     (options "subvol=_live/@swap,compress=no,space_cache=v2"))
+   (map (lambda (args)
+          (let-values (((mount-p sv-name) (car+cdr args)))
+            (file-system
+              (device "/dev/mapper/vault")
+              (mount-point mount-p)
+              (type "btrfs")
+              (options (string-append "subvol=_live/@"
+                                      sv-name))
+              (needed-for-boot? (equal? "/" mount-p))
+              (dependencies mapped-devices))))
+        `(("/" . "guix-root")
+          ("/home" . "guix-home")
+          ("/code" . "code")
+          ("/data" . "data")
+          ("/work" . "work")
+          ("/junkyard" . "junkyard")))))
+
+(define-public (make-default-swap file-systems)
+  (swap-space
+    (target "/swap/swapfile")
+    (dependencies (filter (file-system-mount-point-predicate "/swap")
+                          file-systems))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; slim services:
@@ -324,24 +342,23 @@
     (keyboard-layout %us-kb)
 
     (kernel linux)
-    ;; (kernel (@@ (nongnu packages linux) linux))
-    (kernel-arguments '("net.ifnames=0" "biosdevname=0"))
+    (kernel-arguments '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault"))
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
     (bootloader
-     (bootloader-configuration
-      ;; choose wisely:
-      ;; grub-efi-removable-bootloader =>
-      ;;   use when installing on external device:
-      ;;   expects /mnt/boot/efi to exist & be mounted
-      ;; grub-efi-bootloader => for local machine
-      ;;
-      ;; (bootloader grub-efi-removable-bootloader)
-      ;; (targets '("/mnt/tmp-efi/"))
-      (bootloader grub-efi-bootloader)
-      (targets    '("/boot"))
-      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
-      (keyboard-layout keyboard-layout)))
+      (bootloader-configuration
+        ;; choose wisely:
+        ;; grub-efi-removable-bootloader =>
+        ;;   use when installing on external device:
+        ;;   expects /mnt/boot/efi to exist & be mounted
+        ;; grub-efi-bootloader => for local machine
+        ;;
+        ;; (bootloader grub-efi-removable-bootloader)
+        ;; (targets '("/mnt/tmp-efi/"))
+        (bootloader grub-efi-bootloader)
+        (targets    '("/boot"))
+        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
+        (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
     (issue (string-append (spock-say "live long & prosper!") "\n\n"))
@@ -370,14 +387,7 @@
                                 "/bin/brightnessctl")))
       %setuid-programs))
 
-    (file-systems '())
-
-    (swap-devices
-     (list (swap-space
-            (target "/mnt/vault/swap/swapfile")
-            (dependencies (filter
-                           (file-system-mount-point-predicate "/mnt/vault")
-                           file-systems)))))))
+    (file-systems '())))
 
 (define-public %removable-laptop-os
   (operating-system
