@@ -105,6 +105,12 @@
                        (device "/dev/mapper/vault")
                        (type "btrfs")
                        (dependencies mapped-devices))
+                     (file-system
+                       (mount-point "/swap")
+                       (device "/dev/mapper/vault")
+                       (type "btrfs")
+                       (dependencies mapped-devices)
+                       (options "subvol=_live/@swap,noatime,compress=no,space_cache=v2"))
                      (append
                       (make-vault-subvolumes mapped-devices)
                       %base-file-systems))))))
