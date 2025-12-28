@@ -210,14 +210,8 @@
 (defun my/ws-remote-fleet-shell-with-default ()
   (interactive)
   (let* ((ws  exwm-workspace-current-index)
-         (rm  (if (or (= ws 2) (= ws 8))
-                  "of-course-i-still-love-you.local"))
-         (pr (when (= 2 ws)
-               "/mnt/trantor/media/inbox"))
-         (pr (if (= 8 ws)
-                 "/code/lambda-project"
-               pr)))
-    (my/ws-remote-fleet-shell rm pr)))
+         (rm (nth ws ws/default-remote)))
+    (my/ws-remote-fleet-shell rm nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; exec helper

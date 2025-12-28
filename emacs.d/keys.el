@@ -48,6 +48,7 @@
     "tt"  #'my/ws-proj-shell
     "tr"  #'my/ws-remote-fleet-shell-with-default
     "tR"  #'my/ws-remote-fleet-shell
+    "tD"  #'ws/choose-default-remote
     "tl"  #'my/consult-shell
     "tfd" (li (my/ws-remote-fleet-shell "daban-urnud.local"))
     "tfe" (li (my/ws-remote-fleet-shell "enterprise.local"))

@@ -3,9 +3,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; workspace layouts:
 
+(use-package dash)
+
 (use-package window-layout
   :commands (ws/set-layout ws/toggle-buffer)
-  :after exwm-workspace
+  :after (exwm-workspace dash)
+  :hook (exwm-workspace-switch-hook . ws/run-auto-start)
   :demand t
   :config
   (require 'dash) ;; FIXME replace by cl-lib?
@@ -145,7 +148,7 @@
                       ( :name right
                         :hide-your-kids t
                         :buffer-f (progn (org-agenda nil "z")
-                                        "*Org Agenda*"))))
+                                         "*Org Agenda*"))))
 
           ( :layout org2-cal-agenda
             :recipe (| (:left-size-ratio 0.5)
@@ -406,6 +409,16 @@
     (setf (nth exwm-workspace-current-index ws/auto-start-state) t)
     (ws/run-auto-start))
 
-  (add-hook 'exwm-workspace-switch-hook #'ws/run-auto-start))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; default remote
+
+  (defvar ws/default-remote
+    (-repeat my/exwm-workspace-number "of-course-i-still-love-you.local"))
+
+  (defun ws/choose-default-remote ()
+    (interactive)
+    (let ((rm (my/choose-remote-from-fleet)))
+      (setf (nth exwm-workspace-current-index ws/default-remote) rm))
+    (ws/run-auto-start)))
 
 (provide 'conf/workspaces)
