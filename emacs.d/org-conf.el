@@ -152,16 +152,16 @@
     "zD"    #'org-decrypt-entries
     "zq"    (li (org-show-branches-buffer))
     "zR"    #'my/org-fold-show-all
-    "C-k"   #'org-previous-visible-heading
-    "C-j"   #'org-next-visible-heading
     "("     #'org-previous-visible-heading
     ")"     #'org-next-visible-heading
-    "{"     #'evil-backward-paragraph
-    "}"     #'evil-forward-paragraph
-    "C-K"   #'org-move-subtree-up
-    "C-J"   #'org-move-subtree-down
-    "C-H"   #'org-promote-subtree
-    "C-L"   #'org-demote-subtree)
+    ;;"{"     #'evil-backward-paragraph
+    ;;"}"     #'evil-forward-paragraph
+    "C-k"   #'org-move-subtree-up
+    "C-j"   #'org-move-subtree-down
+    "C-<"   #'org-promote-subtree
+    "C->"   #'org-demote-subtree
+    "C-S-h"   #'org-promote-subtree
+    "C-S-l"   #'org-demote-subtree)
 
   ;; babel
   (org-babel-do-load-languages
