@@ -79,39 +79,6 @@
       'confirm fn))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; per workspace shells
-
-(defun my/ws-proj-shell (&optional project)
-  (interactive)
-  (let* ((pr (or project (projectile-project-root default-directory) "~/")))
-    (projectile-with-default-dir pr
-      (shell
-       (projectile-generate-process-name
-        (concat
-         (int-to-string exwm-workspace-current-index) ":") nil pr)))))
-
-(defun my/ws-remote-fleet-shell (&optional remote project)
-  (interactive)
-  (let* ((pr  (or (and project
-                       (tramp-file-local-name project))
-                  (projectile-project-root
-                   (tramp-file-local-name default-directory))
-                  "~/"))
-         (rm  (or remote (my/choose-remote-from-fleet)))
-         (rpr (concat "/ssh:" rm ":" pr)))
-    (projectile-with-default-dir rpr
-      (shell
-       (projectile-generate-process-name
-        (concat (int-to-string exwm-workspace-current-index) ":"
-                (string-remove-suffix ".local" rm)) nil rpr)))))
-
-(defun my/ws-remote-fleet-shell-with-default ()
-  (interactive)
-  (let* ((ws  exwm-workspace-current-index)
-         (rm (nth ws ws/default-remote)))
-    (my/ws-remote-fleet-shell rm nil)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fix insert after cursor
 
 (defmacro my/insert-after-space (&rest fs)

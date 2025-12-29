@@ -21,7 +21,7 @@
                        left
                        right)
             :buffers ((:name left  :buffer-f (magit-status))
-                      (:name right :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
+                      (:name right :buffer-f (ws/proj-shell) :hide-your-kids t)))
 
           ( :layout code2-bottom-shell
             :recipe (- (:upper-size-ratio 0.8)
@@ -31,7 +31,7 @@
                        shell)
             :buffers ((:name right :buffer-f (buffer-name))
                       (:name left  :buffer-f (magit-status))
-                      (:name shell :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
+                      (:name shell :buffer-f (ws/proj-shell) :hide-your-kids t)))
 
           ( :layout code3
             :recipe (| (:left-size-ratio 0.3)
@@ -41,7 +41,7 @@
                           left))
             :buffers ((:name center :buffer-f (buffer-name))
                       (:name right  :buffer-f (magit-status))
-                      (:name left   :buffer-f (my/ws-proj-shell) :hide-your-kids t)))
+                      (:name left   :buffer-f (ws/proj-shell) :hide-your-kids t)))
 
           ( :layout tramp3
             :recipe (| (:left-size-ratio 0.5)
@@ -56,7 +56,7 @@
                            (:name remote-code :buffer-f (magit-status ,rpr))
                            ( :name remote-shell
                              :hide-your-kids t
-                             :buffer-f (my/ws-remote-fleet-shell ,rm ,pr)))))
+                             :buffer-f (ws/remote-fleet-shell ,rm ,pr)))))
 
           ( :layout tramp4
             :recipe (| (:left-size-ratio 0.5)
@@ -73,10 +73,10 @@
                            (:name remote-code :buffer-f (magit-status ,rpr))
                            ( :name local-shell
                              :hide-your-kids t
-                             :buffer-f (my/ws-proj-shell ,pr))
+                             :buffer-f (ws/proj-shell ,pr))
                            ( :name remote-shell
                              :hide-your-kids t
-                             :buffer-f (my/ws-remote-fleet-shell ,rm ,pr)))))
+                             :buffer-f (ws/remote-fleet-shell ,rm ,pr)))))
 
           ( :layout grid9
             :recipe (| (:left-size-ratio 0.3)
@@ -113,7 +113,7 @@
                        right)
             :buffers-f (progn
                          (bluetooth-list-devices)
-                         '((:name right :buffer-f (my/ws-proj-shell "~/"))
+                         '((:name right :buffer-f (ws/proj-shell "~/"))
                            (:name left  :buffer-f "*Bluetooth*" :hide-your-kids t))))
 
           ( :layout media2
@@ -122,7 +122,7 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
-                        :buffer-f (my/ws-proj-shell "/data/org"))
+                        :buffer-f (ws/proj-shell "/data/org"))
                       ( :name right
                         :buffer-f (org-roam-node-open
                                    (org-roam-node-from-title-or-alias my/current-media)))))
@@ -132,7 +132,7 @@
                        right)
             :buffers (( :name left
                         :hide-your-kids t
-                        :buffer-f (my/ws-remote-fleet-shell
+                        :buffer-f (ws/remote-fleet-shell
                                    "of-course-i-still-love-you.local"
                                    "/mnt/trantor/media/inbox"))
                       ( :name right
@@ -345,16 +345,11 @@
   (defun unused/filter-project-buffs (name)
     (cl-first (-filter (lambda (b)
                          (string-prefix-p name (buffer-name b)))
-                       (projectile-project-buffers)))))
+                       (projectile-project-buffers))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; auto start workspaces:
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; auto start workspaces:
 
-(use-package emacs
-  :ensure t
-  :after exwm-workspace
-  :demand t
-  :config
   (defvar ws/auto-start-state (-repeat my/exwm-workspace-number t))
   ;; disable auto run for nameless project spaces:
   (setf (nth 5 ws/auto-start-state) nil)
@@ -410,6 +405,39 @@
     (ws/run-auto-start))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; per workspace shells
+
+  (defun ws/proj-shell (&optional project)
+    (interactive)
+    (let* ((pr (or project (projectile-project-root default-directory) "~/")))
+      (projectile-with-default-dir pr
+        (shell
+         (projectile-generate-process-name
+          (concat
+           (int-to-string exwm-workspace-current-index) ":") nil pr)))))
+
+  (defun ws/remote-fleet-shell (&optional remote project)
+    (interactive)
+    (let* ((pr  (or (and project
+                         (tramp-file-local-name project))
+                    (projectile-project-root
+                     (tramp-file-local-name default-directory))
+                    "~/"))
+           (rm  (or remote (my/choose-remote-from-fleet)))
+           (rpr (concat "/ssh:" rm ":" pr)))
+      (projectile-with-default-dir rpr
+        (shell
+         (projectile-generate-process-name
+          (concat (int-to-string exwm-workspace-current-index) ":"
+                  (string-remove-suffix ".local" rm)) nil rpr)))))
+
+  (defun ws/remote-fleet-shell-with-default ()
+    (interactive)
+    (let* ((ws  exwm-workspace-current-index)
+           (rm (nth ws ws/default-remote)))
+      (ws/remote-fleet-shell rm nil)))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; default remote
 
   (defvar ws/default-remote
@@ -418,7 +446,6 @@
   (defun ws/choose-default-remote ()
     (interactive)
     (let ((rm (my/choose-remote-from-fleet)))
-      (setf (nth exwm-workspace-current-index ws/default-remote) rm))
-    (ws/run-auto-start)))
+      (setf (nth exwm-workspace-current-index ws/default-remote) rm))))
 
 (provide 'conf/workspaces)

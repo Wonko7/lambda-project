@@ -44,16 +44,16 @@
     "yP" #'consult-yank-pop
 
     ;; regroup shells / tmp
-    "ts"  #'my/ws-proj-shell
-    "tt"  #'my/ws-proj-shell
-    "tr"  #'my/ws-remote-fleet-shell-with-default
-    "tR"  #'my/ws-remote-fleet-shell
+    "ts"  #'ws/proj-shell
+    "tt"  #'ws/proj-shell
+    "tr"  #'ws/remote-fleet-shell-with-default
+    "tR"  #'ws/remote-fleet-shell
     "tD"  #'ws/choose-default-remote
     "tl"  #'my/consult-shell
-    "tfd" (li (my/ws-remote-fleet-shell "daban-urnud.local"))
-    "tfe" (li (my/ws-remote-fleet-shell "enterprise.local"))
-    "tfy" (li (my/ws-remote-fleet-shell "yggdrasill.local"))
-    "tfo" (li (my/ws-remote-fleet-shell "of-course-i-still-love-you.local"))
+    "tfd" (li (ws/remote-fleet-shell "daban-urnud.local"))
+    "tfe" (li (ws/remote-fleet-shell "enterprise.local"))
+    "tfy" (li (ws/remote-fleet-shell "yggdrasill.local"))
+    "tfo" (li (ws/remote-fleet-shell "of-course-i-still-love-you.local"))
 
     ;; emacs apps
     "a"   '("Apps" . (keymap))
@@ -62,8 +62,8 @@
     "ad"  #'dired
     "aD"  #'dictionary-lookup-definition
     ;; "as"  #'shell
-    "as"  #'my/ws-proj-shell
-    "aS"  #'my/ws-remote-fleet-shell-with-default
+    "as"  #'ws/proj-shell
+    "aS"  #'ws/remote-fleet-shell-with-default
     "ap"  #'proced
     "aE"  #'eww-search-words
     ;; external apps
@@ -158,7 +158,7 @@
     "pK"  #'projectile-kill-buffers
     "pS"  #'projectile-save-project-buffers
     ;; "ps"  #'projectile-run-shell
-    "ps"  #'my/ws-proj-shell
+    "ps"  #'ws/proj-shell
     "pb"  #'projectile-ibuffer
     "pd"  #'projectile-dired
     "pm"  #'persp-merge
