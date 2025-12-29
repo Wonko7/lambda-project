@@ -1,6 +1,14 @@
 ;;; misc.el  -*- lexical-binding: t; -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; code golf helper:
+
+(defmacro li (&rest body) ;; FIXME use in exwm too.
+  `(lambda ()
+     (interactive)
+     ,@body))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; up up & away
 
 (defun my/cd-up ()
