@@ -1,8 +1,7 @@
 ;;; misc.el  -*- lexical-binding: t; -*-
 
-(defun my/insert-inactive-timestamp ()
-  (interactive)
-  (insert (format-time-string "[%F %a %H:%M]")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; up up & away
 
 (defun my/cd-up ()
   (interactive)
@@ -20,14 +19,14 @@
     ('eshell-mode (eshell-send-input))
     ('term-mode (term-send-input))))
 
-(defun my/init-org ()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; exec helper
+
+(defun my/local-async-shell-command (command)
+  ;; some things aren't meant to be executed remotely via tramp.
   (interactive)
-  (org-roam-node-open (org-roam-node-from-title-or-alias "ssdd"))
-  (delete-other-windows)
-  (evil-window-vsplit)
-  (org-agenda nil "z")
-  (other-window 1)
-  (cfw:open-org-calendar))
+  (let ((default-directory "~/"))
+    (async-shell-command command)))
 
 (defun my/tbb ()
   (interactive)
@@ -53,22 +52,94 @@
       --                                                           \
       ./start-tor-browser.desktop -v "))
 
-;; (require 'enlive)
-;; (require 'seq)
-;;
-;; (defun ar/scrape-links-from-clipboard-url ()
-;;   "Scrape links from clipboard URL and return as a list. Fails if no URL in clipboard."
-;;   (unless (string-prefix-p "http" (current-kill 0))
-;;     (user-error "no URL in clipboard"))
-;;   (thread-last (enlive-query-all (enlive-fetch (current-kill 0)) [a])
-;;     (mapcar (lambda (element)
-;;               (string-remove-suffix "/" (enlive-attr element 'href))))
-;;     (seq-filter (lambda (link)
-;;                   (string-prefix-p "http" link)))
-;;     (seq-uniq)
-;;     (seq-sort (lambda (l1 l2)
-;;                 (string-lessp (replace-regexp-in-string "^http\\(s\\)*://" "" l1)
-;;                               (replace-regexp-in-string "^http\\(s\\)*://" "" l2))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fleet / remote operations:
+
+(defun my/choose-remote-from-fleet ()
+  (consult--read
+   (remove "" (string-split (shell-command-to-string "cat /etc/hosts | cut -d\\\t -f2 | grep -v localhost") "\n"))
+   :prompt "choose ship from fleet: "
+   :sort nil
+   :require-match t))
+
+(defun my/remote-fleet-find-file (&optional file)
+  (interactive "FFile: ")
+  (let* ((remote (my/choose-remote-from-fleet))
+         (fp     (or file
+                     (buffer-file-name)
+                     default-directory))
+         (dn     (file-name-directory fp))
+         (fn     (file-name-nondirectory fp)))
+    (message remote)
+    (find-file
+     (read-file-name
+      "Find remote file: "
+      (concat "/ssh:" remote ":" dn)
+      (concat "/ssh:" remote ":" fp)
+      'confirm fn))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; per workspace shells
+
+(defun my/ws-proj-shell (&optional project)
+  (interactive)
+  (let* ((pr (or project (projectile-project-root default-directory) "~/")))
+    (projectile-with-default-dir pr
+      (shell
+       (projectile-generate-process-name
+        (concat
+         (int-to-string exwm-workspace-current-index) ":") nil pr)))))
+
+(defun my/ws-remote-fleet-shell (&optional remote project)
+  (interactive)
+  (let* ((pr  (or (and project
+                       (tramp-file-local-name project))
+                  (projectile-project-root
+                   (tramp-file-local-name default-directory))
+                  "~/"))
+         (rm  (or remote (my/choose-remote-from-fleet)))
+         (rpr (concat "/ssh:" rm ":" pr)))
+    (projectile-with-default-dir rpr
+      (shell
+       (projectile-generate-process-name
+        (concat (int-to-string exwm-workspace-current-index) ":"
+                (string-remove-suffix ".local" rm)) nil rpr)))))
+
+(defun my/ws-remote-fleet-shell-with-default ()
+  (interactive)
+  (let* ((ws  exwm-workspace-current-index)
+         (rm (nth ws ws/default-remote)))
+    (my/ws-remote-fleet-shell rm nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fix insert after cursor
+
+(defmacro my/insert-after-space (&rest fs)
+  `(progn
+     ,@(mapcar
+        (lambda (f)
+          ;; If in evil normal mode and cursor is on a whitespace til EOL
+          ;; then go into append mode first before inserting the thing.
+          ;; This is to put the thing after the space rather than before.
+          `(defadvice ,f (around append-if-in-evil-normal-mode activate compile)
+             (let ((is-in-evil-normal-mode (and (bound-and-true-p evil-mode)
+                                                (not (bound-and-true-p
+                                                      evil-insert-state-minor-mode))
+                                                (looking-at "[[:blank:]]*$"))))
+               (if (not is-in-evil-normal-mode)
+                   ad-do-it
+                 (evil-append 0)
+                 ad-do-it
+                 (evil-normal-state)))))
+        fs)))
+
+(my/insert-after-space org-roam-node-insert
+                       emoji-search
+                       org-web-tools-insert-link-for-url
+                       my/insert-inactive-timestamp)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; insert things
 
 (defun my/set-date ()
   (interactive)
@@ -154,104 +225,6 @@
   (interactive)
   (my/insert-line-from-buffer (other-buffer (current-buffer) t)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; fleet / remote operations:
-
-(defun my/choose-remote-from-fleet ()
-  (consult--read
-   (remove "" (string-split (shell-command-to-string "cat /etc/hosts | cut -d\\\t -f2 | grep -v localhost") "\n"))
-   :prompt "choose ship from fleet: "
-   :sort nil
-   :require-match t))
-
-(defun my/remote-fleet-find-file (&optional file)
-  (interactive "FFile: ")
-  (let* ((remote (my/choose-remote-from-fleet))
-         (fp     (or file
-                     (buffer-file-name)
-                     default-directory))
-         (dn     (file-name-directory fp))
-         (fn     (file-name-nondirectory fp)))
-    (message remote)
-    (find-file
-     (read-file-name
-      "Find remote file: "
-      (concat "/ssh:" remote ":" dn)
-      (concat "/ssh:" remote ":" fp)
-      'confirm fn))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; per workspace shells
-
-(defun my/ws-proj-shell (&optional project)
-  (interactive)
-  (let* ((pr (or project (projectile-project-root default-directory) "~/")))
-    (projectile-with-default-dir pr
-      (shell
-       (projectile-generate-process-name
-        (concat
-         (int-to-string exwm-workspace-current-index) ":") nil pr)))))
-
-(defun my/ws-remote-fleet-shell (&optional remote project)
-  (interactive)
-  (let* ((pr  (or (and project
-                       (tramp-file-local-name project))
-                  (projectile-project-root
-                   (tramp-file-local-name default-directory))
-                  "~/"))
-         (rm  (or remote (my/choose-remote-from-fleet)))
-         (rpr (concat "/ssh:" rm ":" pr)))
-    (projectile-with-default-dir rpr
-      (shell
-       (projectile-generate-process-name
-        (concat (int-to-string exwm-workspace-current-index) ":"
-                (string-remove-suffix ".local" rm)) nil rpr)))))
-
-(defun my/ws-remote-fleet-shell-with-default ()
-  (interactive)
-  (let* ((ws  exwm-workspace-current-index)
-         (rm (nth ws ws/default-remote)))
-    (my/ws-remote-fleet-shell rm nil)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; exec helper
-
-(defun my/local-async-shell-command (command)
-  ;; some things aren't meant to be executed remotely via tramp.
-  (interactive)
-  (let ((default-directory "~/"))
-    (async-shell-command command)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; fix insert after cursor
-
-(defmacro my/insert-after-space (&rest fs)
-  `(progn
-     ,@(mapcar
-        (lambda (f)
-          ;; If in evil normal mode and cursor is on a whitespace til EOL
-          ;; then go into append mode first before inserting the thing.
-          ;; This is to put the thing after the space rather than before.
-          `(defadvice ,f (around append-if-in-evil-normal-mode activate compile)
-             (let ((is-in-evil-normal-mode (and (bound-and-true-p evil-mode)
-                                                (not (bound-and-true-p
-                                                      evil-insert-state-minor-mode))
-                                                (looking-at "[[:blank:]]*$"))))
-               (if (not is-in-evil-normal-mode)
-                   ad-do-it
-                 (evil-append 0)
-                 ad-do-it
-                 (evil-normal-state)))))
-        fs)))
-
-(my/insert-after-space org-roam-node-insert
-                       emoji-search
-                       org-web-tools-insert-link-for-url
-                       my/insert-inactive-timestamp)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; misc
-
 (defun my/insert-elisp-header ()
   (interactive)
   (progn ;; save-excursion
@@ -260,14 +233,15 @@
                     (file-name-nondirectory buffer-file-name)
                     "  -*- lexical-binding: t; -*-\n\n"))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; insert link
-
 (defun my/bleau-link-insert ()
   (interactive)
   (execute-kbd-macro (kbd "^wD"))
   (org-web-tools-insert-link-for-url (current-kill 0 t))
   (org-id-get-create)
   (evil-next-line 2))
+
+(defun my/insert-inactive-timestamp ()
+  (interactive)
+  (insert (format-time-string "[%F %a %H:%M]")))
 
 (provide 'conf/misc)
