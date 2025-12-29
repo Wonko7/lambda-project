@@ -105,6 +105,10 @@
     (when org-auto-align-tags
       (org-align-tags t)))
 
+  (defun my/org-fold-show-all ()
+    (interactive)
+    (org-fold-show-all '(blocks headings drawers)))
+
   (add-hook 'org-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'my/align-org-tags nil 'local)))
@@ -147,6 +151,7 @@
   (general-evil-define-key '(normal) org-mode-map
     "zD"    #'org-decrypt-entries
     "zq"    (lambda() (interactive) (org-show-branches-buffer))
+    "zR"    #'my/org-fold-show-all
     "C-k"   #'org-previous-visible-heading
     "C-j"   #'org-next-visible-heading
     "("     #'org-previous-visible-heading
