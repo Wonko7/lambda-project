@@ -150,7 +150,7 @@
 
   (general-evil-define-key '(normal) org-mode-map
     "zD"    #'org-decrypt-entries
-    "zq"    (lambda() (interactive) (org-show-branches-buffer))
+    "zq"    (li (org-show-branches-buffer))
     "zR"    #'my/org-fold-show-all
     "C-k"   #'org-previous-visible-heading
     "C-j"   #'org-next-visible-heading
