@@ -87,7 +87,7 @@
     "bk" #'kill-current-buffer
     "bn" #'evil-buffer-new
     "bo" #'consult-outline
-    "bg" #'consult-focus-lines
+    "bf" #'consult-focus-lines
 
     ;; org
     "o"    '("org" . (keymap))
@@ -211,6 +211,7 @@
     "ss" #'consult-outline ;; :desc "filter line"
     "so" #'consult-omni
     "sl" #'consult-line
+    "sf" #'consult-focus-lines
 
     ;; code stuff
     ;; M-x flymake-goto-next-error goes to previous error in the current buffer
