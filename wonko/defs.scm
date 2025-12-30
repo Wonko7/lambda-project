@@ -35,3 +35,8 @@
   #~(string-append (getenv "HOME") "/" #$%home-log-root #$fn ".log"))
 
 (define-public %wake-up-notification-file "/run/systemd/wakeup")
+
+(define-public %x11-svc-respawn-delay 5)
+(define-public %x11-svc-respawn-limit
+  (let ((grace (* 5 60))) ;; 5 minute grace period for X11 services
+    (cons grace (- (/ grace %x11-svc-respawn-delay) 1))))
