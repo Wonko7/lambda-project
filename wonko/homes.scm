@@ -231,7 +231,11 @@
      (start #~(make-forkexec-constructor
                (list #$(file-append dunst "/bin/dunst"))
                #:log-file #$(home-log-path "dunst")))
-     (stop #~(make-kill-destructor))
+     (stop #~(lambda _
+               (display "killall dunst")
+               (system
+                (string-append
+                 #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
      (respawn? #t)
      (respawn-delay %x11-svc-respawn-delay)
      (respawn-limit #~'#$%x11-svc-respawn-limit)
