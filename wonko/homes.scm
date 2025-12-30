@@ -167,35 +167,35 @@
 
 (define-public %wonko-bash-config
   (home-bash-configuration
-   (guix-defaults? #f)
-   (aliases %aliases)
-   (environment-variables %wonko-env)
-   (bashrc
-    (list
-     (mixed-text-file
-      "bash-options"
-      "# Source the system-wide file.\n"
-      "[ -f /etc/bashrc ] && source /etc/bashrc\n")
-     (mixed-text-file
-      "path-setup"
-      "# Source my paths:\n"
-      "source ~/.profile\n")
-     (mixed-text-file
-      "interactive-shell-bash-options"
-      "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
-      "shopt -s autocd\n"
-      "shopt -s extglob\n"
-      "shopt -s globstar\n"
-      "shopt -s nocaseglob\n"
-      ;; this affects emacs' completion:
-      "bind 'set completion-ignore-case on' 2> /dev/null\n"
-      "[ x$TERM = xtramp ] && return\n"
-      "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
-      " \\A 🦄 \\u@\\h "
-      "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
-      " \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
-      "set -o vi\n"
-      "bind '\"jj\":vi-movement-mode'\n")))))
+    (guix-defaults? #f)
+    (aliases %aliases)
+    (environment-variables %wonko-env)
+    (bashrc
+     (list
+      (mixed-text-file
+       "bash-options"
+       "# Source the system-wide file.\n"
+       "[ -f /etc/bashrc ] && source /etc/bashrc\n")
+      (mixed-text-file
+       "path-setup"
+       "# Source my paths:\n"
+       "source ~/.profile\n")
+      (mixed-text-file
+       "interactive-shell-bash-options"
+       "[[ $- != *i* ]] && return ## ssh/non-interactive shells exit here\n"
+       "shopt -s autocd\n"
+       "shopt -s extglob\n"
+       "shopt -s globstar\n"
+       "shopt -s nocaseglob\n"
+       ;; this affects emacs' completion:
+       "bind 'set completion-ignore-case on' 2> /dev/null\n"
+       "[ x$TERM = xtramp ] && return\n"
+       "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
+       " \\A 🦄 \\u@\\h "
+       "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
+       " \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+       "set -o vi\n"
+       "bind '\"jj\":vi-movement-mode'\n")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shepherd
