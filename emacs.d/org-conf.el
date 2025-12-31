@@ -149,19 +149,19 @@
     "k"     #'org-roam-dailies-goto-previous-note)
 
   (general-evil-define-key '(normal) org-mode-map
-    "zD"    #'org-decrypt-entries
-    "zq"    (li (org-show-branches-buffer))
-    "zR"    #'my/org-fold-show-all
-    "("     #'org-previous-visible-heading
-    ")"     #'org-next-visible-heading
-    ;;"{"     #'evil-backward-paragraph
-    ;;"}"     #'evil-forward-paragraph
-    "C-k"   #'org-move-subtree-up
-    "C-j"   #'org-move-subtree-down
-    "C-<"   #'org-promote-subtree
-    "C->"   #'org-demote-subtree
+    "zD"      #'org-decrypt-entries
+    "zq"      (li (org-show-branches-buffer))
+    "zR"      #'my/org-fold-show-all
+    "("       #'org-previous-visible-heading
+    ")"       #'org-next-visible-heading
+    "J"       nil
+    "C-k"     #'org-move-subtree-up
+    "C-j"     #'org-move-subtree-down
+    "C-<"     #'org-promote-subtree
+    "C->"     #'org-demote-subtree
     "C-S-h"   #'org-promote-subtree
-    "C-S-l"   #'org-demote-subtree)
+    "C-S-l"   #'org-demote-subtree
+    "C-l"     #'org-demote-subtree)
 
   ;; babel
   (org-babel-do-load-languages
