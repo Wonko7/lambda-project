@@ -276,37 +276,13 @@
 
 (use-package comint
   :demand t
+
   :custom
   (comint-scroll-to-bottom-on-input t)
   (comint-scroll-to-bottom-on-output t)
   (comint-prompt-read-only t)
+
   :config
-  ;; FIXME: fuck me: comint-watch-for-password-prompt - try w/o on emacs 30.
-  ;; [2025-09-24 Wed 16:10] removing this
-  ;; run-at-time 0 nil => bug
-  ;; run-at-time 0.01 nil => no bug. wtf?
-  ;; (defun comint-watch-for-password-prompt (string)
-  ;;     "Prompt in the minibuffer for password and send without echoing.
-  ;; Looks for a match to `comint-password-prompt-regexp' in order
-  ;; to detect the need to (prompt and) send a password.  Ignores any
-  ;; carriage returns (\\r) in STRING.
-
-  ;; This function could be in the list `comint-output-filter-functions'."
-  ;;     (when (let ((case-fold-search t))
-  ;; 	    (string-match comint-password-prompt-regexp
-  ;; 			  (string-replace "\r" "" string)))
-  ;;       ;; Use `run-at-time' in order not to pause execution of the
-  ;;       ;; process filter with a minibuffer
-  ;;       ;; or don't use it so that there is no weird timeout bug.
-  ;;       (with-current-buffer (current-buffer)
-  ;;         (let ((comint--prompt-recursion-depth
-  ;; 	       (1+ comint--prompt-recursion-depth)))
-  ;; 	  (if (> comint--prompt-recursion-depth 10)
-  ;; 	      (message "Password prompt recursion too deep")
-  ;; 	    (when (get-buffer-process (current-buffer))
-  ;; 	      (comint-send-invisible
-  ;; 	       (string-trim string "[ \n\r\t\v\f\b\a]+" "\n+"))))))))
-
   (general-evil-define-key '(normal visual) comint-mode-map
     "|"           #'my/insert-shell-line
     "ï"           #'my/cd-up
@@ -344,7 +320,7 @@
   (defun my/toggle-scroll-to-bottom-on-output ()
     (interactive)
     (setq-local comint-scroll-to-bottom-on-output
-	        (not comint-scroll-to-bottom-on-output))))
+                (not comint-scroll-to-bottom-on-output))))
 
 (use-package shell
   :after coterm
@@ -464,46 +440,10 @@
   (connection-local-set-profiles
    '(:application tramp :protocol "rsync")
    'remote-direct-async-process)
+  ;; when this fails: (setq connection-local-criteria-alist nil)
 
   (with-eval-after-load 'compile
-    (remove-hook 'compilation-mode-hook #'tramp-compile-disable-ssh-controlmaster-options))
-
-  ;; when this fails:
-  ;; (setq connection-local-criteria-alist nil)
-
-  ;; FIXME/workaround bug introduced with guix's emacs 31.
-  ;; without this tramp complains about not finding a suitable ls.
-  ;; tl;dr s/command/which/
-  ;; (defun tramp-find-executable
-  ;;       (vec progname dirlist &optional ignore-tilde ignore-path)
-  ;;     "Search for PROGNAME in $PATH and all directories mentioned in DIRLIST.
-  ;; First arg VEC specifies the connection, PROGNAME is the program
-  ;; to search for, and DIRLIST gives the list of directories to
-  ;; search.  If IGNORE-TILDE is non-nil, directory names starting
-  ;; with \"~\" will be ignored.  If IGNORE-PATH is non-nil, searches
-  ;; only in DIRLIST.
-
-  ;; Returns the absolute file name of PROGNAME, if found, and nil otherwise.
-
-  ;; This function expects to be in the right *tramp* buffer."
-  ;;     (unless ignore-path
-  ;;       (setq dirlist (cons "$PATH" dirlist)))
-  ;;     (when ignore-tilde
-  ;;       ;; Remove all ~/foo directories from dirlist.
-  ;;       (let (newdl d)
-  ;;         (while dirlist
-  ;; 	  (setq d (car dirlist)
-  ;; 	        dirlist (cdr dirlist))
-  ;; 	  (unless (char-equal ?~ (aref d 0))
-  ;; 	    (setq newdl (cons d newdl))))
-  ;;         (setq dirlist (nreverse newdl))))
-  ;;     (when (tramp-send-command-and-check
-  ;;            vec (format "(unalias %s; %s which %s)" ;; this works in emacs 31
-  ;;                        progname
-  ;;                        (if dirlist (concat "PATH=" (string-join dirlist ":")) "")
-  ;;                        progname))
-  ;;       (string-trim (tramp-get-buffer-string (tramp-get-connection-buffer vec)))))
-  )
+    (remove-hook 'compilation-mode-hook #'tramp-compile-disable-ssh-controlmaster-options)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
@@ -559,7 +499,7 @@
 (use-package calc
   :config
   (general-evil-define-key '(normal) calc-mode-map
-    "-"    #'calc-minus ;; FIXME why do I need set this?
+    "-"    #'calc-minus ;; FIXME why do I need to set this?
     "i"    (lambda ()
              (interactive) ;; avoid having info popping up all the time.
              (message "I'm sorry, Dave. I'm afraid I can't do that."))))
@@ -603,7 +543,7 @@
 
 (use-package transmission
   :custom
-  (transmission-torrent-functions '(transmission-ffap-last-killed))
+  (transmission-torrent-functions '(transmission-ffap-last-killed)) ;; still bullshit
   (transmission-host "of-course-i-still-love-you.local")
   (transmission-refresh-modes '(transmission-mode
                                 transmission-files-mode
