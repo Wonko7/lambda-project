@@ -200,9 +200,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shepherd
 
+(define x11-respawn-config-shepherd-service
+  (shepherd-service
+    (provision '(respawn-config))
+    (respawn? #t)
+    (respawn-delay 5) ;; retry every 5s
+    (respawn-limit
+     (let ((grace (* 5 60))) ;; 5 minute grace period
+       `( ,grace .                          ;; admins hate this one simple trick:
+          ,(- (/ grace respawn-delay) 1)))) ;; change -1 to +1 for infinite respawn
+    (documentation "respawn settings that allow respawning x services after xorg server restart")))
+
 (define-public %common-shepherd-wonko-services
   (list
    (shepherd-service
+     (inherit x11-respawn-config-shepherd-service)
      (provision '(picom))
      (start #~(make-forkexec-constructor
                (list #$(file-append picom "/bin/picom")
@@ -211,9 +223,6 @@
                      "--opacity-rule=10:name *= 'oneko'")
                #:log-file #$(home-log-path "picom")))
      (stop #~(make-kill-destructor))
-     (respawn? #t)
-     (respawn-delay %x11-svc-respawn-delay)
-     (respawn-limit #~'#$%x11-svc-respawn-limit)
      (documentation "bling"))
    (shepherd-service
      (provision '(pantalaimon))
@@ -227,6 +236,7 @@
      (stop #~(make-kill-destructor))
      (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
+     (inherit x11-respawn-config-shepherd-service)
      (provision '(dunst))
      (start #~(make-forkexec-constructor
                (list #$(file-append dunst "/bin/dunst"))
@@ -236,9 +246,6 @@
                (system
                 (string-append
                  #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
-     (respawn? #t)
-     (respawn-delay %x11-svc-respawn-delay)
-     (respawn-limit #~'#$%x11-svc-respawn-limit)
      (documentation "riced notifications"))
    (shepherd-service
      (provision '(guix-repl))
@@ -260,6 +267,7 @@
      (services
       (cons*
        (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
          (provision '(xss-lock))
          (start #~(make-forkexec-constructor
                    (cons* #$(file-append xss-lock "/bin/xss-lock")
@@ -267,11 +275,9 @@
                           '#$%lock-cmd)
                    #:log-file #$(home-log-path "xss-lock")))
          (stop #~(make-kill-destructor))
-         (respawn? #t)
-         (respawn-delay %x11-svc-respawn-delay)
-         (respawn-limit #~'#$%x11-svc-respawn-limit)
          (documentation "don't touch my stuff"))
        (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
          (provision '(oneko))
          (start #~(make-forkexec-constructor
                    ;; (list #$(file-append oneko "/bin/oneko") "-dog")
@@ -281,9 +287,6 @@
                     "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
-         (respawn? #t)
-         (respawn-delay %x11-svc-respawn-delay)
-         (respawn-limit #~'#$%x11-svc-respawn-limit)
          (documentation "neko"))
        %common-shepherd-wonko-services)))))
 
@@ -292,24 +295,20 @@
    'yggdrasill-shepherd home-shepherd-service-type
    (list
     (shepherd-service
+      (inherit x11-respawn-config-shepherd-service)
       (provision '(synergyd))
       (start #~(make-forkexec-constructor
                 (list #$(file-append synergy "/bin/synergy"))
                 #:log-file #$(home-log-path "synergy")))
       (stop #~(make-kill-destructor))
-      (respawn? #t)
-      (respawn-delay %x11-svc-respawn-delay)
-      (respawn-limit #~'#$%x11-svc-respawn-limit)
       (documentation "can't be arsed to move IRL"))
     (shepherd-service
+      (inherit x11-respawn-config-shepherd-service)
       (provision '(kdeconnectd))
       (start #~(make-forkexec-constructor
                 (list #$(file-append kdeconnect "/bin/kdeconnectd"))
                 #:log-file #$(home-log-path "kdeconnectd")))
       (stop #~(make-kill-destructor))
-      (respawn? #t)
-      (respawn-delay %x11-svc-respawn-delay)
-      (respawn-limit #~'#$%x11-svc-respawn-limit)
       (documentation "ET phone home")))))
 
 (define-public %media-station-shepherd-wonko-service
@@ -319,6 +318,7 @@
      (services
       (cons*
        (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
          (provision '(xss-lock))
          (auto-start? #f)
          (start #~(make-forkexec-constructor
@@ -327,11 +327,9 @@
                           '#$%lock-cmd)
                    #:log-file #$(home-log-path "xss-lock")))
          (stop #~(make-kill-destructor))
-         (respawn? #t)
-         (respawn-delay %x11-svc-respawn-delay)
-         (respawn-limit #~'#$%x11-svc-respawn-limit)
          (documentation "don't touch my stuff"))
        (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
          (provision '(synergyc))
          (start #~(make-forkexec-constructor
                    (list #$(file-append synergy "/bin/synergyc")
@@ -339,11 +337,9 @@
                          "-f" "yggdrasill.local")
                    #:log-file #$(home-log-path "synergy")))
          (stop #~(make-kill-destructor))
-         (respawn? #t)
-         (respawn-delay %x11-svc-respawn-delay)
-         (respawn-limit #~'#$%x11-svc-respawn-limit)
          (documentation "can't be arsed to move IRL"))
        (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
          (auto-start? #f)
          (provision '(synergyc-enterprise))
          (start #~(make-forkexec-constructor
@@ -352,9 +348,6 @@
                          "-f" "enterprise.local")
                    #:log-file #$(home-log-path "synergy")))
          (stop #~(make-kill-destructor))
-         (respawn? #t)
-         (respawn-delay %x11-svc-respawn-delay)
-         (respawn-limit #~'#$%x11-svc-respawn-limit)
          (documentation "can't be arsed to move IRL"))
        %common-shepherd-wonko-services)))))
 
