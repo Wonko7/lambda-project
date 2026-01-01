@@ -242,6 +242,8 @@
         ;; system
         emacs-bluetooth
         emacs-pulseaudio-control
+        ;; emacs-tramp ;; tramp hlo needs recent tramp.
+        ;; emacs-tramp-hlo
 
         ;; x stuff
         emacs-desktop-environment

@@ -238,6 +238,28 @@
       (description "This library offers an alternative to calendar. It’s very similar and offer only a few options, like the possibility to color day according to the number of item in the org-agenda")
       (license (@ (guix licenses) gpl3+)))))
 
+(define-public emacs-tramp-hlo
+  (let ((commit "b726b4042e96ac5cead396c8d12c01e6bad2bd78"))
+    (package
+      (name "emacs-tramp-hlo")
+      (version "0.0.1")
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/jsadusk/tramp-hlo")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "154w75nh2i58fs7qw4b3rc4j224pnxfbh326h4fbl9kpf9rz9qk5"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/jsadusk/tramp-hlo")
+      (synopsis "Higher level emacs functions as optimized tramp operations")
+      (description "Normally a tramp handler only contains implementations of the emacs primitive file operations. Implementing this set of operations allows emacs to do anything on a remote host, but many of the common functions in the emacs standard library will trigger multiple file operations for a single call. This can cause performance issues, because each file operation involves a roundtrip to the remote host.
+
+This module implements some of those operations as single round trip tramp operations. The bulk of the operation is implemented as a server side bash script, rather than an elisp function. In practice this makes a lot of day to day editing on remote hosts much more responsive.")
+      (license (@ (guix licenses) gpl3+)))))
+
 (define-public emacs-browser-hist
   (package
     (name "emacs-browser-hist")

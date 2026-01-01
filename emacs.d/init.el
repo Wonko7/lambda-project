@@ -445,6 +445,14 @@
   (with-eval-after-load 'compile
     (remove-hook 'compilation-mode-hook #'tramp-compile-disable-ssh-controlmaster-options)))
 
+;; 1/ needs tramp 2.8
+;; 2/ could not find proper ls command
+;; (use-package tramp-hlo
+;;   :demand t
+;;   :after tramp
+;;   :config
+;;   (tramp-hlo-setup))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired
 
