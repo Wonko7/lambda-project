@@ -42,7 +42,7 @@
 
   :custom
   (evil-cleverparens-complete-parens-in-yanked-region t)
-  (evil-cleverparens-move-skip-delimiters t)
+  (evil-cleverparens-move-skip-delimiters nil)
   (evil-cleverparens-swap-move-by-word-and-symbol nil)
   (evil-cleverparens-drag-ignore-lines t)
   (evil-cleverparens-use-s-and-S nil)
