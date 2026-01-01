@@ -207,8 +207,9 @@
     (respawn-delay 5) ;; retry every 5s
     (respawn-limit
      (let ((grace (* 5 60))) ;; 5 minute grace period
-       `( ,grace .                          ;; admins hate this one simple trick:
-          ,(- (/ grace respawn-delay) 1)))) ;; change -1 to +1 for infinite respawn
+       `(quote
+         ( ,grace .                           ;; admins hate this one simple trick:
+           ,(- (/ grace respawn-delay) 1))))) ;; change -1 to +1 for infinite respawn
     (documentation "respawn settings that allow respawning x services after xorg server restart")))
 
 (define-public %common-shepherd-wonko-services
