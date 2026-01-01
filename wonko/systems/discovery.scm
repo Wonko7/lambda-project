@@ -71,6 +71,7 @@
   (operating-system
     (inherit %removable-laptop-os)
     (host-name "discovery")
+
     (services
      (cons*
       (service slim-service-type wonko-slim-config)
@@ -82,28 +83,23 @@
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
       %laptop-services))
+
     (mapped-devices
      (list (mapped-device
              (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
              (target "vault")
              (type luks-device-mapping)
              (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
-    (file-systems (let ((btrfs-vault-subvol (lambda (args)
-                                              (make-vault-subvolume args mapped-devices))))
-                    (cons*
-                     (file-system
-                       (mount-point "/boot")
-                       (device (uuid "4ACA-0700"
-                                     'fat32))
-                       (type "vfat"))
-                     (file-system
-                       (mount-point "/mnt/vault")
-                       (device "/dev/mapper/vault")
-                       (type "btrfs")
-                       (dependencies mapped-devices))
-                     (append
-                      (make-vault-subvolumes mapped-devices)
-                      %base-file-systems))))))
+    ;; FIXME: make swap on discovery
+    (file-systems (cons*
+                   (file-system
+                     (mount-point "/boot")
+                     (device (uuid "4ACA-0700"
+                                   'fat32))
+                     (type "vfat"))
+                   (append
+                    (make-vault-subvolumes mapped-devices)
+                    %base-file-systems)))))
 
 %wonko-home
 %discovery-os
