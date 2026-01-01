@@ -543,13 +543,32 @@
 
 (use-package transmission
   :custom
-  (transmission-torrent-functions '(transmission-ffap-last-killed)) ;; still bullshit
   (transmission-host "of-course-i-still-love-you.local")
   (transmission-refresh-modes '(transmission-mode
                                 transmission-files-mode
                                 transmission-info-mode
                                 transmission-peers-mode))
-  (transmission-refresh-interval 2))
+  (transmission-refresh-interval 2)
+
+  :config
+  (general-evil-define-key '(normal) transmission-mode-map
+    "a" #'my/transmission-add)
+
+  (defun my/transmission-add ()
+    "add current-kill as a magnet link, do not try to interpret it as a file"
+    (interactive)
+    (let ((torrent (transmission-ffap-string (current-kill 0))))
+      (transmission-request-async
+       (lambda (response)
+         (let-alist response
+           (or (and .torrent-added.name
+                    (message "Added %s" .torrent-added.name))
+               (and .torrent-duplicate.name
+                    (message "Already added %s" .torrent-duplicate.name)))))
+       "torrent-add"
+       (append `(:filename ,(if (transmission-btih-p torrent)
+                                (concat "magnet:?xt=urn:btih:" torrent)
+                              torrent)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
