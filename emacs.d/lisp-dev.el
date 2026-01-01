@@ -79,6 +79,8 @@
     "T"   (lambda() (interactive) (sp-transpose-sexp -1))
     "M-T" (lambda() (interactive) (sp-transpose-sexp -1))
     "@"  #'sp-splice-sexp
+    "u"  #'sp-unwrap-sexp
+    "j"  #'sp-join-sexp
     "p"  #'evil-cp-wrap-next-round
     "P"  #'evil-cp-wrap-previous-round
     "c"  #'evil-cp-wrap-next-curly
