@@ -38,7 +38,7 @@
                      admin linux)
 (use-service-modules linux nfs
                      ;; public net:
-                     configuration sysctl)
+                     configuration sysctl vpn)
 
 (define machine-home-services
   (list
@@ -150,34 +150,25 @@
 
 (define %nftables-ruleset
   (plain-file "nftables.conf" "\
+## for masquerading example: https://www.procustodibus.com/blog/2021/11/wireguard-nftables/
 table inet firewall {
 
     chain inbound_ipv4 {
-        # icmp type echo-request limit rate 5/second accept
+        icmp type echo-request limit rate 5/second accept
         accept # accept everything on local network
     }
 
     chain inbound_ipv6 {
-        # accept neighbour discovery otherwise connectivity breaks
-        #
         icmpv6 type { nd-neighbor-solicit, nd-router-advert, nd-neighbor-advert } accept
-
-        # accepting ping (icmpv6-echo-request) for diagnostic purposes.
-        # However, it also lets probes discover this host is alive.
-        # This sample accepts them within a certain rate limit:
-        #
         icmpv6 type echo-request limit rate 5/second accept
+
         ip6 daddr != 2a01:e0a:b5a:de71::/64 accept # accept on non public
         tcp dport { 80, 443 } accept # only accept these on public facing ipv6
+        udp dport { 51820 } accept   # only accept these on public facing ipv6
     }
 
     chain inbound {
-
-        # By default, drop all traffic unless it meets a filter
-        # criteria specified by the rules that follow below.
         type filter hook input priority 0; policy drop;
-
-        # Allow traffic from established and related packets, drop invalid
         ct state vmap { established : accept, related : accept, invalid : drop }
 
         # Allow loopback traffic.
@@ -188,22 +179,16 @@ table inet firewall {
 
         # Jump to chain according to layer 3 protocol using a verdict map
         meta protocol vmap { ip : jump inbound_ipv4, ip6 : jump inbound_ipv6 }
-
-        # Allow SSH on port TCP/22 and allow HTTP(S) TCP/80 and TCP/443
-        # for IPv4 and IPv6.
-        # tcp dport { 22, 80, 443} accept
-
-        # Uncomment to enable logging of denied inbound traffic
-        # log prefix \"[nftables] Inbound Denied: \" counter drop
     }
 
     chain forward {
-        # Drop everything (assumes this device is not a router)
         type filter hook forward priority 0; policy drop;
+        ct state vmap { invalid : drop, established : accept, related : accept }
+        iifname wg0 oifname wg0 ct state new accept
     }
-
     # no need to define output chain, default policy is accept if undefined.
-} "))
+}
+"))
 
 (define %radvd-config
   (plain-file "radvd.conf" "\
@@ -246,10 +231,7 @@ interface eth0                    # identifies the interface we are advertising 
     (description "radvd")
     (extensions
      (list (service-extension shepherd-root-service-type
-                              (compose list radvd-shepherd-service))
-           ;; (service-extension profile-service-type
-           ;;                    (compose list radvd-configuration))
-           ))
+                              (compose list radvd-shepherd-service))))
     (default-value (radvd-configuration))))
 
 
@@ -314,28 +296,50 @@ interface eth0                    # identifies the interface we are advertising 
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
         (service radvd-service-type (radvd-configuration
-                                     (config-file %radvd)))
+                                     (config-file %radvd-config)))
+        (service dhcpcd-service-type (dhcpcd-configuration
+                                       (interfaces '("eth0"))))
+        (service static-networking-service-type
+                 (list
+                  (static-networking
+                    (provision '(nothing))
+                    (addresses
+                     (list (network-address
+                             (device "eth0")
+                             (value "2a01:e0a:b5a:de71::1/64"))))
+                    (routes
+                     (list (network-route
+                             (destination "2000::/3")
+                             (gateway "2a01:e0a:b5a:de70::1")))))))
+
+
+        ;; wg:
+        ;; ent; mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ=
+        ;; sly; U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=
+        ;; ygg; bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0=
+
+        (service wireguard-service-type
+                 (wireguard-configuration
+                   (addresses '("10.42.0.1/24"))
+                   (peers
+                    (list
+                     (wireguard-peer
+                       (name "ent")
+                       (public-key "mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ=")
+                       (allowed-ips '("10.42.0.3/32")))
+                     (wireguard-peer
+                       (name "ygg")
+                       (public-key "bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0=")
+                       (allowed-ips '("10.42.0.2/32")))))))
+
         (modify-services %media-station-services
           (sysctl-service-type
            config =>
            (sysctl-configuration
-             (settings (append '(("net.ipv6.conf.all.forwarding" . "1"))
+             (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
+                                 ("net.ipv4.ip_forward" . "1"))
                                %default-sysctl-settings))))
-          ;; okkkkk... nm did not like this, will probably end nuking nm.
-          ;; (static-networking-service-type
-          ;;  config =>
-          ;;  (list
-          ;;   (static-networking
-          ;;     (addresses
-          ;;      (cons (network-address
-          ;;              (device "eth0")
-          ;;              (value "2a01:e0a:b5a:de71::1/64"))
-          ;;            (static-networking-addresses %loopback-static-networking)))
-          ;;     (routes
-          ;;      (list (network-route
-          ;;              (destination "2000::/3")
-          ;;              (gateway "2a01:e0a:b5a:de70::1"))))
-          ;;     (provision '(loopback)))))
+          (delete network-manager-service-type)
           ;; public net stuff -->
           ))))
 
