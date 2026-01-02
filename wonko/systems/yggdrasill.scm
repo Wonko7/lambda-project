@@ -1,12 +1,5 @@
 (define-module (wonko systems yggdrasill)
   #:use-module (gnu)
-  #:use-module (gnu services shepherd)
-  #:use-module (gnu services desktop)
-  #:use-module (gnu services xorg)
-  #:use-module (gnu services sddm)
-  #:use-module (gnu services networking)
-  #:use-module (gnu services ssh)
-  #:use-module (gnu services guix)
   #:use-module (gnu home)
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
@@ -29,6 +22,10 @@
   #:export (%yggdrasill-os))
 
 (use-package-modules xorg)
+(use-service-modules
+ desktop xorg sddm
+ networking ssh vpn
+ guix shepherd)
 
 (define machine-home-services
   (list
@@ -80,6 +77,19 @@
                      (service kmonad-service-type kmonad-laptop-config)
                      (service kmonad-service-type kmonad-ergodox-config)
                      (service kmonad-service-type kmonad-bullshit-config)
+
+                     (service wireguard-service-type
+                              (wireguard-configuration
+                                (addresses '("10.42.0.2/24"))
+                                (peers
+                                 (list
+                                  (wireguard-peer
+                                    (name "sly")
+                                    (public-key "U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=")
+                                    (endpoint "[2a01:e0a:b5a:de71::1]:51820")
+                                    (allowed-ips '("0.0.0.0/0"))
+                                    (keep-alive 60))))))
+
                      %laptop-services))
 
     (mapped-devices

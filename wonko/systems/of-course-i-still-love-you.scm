@@ -1,12 +1,5 @@
 (define-module (wonko systems of-course-i-still-love-you)
   #:use-module (gnu)
-  #:use-module (gnu services shepherd)
-  #:use-module (gnu services desktop)
-  #:use-module (gnu services xorg)
-  #:use-module (gnu services sddm)
-  #:use-module (gnu services networking)
-  #:use-module (gnu services ssh)
-  #:use-module (gnu services guix)
   #:use-module (gnu home)
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
@@ -37,6 +30,9 @@
                      ;; public net:
                      admin linux)
 (use-service-modules linux nfs
+                     desktop xorg sddm
+                     networking ssh vpn
+                     guix shepherd
                      ;; public net:
                      configuration sysctl vpn)
 
