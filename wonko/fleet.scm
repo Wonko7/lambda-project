@@ -67,18 +67,29 @@
    (local-address "192.168.1.4")
    (wg-address "10.42.0.4")))
 
+(define-public %discovery-net-peer
+  (net-peer
+   (name "discovery")
+   (public-key "nIAdvx5JR1uwLyyzKgOU/x3DHi6KKKKcL9nexPAP50Q=")
+   (local-address "")
+   (wg-address "10.42.0.5")))
+
 (define-public %star-fleet-hosts
   (list %yggdrasill-net-peer
         %enterprise-net-peer
         %rocinante-net-peer
+        %discovery-net-peer
         %of-course-i-still-love-you-net-peer))
 
 (define-public %fleet-hosts
   (append
-   (map (lambda (h)
-          (host (net-peer-local-address h)
-                (string-append (net-peer-name h) ".local")))
-        %star-fleet-hosts)
+   (filter identity
+           (map (lambda (h)
+                  (if (not (string= "" (net-peer-local-address h)))
+                      (host (net-peer-local-address h)
+                            (string-append (net-peer-name h) ".local"))
+                      #f))
+                %star-fleet-hosts))
    (map (lambda (h)
           (host (net-peer-wg-address h)
                 (string-append (net-peer-name h) ".star-fleet.local")))
@@ -98,8 +109,10 @@
        hosts))
 
 (define-public %fleet-names (list
-                             "daban-urnud"
-                             "enterprise"
-                             "of-course-i-still-love-you"
-                             "rocinante"
-                             "yggdrasill"))
+                             ;; "daban-urnud"             ;; 1
+                             ;; "discovery"               ;; 5 (not on local net)
+                             ;; "nispe"                   ;; 9
+                             "enterprise"                 ;; 6
+                             "of-course-i-still-love-you" ;; 7
+                             "rocinante"                  ;; 4
+                             "yggdrasill"))               ;; 3
