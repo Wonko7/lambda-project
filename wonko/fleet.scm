@@ -60,9 +60,17 @@
    (local-address "192.168.1.3")
    (wg-address "10.42.0.3")))
 
+(define-public %rocinante-net-peer
+  (net-peer
+   (name "rocinante")
+   (public-key "Hpugstb4CA8kryRhzE37vl76mrfYPqWHBkFXjiydfl0=")
+   (local-address "192.168.1.4")
+   (wg-address "10.42.0.4")))
+
 (define-public %star-fleet-hosts
   (list %yggdrasill-net-peer
         %enterprise-net-peer
+        %rocinante-net-peer
         %of-course-i-still-love-you-net-peer))
 
 (define-public %fleet-hosts
@@ -77,7 +85,6 @@
         %star-fleet-hosts)
    (list
     (host "192.168.1.1" "daban-urnud.local")
-    (host "192.168.1.4" "rocinante.local")
     (host "192.168.1.9" "nispe.local"))))
 
 (define-public %fleet-names (list

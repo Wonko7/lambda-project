@@ -1,12 +1,5 @@
 (define-module (wonko systems rocinante)
   #:use-module (gnu)
-  #:use-module (gnu services shepherd)
-  #:use-module (gnu services desktop)
-  #:use-module (gnu services xorg)
-  #:use-module (gnu services sddm)
-  #:use-module (gnu services networking)
-  #:use-module (gnu services ssh)
-  #:use-module (gnu services guix)
   #:use-module (gnu home)
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
@@ -29,7 +22,10 @@
   #:export (%rocinante-os))
 
 (use-package-modules xorg)
-(use-service-modules desktop)
+(use-service-modules
+ desktop xorg sddm
+ networking ssh vpn
+ guix shepherd)
 
 (define machine-home-services
   (list
@@ -93,6 +89,12 @@
             (service kmonad-service-type kmonad-fr-laptop-config)
             (service kmonad-service-type kmonad-ergodox-config)
             (service kmonad-service-type kmonad-bullshit-config)
+
+            (service wireguard-service-type
+                     (wireguard-configuration
+                      (inherit %star-fleet-client-config)
+                      (addresses (net-peer-addr-to/24 %rocinante-net-peer))))
+
             %laptop-services))
 
     (mapped-devices
