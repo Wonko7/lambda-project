@@ -144,10 +144,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; public facing services network config:
 
-(define azirevpn-service
+(define wait-for-wan-service
   (list
    (shepherd-service
      (requirement '(networking user-processes))
+     (provision '(wait-for-wan))
+     (start #~(lambda _
+                (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8")))
+     (stop #~(lambda _ #f))
+     (respawn? #t)
+     (respawn-delay 5) ;; retry every 5s
+     (respawn-limit
+      (let ((grace (* 10 60))) ;; 10m grace period
+        `(quote
+          ( ,grace .                           ;; admins hate this one simple trick:
+            ,(- (/ grace respawn-delay) 1))))) ;; change -1 to +1 for infinite respawn
+     (documentation "wait for wan"))))
+
+(define azirevpn-service
+  (list
+   (shepherd-service
+     (requirement '(networking user-processes wait-for-wan))
      (provision '(azirevpn))
      (start #~(lambda _
                 (invoke (string-append #$wireguard-tools "/bin/wg-quick")
@@ -331,6 +348,10 @@ interface eth0                    # identifies the interface we are advertising 
                          (filter (lambda (h)
                                    (not (equal? h %of-course-i-still-love-you-net-peer)))
                                  %star-fleet-hosts)))))
+
+        (simple-service 'wait-for-wan-service
+                        shepherd-root-service-type
+                        wait-for-wan-service)
 
         (simple-service 'azirevpn-service
                         shepherd-root-service-type
