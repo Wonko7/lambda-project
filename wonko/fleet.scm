@@ -108,7 +108,7 @@
          (host-canonical-name h))
        hosts))
 
-(define-public %fleet-names (list
+(define-public %fleet-names (list ;; machines that have ssh & substitute keys:
                              ;; "daban-urnud"             ;; 1
                              ;; "discovery"               ;; 5 (not on local net)
                              ;; "nispe"                   ;; 9
