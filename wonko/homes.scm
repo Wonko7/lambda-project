@@ -433,42 +433,42 @@
 
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
-             (default-cache-ttl (* 60 30))
-             (max-cache-ttl (* 60 60 2))
-             (pinentry-program
-              (file-append pinentry-emacs "/bin/pinentry-emacs"))
-             (ssh-support? #t)))
+              (default-cache-ttl (* 60 30))
+              (max-cache-ttl (* 60 60 2))
+              (pinentry-program
+               (file-append pinentry-emacs "/bin/pinentry-emacs"))
+              (ssh-support? #t)))
 
    (simple-service
     'xdg-user-directories-config-service
     home-xdg-user-directories-service-type
     (home-xdg-user-directories-configuration
-     (desktop     "$HOME/desktop")
-     (documents   "$HOME/documents")
-     (download    "$HOME/downloads")
-     (music       "$HOME/music")
-     (pictures    "$HOME/pictures")
-     (publicshare "$HOME/public")
-     (templates   "$HOME/templates")
-     (videos      "$HOME/videos")))
+      (desktop     "$HOME/desktop")
+      (documents   "$HOME/documents")
+      (download    "$HOME/downloads")
+      (music       "$HOME/music")
+      (pictures    "$HOME/pictures")
+      (publicshare "$HOME/public")
+      (templates   "$HOME/templates")
+      (videos      "$HOME/videos")))
 
    (service
     (service-type
-     (name 'home-xdg-desktop-portal)
-     (extensions
-      (list
-       (service-extension
-        home-profile-service-type
-        (const (list xdg-desktop-portal
-                     xdg-desktop-portal-gtk)))
-       (service-extension
-        home-xdg-configuration-files-service-type
-        (const `(("xdg-desktop-portal/portals.conf"
-                  ,(mixed-text-file "xdg-portals"
-                                    "[preferred]\n"
-                                    "default=gtk")))))))
-     (default-value #f)
-     (description "xdg portal")))
+      (name 'home-xdg-desktop-portal)
+      (extensions
+       (list
+        (service-extension
+         home-profile-service-type
+         (const (list xdg-desktop-portal
+                      xdg-desktop-portal-gtk)))
+        (service-extension
+         home-xdg-configuration-files-service-type
+         (const `(("xdg-desktop-portal/portals.conf"
+                   ,(mixed-text-file "xdg-portals"
+                                     "[preferred]\n"
+                                     "default=gtk")))))))
+      (default-value #f)
+      (description "xdg portal")))
 
    (simple-service
     'config-files
@@ -639,10 +639,7 @@
                               (getcwd)))
                     (name (basename repo))
                     (git #$(file-append git "/bin/git"))
-                    (fleet-remotes (list #$@(map (lambda (s)
-                                                   ;; (ship-name s)
-                                                   s
-                                                   ) %fleet-names))))
+                    (fleet-remotes '#$(fleet-names-from-hosts %fleet-hosts)))
                (chdir repo)
                (when (assoc-ref args 'fleet)
                  (map (lambda (rm)

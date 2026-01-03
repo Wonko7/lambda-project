@@ -265,9 +265,7 @@
             (transmission-daemon-configuration
               (rpc-authentication-required? #f)
               (rpc-whitelist-enabled? #t)
-              (rpc-host-whitelist (map (lambda (hn)
-                                         (string-append hn ".local"))
-                                       %fleet-names))
+              (rpc-host-whitelist (fleet-canonical-names-from-hosts %fleet-hosts))
               (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*"))
               (umask #o000)
               (download-dir "/junkyard/downloads/inbox")))

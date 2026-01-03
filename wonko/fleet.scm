@@ -22,7 +22,7 @@
   (net-peer
    (name "of-course-i-still-love-you")
    (public-key "U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=")
-   (local-address "192.168.1.7")
+   (local-address "192.168.1.7") ;; remember to update router's MAC -> ip attribution
    (wg-address "10.42.0.7")))
 
 (define-public (net-to-wg-peer peer)
@@ -84,8 +84,18 @@
                 (string-append (net-peer-name h) ".star-fleet.local")))
         %star-fleet-hosts)
    (list
-    (host "192.168.1.1" "daban-urnud.local")
+    ;; (host "192.168.1.1" "daban-urnud.local") ;; RIP you now rest in silicon heaven
     (host "192.168.1.9" "nispe.local"))))
+
+(define-public (fleet-names-from-hosts hosts)
+  (map (lambda (h)
+         (string-drop-right (host-canonical-name h) 6))
+       hosts))
+
+(define-public (fleet-canonical-names-from-hosts hosts)
+  (map (lambda (h)
+         (host-canonical-name h))
+       hosts))
 
 (define-public %fleet-names (list
                              "daban-urnud"
