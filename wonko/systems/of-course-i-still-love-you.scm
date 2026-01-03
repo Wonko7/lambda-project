@@ -28,13 +28,13 @@
 
 (use-package-modules file-systems xorg machine-learning synergy
                      ;; public net:
-                     admin linux)
+                     admin linux vpn)
 (use-service-modules linux nfs
                      desktop xorg sddm
                      networking ssh vpn
                      guix shepherd
                      ;; public net:
-                     configuration sysctl vpn)
+                     configuration sysctl)
 
 (define machine-home-services
   (list
@@ -144,6 +144,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; public facing services network config:
 
+(define azirevpn-service
+  (list
+   (shepherd-service
+     (requirement '(networking user-processes))
+     (provision '(azirevpn))
+     (start #~(lambda _
+                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
+                        "up" "azirevpn-fr-par")))
+     (stop #~(lambda _
+               (invoke (string-append #$wireguard-tools "/bin/wg-quick")
+                       "down" "azirevpn-fr-par")))
+     (documentation "azirevpn wg"))))
+
 (define %nftables-ruleset
   (plain-file "nftables.conf" "\
 ## for masquerading example: https://www.procustodibus.com/blog/2021/11/wireguard-nftables/
@@ -220,7 +233,6 @@ interface eth0                    # identifies the interface we are advertising 
                   "-n" "-C" #$config-file)))
       (stop #~(make-kill-destructor)))))
 
-
 (define radvd-service-type
   (service-type
     (name 'radvd)
@@ -230,6 +242,8 @@ interface eth0                    # identifies the interface we are advertising 
                               (compose list radvd-shepherd-service))))
     (default-value (radvd-configuration))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; the OS
 
 (define %of-course-i-still-love-you-os
   (operating-system
@@ -298,7 +312,7 @@ interface eth0                    # identifies the interface we are advertising 
         (service static-networking-service-type
                  (list
                   (static-networking
-                    (provision '(nothing))
+                    (provision '(static-net-conf))
                     (addresses
                      (list (network-address
                              (device "eth0")
@@ -317,6 +331,10 @@ interface eth0                    # identifies the interface we are advertising 
                          (filter (lambda (h)
                                    (not (equal? h %of-course-i-still-love-you-net-peer)))
                                  %star-fleet-hosts)))))
+
+        (simple-service 'azirevpn-service
+                        shepherd-root-service-type
+                        azirevpn-service)
 
         (modify-services %media-station-services
           (sysctl-service-type
