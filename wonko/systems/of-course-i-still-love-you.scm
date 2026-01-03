@@ -130,16 +130,16 @@
 (define skynet-llm-service
   (list
    (shepherd-service
-     (provision '(skynet))
-     (requirement '(user-processes networking file-systems))
-     (documentation "start skynet llm")
-     (start #~(make-forkexec-constructor
-               (list (string-append #$llama-cpp "/bin/llama-server")
-                     "--host" "192.168.1.7"
-                     "--port" "6060"
-                     "-ngl" "256"
-                     "-m" "/code/llms/phi-4-q4.gguf")))
-     (stop #~(make-kill-destructor)))))
+    (provision '(skynet))
+    (requirement '(user-processes networking file-systems))
+    (documentation "start skynet llm")
+    (start #~(make-forkexec-constructor
+              (list (string-append #$llama-cpp "/bin/llama-server")
+                    "--host" "192.168.1.7"
+                    "--port" "6060"
+                    "-ngl" "256"
+                    "-m" "/code/llms/phi-4-q4.gguf")))
+    (stop #~(make-kill-destructor)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; public facing services network config:
@@ -147,19 +147,19 @@
 (define wait-for-wan-service
   (list
    (shepherd-service
-     (requirement '(networking user-processes))
-     (provision '(wait-for-wan))
-     (start #~(lambda _
-                (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8")))
-     (stop #~(lambda _ #f))
-     (respawn? #t)
-     (respawn-delay 5) ;; retry every 5s
-     (respawn-limit
-      (let ((grace (* 10 60))) ;; 10m grace period
-        `(quote
-          ( ,grace .                           ;; admins hate this one simple trick:
-            ,(- (/ grace respawn-delay) 1))))) ;; change -1 to +1 for infinite respawn
-     (documentation "wait for wan"))))
+    (requirement '(networking user-processes))
+    (provision '(wait-for-wan))
+    (start #~(lambda _
+               (catch #t ;; catching doesn't help respawn.
+                 (lambda ()
+                   ;; (invoke "/run/current-system/utils-profile/bin/false" "-c3" "8.8.8.8")
+                   (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8"))
+                 (const #f))))
+    (one-shot? #f)
+    (respawn? #t) ;; is not respawned :(
+    (respawn-delay 5) ;; retry every 5s
+    ;; (respawn-limit #~'(600 . 1000)) ;; oo
+    (documentation "wait for wan"))))
 
 (define azirevpn-service
   (list
