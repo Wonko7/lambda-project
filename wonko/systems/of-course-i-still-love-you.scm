@@ -180,7 +180,7 @@ table inet firewall {
     chain forward {
         type filter hook forward priority 0; policy drop;
         ct state vmap { invalid : drop, established : accept, related : accept }
-        iifname wg0 oifname wg0 ct state new accept
+        iifname star-fleet oifname star-fleet ct state new accept
     }
     # no need to define output chain, default policy is accept if undefined.
 }
@@ -308,25 +308,15 @@ interface eth0                    # identifies the interface we are advertising 
                              (destination "2000::/3")
                              (gateway "2a01:e0a:b5a:de70::1")))))))
 
-
-        ;; wg:
-        ;; ent; mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ=
-        ;; sly; U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=
-        ;; ygg; bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0=
-
         (service wireguard-service-type
                  (wireguard-configuration
-                   (addresses '("10.42.0.1/24"))
+                   (interface "star-fleet")
+                   (addresses (net-peer-addr-to/24 %of-course-i-still-love-you-net-peer))
                    (peers
-                    (list
-                     (wireguard-peer
-                       (name "ent")
-                       (public-key "mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ=")
-                       (allowed-ips '("10.42.0.3/32")))
-                     (wireguard-peer
-                       (name "ygg")
-                       (public-key "bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0=")
-                       (allowed-ips '("10.42.0.2/32")))))))
+                    (map net-to-wg-peer
+                         (filter (lambda (h)
+                                   (not (equal? h %of-course-i-still-love-you-net-peer)))
+                                 %star-fleet-hosts)))))
 
         (modify-services %media-station-services
           (sysctl-service-type
