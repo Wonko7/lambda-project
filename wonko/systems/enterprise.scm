@@ -67,10 +67,10 @@
     (inherit %laptop-os)
     (host-name "enterprise")
     (bootloader
-      (bootloader-configuration
-        (bootloader   my-grub-efi-bootloader)
-        (targets      '("/boot"))
-        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
+     (bootloader-configuration
+      (bootloader   my-grub-efi-bootloader)
+      (targets      '("/boot"))
+      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
     (kernel-arguments (append '("resume_offset=5841087")
                               (operating-system-user-kernel-arguments %laptop-os)))
 
@@ -87,29 +87,17 @@
 
       (service wireguard-service-type
                (wireguard-configuration
-                 (inherit %star-fleet-client-config)
-                 (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
-
-      ;; (service wireguard-service-type
-      ;;          (wireguard-configuration
-      ;;            (addresses '("10.42.0.3/24"))
-      ;;            (peers
-      ;;             (list
-      ;;              (wireguard-peer
-      ;;                (name "sly")
-      ;;                (public-key "U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=")
-      ;;                (endpoint "[2a01:e0a:b5a:de71::1]:51820")
-      ;;                (allowed-ips '("0.0.0.0/0"))
-      ;;                (keep-alive 60))))))
+                (inherit %star-fleet-client-config)
+                (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
 
       %laptop-services))
 
     (mapped-devices
      (list (mapped-device
-             (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
-             (target "vault")
-             (type luks-device-mapping)
-             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
+            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+            (target "vault")
+            (type luks-device-mapping)
+            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")
