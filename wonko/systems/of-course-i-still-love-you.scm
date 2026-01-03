@@ -68,7 +68,7 @@
           (documentation "can't be arsed to move IRL"))))
       (append
        machine-home-services
-       %vanilla-wonko-services)))))
+       %highdpi-wonko-services)))))
 
 (define %media-station-home
   (home-environment
