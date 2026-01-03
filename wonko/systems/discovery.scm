@@ -66,8 +66,12 @@
 
 (define %discovery-os
   (operating-system
+
     (inherit %removable-laptop-os)
     (host-name "discovery")
+    (kernel-arguments (append '("resume_offset=3155200")
+                              (operating-system-user-kernel-arguments %removable-laptop-os)))
+
 
     (services
      (cons*
@@ -102,7 +106,9 @@
                      (type "vfat"))
                    (append
                     (make-vault-subvolumes mapped-devices)
-                    %base-file-systems)))))
+                    %base-file-systems)))
+    (swap-devices
+     (list (make-default-swap file-systems)))))
 
 %wonko-home
 %discovery-os
