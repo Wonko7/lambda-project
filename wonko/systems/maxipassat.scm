@@ -6,6 +6,7 @@
   (gnu packages pkg-config)
   (gnu packages version-control)
   (gnu services ci)
+  (gnu services databases)
   (forge forge)
   (forge laminar)
   (forge utils)
@@ -64,6 +65,7 @@
      (cons*
       (service forge-service-type
                (forge-configuration
+                (web-domain "of-course-i-still-love-you.star-fleet.local")
                 (projects
                  (list org-project))))
       (service laminar-service-type
@@ -83,9 +85,14 @@
                         %base-file-systems))
     (bootloader (bootloader-configuration
                   (bootloader grub-bootloader)))
+
+    ;; (users
+    ;;  (append (map crew->user-account %crew)
+    ;;          %base-user-accounts))
     (services
      (cons* (service postgresql-service-type
                      (postgresql-configuration
+                       (postgresql postgresql)
                        (data-directory db-dir)
                        (config-file
                         (postgresql-config-file
@@ -94,7 +101,8 @@
                            (plain-file "pg_hba.conf"
                                        "\
 local	all	all			trust
-host	all	all	10.0.0.1/32 	trust"))
+host	all	all	192.168.1.1/32	trust
+host	all	all	10.42.0.1/32	trust"))
                           (extra-config
                            '(("listen_addresses" "*")
                              ("log_directory"    "/var/log/postgresql")))))))
@@ -102,6 +110,6 @@ host	all	all	10.0.0.1/32 	trust"))
                      (postgresql-role-configuration
                       (roles
                        (list (postgresql-role
-                               (name "test")
+                               (name "wonko")
                                (create-database? #t))))))
             %base-services))))

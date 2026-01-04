@@ -39,17 +39,25 @@
    (uid 1099)
    (kb %dvorak-kb)))
 
+(define-public %www-user
+  (crew
+   (name "www")
+   (admin? #f)
+   (uid 1101)
+   (kb %dvorak-kb)))
+
+
 (define-public (crew->user-account crew)
   (user-account
-   (name (crew-name crew))
-   (uid (crew-uid crew))
-   (group "users")
-   (home-directory (string-append "/home/" (crew-name crew)))
-   (shell (file-append bash "/bin/bash"))
-   (supplementary-groups
-    (append '("lp" "netdev" "audio" "video")
-            (if (crew-admin? crew)
-                '("wheel" "kvm")
-                '())))))
+    (name (crew-name crew))
+    (uid (crew-uid crew))
+    (group "users")
+    (home-directory (string-append "/home/" (crew-name crew)))
+    (shell (file-append bash "/bin/bash"))
+    (supplementary-groups
+     (append '("lp" "netdev" "audio" "video")
+             (if (crew-admin? crew)
+                 '("wheel" "kvm")
+                 '())))))
 
-(define-public %crew (list %wonko %tina %media))
+(define-public %crew (list %wonko %tina %media %www-user))
