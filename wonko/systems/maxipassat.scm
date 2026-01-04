@@ -6,12 +6,15 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages databases)
+  #:use-module (gnu packages emacs)
   #:use-module (gnu services ci)
   #:use-module (gnu services databases)
   #:use-module (forge forge)
   #:use-module (forge laminar)
   #:use-module (forge utils)
-  #:use-module (wonko crew))
+  #:use-module (wonko crew)
+  #:use-module (wonko packages emacs-xyz)
+  )
 
 (use-package-modules rsync)
 
@@ -28,7 +31,7 @@
      (list autoconf automake coreutils
            gawk git-minimal gnu-make grep
            guile-3.0 sed pkg-config
-           ;; emacs emacs-org-ql
+           emacs emacs-org-sql
            )
      #~(begin
          (use-modules
@@ -38,7 +41,9 @@
                  "clone" #$org-repo ".")
          (invoke "ls" "-l" )
          (invoke "git" "log" "-n1")
-         (invoke "git" "branch")))))
+         (invoke "pwd")
+         (invoke "emacs -Q --script .ci/update-db.el")
+         ))))
 
 (define org-project
   (forge-project
