@@ -534,7 +534,7 @@ current time."
 (use-package appt
   :after org-agenda
   :demand t
-  :hook (system/wake-up-hook . my/idle-org-agenda-to-appt)
+  :hook (system/wake-up-hook . my/idle-org-agenda-to-appt-2m)
   :custom
   (appt-message-warning-time 12)
   (appt-display-interval 3)
@@ -542,14 +542,14 @@ current time."
   (appt-disp-window-function #'my/appt-notify)
   :config
   (appt-activate)
+  (defun my/idle-org-agenda-to-appt-2m ()
+    (message "[org->appt] in 2m: %s" (format-time-string "[%F %a %H:%M]"))
+    (run-at-time "2m" 0 #'my/idle-org-agenda-to-appt))
   (defun my/idle-org-agenda-to-appt ()
-    (let ((t1  (pp (org-today)))
-          (_ (sleep-for (* 60 2)))
-          (t2 (pp (org-today))))
-      (if (not (equal t1 t2))
-          (message "FOUND THE BUG")))
+    (message "[org->appt] when idle: %s" (format-time-string "[%F %a %H:%M]"))
     (run-with-idle-timer 10 nil #'org-agenda-to-appt))
   (run-at-time nil 3600 #'my/idle-org-agenda-to-appt))
+
 
 (use-package notifications
   :commands (my/appt-notify)
