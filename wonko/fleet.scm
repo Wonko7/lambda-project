@@ -103,9 +103,10 @@
           (host (net-peer-wg-address h)
                 (string-append (net-peer-name h) ".star-fleet.local")))
         %star-fleet-hosts)
-   (list
-    ;; (host "192.168.1.1" "daban-urnud.local") ;; RIP you now rest in silicon heaven
-    (host "192.168.1.9" "nispe.local"))))
+   ;; (list
+   ;;  ;; (host "192.168.1.1" "daban-urnud.local") ;; RIP you now rest in silicon heaven
+   ;;  (host "192.168.1.9" "nispe.local"))
+   ))
 
 (define-public (fleet-names-from-hosts hosts)
   (map (lambda (h)
