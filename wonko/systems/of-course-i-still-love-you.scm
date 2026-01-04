@@ -133,11 +133,11 @@
   (list
    (shepherd-service
      (provision '(skynet))
-     (requirement '(user-processes networking file-systems)) ;; FIXME: could wait for wan, or local net? 192 eth0 addr not ready when this is initially started.
+     (requirement '(user-processes udev networking file-systems)) ;; FIXME: could wait for wan, or local net? 192 eth0 addr not ready when this is initially started.
      (documentation "start skynet llm")
      (start #~(make-forkexec-constructor
                (list (string-append #$llama-cpp "/bin/llama-server")
-                     "--host" "192.168.1.7"
+                     "--host" "0"
                      "--port" "6060"
                      "-ngl" "256"
                      "-m" "/code/llms/phi-4-q4.gguf")))
@@ -158,15 +158,15 @@
                     (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8"))
                   (const #f))))
      (one-shot? #f)
-     (respawn? #t) ;; is not respawned :(
+     (respawn? #t) ;; FIXME is not respawned :(
      (respawn-delay 5) ;; retry every 5s
-     ;; (respawn-limit #~'(600 . 1000)) ;; oo
+     (respawn-limit #~'(600 . 1000)) ;; oo
      (documentation "wait for wan"))))
 
 (define azirevpn-service
   (list
    (shepherd-service
-     (requirement '(networking user-processes wait-for-wan))
+     (requirement '(networking user-processes udev)) ;;  wait-for-wan
      (provision '(azirevpn))
      (start #~(lambda _
                 (invoke (string-append #$wireguard-tools "/bin/wg-quick")
