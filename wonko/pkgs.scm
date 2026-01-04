@@ -367,7 +367,8 @@
   (list font-nerd-jetbrains
         font-google-roboto-mono
         font-nerd-symbols
-        font-goog-noto-emoji))
+        font-goog-noto-emoji
+        font-misc-misc))
 
 (define-public %ocaml-with-opam-world
   (list opam
