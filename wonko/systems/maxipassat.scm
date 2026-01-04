@@ -102,8 +102,9 @@
                            (plain-file "pg_hba.conf"
                                        "\
 local	all	all			trust
-host	all	all	192.168.1.1/32	trust
-host	all	all	10.42.0.1/32	trust"))
+host	all	all	127.0.0.1/32	trust
+#host	all	all	192.168.1.7/32	trust
+#host	all	all	10.42.0.1/32	trust"))
                           (extra-config
                            '(("listen_addresses" "*")
                              ("log_directory"    "/var/log/postgresql")))))))
