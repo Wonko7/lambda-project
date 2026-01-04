@@ -19,6 +19,7 @@
 (define git-dir (string-append base-dir "ci/"))
 (define db-dir (string-append base-dir "db/"))
 (define org-repo (string-append git-dir "org/"))
+(define forge-dir (string-append git-dir "forge/")) ;; has to exist otherwise forge does not start
 
 (define update-db
   (with-imported-modules
@@ -26,7 +27,9 @@
     (with-packages
      (list autoconf automake coreutils
            gawk git-minimal gnu-make grep
-           guile-3.0 sed pkg-config)
+           guile-3.0 sed pkg-config
+           ;; emacs emacs-org-ql
+           )
      #~(begin
          (use-modules
           (guix build utils))
@@ -66,7 +69,8 @@
      (cons*
       (service forge-service-type
                (forge-configuration
-                (web-domain "of-course-i-still-love-you.star-fleet.local")
+                (web-domain "")
+                (websites-directory forge-dir)
                 (projects
                  (list org-project))))
       (service laminar-service-type
