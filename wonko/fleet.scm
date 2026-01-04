@@ -74,11 +74,20 @@
    (local-address "")
    (wg-address "10.42.0.5")))
 
+(define-public %nispe-net-peer
+  (net-peer
+   (name "nispe")
+   (public-key "Tg9H0FfzLndUEcRYQ6EsqQzPIsozrCtUASQ4WVItWgQ=")
+   (local-address "192.168.1.9")
+   (wg-address "10.42.0.9")))
+
+
 (define-public %star-fleet-hosts
   (list %yggdrasill-net-peer
         %enterprise-net-peer
         %rocinante-net-peer
         %discovery-net-peer
+        %nispe-net-peer
         %of-course-i-still-love-you-net-peer))
 
 (define-public %fleet-hosts
