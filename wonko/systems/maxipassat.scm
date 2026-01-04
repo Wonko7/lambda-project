@@ -14,7 +14,8 @@
   #:use-module (forge utils)
   #:use-module (wonko crew)
   #:use-module (wonko packages emacs-xyz)
-  )
+  #:use-module (gnu packages emacs-xyz)
+  #:use-module (gnu packages emacs-build))
 
 (use-package-modules rsync)
 
@@ -31,18 +32,21 @@
      (list autoconf automake coreutils
            gawk git-minimal gnu-make grep
            guile-3.0 sed pkg-config
-           emacs emacs-org-sql
-           )
+           findutils
+           emacs emacs-org-sql emacs-org-ml
+           emacs-dash emacs-s emacs-f
+           postgresql)
      #~(begin
          (use-modules
           (guix build utils))
          (invoke "git" "-c"
                  (string-append "safe.directory=" #$org-repo)
                  "clone" #$org-repo ".")
-         (invoke "ls" "-l" )
-         (invoke "git" "log" "-n1")
          (invoke "pwd")
-         (invoke "emacs -Q --script .ci/update-db.el")
+         (invoke "ls" "-la" )
+         (invoke "ls" "-l" ".ci")
+         (invoke "git" "log" "-n1")
+         (invoke "emacs" "-Q" "--script" ".ci/update-db.el")
          ))))
 
 (define org-project
