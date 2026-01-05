@@ -152,8 +152,8 @@
        (method git-fetch)
        (uri
         (git-reference
-         (url "https://github.com/ndwarshuis/org-ml")
-         (commit (string-append "v" version))))
+          (url "https://github.com/ndwarshuis/org-ml")
+          (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
         (base32 "16j03fdikha5hwg8ifj0shsn4prbgf7dsggy3ksidpl63w3g05h4"))))
@@ -371,11 +371,12 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (inherit emacs)
     (inputs ;; libxaw is needed to get alpha-background working
      (modify-inputs (package-inputs emacs)
-                    (append libxaw)))
-    (arguments ;; [2025-11-30 Sun 16:28] dired is failing again :(
-     (substitute-keyword-arguments (package-arguments emacs)
-       ((#:phases phases) #~(modify-phases #$phases
-                              (delete 'check)))))))
+       (append libxaw)))
+    ;; (arguments ;; [2025-11-30 Sun 16:28] dired is failing again :(
+    ;;  (substitute-keyword-arguments (package-arguments emacs)
+    ;;    ((#:phases phases) #~(modify-phases #$phases
+    ;;                           (delete 'check)))))
+    ))
 
 (define-public emacs-exwm-custom-emacs
   (package
