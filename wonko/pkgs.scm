@@ -173,6 +173,7 @@
         emacs-inheritenv
         ;; maxi passat:
         emacs-org-sql
+        emacs-org-ml
 
         ;; completion framework
         emacs-embark
