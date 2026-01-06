@@ -111,8 +111,21 @@
       (name "maxipassat")
       (run update-mp))))))
 
+(define-public mp-dev-ci-services
+  (list
+   (service forge-service-type
+            (forge-configuration
+             (web-domain "")
+             (websites-directory forge-dir)
+             (projects
+              (list org-project
+                    mp-project))))
+   (service laminar-service-type
+            (laminar-configuration
+              (bind-http "192.168.1.7:7777")))))
+
 ;; sudo $(guix system container --network --share=/data/www/maxipassat/staging wonko/ci.scm)
-(define-public mp-dev-ci
+(define-public mp-dev-ci ;; -> mp job does not work in a container
   (operating-system
     (host-name "ci.maxipass.at")
     (timezone "UTC")
@@ -124,19 +137,8 @@
      (append (map crew->user-account %crew)
              %base-user-accounts))
     (packages %base-packages)
-    (services
-     (cons*
-      (service forge-service-type
-               (forge-configuration
-                (web-domain "")
-                (websites-directory forge-dir)
-                (projects
-                 (list org-project
-                       mp-project))))
-      (service laminar-service-type
-               (laminar-configuration
-                 (bind-http "192.168.1.7:7777")))
-      %base-services))))
+    (services (append mp-dev-ci-services
+                      %base-services))))
 
 (define-public mp-dev
   (operating-system

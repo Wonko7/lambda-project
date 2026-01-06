@@ -21,6 +21,7 @@
   #:use-module (wonko dotfiles)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
+  #:use-module (wonko systems maxipassat)
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
   #:export (%of-course-i-still-love-you-wonko-home
@@ -359,16 +360,18 @@ interface eth0                    # identifies the interface we are advertising 
                         shepherd-root-service-type
                         azirevpn-service)
 
-        (modify-services %media-station-services
-          (sysctl-service-type
-           config =>
-           (sysctl-configuration
-             (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
-                                 ("net.ipv4.ip_forward" . "1"))
-                               %default-sysctl-settings))))
-          (delete network-manager-service-type)
-          ;; public net stuff -->
-          ))))
+        (append
+         (modify-services %media-station-services
+           (sysctl-service-type
+            config =>
+            (sysctl-configuration
+              (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
+                                  ("net.ipv4.ip_forward" . "1"))
+                                %default-sysctl-settings))))
+           (delete network-manager-service-type))
+         ;; public net stuff -->
+         ;; ci:
+         mp-dev-ci-services))))
 
     (mapped-devices
      (list (mapped-device
