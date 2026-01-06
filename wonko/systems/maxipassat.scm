@@ -14,16 +14,23 @@
   #:use-module (forge utils)
   #:use-module (wonko crew)
   #:use-module (wonko packages emacs-xyz)
+  #:use-module (gnu packages package-management)
   #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages emacs-build))
 
 (use-package-modules rsync)
 
-(define base-dir "/data/www/maxi-passat/")
-(define git-dir (string-append base-dir "ci/"))
-(define db-dir (string-append base-dir "db/"))
-(define org-repo (string-append git-dir "org/"))
-(define forge-dir (string-append git-dir "forge/")) ;; has to exist otherwise forge does not start
+(define base-dir "/data/www/maxipassat/staging")
+(define ci-dir (string-append base-dir "/ci"))
+(define git-dir ci-dir)
+(define db-dir (string-append base-dir "/db"))
+(define org-repo (string-append git-dir "/org"))
+(define mp-repo (string-append git-dir "/maxipassat"))
+(define run-dir (string-append base-dir "/run")) ;; mkdir -p local/var/log/maxi_passat local/var/run/
+(define guix-prof-dir (string-append base-dir "/run/guix-profile"))
+(define mp-prof-dir (string-append base-dir "/run/mp-profile"))
+
+(define forge-dir (string-append ci-dir "/forge")) ;; has to exist otherwise forge does not start
 
 (define update-db
   (with-imported-modules
@@ -42,12 +49,31 @@
          (invoke "git" "-c"
                  (string-append "safe.directory=" #$org-repo)
                  "clone" #$org-repo ".")
-         (invoke "pwd")
-         (invoke "ls" "-la" )
-         (invoke "ls" "-l" ".ci")
          (invoke "git" "log" "-n1")
          (invoke "emacs" "-Q" "--script" ".ci/update-db.el")
          ))))
+
+(define update-mp
+  (with-imported-modules
+      '((guix build utils))
+    (with-packages
+     (list autoconf automake coreutils
+           gawk git-minimal gnu-make grep
+           guile-3.0 sed pkg-config guix)
+     #~(begin
+         (use-modules
+          (guix build utils))
+         (invoke "git" "-c"
+                 (string-append "safe.directory=" #$mp-repo)
+                 "clone" #$mp-repo ".")
+         (invoke "pwd")
+         (invoke "ls" "-la" )
+         (invoke
+          "guix" "pull" "-p" #$guix-prof-dir "-C"
+          (string-append #$run-dir "/maxipassat-staging-channel.scm"))
+         ~/.guix-extra-profiles/maxipassat/bin/guix install -p ~/.guix-extra-profiles/maxipassat-staging maxipassat
+         (invoke
+          (string-append #$guix-prof-dir "/bin/guix") "-p" #$mp-prof-dir "install" "maxipassat")))))
 
 (define org-project
   (forge-project
@@ -61,10 +87,34 @@
       (name "org")
       (run update-db))))))
 
-;; sudo $(guix system container --network --share=/data/www/org wonko/ci.scm)
+(define org-project
+  (forge-project
+   (name "org")
+   (user "wonko")
+   (repository org-repo) ;; needs to be --bare
+   (description "org")
+   (ci-jobs
+    (list
+     (forge-laminar-job
+      (name "org")
+      (run update-db))))))
+
+(define mp-project
+  (forge-project
+   (name "maxipassat")
+   (user "wonko")
+   (repository mp-repo) ;; needs to be --bare
+   (description "maxipassat")
+   (ci-jobs
+    (list
+     (forge-laminar-job
+      (name "maxipassat")
+      (run update-mp))))))
+
+;; sudo $(guix system container --network --share=/data/www/maxipassat/staging wonko/ci.scm)
 (define-public mp-dev-ci
   (operating-system
-    (host-name "ci.maxi-pass.at")
+    (host-name "ci.maxipass.at")
     (timezone "UTC")
     (bootloader
       (bootloader-configuration
@@ -81,7 +131,8 @@
                 (web-domain "")
                 (websites-directory forge-dir)
                 (projects
-                 (list org-project))))
+                 (list org-project
+                       mp-project))))
       (service laminar-service-type
                (laminar-configuration
                  (bind-http "192.168.1.7:7777")))
