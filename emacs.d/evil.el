@@ -160,7 +160,7 @@
                (kbd "<C-return>")  '+org/insert-item-below
                (kbd "<C-S-return>") '+org/insert-item-above)))
   :custom
-  (evil-org-key-theme '(navigation insert textobjects shift todo heading calendar))
+  (evil-org-key-theme '(navigation insert textobjects todo heading calendar))
   :config
   (setq evil-org-retain-visual-state-on-shift t)
   (setq evil-org-special-o/O nil)
