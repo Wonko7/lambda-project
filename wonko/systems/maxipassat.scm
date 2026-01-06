@@ -50,8 +50,7 @@
                  (string-append "safe.directory=" #$org-repo)
                  "clone" #$org-repo ".")
          (invoke "git" "log" "-n1")
-         (invoke "emacs" "-Q" "--script" ".ci/update-db.el")
-         ))))
+         (invoke "emacs" "-Q" "--script" ".ci/update-db.el")))))
 
 (define update-mp
   (with-imported-modules
@@ -119,13 +118,14 @@
              (websites-directory forge-dir)
              (projects
               (list org-project
-                    mp-project))))
+                    ;; mp-project
+                    ))))
    (service laminar-service-type
             (laminar-configuration
               (bind-http "192.168.1.7:7777")))))
 
 ;; sudo $(guix system container --network --share=/data/www/maxipassat/staging wonko/ci.scm)
-(define-public mp-dev-ci ;; -> mp job does not work in a container
+(define-public mp-dev-ci
   (operating-system
     (host-name "ci.maxipass.at")
     (timezone "UTC")

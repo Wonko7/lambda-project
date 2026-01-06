@@ -360,18 +360,15 @@ interface eth0                    # identifies the interface we are advertising 
                         shepherd-root-service-type
                         azirevpn-service)
 
-        (append
-         (modify-services %media-station-services
-           (sysctl-service-type
-            config =>
-            (sysctl-configuration
-              (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
-                                  ("net.ipv4.ip_forward" . "1"))
-                                %default-sysctl-settings))))
-           (delete network-manager-service-type))
-         ;; public net stuff -->
-         ;; ci:
-         mp-dev-ci-services))))
+        (modify-services %media-station-services
+          (sysctl-service-type
+           config =>
+           (sysctl-configuration
+             (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
+                                 ("net.ipv4.ip_forward" . "1"))
+                               %default-sysctl-settings))))
+          (delete network-manager-service-type)))))
+    ;; public net stuff -->
 
     (mapped-devices
      (list (mapped-device
