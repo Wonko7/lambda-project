@@ -259,6 +259,8 @@
     (let ((root (magit-with-toplevel default-directory)))
       (or (string= (substring root 0 5) "/ssh:")
           (string= root "/data/org/")
+          (string= root "/data/")
+          (string= root "/junkyard/")
           (string= root "/work/guix/guix")
           (string= root "/code/guix/guix")))))
 
