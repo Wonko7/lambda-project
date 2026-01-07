@@ -47,11 +47,10 @@
         (use-modules (ice-9 ports)
                      (guix build utils))
         (invoke
-         "/run/current-system/profile/bin/guix"
+         (string-append #$guix-prof-dir "/bin/guix")
          "shell"
-         "findutils"
-         "emacs" "emacs-org-sql" "emacs-org-ml" "emacs-dash" "emacs-s" "emacs-f"
-         "postgresql"
+         "findutils" "postgresql"
+         "emacs-minimal" "emacs-org-sql" "emacs-org-ml" "emacs-dash" "emacs-s" "emacs-f"
          "--"
          "emacs"
          "-Q" "--script" ".ci/update-db.el")
