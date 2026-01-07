@@ -18,10 +18,9 @@
 
 ;; stateful init:
 ;; 1/ clone repos in repo dir.
-;;   - maxipassat can be --bare
-;;   - org needs to no be --bare
-;;     + git config receive.denyCurrentBranch updateInstead
-;;     + git config core.hooksPath hooks
+;;   - maxipassat --bare
+;;   - org needs to be --bare
+;;   - working-org
 ;; 2/ init db from snapshot + grant priv to roles
 ;; 3/ mkdir maxipassat's run dirs
 ;; 4/ chown /data/www/maxipassat/staging/run/local/var/run/maxi_passat-cmd
@@ -43,25 +42,26 @@
   (with-imported-modules
       '((guix build utils)
         (ice-9 ports))
-    #~(begin
-        (use-modules (ice-9 ports)
-                     (guix build utils))
-        (system "echo yes >> /tmp/ci.log")
-        (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update started")
-        (invoke
-         (string-append #$guix-prof-dir "/bin/guix")
-         "shell"
-         "findutils" "postgresql"
-         "emacs-minimal" "emacs-org-sql" "emacs-org-ml" "emacs-dash" "emacs-s" "emacs-f"
-         "--"
-         "emacs"
-         "-Q" "--script" ".ci/update-db.el")
-        (system "echo done >> /tmp/ci.log")
-        (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update done")
-        (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
-                               "w")))
-          (display "maxi-passat:preprocess_org\n" port)
-          (close-port port)))))
+    (let ((packages '("git-minimal" "findutils" "postgresql"
+                      "emacs-minimal" "emacs-org-sql" "emacs-org-ml"
+                      "emacs-dash" "emacs-s" "emacs-f")))
+      #~(begin
+          (use-modules (ice-9 ports)
+                       (guix build utils))
+          (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ db-update'\" started")
+          (unsetenv "GIT_DIR")
+          (chdir "../working-org")
+          (invoke
+           (string-append #$guix-prof-dir "/bin/guix") "shell" #$@packages
+           "--" "git" "pull" "--force")
+          (invoke
+           (string-append #$guix-prof-dir "/bin/guix") "shell" #$@packages
+           "--" "emacs" "-Q" "--script" ".ci/update-db.el")
+          (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ db-update'\" done")
+          (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
+                                 "w")))
+            (display "maxi-passat:preprocess_org\n" port)
+            (close-port port))))))
 
 (define update-mp
   (with-imported-modules
@@ -69,6 +69,7 @@
     #~(begin
         (use-modules (ice-9 ports)
                      (guix build utils))
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ mp-update'\" started")
         (invoke
          "/run/current-system/profile/bin/guix"
          "pull" "--allow-downgrades" "-p" #$guix-prof-dir "-C"
@@ -76,6 +77,7 @@
         (invoke
          (string-append #$guix-prof-dir "/bin/guix")
          "install" "-p" #$mp-prof-dir "maxipassat")
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ mp-update'\" done")
         (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
                                "w")))
           (display "maxi-passat:kys\n" port)
