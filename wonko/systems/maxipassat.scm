@@ -46,6 +46,8 @@
     #~(begin
         (use-modules (ice-9 ports)
                      (guix build utils))
+        (system "echo yes >> /tmp/ci.log")
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update started")
         (invoke
          (string-append #$guix-prof-dir "/bin/guix")
          "shell"
@@ -54,6 +56,8 @@
          "--"
          "emacs"
          "-Q" "--script" ".ci/update-db.el")
+        (system "echo done >> /tmp/ci.log")
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update done")
         (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
                                "w")))
           (display "maxi-passat:preprocess_org\n" port)
