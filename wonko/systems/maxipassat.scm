@@ -311,69 +311,6 @@
 
 ;;; new
 
-(define-public maxipassat-ci-postgresql-service
-  (match-record-lambda <maxipassat-ci-configuration>
-      (base-path)
-    (define paths (make-paths base-path))
-    (service postgresql-service-type
-             (postgresql-configuration
-               (postgresql postgresql)
-               (data-directory (paths 'db))
-               (config-file
-                (postgresql-config-file
-                  (log-destination "stderr")
-                  (hba-file
-                   (plain-file "pg_hba.conf"
-                               "\
-local	all	all			trust
-host	all	all	127.0.0.1/32	trust
-#host	all	all	192.168.1.7/32	trust
-#host	all	all	10.42.0.1/32	trust"))
-                  (extra-config
-                   '(("listen_addresses" "*")
-                     ("log_directory"    "/var/log/postgresql")))))))))
-
-(define maxipassat-ci-postgresql-role
-  (match-record-lambda <maxipassat-ci-configuration>
-      (db-user)
-    (list (postgresql-role
-            (name db-user)
-            (create-database? #t))
-          (postgresql-role
-            (name "wonko")
-            (create-database? #t)))))
-
-;; (define database-services
-;;   (list (service postgresql-service-type
-;;                  (postgresql-configuration
-;;                    (postgresql postgresql)
-;;                    (data-directory db-path)
-;;                    (config-file
-;;                     (postgresql-config-file
-;;                       (log-destination "stderr")
-;;                       (hba-file
-;;                        (plain-file "pg_hba.conf"
-;;                                    "\
-;; local	all	all			trust
-;; host	all	all	127.0.0.1/32	trust
-;; #host	all	all	192.168.1.7/32	trust
-;; #host	all	all	10.42.0.1/32	trust"))
-;;                       (extra-config
-;;                        '(("listen_addresses" "*")
-;;                          ("log_directory"    "/var/log/postgresql")))))))
-
-;;         (service postgresql-role-service-type
-;;                  (postgresql-role-configuration
-;;                   (roles
-;;                    (list (postgresql-role
-;;                            (name "www")
-;;                            (create-database? #t))
-;;                          (postgresql-role
-;;                            (name "wonko")
-;;                            (create-database? #t))))))))
-
-
-
 (define maxipassat-ci-files-service
   (match-record-lambda <maxipassat-ci-configuration>
       (base-path deployment-name db-name db-user db-pass db-port db-host notify)
@@ -475,18 +412,84 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
         (,(paths 'mp-channel)
          ,(scheme-file "mp-channel.scm" mp-channel))))))
 
+(define-public maxipassat-ci-postgresql-service
+  (match-record-lambda <maxipassat-ci-configuration>
+      (base-path)
+    (define paths (make-paths base-path))
+    (service postgresql-service-type
+             (postgresql-configuration
+               (postgresql postgresql)
+               (data-directory (paths 'db))
+               (config-file
+                (postgresql-config-file
+                  (log-destination "stderr")
+                  (hba-file
+                   (plain-file "pg_hba.conf"
+                               "\
+local	all	all			trust
+host	all	all	127.0.0.1/32	trust
+#host	all	all	192.168.1.7/32	trust
+#host	all	all	10.42.0.1/32	trust"))
+                  (extra-config
+                   '(("listen_addresses" "*")
+                     ("log_directory"    "/var/log/postgresql")))))))))
+
+(define maxipassat-ci-postgresql-role
+  (match-record-lambda <maxipassat-ci-configuration>
+      (db-user)
+    (list (postgresql-role
+            (name db-user)
+            (create-database? #t))
+          (postgresql-role
+            (name "wonko")
+            (create-database? #t)))))
+
+(define maxipassat-ci-shepherd-service
+  (match-record-lambda <maxipassat-ci-configuration>
+      (base-path db-name db-user db-pass db-port)
+    (define paths (make-paths base-path))
+    (list
+     (shepherd-service
+       (provision '(maxipassat-ownership))
+       (requirement '(user-processes networking))
+       (documentation "init ownership")
+       (one-shot? #t)
+       (start #~(lambda _
+                  ;; (let* ((user (getpw "wesnothd"))
+                  ;;        (directory "/var/run/wesnothd"))
+                  ;;   ;; wesnothd creates a Unix-domain socket in DIRECTORY.
+                  ;;   (mkdir-p directory)
+                  ;;   (chown directory (passwd:uid user) (passwd:gid user)))
+                  (invoke "chown" "postgres:postgres" "-R" #$(paths 'db))
+                  (invoke "chown" "www:users" "-R" #$(paths 'run)))))
+
+     (shepherd-service
+       (provision '(maxipassat))
+       (requirement '(user-processes networking maxipassat-ownership))
+       (documentation "maxipassat")
+       ;; (respawn-delay 1)
+       (respawn-limit #~'(1 . 5000))
+       (start #~(make-forkexec-constructor
+                 (list (string-append #$(paths 'mp-prof) "/bin/maxi_passat"))
+                 #:user #$db-user
+                 #:group "users"
+                 #:environment-variables (cons*
+                                          (string-append "DBPORT=" #$db-port)
+                                          (string-append "DBUSER=" #$db-user)
+                                          (default-environment-variables))
+                 #:directory #$run-path))
+       (stop #~(make-kill-destructor))))))
+
 (define maxipassat-ci-service-type
   (service-type
     (name 'maxipassat-ci)
     (default-value (maxipassat-ci-configuration))
     (extensions
      (list
-      ;; (service-extension postgresql-service-type
-      ;;                    maxipassat-ci-postgresql-service)
       (service-extension postgresql-role-service-type
                          maxipassat-ci-postgresql-role)
-      ;; (service-extension shepherd-root-service-type
-      ;;                    maxipassat-ci-shepherd-service)
+      (service-extension shepherd-root-service-type
+                         maxipassat-ci-shepherd-service)
       (service-extension special-files-service-type
                          maxipassat-ci-files-service)))
     (description "maxipassat ci")))
