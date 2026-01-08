@@ -54,9 +54,9 @@
 
 (define mp-channel ;; used to guix pull & build on each git push
   #~(cons* (channel
-             (name 'mp)
-             (url #$mp-repo-path)
-             (branch "master"))
+            (name 'mp)
+            (url #$mp-repo-path)
+            (branch "master"))
            %default-channels))
 
 (define (update-mp-guix-build-cmds chan-path)
@@ -108,46 +108,46 @@
             (close-port port))))))
 
 (define emacs-update-db-job
-  #~(progn
-     (require 'org-sql)
+  (mixed-text-file "update-db.el"
+                   " (require 'org-sql)
 
-     (defun org-sql--disk-get-hashpathpairs ()
-       "Get a list of hashpathpair for org files on disk.
+   (defun org-sql--disk-get-hashpathpairs ()
+     \"Get a list of hashpathpair for org files on disk.
 Each hashpathpair will have it's :db-path set to nil. Only files in
-`org-sql-files' will be considered."
-       (cl-flet
-        ((get-md5
-          (fp)
-          (org-sql--on-success (org-sql--run-command "md5sum" `(,fp) nil)
-                               (car (s-split-up-to " " it-out 1))
-                               (error "Could not get md5")))
-         (expand-if-path
-          (fp)
-          (if (not (file-directory-p fp)) `(,fp)
-              (directory-files fp t "\\`.*\\.org\\(_archive\\)?\\'"))))
-        (if (stringp org-sql-files)
-            (error "`org-sql-files' must be a list of paths")
-            (->> (-mapcat #'expand-if-path org-sql-files)
-                 ;; This is why I'm redefining this: -> I want the relative path:
-                 ;; (-map #'expand-file-name)
-                 (-filter #'file-exists-p)
-                 (-uniq)
-                 (--map (cons (get-md5 it) it))))))
+`org-sql-files' will be considered.\"
+     (cl-flet
+      ((get-md5
+        (fp)
+        (org-sql--on-success (org-sql--run-command \"md5sum\" `(,fp) nil)
+                             (car (s-split-up-to \" \" it-out 1))
+                             (error \"Could not get md5\")))
+       (expand-if-path
+        (fp)
+        (if (not (file-directory-p fp)) `(,fp)
+            (directory-files fp t \"\\`.*\\.org\\(_archive\\)?\\'\"))))
+      (if (stringp org-sql-files)
+          (error \"`org-sql-files' must be a list of paths\")
+          (->> (-mapcat #'expand-if-path org-sql-files)
+               ;; This is why I'm redefining this: -> I want the relative path:
+               ;; (-map #'expand-file-name)
+               (-filter #'file-exists-p)
+               (-uniq)
+               (--map (cons (get-md5 it) it))))))
 
-     ;; (org-sql-user-init) -> you'll need to run that once first time you're creating your db
+   ;; (org-sql-user-init) -> you'll need to run that once first time you're creating your db
 
-     (setq org-sql-db-config '(postgres
-                               :hostname "localhost"
-                               :port 5432
-                               :username "wonko"
-                               :schema "org"
-                               :database "maxi_passat"))
+   (setq org-sql-db-config '(postgres
+                             :hostname \"localhost\"
+                             :port 5432
+                             :username \"wonko\"
+                             :schema \"org\"
+                             :database \"maxi_passat\"))
 
-     (setq org-sql-files
-           (split-string ;; this is the entry point to the org files I want in DB:
-            (shell-command-to-string "find here-be-dragons/ -name '*.org'") "\n" t))
+   (setq org-sql-files
+         (split-string ;; this is the entry point to the org files I want in DB:
+          (shell-command-to-string \"find here-be-dragons/ -name '*.org'\") \"\n\" t))
 
-     (org-sql-user-push)))
+   (org-sql-user-push)"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services:
@@ -155,31 +155,31 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
 (define database-services
   (list (service postgresql-service-type
                  (postgresql-configuration
-                   (postgresql postgresql)
-                   (data-directory db-path)
-                   (config-file
-                    (postgresql-config-file
-                      (log-destination "stderr")
-                      (hba-file
-                       (plain-file "pg_hba.conf"
-                                   "\
+                  (postgresql postgresql)
+                  (data-directory db-path)
+                  (config-file
+                   (postgresql-config-file
+                    (log-destination "stderr")
+                    (hba-file
+                     (plain-file "pg_hba.conf"
+                                 "\
 local	all	all			trust
 host	all	all	127.0.0.1/32	trust
 #host	all	all	192.168.1.7/32	trust
 #host	all	all	10.42.0.1/32	trust"))
-                      (extra-config
-                       '(("listen_addresses" "*")
-                         ("log_directory"    "/var/log/postgresql")))))))
+                    (extra-config
+                     '(("listen_addresses" "*")
+                       ("log_directory"    "/var/log/postgresql")))))))
 
         (service postgresql-role-service-type
                  (postgresql-role-configuration
                   (roles
                    (list (postgresql-role
-                           (name "www")
-                           (create-database? #t))
+                          (name "www")
+                          (create-database? #t))
                          (postgresql-role
-                           (name "wonko")
-                           (create-database? #t))))))))
+                          (name "wonko")
+                          (create-database? #t))))))))
 
 (define-public maxipassat-init-ci-services
   ;; can't run guix inside a container, this is provided as helper but still stateful :(
@@ -223,33 +223,33 @@ host	all	all	127.0.0.1/32	trust
                    shepherd-root-service-type
                    (list
                     (shepherd-service
-                      (provision '(maxipassat-ownership))
-                      (requirement '(user-processes networking))
-                      (documentation "init ownership")
-                      (one-shot? #t)
-                      (start #~(lambda _
-                                 (invoke "chown" "postgres:postgres" "-R" #$db-path)
-                                 (invoke "chown" "www:users" "-R" #$run-path))))))
+                     (provision '(maxipassat-ownership))
+                     (requirement '(user-processes networking))
+                     (documentation "init ownership")
+                     (one-shot? #t)
+                     (start #~(lambda _
+                                (invoke "chown" "postgres:postgres" "-R" #$db-path)
+                                (invoke "chown" "www:users" "-R" #$run-path))))))
 
    (simple-service 'maxipassat-init-ownership-service
                    shepherd-root-service-type
                    (list
                     (shepherd-service
-                      (provision '(maxipassat))
-                      (requirement '(user-processes networking maxipassat-ownership))
-                      (documentation "maxipassat")
-                      ;; (respawn-delay 1)
-                      (respawn-limit #~'(1 . 5000))
-                      (start #~(make-forkexec-constructor
-                                (list (string-append #$mp-prof-path "/bin/maxi_passat"))
-                                #:user "www"
-                                #:group "users"
-                                #:environment-variables (cons*
-                                                         "DBPORT=5432"
-                                                         "DBUSER=www"
-                                                         (default-environment-variables))
-                                #:directory #$run-path))
-                      (stop #~(make-kill-destructor)))))
+                     (provision '(maxipassat))
+                     (requirement '(user-processes networking maxipassat-ownership))
+                     (documentation "maxipassat")
+                     ;; (respawn-delay 1)
+                     (respawn-limit #~'(1 . 5000))
+                     (start #~(make-forkexec-constructor
+                               (list (string-append #$mp-prof-path "/bin/maxi_passat"))
+                               #:user "www"
+                               #:group "users"
+                               #:environment-variables (cons*
+                                                        "DBPORT=5432"
+                                                        "DBUSER=www"
+                                                        (default-environment-variables))
+                               #:directory #$run-path))
+                     (stop #~(make-kill-destructor)))))
 
    (extra-special-file (string-append mp-repo-path "/hooks/post-receive")
                        (program-file "mp_post-receive" update-mp-job))
@@ -258,7 +258,7 @@ host	all	all	127.0.0.1/32	trust
                        (program-file "org_post-receive" update-db-job))
 
    (extra-special-file emacs-update-db-job-path
-                       (scheme-file "update-db.el" emacs-update-db-job))
+                       emacs-update-db-job)
 
    (extra-special-file mp-channel-path
                        (scheme-file "mp-channel.scm" mp-channel))
