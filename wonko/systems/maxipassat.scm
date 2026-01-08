@@ -26,18 +26,53 @@
 ;; 4/ chown /data/www/maxipassat/staging/run/local/var/run/maxi_passat-cmd
 ;; 5/ sometimes postgres uid changes and you need to rechown db.
 
-(define base-dir "/data/www/maxipassat/staging")
-(define ci-dir (string-append base-dir "/ci"))
-(define git-dir ci-dir)
-(define db-dir (string-append base-dir "/db"))
-(define org-repo (string-append git-dir "/org"))
-(define mp-repo (string-append git-dir "/maxipassat"))
-(define run-dir (string-append base-dir "/run")) ;; mkdir -p local/var/log/maxi_passat local/var/run/
-(define guix-prof-dir (string-append run-dir "/gp/guix-profile"))
-(define mp-prof-dir (string-append run-dir "/gp/mp-profile")) ;; keeping this as a profile and not an guix shell so you can rollback to previous versions
-(define mp-channel-path (string-append run-dir "/gp/mp-channel.scm")) ;; has to exist otherwise forge does not start
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; paths
 
-(define update-db
+(define base-path "/data/www/maxipassat/staging")
+(define ci-path (string-append base-path "/ci"))
+(define git-path ci-path)
+(define db-path (string-append base-path "/db"))
+(define org-repo-path (string-append git-path "/org"))
+(define mp-repo-path (string-append git-path "/maxipassat"))
+(define emacs-update-db-job-path (string-append org-repo-path "/.ci/update-db.el")) ;; could be anywhere
+(define run-path (string-append base-path "/run")) ;; mkdir -p local/var/log/maxi_passat local/var/run/
+(define guix-prof-path (string-append run-path "/gp/guix-profile"))
+;; keeping this as a profile and not an guix shell so you can rollback to previous versions:
+(define mp-prof-path (string-append run-path "/gp/mp-profile"))
+(define mp-channel-path (string-append run-path "/gp/mp-channel.scm"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; jobs
+
+(define mp-channel ;; used to guix pull & build on each git push
+  #~(append (channel
+              (name 'mp)
+              (url #$mp-repo-path)
+              (branch "master"))
+            %default-channels))
+
+(define update-mp-job
+  (with-imported-modules
+      '((guix build utils))
+    #~(begin
+        (use-modules (ice-9 ports)
+                     (guix build utils))
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify mp-update started")
+        (invoke
+         "/run/current-system/profile/bin/guix"
+         "pull" "--allow-downgrades" "-p" #$guix-prof-path "-C"
+         (string-append #$run-path "/maxipassat-staging-channel.scm"))
+        (invoke
+         (string-append #$guix-prof-path "/bin/guix")
+         "install" "-p" #$mp-prof-path "maxipassat")
+        (system "ssh yggdrasill.local DISPLAY=:9 dunstify mp-update done")
+        (let ((port (open-file (string-append #$run-path "/local/var/run/maxi_passat-cmd")
+                               "w")))
+          (display "maxi-passat:kys\n" port)
+          (close-port port)))))
+
+(define update-db-job
   (with-imported-modules
       '((guix build utils)
         (ice-9 ports))
@@ -47,40 +82,20 @@
       #~(begin
           (use-modules (ice-9 ports)
                        (guix build utils))
-          (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ db-update'\" started")
+          (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update started")
           (unsetenv "GIT_DIR")
           (chdir "../working-org")
           (invoke
-           (string-append #$guix-prof-dir "/bin/guix") "shell" #$@packages
+           (string-append #$guix-prof-path "/bin/guix") "shell" #$@packages
            "--" "git" "pull" "--force")
           (invoke
-           (string-append #$guix-prof-dir "/bin/guix") "shell" #$@packages
-           "--" "emacs" "-Q" "--script" #$emacs-update-db-path)
-          (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ db-update'\" done")
-          (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
+           (string-append #$guix-prof-path "/bin/guix") "shell" #$@packages
+           "--" "emacs" "-Q" "--script" #$emacs-update-db-job-path)
+          (system "ssh yggdrasill.local DISPLAY=:9 dunstify db-update done")
+          (let ((port (open-file (string-append #$run-path "/local/var/run/maxi_passat-cmd")
                                  "w")))
             (display "maxi-passat:preprocess_org\n" port)
             (close-port port))))))
-
-(define update-mp
-  (with-imported-modules
-      '((guix build utils))
-    #~(begin
-        (use-modules (ice-9 ports)
-                     (guix build utils))
-        (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ mp-update'\" started")
-        (invoke
-         "/run/current-system/profile/bin/guix"
-         "pull" "--allow-downgrades" "-p" #$guix-prof-dir "-C"
-         (string-append #$run-dir "/maxipassat-staging-channel.scm"))
-        (invoke
-         (string-append #$guix-prof-dir "/bin/guix")
-         "install" "-p" #$mp-prof-dir "maxipassat")
-        (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ mp-update'\" done")
-        (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
-                               "w")))
-          (display "maxi-passat:kys\n" port)
-          (close-port port)))))
 
 (define emacs-update-db-job
   #~(progn
@@ -96,13 +111,13 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
           (org-sql--on-success (org-sql--run-command "md5sum" `(,fp) nil)
                                (car (s-split-up-to " " it-out 1))
                                (error "Could not get md5")))
-         (expand-if-dir
+         (expand-if-path
           (fp)
           (if (not (file-directory-p fp)) `(,fp)
               (directory-files fp t "\\`.*\\.org\\(_archive\\)?\\'"))))
         (if (stringp org-sql-files)
             (error "`org-sql-files' must be a list of paths")
-            (->> (-mapcat #'expand-if-dir org-sql-files)
+            (->> (-mapcat #'expand-if-path org-sql-files)
                  ;; This is why I'm redefining this: -> I want the relative path:
                  ;; (-map #'expand-file-name)
                  (-filter #'file-exists-p)
@@ -124,13 +139,6 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
 
      (org-sql-user-push)))
 
-(define mp-channel ;; used to guix pull & build on each git push
-  #~(append (channel
-              (name 'mp)
-              (url #$mp-repo)
-              (branch "master"))
-            %default-channels))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services:
 
@@ -140,7 +148,7 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
    (service postgresql-service-type
             (postgresql-configuration
               (postgresql postgresql)
-              (data-directory db-dir)
+              (data-directory db-path)
               (config-file
                (postgresql-config-file
                  (log-destination "stderr")
@@ -174,22 +182,22 @@ host	all	all	127.0.0.1/32	trust
                       ;; (respawn-delay 1)
                       (respawn-limit #~'(1 . 5000))
                       (start #~(make-forkexec-constructor
-                                (list (string-append #$mp-prof-dir "/bin/maxi_passat"))
+                                (list (string-append #$mp-prof-path "/bin/maxi_passat"))
                                 #:user "www"
                                 #:environment-variables (cons*
                                                          "DBPORT=5432"
                                                          "DBUSER=www"
                                                          (default-environment-variables))
-                                #:directory #$run-dir))
+                                #:directory #$run-path))
                       (stop #~(make-kill-destructor)))))
 
-   (extra-special-file (string-append mp-repo "/hooks/post-receive")
-                       (program-file "mp_post-receive" update-mp))
+   (extra-special-file (string-append mp-repo-path "/hooks/post-receive")
+                       (program-file "mp_post-receive" update-mp-job))
 
-   (extra-special-file (string-append org-repo "/hooks/post-receive")
-                       (program-file "org_post-receive" update-db))
+   (extra-special-file (string-append org-repo-path "/hooks/post-receive")
+                       (program-file "org_post-receive" update-db-job))
 
-   (extra-special-file emacs-update-db-path
+   (extra-special-file emacs-update-db-job-path
                        (scheme-file "update-db.el" emacs-update-db-job))
 
    (extra-special-file mp-channel-path
