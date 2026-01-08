@@ -13,6 +13,7 @@
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages emacs-build)
+  #:use-module (guix modules)
   #:use-module (wonko packages emacs-xyz)
   #:use-module (wonko crew))
 
@@ -21,6 +22,7 @@
 ;;   - maxipassat --bare
 ;;   - org needs to be --bare
 ;;   - working-org
+;; 1.1/ initial
 ;; 2/ init db from snapshot + grant priv to roles
 ;; 3/ mkdir maxipassat's run dirs
 ;; 4/ chown /data/www/maxipassat/staging/run/local/var/run/maxi_passat-cmd
@@ -37,20 +39,34 @@
 (define mp-repo-path (string-append git-path "/maxipassat"))
 (define emacs-update-db-job-path (string-append org-repo-path "/.ci/update-db.el")) ;; could be anywhere
 (define run-path (string-append base-path "/run")) ;; mkdir -p local/var/log/maxi_passat local/var/run/
-(define guix-prof-path (string-append run-path "/gp/guix-profile"))
+(define guix-prof-root-path (string-append ci-path "/gp"))
+(define guix-prof-path (string-append guix-prof-root-path "/guix-profile"))
 ;; keeping this as a profile and not an guix shell so you can rollback to previous versions:
-(define mp-prof-path (string-append run-path "/gp/mp-profile"))
-(define mp-channel-path (string-append run-path "/gp/mp-channel.scm"))
+(define mp-prof-path (string-append guix-prof-root-path "/mp-profile"))
+(define mp-channel-path (string-append guix-prof-root-path "/mp-channel.scm"))
+
+;; repos
+(define mp-origin "yggdrasill.local:/code/maxi-passat/maxi_passat/")
+(define org-origin "yggdrasill.local:/data/org")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; jobs
 
 (define mp-channel ;; used to guix pull & build on each git push
-  #~(append (channel
-              (name 'mp)
-              (url #$mp-repo-path)
-              (branch "master"))
-            %default-channels))
+  #~(cons* (channel
+             (name 'mp)
+             (url #$mp-repo-path)
+             (branch "master"))
+           %default-channels))
+
+(define (update-mp-guix-build-cmds chan-path)
+  #~(begin
+      (invoke
+       "/run/current-system/profile/bin/guix"
+       "pull" "--allow-downgrades" "-p" #$guix-prof-path "-C" #$chan-path)
+      (invoke
+       (string-append #$guix-prof-path "/bin/guix")
+       "install" "-p" #$mp-prof-path "maxipassat")))
 
 (define update-mp-job
   (with-imported-modules
@@ -59,13 +75,7 @@
         (use-modules (ice-9 ports)
                      (guix build utils))
         (system "ssh yggdrasill.local DISPLAY=:9 dunstify mp-update started")
-        (invoke
-         "/run/current-system/profile/bin/guix"
-         "pull" "--allow-downgrades" "-p" #$guix-prof-path "-C"
-         (string-append #$run-path "/maxipassat-staging-channel.scm"))
-        (invoke
-         (string-append #$guix-prof-path "/bin/guix")
-         "install" "-p" #$mp-prof-path "maxipassat")
+        #$(update-mp-guix-build-cmds mp-channel-path)
         (system "ssh yggdrasill.local DISPLAY=:9 dunstify mp-update done")
         (let ((port (open-file (string-append #$run-path "/local/var/run/maxi_passat-cmd")
                                "w")))
@@ -142,42 +152,91 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services:
 
-(define-public maxipassat-services
-  (list
-
-   (service postgresql-service-type
-            (postgresql-configuration
-              (postgresql postgresql)
-              (data-directory db-path)
-              (config-file
-               (postgresql-config-file
-                 (log-destination "stderr")
-                 (hba-file
-                  (plain-file "pg_hba.conf"
-                              "\
+(define database-services
+  (list (service postgresql-service-type
+                 (postgresql-configuration
+                   (postgresql postgresql)
+                   (data-directory db-path)
+                   (config-file
+                    (postgresql-config-file
+                      (log-destination "stderr")
+                      (hba-file
+                       (plain-file "pg_hba.conf"
+                                   "\
 local	all	all			trust
 host	all	all	127.0.0.1/32	trust
 #host	all	all	192.168.1.7/32	trust
 #host	all	all	10.42.0.1/32	trust"))
-                 (extra-config
-                  '(("listen_addresses" "*")
-                    ("log_directory"    "/var/log/postgresql")))))))
-   (service postgresql-role-service-type
-            (postgresql-role-configuration
-             (roles
-              (list (postgresql-role
-                      (name "www")
-                      (create-database? #t))
-                    (postgresql-role
-                      (name "wonko")
-                      (create-database? #t))))))
+                      (extra-config
+                       '(("listen_addresses" "*")
+                         ("log_directory"    "/var/log/postgresql")))))))
 
+        (service postgresql-role-service-type
+                 (postgresql-role-configuration
+                  (roles
+                   (list (postgresql-role
+                           (name "www")
+                           (create-database? #t))
+                         (postgresql-role
+                           (name "wonko")
+                           (create-database? #t))))))))
+
+(define-public maxipassat-init-ci-services
+  ;; can't run guix inside a container, this is provided as helper but still stateful :(
+  ;; run this in your container instead of maxipassat-services, run base-path/init from outside
+  ;; the container, might as well init db. then run maxipassat-services.
+  (let ((tmp-chan-path (string-append base-path "/channel.scm")))
+    (cons*
+     (extra-special-file tmp-chan-path
+                         (scheme-file "mp-channel.scm"
+                                      mp-channel))
+     (extra-special-file
+      (string-append base-path "/init-ci")
+      (program-file "init-ci"
+                    (with-imported-modules '((guix build utils))
+                      #~(begin
+                          (use-modules (guix build utils))
+                          (display "hello!\n")
+                          (when (not (directory-exists? #$guix-prof-path))
+                            (display "making paths!\n")
+                            (mkdir-p #$ci-path)
+                            (mkdir-p #$guix-prof-root-path)
+                            (mkdir-p (string-append #$run-path "/local/var/run"))
+                            (mkdir-p (string-append #$run-path "/local/var/log/maxi_passat"))
+                            (display "git repos init!\n")
+                            (invoke  "git" "clone" "--bare"
+                                     #$mp-origin #$mp-repo-path)
+                            (invoke "git" "clone" "--bare"
+                                    #$org-origin #$org-repo-path)
+                            (invoke "git" "clone"
+                                    #$org-repo-path
+                                    (string-append #$org-repo-path "/../working-org"))
+                            (display "guix profile build!\n")
+                            (invoke "guix" "pull" "-p" #$guix-prof-path "-C" #$tmp-chan-path)
+                            #$(update-mp-guix-build-cmds tmp-chan-path))
+                          #t))))
+     database-services)))
+
+(define-public maxipassat-services
+  (cons*
    (simple-service 'maxipassat-service
                    shepherd-root-service-type
                    (list
                     (shepherd-service
-                      (provision '(maxipassat))
+                      (provision '(maxipassat-ownership))
                       (requirement '(user-processes networking))
+                      (documentation "init ownership")
+                      (one-shot? #t)
+                      (start #~(lambda _
+                                 (invoke "chown" "postgres:postgres" "-R" #$db-path)
+                                 (invoke "chown" "www:users" "-R" #$run-path))))))
+
+   (simple-service 'maxipassat-init-ownership-service
+                   shepherd-root-service-type
+                   (list
+                    (shepherd-service
+                      (provision '(maxipassat))
+                      (requirement '(user-processes networking maxipassat-ownership))
                       (documentation "maxipassat")
                       ;; (respawn-delay 1)
                       (respawn-limit #~'(1 . 5000))
@@ -201,4 +260,6 @@ host	all	all	127.0.0.1/32	trust
                        (scheme-file "update-db.el" emacs-update-db-job))
 
    (extra-special-file mp-channel-path
-                       (scheme-file "mp-channel.scm" mp-channel))))
+                       (scheme-file "mp-channel.scm" mp-channel))
+
+   database-services))
