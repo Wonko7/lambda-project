@@ -243,6 +243,7 @@ host	all	all	127.0.0.1/32	trust
                       (start #~(make-forkexec-constructor
                                 (list (string-append #$mp-prof-path "/bin/maxi_passat"))
                                 #:user "www"
+                                #:group "users"
                                 #:environment-variables (cons*
                                                          "DBPORT=5432"
                                                          "DBUSER=www"
