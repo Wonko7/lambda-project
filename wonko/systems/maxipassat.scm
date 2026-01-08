@@ -48,7 +48,7 @@
   maxipassat-ci-configuration?
   (deployment-name maxipassat-ci-deployment-name (default "staging"))
   (base-path maxipassat-ci-base-path (default #f)) ;; you need to set this
-  (notify maxipassat-ci-notify (default (lambda (title status) #t)))
+  (notify maxipassat-ci-notify (default (lambda (title status) #~#t)))
   (db-user maxipassat-ci-db-user (default "www"))
   (db-port maxipassat-ci-db-port (default "5432"))
   (db-host maxipassat-ci-db-host (default "localhost"))
@@ -220,35 +220,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services:
 
-(define database-services
-  (list (service postgresql-service-type
-                 (postgresql-configuration
-                   (postgresql postgresql)
-                   (data-directory db-path)
-                   (config-file
-                    (postgresql-config-file
-                      (log-destination "stderr")
-                      (hba-file
-                       (plain-file "pg_hba.conf"
-                                   "\
-local	all	all			trust
-host	all	all	127.0.0.1/32	trust
-#host	all	all	192.168.1.7/32	trust
-#host	all	all	10.42.0.1/32	trust"))
-                      (extra-config
-                       '(("listen_addresses" "*")
-                         ("log_directory"    "/var/log/postgresql")))))))
-
-        (service postgresql-role-service-type
-                 (postgresql-role-configuration
-                  (roles
-                   (list (postgresql-role
-                           (name "www")
-                           (create-database? #t))
-                         (postgresql-role
-                           (name "wonko")
-                           (create-database? #t))))))))
-
 ;; (define-public maxipassat-init-ci-services
 ;;   ;; can't run guix inside a container, this is provided as helper but still stateful :(
 ;;   ;; run this in your container instead of maxipassat-services, run base-path/init from outside
@@ -339,6 +310,70 @@ host	all	all	127.0.0.1/32	trust
 ;;    database-services))
 
 ;;; new
+
+(define-public maxipassat-ci-postgresql-service
+  (match-record-lambda <maxipassat-ci-configuration>
+      (base-path)
+    (define paths (make-paths base-path))
+    (service postgresql-service-type
+             (postgresql-configuration
+               (postgresql postgresql)
+               (data-directory (paths 'db))
+               (config-file
+                (postgresql-config-file
+                  (log-destination "stderr")
+                  (hba-file
+                   (plain-file "pg_hba.conf"
+                               "\
+local	all	all			trust
+host	all	all	127.0.0.1/32	trust
+#host	all	all	192.168.1.7/32	trust
+#host	all	all	10.42.0.1/32	trust"))
+                  (extra-config
+                   '(("listen_addresses" "*")
+                     ("log_directory"    "/var/log/postgresql")))))))))
+
+(define maxipassat-ci-postgresql-role
+  (match-record-lambda <maxipassat-ci-configuration>
+      (db-user)
+    (list (postgresql-role
+            (name db-user)
+            (create-database? #t))
+          (postgresql-role
+            (name "wonko")
+            (create-database? #t)))))
+
+;; (define database-services
+;;   (list (service postgresql-service-type
+;;                  (postgresql-configuration
+;;                    (postgresql postgresql)
+;;                    (data-directory db-path)
+;;                    (config-file
+;;                     (postgresql-config-file
+;;                       (log-destination "stderr")
+;;                       (hba-file
+;;                        (plain-file "pg_hba.conf"
+;;                                    "\
+;; local	all	all			trust
+;; host	all	all	127.0.0.1/32	trust
+;; #host	all	all	192.168.1.7/32	trust
+;; #host	all	all	10.42.0.1/32	trust"))
+;;                       (extra-config
+;;                        '(("listen_addresses" "*")
+;;                          ("log_directory"    "/var/log/postgresql")))))))
+
+;;         (service postgresql-role-service-type
+;;                  (postgresql-role-configuration
+;;                   (roles
+;;                    (list (postgresql-role
+;;                            (name "www")
+;;                            (create-database? #t))
+;;                          (postgresql-role
+;;                            (name "wonko")
+;;                            (create-database? #t))))))))
+
+
+
 (define maxipassat-ci-files-service
   (match-record-lambda <maxipassat-ci-configuration>
       (base-path deployment-name db-name db-user db-pass db-port db-host notify)
@@ -447,9 +482,9 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
     (extensions
      (list
       ;; (service-extension postgresql-service-type
-      ;;                    maxpassat-ci-postgresql-service)
-      ;; (service-extension postgresql-ci-role-service-type
-      ;;                    maxpassat-ci-postgresql-role)
+      ;;                    maxipassat-ci-postgresql-service)
+      (service-extension postgresql-role-service-type
+                         maxipassat-ci-postgresql-role)
       ;; (service-extension shepherd-root-service-type
       ;;                    maxipassat-ci-shepherd-service)
       (service-extension special-files-service-type
