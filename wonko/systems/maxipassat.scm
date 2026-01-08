@@ -33,10 +33,9 @@
 (define org-repo (string-append git-dir "/org"))
 (define mp-repo (string-append git-dir "/maxipassat"))
 (define run-dir (string-append base-dir "/run")) ;; mkdir -p local/var/log/maxi_passat local/var/run/
-(define guix-prof-dir (string-append run-dir "/guix-profile"))
-(define mp-prof-dir (string-append run-dir "/mp-profile"))
-
-(define forge-dir (string-append ci-dir "/forge")) ;; has to exist otherwise forge does not start
+(define guix-prof-dir (string-append run-dir "/gp/guix-profile"))
+(define mp-prof-dir (string-append run-dir "/gp/mp-profile")) ;; keeping this as a profile and not an guix shell so you can rollback to previous versions
+(define mp-channel-path (string-append run-dir "/gp/mp-channel.scm")) ;; has to exist otherwise forge does not start
 
 (define update-db
   (with-imported-modules
@@ -56,7 +55,7 @@
            "--" "git" "pull" "--force")
           (invoke
            (string-append #$guix-prof-dir "/bin/guix") "shell" #$@packages
-           "--" "emacs" "-Q" "--script" ".ci/update-db.el")
+           "--" "emacs" "-Q" "--script" #$emacs-update-db-path)
           (system "ssh yggdrasill.local DISPLAY=:9 dunstify \"'☁️ db-update'\" done")
           (let ((port (open-file (string-append #$run-dir "/local/var/run/maxi_passat-cmd")
                                  "w")))
@@ -82,6 +81,55 @@
                                "w")))
           (display "maxi-passat:kys\n" port)
           (close-port port)))))
+
+(define emacs-update-db-job
+  #~(progn
+     (require 'org-sql)
+
+     (defun org-sql--disk-get-hashpathpairs ()
+       "Get a list of hashpathpair for org files on disk.
+Each hashpathpair will have it's :db-path set to nil. Only files in
+`org-sql-files' will be considered."
+       (cl-flet
+        ((get-md5
+          (fp)
+          (org-sql--on-success (org-sql--run-command "md5sum" `(,fp) nil)
+                               (car (s-split-up-to " " it-out 1))
+                               (error "Could not get md5")))
+         (expand-if-dir
+          (fp)
+          (if (not (file-directory-p fp)) `(,fp)
+              (directory-files fp t "\\`.*\\.org\\(_archive\\)?\\'"))))
+        (if (stringp org-sql-files)
+            (error "`org-sql-files' must be a list of paths")
+            (->> (-mapcat #'expand-if-dir org-sql-files)
+                 ;; This is why I'm redefining this: -> I want the relative path:
+                 ;; (-map #'expand-file-name)
+                 (-filter #'file-exists-p)
+                 (-uniq)
+                 (--map (cons (get-md5 it) it))))))
+
+     ;; (org-sql-user-init) -> you'll need to run that once first time you're creating your db
+
+     (setq org-sql-db-config '(postgres
+                               :hostname "localhost"
+                               :port 5432
+                               :username "wonko"
+                               :schema "org"
+                               :database "maxi_passat"))
+
+     (setq org-sql-files
+           (split-string ;; this is the entry point to the org files I want in DB:
+            (shell-command-to-string "find here-be-dragons/ -name '*.org'") "\n" t))
+
+     (org-sql-user-push)))
+
+(define mp-channel ;; used to guix pull & build on each git push
+  #~(append (channel
+              (name 'mp)
+              (url #$mp-repo)
+              (branch "master"))
+            %default-channels))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; services:
@@ -139,4 +187,10 @@ host	all	all	127.0.0.1/32	trust
                        (program-file "mp_post-receive" update-mp))
 
    (extra-special-file (string-append org-repo "/hooks/post-receive")
-                       (program-file "org_post-receive" update-db))))
+                       (program-file "org_post-receive" update-db))
+
+   (extra-special-file emacs-update-db-path
+                       (scheme-file "update-db.el" emacs-update-db-job))
+
+   (extra-special-file mp-channel-path
+                       (scheme-file "mp-channel.scm" mp-channel))))
