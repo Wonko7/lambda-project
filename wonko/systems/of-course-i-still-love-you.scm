@@ -35,7 +35,7 @@
                      networking ssh vpn
                      guix shepherd
                      ;; public net:
-                     configuration sysctl)
+                     certbot configuration sysctl)
 
 (define machine-home-services
   (list
@@ -323,6 +323,13 @@ interface eth0                    # identifies the interface we are advertising 
                         skynet-llm-service)
 
         ;; <!-- public net stuff:
+        (service certbot-service-type
+                 (certbot-configuration
+                   (certificates
+                    (list
+                     (certificate-configuration
+                      (domains '("maxipass.at" "www.maxipass.at")))))))
+
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
         (service radvd-service-type (radvd-configuration
