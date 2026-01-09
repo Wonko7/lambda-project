@@ -191,9 +191,18 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
                           :schema \"org\"
                           :database \"" db-name "\"))
 
-(setq org-sql-files
-      (split-string ;; this is the entry point to the org files I want in DB:
-       (shell-command-to-string \"find here-be-dragons/ -name '*.org'\") \"\n\" t))
+(pcase '" deployment-name ") ;; this is the entry point to the org files I want in DB:
+  ((or 'prod 'preprod) (setq org-base-path \"here-be-dragons/.www/\"))
+  (_                   (setq org-base-path \"here-be-dragons/\")))
+
+(setq org-sql-files (split-string
+                     (shell-command-to-string
+                       (concat \"find \" org-base-path \" -name '*.org'\"))
+                     \"\n\" t))
+
+setq org-sql-files
+      (split-string
+       (shell-command-to-string \"find here-be-dragons/ -name '*.org'\") \"\n\" t)
 
 (org-sql-user-push)"))
 
