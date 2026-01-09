@@ -217,11 +217,11 @@ setq org-sql-files
 
 (define maxipassat-init-ci-files-service
   (match-record-lambda <maxipassat-ci-configuration>
-      (base-path)
+      (base-path maxipassat-repo-origin org-repo-origin)
 
     (define paths (make-paths base-path))
 
-    (define mp-channel (make-mp-channel maxipassat-ci-mp-repo-origin))
+    (define mp-channel (make-mp-channel maxipassat-repo-origin))
     (define tmp-chan-path (string-append (paths 'run) "/init-chan.scm"))
 
     (define init-job
@@ -237,9 +237,9 @@ setq org-sql-files
               (mkdir-p (string-append #$(paths 'run) "/local/var/log/maxi_passat"))
               (display "git repos init!\n")
               (invoke "git" "clone" "--bare"
-                      #$maxipassat-ci-mp-repo-origin #$(paths 'mp-repo))
+                      #$maxipassat-repo-origin #$(paths 'mp-repo))
               (invoke "git" "clone" "--bare"
-                      #$maxipassat-ci-org-repo-origin #$(paths 'org-repo))
+                      #$org-repo-origin #$(paths 'org-repo))
               (invoke "git" "clone"
                       #$(paths 'org-repo)
                       (string-append #$(paths 'org-repo) "/../working-org"))
@@ -248,7 +248,7 @@ setq org-sql-files
               #$(update-mp-guix-build-cmds tmp-chan-path paths))
             #t)))
 
-    `((,(string-append (paths 'run) "/init-ci")
+    `((,(string-append base-path "/init-ci")
        ,(program-file "init-ci" init-job))
       (,tmp-chan-path
        ,(scheme-file "mp-channel.scm" mp-channel)))))
