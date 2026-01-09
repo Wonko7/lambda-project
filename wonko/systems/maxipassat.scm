@@ -259,11 +259,12 @@ setq org-sql-files
 
 (define-public maxipassat-ci-postgresql-service
   (match-record-lambda <maxipassat-ci-configuration>
-      (base-path)
+      (base-path db-port)
     (define paths (make-paths base-path))
     (service postgresql-service-type
              (postgresql-configuration
                (postgresql postgresql)
+               (port db-port)
                (data-directory (paths 'db))
                (config-file
                 (postgresql-config-file
