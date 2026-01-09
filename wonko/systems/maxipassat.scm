@@ -221,8 +221,9 @@ setq org-sql-files
 
     (define paths (make-paths base-path))
 
-    (define mp-channel (make-mp-channel maxipassat-repo-origin))
-    (define tmp-chan-path (string-append (paths 'run) "/init-chan.scm"))
+    (define init-path (string-append base-path "/init"))
+    (define init-chan-path (string-append init-path "/init-chan.scm"))
+    (define init-channel (make-mp-channel (paths 'mp-repo))) ;; during init will be orig
 
     (define init-job
       (with-imported-modules '((guix build utils))
@@ -244,14 +245,14 @@ setq org-sql-files
                       #$(paths 'org-repo)
                       (string-append #$(paths 'org-repo) "/../working-org"))
               (display "guix profile build!\n")
-              (invoke "guix" "pull" "-p" #$(paths 'guix-prof) "-C" #$tmp-chan-path)
-              #$(update-mp-guix-build-cmds tmp-chan-path paths))
+              (invoke "guix" "pull" "-p" #$(paths 'guix-prof) "-C" #$init-chan-path)
+              #$(update-mp-guix-build-cmds init-chan-path paths))
             #t)))
 
-    `((,(string-append base-path "/init-ci")
+    `((,(string-append base-path "/init/init-ci")
        ,(program-file "init-ci" init-job))
-      (,tmp-chan-path
-       ,(scheme-file "mp-channel.scm" mp-channel)))))
+      (,init-chan-path
+       ,(scheme-file "tmp-channel.scm" init-channel)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; db services
