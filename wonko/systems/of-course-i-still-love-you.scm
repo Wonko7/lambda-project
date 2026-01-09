@@ -35,7 +35,7 @@
                      networking ssh vpn
                      guix shepherd
                      ;; public net:
-                     certbot configuration sysctl)
+                     certbot configuration sysctl web)
 
 (define machine-home-services
   (list
@@ -329,6 +329,31 @@ interface eth0                    # identifies the interface we are advertising 
                     (list
                      (certificate-configuration
                       (domains '("maxipass.at" "www.maxipass.at")))))))
+
+        (service
+         nginx-service-type
+         (nginx-configuration
+           (server-blocks
+            (list (nginx-server-configuration
+                    (server-name '("www.maxipass.at"))
+                    (listen '("443 ssl" "[::]:443 ssl"))
+                    (root (string-append
+                           ;; (maxipassat-ci-base-path mp-prod-config)
+                           "/data/www/maxipassat/prod"
+                           "/static"))
+                    (ssl-certificate "/etc/letsencrypt/live/maxipass.at/fullchain.pem")
+                    (ssl-certificate-key "/etc/letsencrypt/live/maxipass.at/privkey.pem")
+                    (locations
+                     (list
+                      (nginx-location-configuration
+                        (uri "/")
+                        (body `(,(string-append "proxy_pass http://127.0.0.1:"
+                                                "8042" ;; mp-prod-config
+                                                ";")
+                                "proxy_set_header Host $host;"
+                                "proxy_set_header X-Real-IP $remote_addr;"
+                                "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+                                "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
 
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
