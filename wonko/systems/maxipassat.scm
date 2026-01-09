@@ -24,6 +24,7 @@
             maxipassat-ci-deployment-name
             maxipassat-ci-base-path
             maxipassat-ci-notify
+            maxipassat-ci-port
             maxipassat-ci-db-user
             maxipassat-ci-db-port
             maxipassat-ci-db-host
@@ -41,6 +42,7 @@
   (deployment-name maxipassat-ci-deployment-name (default "staging"))
   (base-path maxipassat-ci-base-path (default #f)) ;; you need to set this
   (notify maxipassat-ci-notify (default (lambda (title status) #~#t)))
+  (port maxipassat-ci-port (default "8080"))
   (db-user maxipassat-ci-db-user (default "www"))
   (db-port maxipassat-ci-db-port (default "5432"))
   (db-host maxipassat-ci-db-host (default "localhost"))
@@ -282,7 +284,7 @@ host	all	all	127.0.0.1/32	trust
 
 (define-public maxipassat-ci-shepherd-service
   (match-record-lambda <maxipassat-ci-configuration>
-      (base-path db-name db-user db-pass db-port)
+      (base-path port db-name db-user db-pass db-port)
     (define paths (make-paths base-path))
     (list
      (shepherd-service
@@ -315,6 +317,7 @@ host	all	all	127.0.0.1/32	trust
                  #:user #$db-user
                  #:group "users"
                  #:environment-variables (cons*
+                                          (string-append "PORT=" #$port)
                                           (string-append "DBPORT=" #$db-port)
                                           (string-append "DBUSER=" #$db-user)
                                           (default-environment-variables))
