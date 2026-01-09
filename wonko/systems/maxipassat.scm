@@ -42,9 +42,9 @@
   (deployment-name maxipassat-ci-deployment-name (default "staging"))
   (base-path maxipassat-ci-base-path (default #f)) ;; you need to set this
   (notify maxipassat-ci-notify (default (lambda (title status) #~#t)))
-  (port maxipassat-ci-port (default "8080"))
+  (port maxipassat-ci-port (default 8080))
   (db-user maxipassat-ci-db-user (default "www"))
-  (db-port maxipassat-ci-db-port (default "5432"))
+  (db-port maxipassat-ci-db-port (default 5432))
   (db-host maxipassat-ci-db-host (default "localhost"))
   (db-pass maxipassat-ci-db-pass (default ""))
   (db-name maxipassat-ci-db-name (default "maxi_passat"))
@@ -186,7 +186,7 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
 
 (setq org-sql-db-config '(postgres
                           :hostname \"" db-host "\"
-                          :port "db-port"
+                          :port " (number->string db-port) "
                           :username \"" db-user "\"
                           :schema \"org\"
                           :database \"" db-name "\"))
@@ -328,8 +328,10 @@ host	all	all	127.0.0.1/32	trust
                  #:user #$db-user
                  #:group "users"
                  #:environment-variables (cons*
-                                          (string-append "PORT=" #$port)
-                                          (string-append "DBPORT=" #$db-port)
+                                          (string-append "PORT="
+                                                         #$(number->string port))
+                                          (string-append "DBPORT="
+                                                         #$(number->string db-port))
                                           (string-append "DBUSER=" #$db-user)
                                           (default-environment-variables))
                  #:directory #$(paths 'run)))
