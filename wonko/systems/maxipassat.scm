@@ -206,7 +206,7 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
       (,(paths 'mp-channel)
        ,(scheme-file "mp-channel.scm" mp-channel)))))
 
-(define maxipassat-ci-init-files-service
+(define maxipassat-init-ci-files-service
   (match-record-lambda <maxipassat-ci-configuration>
       (base-path)
 
@@ -239,10 +239,10 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
               #$(update-mp-guix-build-cmds tmp-chan-path paths))
             #t)))
 
-    ((,(string-append (paths 'run) "/init-ci")
-      ,(program-file "init-ci" init-job))
-     (,tmp-chan-path
-      ,(scheme-file "mp-channel.scm" mp-channel)))))
+    `((,(string-append (paths 'run) "/init-ci")
+       ,(program-file "init-ci" init-job))
+      (,tmp-chan-path
+       ,(scheme-file "mp-channel.scm" mp-channel)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; db services
