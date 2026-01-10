@@ -119,7 +119,7 @@
             (use-modules (ice-9 ports)
                          (guix build utils))
             #$(notify "mp-update" (string-append deployment-name ": started"))
-            #$(update-mp-guix-build-cmds (paths 'mp-repo) paths)
+            #$(update-mp-guix-build-cmds (paths 'mp-channel) paths)
             #$(notify "mp-update" (string-append deployment-name ": done"))
             (let ((port (open-file (string-append #$(paths 'run)
                                                   "/local/var/run/maxi_passat-cmd")
