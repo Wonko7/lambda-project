@@ -484,7 +484,8 @@
    openntpd
    wireguard-tools
    iproute
-   iw))
+   iw
+   ndisc6))
 
 (define-public %os-disk-world
   (list
