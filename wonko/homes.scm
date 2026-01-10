@@ -627,6 +627,9 @@
                                            (option '(#\h "hub") #f #f
                                                    (lambda (opt name arg acc)
                                                      (alist-cons 'hub #t acc)))
+                                           (option '(#\b "berg") #f #f
+                                                   (lambda (opt name arg acc)
+                                                     (alist-cons 'berg #t acc)))
                                            (option '(#\r "repo") #t #f
                                                    (lambda (opt name arg acc)
                                                      (alist-cons 'repo arg acc))))
@@ -656,6 +659,9 @@
                (when (assoc-ref args 'hub)
                  (system
                   (string-append git " remote add hub git@github.com:wonko7/" name)))
+               (when (assoc-ref args 'berg)
+                 (system
+                  (string-append git " remote add hub git@codeberg.com:wonko/" name)))
                (when (assoc-ref args 'push-remote)
                  (let* ((pipe (open-input-pipe
                                (string-append git " branch --show-current")))

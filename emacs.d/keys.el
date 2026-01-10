@@ -172,6 +172,7 @@
     "graf" (li (async-shell-command "git-add-remotes -f"))
     "gral" (li (async-shell-command "git-add-remotes -l"))
     "grah" (li (async-shell-command "git-add-remotes -h"))
+    "grab" (li (async-shell-command "git-add-remotes -b"))
     "grap" (lambda ()
              (interactive)
              (shell-command-to-string "git remote")
