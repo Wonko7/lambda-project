@@ -47,7 +47,7 @@
   (db-port maxipassat-ci-db-port (default 5432))
   (db-host maxipassat-ci-db-host (default "localhost"))
   (db-pass maxipassat-ci-db-pass (default ""))
-  (db-name maxipassat-ci-db-name (default "maxi_passat"))
+  (db-name maxipassat-ci-db-name (default "maxipassat"))
   (org-repo-origin maxipassat-ci-org-repo-origin (default #f))
   (maxipassat-repo-origin maxipassat-ci-maxipassat-repo-origin (default #f)))
 
@@ -122,9 +122,9 @@
             #$(update-mp-guix-build-cmds (paths 'mp-channel) paths)
             #$(notify "mp-update" (string-append deployment-name ": done"))
             (let ((port (open-file (string-append #$(paths 'run)
-                                                  "/local/var/run/maxi_passat-cmd")
+                                                  "/local/var/run/maxipassat-cmd")
                                    "w")))
-              (display "maxi-passat:kys\n" port)
+              (display "maxipassat:kys\n" port)
               (close-port port)))))
 
     (define update-db-job
@@ -149,9 +149,9 @@
                "--" "emacs" "-Q" "--script" #$(paths 'emacs-update-db-job))
               #$(notify "db-update" (string-append deployment-name ": done"))
               (let ((port (open-file (string-append #$(paths 'run)
-                                                    "/local/var/run/maxi_passat-cmd")
+                                                    "/local/var/run/maxipassat-cmd")
                                      "w")))
-                (display "maxi-passat:preprocess_org\n" port)
+                (display "maxipassat:preprocess_org\n" port)
                 (close-port port))))))
 
     (define emacs-update-db-job
@@ -219,7 +219,7 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
 
     (define init-path (string-append base-path "/init"))
     (define init-chan-path (string-append init-path "/init-chan.scm"))
-    (define init-channel (make-mp-channel (paths 'mp-repo))) ;; during init will be orig
+    (define init-channel (make-mp-channel (paths 'mp-repo)))
 
     (define init-job
       (with-imported-modules '((guix build utils))
@@ -230,8 +230,9 @@ Each hashpathpair will have it's :db-path set to nil. Only files in
               (display "making paths!\n")
               (mkdir-p #$(paths 'ci))
               (mkdir-p #$(paths 'guix-prof-root))
+              (mkdir-p #$(string-append base-path "/static")) ;; unused for now
               (mkdir-p (string-append #$(paths 'run) "/local/var/run"))
-              (mkdir-p (string-append #$(paths 'run) "/local/var/log/maxi_passat"))
+              (mkdir-p (string-append #$(paths 'run) "/local/var/log/maxipassat"))
               (display "git repos init!\n")
               (invoke "git" "clone" "--bare"
                       #$maxipassat-repo-origin #$(paths 'mp-repo))
@@ -320,7 +321,7 @@ host	all	all	127.0.0.1/32	trust
        ;; (respawn-delay 1)
        (respawn-limit #~'(1 . 5000))
        (start #~(make-forkexec-constructor
-                 (list (string-append #$(paths 'mp-prof) "/bin/maxi_passat"))
+                 (list (string-append #$(paths 'mp-prof) "/bin/maxipassat"))
                  #:user #$db-user
                  #:group "users"
                  #:environment-variables (cons*
