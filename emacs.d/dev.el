@@ -170,7 +170,7 @@
 
   (setq sql-product 'postgres)
   (setq sql-postgres-login-params '((user :default "wonko")
-                                    (database :default "maxi_passat")
+                                    (database :default "maxipassat")
                                     (server :default "localhost")
                                     (port :default 3000))))
 

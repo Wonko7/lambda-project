@@ -188,7 +188,7 @@
   :demand t
   :custom
   (projectile-project-search-path '(( "/code" . 0) ( "/work" . 0) ("/data" . 0)
-                                    ( "/code/maxi-passat" . 0)))
+                                    ( "/code/maxipassat" . 0)))
   (projectile-sort-order 'recently-active)
   (projectile-enable-caching t)
   :config
