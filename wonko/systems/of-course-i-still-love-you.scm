@@ -21,9 +21,9 @@
   #:use-module (wonko dotfiles)
   #:use-module (wonko homes)
   #:use-module (wonko systems)
-  #:use-module (wonko systems maxipassat)
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
+  #:use-module (maxipassat services ci)
   #:export (%of-course-i-still-love-you-wonko-home
             %of-course-i-still-love-you-os))
 
@@ -262,6 +262,19 @@ interface eth0                    # identifies the interface we are advertising 
                               (compose list radvd-shepherd-service))))
     (default-value (radvd-configuration))))
 
+(define mp-prod-config
+  (maxipassat-ci-configuration
+   (deployment-name "prod")
+   (base-path "/data/www/maxipassat/prod")
+   (notify (lambda (title status)
+             #~(system (string-append "ssh yggdrasill.local DISPLAY=:9 dunstify "
+                                      "\"'" #$title "'\" \"'" #$status "'\""))))
+   (db-user "www")
+   (db-port 6942)
+   (port 8042)
+   (org-repo-origin "yggdrasill.local:/data/org")
+   (maxipassat-repo-origin "yggdrasill.local:/code/maxipassat/maxipassat")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the OS
 
@@ -338,8 +351,7 @@ interface eth0                    # identifies the interface we are advertising 
                     (server-name '("www.maxipass.at"))
                     (listen '("443 ssl" "[::]:443 ssl"))
                     (root (string-append
-                           ;; (maxipassat-ci-base-path mp-prod-config)
-                           "/data/www/maxipassat/prod"
+                           (maxipassat-ci-base-path mp-prod-config)
                            "/static"))
                     (ssl-certificate "/etc/letsencrypt/live/maxipass.at/fullchain.pem")
                     (ssl-certificate-key "/etc/letsencrypt/live/maxipass.at/privkey.pem")
@@ -348,12 +360,16 @@ interface eth0                    # identifies the interface we are advertising 
                       (nginx-location-configuration
                         (uri "/")
                         (body `(,(string-append "proxy_pass http://127.0.0.1:"
-                                                "8042" ;; mp-prod-config
+                                                (number->string
+                                                 (maxipassat-ci-port mp-prod-config))
                                                 ";")
                                 "proxy_set_header Host $host;"
                                 "proxy_set_header X-Real-IP $remote_addr;"
                                 "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
                                 "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
+
+        (maxipassat-ci-postgresql-service mp-prod-config)
+        (service maxipassat-ci-service-type mp-prod-config)
 
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
@@ -388,9 +404,10 @@ interface eth0                    # identifies the interface we are advertising 
                         shepherd-root-service-type
                         wait-for-wan-service)
 
-        (simple-service 'azirevpn-service
-                        shepherd-root-service-type
-                        azirevpn-service)
+        ;; until I conntrack web hosting out of this conn.
+        ;; (simple-service 'azirevpn-service
+        ;;                 shepherd-root-service-type
+        ;;                 azirevpn-service)
 
         (modify-services %media-station-services
           (sysctl-service-type
