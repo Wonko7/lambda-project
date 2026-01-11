@@ -175,6 +175,24 @@
      (stop #~(lambda _
                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
                        "down" "azirevpn-fr-par")))
+     (documentation "azirevpn wg"))
+   (shepherd-service
+     (requirement '(networking user-processes azirevpn)) ;;  wait-for-wan
+     (provision '(azirevpn-web-hosting-routing))
+     (start #~(lambda _
+                (invoke (string-append #$iproute "/sbin/ip")
+                        "-6" "rule" "add" "priority" "1010" "to"
+                        "2a01:e0a:b5a:de71::1" "lookup" "main")
+                (invoke (string-append #$iproute "/sbin/ip")
+                        "-6" "rule" "add" "priority" "1010" "from"
+                        "2a01:e0a:b5a:de71::1" "lookup" "main")))
+     (stop #~(lambda _
+               (invoke (string-append #$iproute "/sbin/ip")
+                       "-6" "rule" "del" "priority" "1010" "to"
+                       "2a01:e0a:b5a:de71::1" "lookup" "main")
+               (invoke (string-append #$iproute "/sbin/ip")
+                       "-6" "rule" "del" "priority" "1010" "from"
+                       "2a01:e0a:b5a:de71::1" "lookup" "main")))
      (documentation "azirevpn wg"))))
 
 (define %nftables-ruleset
@@ -404,10 +422,9 @@ interface eth0                    # identifies the interface we are advertising 
                         shepherd-root-service-type
                         wait-for-wan-service)
 
-        ;; until I conntrack web hosting out of this conn.
-        ;; (simple-service 'azirevpn-service
-        ;;                 shepherd-root-service-type
-        ;;                 azirevpn-service)
+        (simple-service 'azirevpn-service
+                        shepherd-root-service-type
+                        azirevpn-service)
 
         (modify-services %media-station-services
           (sysctl-service-type
