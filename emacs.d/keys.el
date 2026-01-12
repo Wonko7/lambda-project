@@ -38,7 +38,7 @@
     "yP" #'consult-yank-pop
 
     ;; regroup shells / tmp
-    "ts"  #'ws/proj-shell
+    "ts"  #'ws/shell
     "tt"  #'ws/proj-shell
     "tr"  #'ws/remote-fleet-shell-with-default
     "tR"  #'ws/remote-fleet-shell

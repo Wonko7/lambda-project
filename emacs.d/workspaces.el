@@ -407,6 +407,12 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; per workspace shells
 
+  (defun ws/shell ()
+    (interactive)
+    (shell
+     (concat
+      "*" (int-to-string exwm-workspace-current-index) ": " default-directory "*")))
+
   (defun ws/proj-shell (&optional project)
     (interactive)
     (let* ((pr (or project (projectile-project-root default-directory) "~/")))
