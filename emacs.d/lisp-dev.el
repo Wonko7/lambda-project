@@ -36,6 +36,10 @@
   :config
   (my/nuke-all-gz-for-origami))
 
+(use-package geiser-guile-mode
+  :config
+  (add-to-list 'geiser-guile-load-path "/code/guix"))
+
 (use-package evil-cleverparens
   :hook ((emacs-lisp-mode-hook . evil-cleverparens-mode)
          (scheme-mode-hook . evil-cleverparens-mode))
