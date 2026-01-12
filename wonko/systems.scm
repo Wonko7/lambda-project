@@ -55,38 +55,33 @@
 
 (define %channels ;; this is pinned, generated with `guix describe -f channels`
   (list (channel
-         (name 'guix-forge)
-         (url "https://git.systemreboot.net/guix-forge/")
-         (branch "main")
-         (commit
-          "ea30fe6a654bc519a6b527d37788fd615f35f0ec")
-         (introduction
-          (make-channel-introduction
-           "0432e37b20dd678a02efee21adf0b9525a670310"
-           (openpgp-fingerprint
-            "7F73 0343 F2F0 9F3C 77BF  79D3 2E25 EE8B 6180 2BB3"))))
+          (name 'maxipassat)
+          (url "https://codeberg.org/wonko/maxipassat")
+          (branch "master")
+          (commit
+           "55ffdc94d78a56fd238ab7886f7b4107eb812547"))
         (channel
-         (name 'nonguix)
-         (url "https://gitlab.com/nonguix/nonguix")
-         (branch "master")
-         (commit
-          "82be0b7adaaaa7a98d47382d7f72dd2e31d8e6d8")
-         (introduction
-          (make-channel-introduction
-           "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-           (openpgp-fingerprint
-            "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+          (name 'nonguix)
+          (url "https://gitlab.com/nonguix/nonguix")
+          (branch "master")
+          (commit
+           "bd8c5ca23e694be0b1a8cf72f05f81c70b1d7fc5")
+          (introduction
+           (make-channel-introduction
+            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+            (openpgp-fingerprint
+             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
         (channel
-         (name 'guix)
-         (url "https://codeberg.org/guix/guix")
-         (branch "master")
-         (commit
-          "0fc08ce2bd8b59a12e6f100e8ff2d145d607e879")
-         (introduction
-          (make-channel-introduction
-           "9edb3f66fd807b096b48283debdcddccfea34bad"
-           (openpgp-fingerprint
-            "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+          (name 'guix)
+          (url "https://codeberg.org/guix/guix")
+          (branch "master")
+          (commit
+           "cfbf8ac61c450054c89611f452b535a5a90c75b6")
+          (introduction
+           (make-channel-introduction
+            "9edb3f66fd807b096b48283debdcddccfea34bad"
+            (openpgp-fingerprint
+             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vault subvolumes
