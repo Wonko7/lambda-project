@@ -175,6 +175,7 @@
      (stop #~(lambda _
                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
                        "down" "azirevpn-fr-par")))
+     (respawn-delay 5) ;; retry every 5s
      (documentation "azirevpn wg"))
    (shepherd-service
      (requirement '(networking user-processes azirevpn)) ;;  wait-for-wan
