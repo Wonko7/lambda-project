@@ -76,12 +76,16 @@
     "aBt" #'my/tbb
 
     ;; buffers
-    "b"  '("buffers" . (keymap))
+    "b"  '("buffers / bookmarks" . (keymap))
     "br" #'rename-buffer
     "bk" #'kill-current-buffer
     "bn" #'evil-buffer-new
     "bo" #'consult-outline
     "bf" #'consult-focus-lines
+    ;; bookmarks
+    "bm" #'bookmark-set
+    "bg" #'bookmark-jump
+    "bR" #'bookmark-rename
 
     ;; org
     "o"    '("org" . (keymap))
