@@ -149,6 +149,7 @@
     "pp"  #'projectile-switch-project
     "pP"  #'persp-switch
     "pD"  #'projectile-discover-projects-in-search-path
+    "pC"  #'projectile-cleanup-known-projects
     "pK"  #'projectile-kill-buffers
     "pS"  #'projectile-save-project-buffers
     ;; "ps"  #'projectile-run-shell
