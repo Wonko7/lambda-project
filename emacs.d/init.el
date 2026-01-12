@@ -184,11 +184,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
 
+
 (use-package projectile
   :demand t
   :custom
-  (projectile-project-search-path '(( "/code" . 0) ( "/work" . 0) ("/data" . 0)
-                                    ( "/code/maxipassat" . 0)))
+  (projectile-project-search-path '(("/code" . 1) ("/work" . 1) ("/data" . 1)
+                                    ("/junkyard" . 0)
+                                    ("/code/maxipassat" . 1)))
   (projectile-sort-order 'recently-active)
   (projectile-enable-caching t)
   :config
