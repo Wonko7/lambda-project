@@ -237,17 +237,13 @@
      (stop #~(make-kill-destructor))
      (documentation "Crypto back-end server for ement.el"))
    (shepherd-service
-     (inherit x11-respawn-config-shepherd-service)
-     (provision '(dunst))
-     (start #~(make-forkexec-constructor
-               (list #$(file-append dunst "/bin/dunst"))
-               #:log-file #$(home-log-path "dunst")))
-     (stop #~(lambda _
-               (display "killall dunst")
-               (system
-                (string-append
-                 #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
-     (documentation "riced notifications"))
+     (provision '(kill-dunst))
+     (one-shot? #t)
+     (start #~(lambda _
+                (system
+                 (string-append
+                  #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
+     (documentation "kill dbus started dunst from previous X session"))
    (shepherd-service
      (provision '(guix-repl))
      (start #~(make-forkexec-constructor
