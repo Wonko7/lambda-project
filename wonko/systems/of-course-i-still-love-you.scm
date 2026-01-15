@@ -291,6 +291,7 @@ interface eth0                    # identifies the interface we are advertising 
    (db-user "www")
    (db-port 6942)
    (port 8042)
+   (org-www-relative-path "here-be-dragons")
    (org-repo-origin "yggdrasill.local:/data/org")
    (maxipassat-repo-origin "yggdrasill.local:/code/maxipassat/maxipassat")))
 
