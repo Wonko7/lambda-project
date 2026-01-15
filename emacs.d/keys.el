@@ -103,6 +103,10 @@
     "o2"   (li (ws/set-layout 'org2-cal-agenda))
     "o3"   (li (ws/set-layout 'org3-latest-cal-agenda))
     "or"   #'org-refile
+    "ot"   #'org-set-tags-command
+    "ov"   '("view" . (keymap))
+    "ovt"  #'org-tags-view
+    "ovq"  #'org-ql-view
 
     ;; roam
     "r"  '("roam" . (keymap))
@@ -119,6 +123,7 @@
     "rn" #'org-roam-capture
     "rr" #'org-roam-refile
     "rR" #'org-roam-link-replace-all
+    "rt" #'org-roam-tag-add
     "ra"  '("alias" . (keymap))
     "raa" #'org-roam-alias-add
     "rar" #'org-roam-alias-remove
