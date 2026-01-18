@@ -152,10 +152,14 @@
 
 (defun my/insert-shell-line ()
   (interactive)
-  (let* ((f "/data/org/here-be-dragons/tech/20230412204446-shell.org")
+  (let* ((fs '("/data/org/here-be-dragons/tech/20230412204446-shell.org"
+               "/data/org/here-be-dragons/wip/20230815232907-maxipass_at.org"))
          (buf-content (split-string
                        (with-temp-buffer
-                         (insert-file-contents f)
+                         (mapc (lambda (f)
+                                 (when (file-exists-p f)
+                                   (insert-file-contents f)))
+                               fs)
                          (buffer-string))
                        "\n"))
          (cmds (seq-filter
