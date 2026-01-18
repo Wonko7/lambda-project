@@ -163,6 +163,8 @@
     "C-S-l"   #'org-demote-subtree
     "C-l"     #'org-demote-subtree)
 
+  ;; leaving this here, sometimes I just force this:
+  ;; (setq  sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
   ;; babel
   (org-babel-do-load-languages
    'org-babel-load-languages
