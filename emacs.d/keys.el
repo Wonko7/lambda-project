@@ -121,8 +121,9 @@
     "rm" #'org-roam-buffer-toggle
     "rM" #'org-roam-buffer-display-dedicated
     "rn" #'org-roam-capture
+    "rL" #'org-roam-link-replace-all
     "rr" #'org-roam-refile
-    "rR" #'org-roam-link-replace-all
+    "rR" #'org-roam-extract-subtree
     "rt" #'org-roam-tag-add
     "ra"  '("alias" . (keymap))
     "raa" #'org-roam-alias-add
