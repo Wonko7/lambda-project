@@ -24,6 +24,7 @@
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
   #:use-module (maxipassat services ci)
+  #:use-module (maxipassat systems ci)
   #:export (%of-course-i-still-love-you-wonko-home
             %of-course-i-still-love-you-os))
 
@@ -281,20 +282,6 @@ interface eth0                    # identifies the interface we are advertising 
                               (compose list radvd-shepherd-service))))
     (default-value (radvd-configuration))))
 
-(define mp-prod-config
-  (maxipassat-ci-configuration
-   (deployment-name "prod")
-   (base-path "/data/www/maxipassat/prod")
-   (notify (lambda (title status)
-             #~(system (string-append "ssh yggdrasill.local DISPLAY=:9 dunstify "
-                                      "\"'" #$title "'\" \"'" #$status "'\""))))
-   (db-user "www")
-   (db-port 6942)
-   (port 8042)
-   (org-www-relative-path "here-be-dragons")
-   (org-repo-origin "yggdrasill.local:/data/org")
-   (maxipassat-repo-origin "yggdrasill.local:/code/maxipassat/maxipassat")))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the OS
 
@@ -388,8 +375,11 @@ interface eth0                    # identifies the interface we are advertising 
                                 "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
                                 "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
 
+        ;; to rm:
         (maxipassat-ci-postgresql-service mp-prod-config)
         (service maxipassat-ci-service-type mp-prod-config)
+
+        (service maxipassat-container-ci-service-type mp-staging-config)
 
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
