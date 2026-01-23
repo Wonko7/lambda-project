@@ -376,10 +376,11 @@ interface eth0                    # identifies the interface we are advertising 
                                 "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
 
         ;; to rm:
-        (maxipassat-ci-postgresql-service mp-prod-config)
-        (service maxipassat-ci-service-type mp-prod-config)
+        ;; (maxipassat-ci-postgresql-service mp-prod-config)
+        ;; (service maxipassat-ci-service-type mp-prod-config)
 
         (service maxipassat-container-ci-service-type mp-staging-config)
+        (service maxipassat-container-ci-service-type mp-preprod-config)
 
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
