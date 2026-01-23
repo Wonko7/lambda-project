@@ -812,6 +812,18 @@ current time."
            "* 🐧 [[roam:linux]] :linux:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚀 tech")))
+          ("tm" "🦄 maxipassat" entry
+           "* 🦄 [[roam:maxipass.at]] :mp:\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚀 tech")))
+          ("tp" "🦄 maxipassat / postgresql" entry
+           ,(string-join '("* 🦄 [[roam:maxipass.at]] / [[roam:postgresql]] :mp:\n"
+                           "%U\n"
+                           "#+begin_src sql :engine postgres :dbuser wonko :database maxipassat :dbhost /tmp :dbport 3000\n"
+                           "  %?\n"
+                           "#+end_src\n"))
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🚀 tech")))
           ("tp" "⚛ physics" entry
            "* ⚛ [[roam:physics]] :sci:\n%U\n%?"
            :jump-to-captured t
