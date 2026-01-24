@@ -197,7 +197,7 @@
                                                             ": "))
                                      :sort nil
                                      :require-match t)))
-    (evil-open-above 1)
+    (evil-open-below 1)
     (insert line)))
 
 (defun my/insert-line ()
