@@ -18,8 +18,8 @@
   (setq org-agenda-files (mapcar
                           (lambda (d)
                             (concat org-roam-directory d))
-                          '("wip/" "work/" "wtf/" "the-road-so-far/")))
-  (setq org-roam-dailies-directory "the-road-so-far")
+                          '("wip/" "work/" "wtf/" "_the-road-so-far/")))
+  (setq org-roam-dailies-directory "_the-road-so-far")
 
   :custom
   (org-startup-indented t)
@@ -1064,12 +1064,12 @@ current time."
     (org-ql-search-directories-files
      :directories (mapcar (lambda (d)
                             (concat org-roam-directory d))
-                          (list "the-road-so-far"
-                                "the-road-so-far/_archive/"))))
+                          (list "_the-road-so-far"
+                                "_the-road-so-far/-archive/"))))
 
   (defun my/recent-dailies ()
     (org-ql-search-directories-files
-     :directories (list (concat org-roam-directory "the-road-so-far")))))
+     :directories (list (concat org-roam-directory "_the-road-so-far")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
