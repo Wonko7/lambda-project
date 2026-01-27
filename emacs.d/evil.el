@@ -39,6 +39,9 @@
   ;; (setq evil-want-minibuffer t)
   (setq evil-search-wrap nil)
 
+  ;; C-g exits replace mode:
+  (define-key evil-replace-state-map (kbd "C-g") 'evil-normal-state)
+
   ;; fix G -> goto last line
   (evil-define-motion evil-goto-line (count)
     "Go to line COUNT. By default the last line."
