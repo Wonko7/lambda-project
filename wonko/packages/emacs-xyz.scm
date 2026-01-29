@@ -314,11 +314,10 @@ consult-omni can be an open-source free alternative to other omni-search tools s
     (inputs ;; libxaw is needed to get alpha-background working
      (modify-inputs (package-inputs emacs)
        (append libxaw)))
-    ;; (arguments ;; [2025-11-30 Sun 16:28] dired is failing again :(
-    ;;  (substitute-keyword-arguments (package-arguments emacs)
-    ;;    ((#:phases phases) #~(modify-phases #$phases
-    ;;                           (delete 'check)))))
-    ))
+    (arguments ;; [2025-11-30 Sun 16:28], [2026-01-29 Thu 17:02] dired is failing again :(
+     (substitute-keyword-arguments (package-arguments emacs)
+       ((#:phases phases) #~(modify-phases #$phases
+                              (delete 'check)))))))
 
 (define-public emacs-exwm-custom-emacs
   (package
