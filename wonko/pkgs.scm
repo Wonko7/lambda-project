@@ -28,7 +28,7 @@
  chromium tor matrix irc bittorrent
  gnuzilla
  ;; tools
- admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn hardware certs ntp tls screen
+ admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn dns hardware certs ntp tls screen
  ;; dev
  android flashing-tools haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
 
@@ -481,12 +481,13 @@
 
 (define-public %os-net-world ;; complements %utils-world
   (list
-   tcpdump
-   openntpd
-   wireguard-tools
+   isc-bind ;; dig
    iproute
    iw
-   ndisc6))
+   ndisc6
+   openntpd
+   tcpdump
+   wireguard-tools))
 
 (define-public %os-disk-world
   (list

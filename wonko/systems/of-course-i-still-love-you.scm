@@ -348,7 +348,7 @@ interface eth0                    # identifies the interface we are advertising 
                    (certificates
                     (list
                      (certificate-configuration
-                      (domains '("maxipass.at" "www.maxipass.at")))))))
+                      (domains '("maxipass.at" "www.maxipass.at" "mail.maxipass.at")))))))
 
         (service
          nginx-service-type
