@@ -365,6 +365,11 @@ interface eth0                    # identifies the interface we are advertising 
                     (locations
                      (list
                       (nginx-location-configuration
+                        (uri "/www/")
+                        (body `(,(string-append
+                                  "root "
+                                  (maxipassat-ci-base-path mp-prod-config) "/static;"))))
+                      (nginx-location-configuration
                         (uri "/")
                         (body `(,(string-append "proxy_pass http://127.0.0.1:"
                                                 (number->string
