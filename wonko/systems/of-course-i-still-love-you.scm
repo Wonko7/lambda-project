@@ -36,7 +36,8 @@
                      networking ssh vpn
                      guix shepherd
                      ;; public net:
-                     certbot configuration sysctl web)
+                     certbot configuration sysctl web
+                     mail)
 
 (define machine-home-services
   (list
@@ -384,6 +385,29 @@ interface eth0                    # identifies the interface we are advertising 
         (service maxipassat-container-ci-service-type mp-preprod-config)
         (service maxipassat-container-ci-service-type mp-prod-config)
 
+        ;; email
+        (service mail-aliases-service-type '(("william" "wonko")
+                                             ("webmaster" "wonko")
+                                             ("dance-commander" "wonko")))
+        (service dovecot-service-type
+                 (dovecot-configuration
+                   (mail-location "maildir:~/.mail")
+                   ;; for pigeonhole example /code/guix/gnu/tests/mail.scm
+                   ;; (extensions (list dovecot-pigeonhole))
+                   ;; (protocols
+                   ;;  (list (protocol-configuration
+                   ;;          (name "imap")
+                   ;;          (mail-plugins '("$mail_plugins" "imap_sieve"))
+                   ;;          (imap-metadata? #t))))
+                   ))
+        (service exim-service-type
+                 (exim-configuration
+                   ;; (package exim-datascan)
+                   (config-file
+                    (local-file
+                     (string-append %lambda-project "/misc/exim.conf")))))
+
+        ;; local net
         (service nftables-service-type (nftables-configuration
                                          (ruleset %nftables-ruleset)))
         (service radvd-service-type (radvd-configuration
