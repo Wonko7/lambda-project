@@ -23,6 +23,7 @@
   #:use-module (wonko systems)
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
+  #:use-module (wonko packages mail)
   #:use-module (maxipassat services ci)
   #:use-module (maxipassat systems ci)
   #:export (%of-course-i-still-love-you-wonko-home
@@ -402,7 +403,7 @@ interface eth0                    # identifies the interface we are advertising 
                    ))
         (service exim-service-type
                  (exim-configuration
-                   ;; (package exim-datascan)
+                   (package exim-content-scan)
                    (config-file
                     (local-file
                      (string-append %lambda-project "/misc/exim.conf")))))
