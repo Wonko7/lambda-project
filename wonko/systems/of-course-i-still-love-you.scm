@@ -399,9 +399,45 @@ interface eth0                    # identifies the interface we are advertising 
                    (mail-location "maildir:~/.mail")
                    ;; for pigeonhole example /code/guix/gnu/tests/mail.scm
                    ;; (extensions (list dovecot-pigeonhole))
+                   (services
+                    (list
+                     (service-configuration
+                       (kind "imap-login")
+                       (client-limit 0)
+                       (process-limit 0)
+                       (listeners
+                        (list
+                         (inet-listener-configuration (protocol "imap") (port 143) (ssl? #f))
+                         (inet-listener-configuration (protocol "imaps") (port 993) (ssl? #t)))))
+                     (service-configuration
+                       (kind "lmtp")
+                       (client-limit 1)
+                       (process-limit 0)
+                       (listeners
+                        (list
+                         (inet-listener-configuration (protocol "lmtp")
+                                                      (port 2525)
+                                                      (ssl? #f)))))
+                     (service-configuration
+                       (kind "auth")
+                       (service-count 0)
+                       (client-limit 0)
+                       (process-limit 1)
+                       (listeners
+                        (list (unix-listener-configuration (path "auth-userdb")))))
+                     (service-configuration
+                       (kind "auth-worker")
+                       (client-limit 1)
+                       (process-limit 0))
+                     (service-configuration
+                       (kind "dict")
+                       (client-limit 1)
+                       (process-limit 0)
+                       (listeners (list (unix-listener-configuration (path "dict")))))))
                    (protocols
                     (list (protocol-configuration
-                            (name "lmtp"))
+                            (name "lmtp")
+                            )
                           (protocol-configuration
                             (name "imap")
                             ;; (mail-plugins '("$mail_plugins" "imap_sieve"))
