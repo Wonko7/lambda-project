@@ -407,8 +407,9 @@ interface eth0                    # identifies the interface we are advertising 
                        (process-limit 0)
                        (listeners
                         (list
-                         (inet-listener-configuration (protocol "imap") (port 143) (ssl? #f))
-                         (inet-listener-configuration (protocol "imaps") (port 993) (ssl? #t)))))
+                         (inet-listener-configuration (protocol "imaps")
+                                                      (port 993)
+                                                      (ssl? #t)))))
                      (service-configuration
                        (kind "lmtp")
                        (client-limit 1)
@@ -434,10 +435,11 @@ interface eth0                    # identifies the interface we are advertising 
                        (client-limit 1)
                        (process-limit 0)
                        (listeners (list (unix-listener-configuration (path "dict")))))))
+                   ;; (mail-debug? #t)
+                   (auth-username-format "%n")
                    (protocols
                     (list (protocol-configuration
-                            (name "lmtp")
-                            )
+                            (name "lmtp"))
                           (protocol-configuration
                             (name "imap")
                             ;; (mail-plugins '("$mail_plugins" "imap_sieve"))
