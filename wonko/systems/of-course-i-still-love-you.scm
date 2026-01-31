@@ -413,6 +413,7 @@ interface eth0                    # identifies the interface we are advertising 
                    (config-file
                     (local-file
                      (string-append %lambda-project "/misc/exim.conf")))))
+        (service rspamd-service-type)
 
         ;; local net
         (service nftables-service-type (nftables-configuration
