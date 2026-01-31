@@ -214,7 +214,7 @@ table inet firewall {
         icmpv6 type echo-request limit rate 5/second accept
 
         ip6 daddr != 2a01:e0a:b5a:de71::/64 accept # accept on non public
-        tcp dport { 80, 443 } accept # only accept these on public facing ipv6
+        tcp dport { 25, 80, 443 } accept # only accept these on public facing ipv6
         udp dport { 51820 } accept   # only accept these on public facing ipv6
     }
 
