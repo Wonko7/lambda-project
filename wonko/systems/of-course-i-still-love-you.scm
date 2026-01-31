@@ -23,6 +23,7 @@
   #:use-module (wonko systems)
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
+  #:use-module (wonko services mail)
   #:use-module (wonko packages mail)
   #:use-module (maxipassat services ci)
   #:use-module (maxipassat systems ci)
@@ -350,7 +351,10 @@ interface eth0                    # identifies the interface we are advertising 
                    (certificates
                     (list
                      (certificate-configuration
-                      (domains '("maxipass.at" "www.maxipass.at" "mail.maxipass.at")))))))
+                      (domains '("mail.maxipass.at"))
+                      (deploy-hook exim-deploy-hook))
+                     (certificate-configuration
+                      (domains '("maxipass.at" "www.maxipass.at")))))))
 
         (service
          nginx-service-type
