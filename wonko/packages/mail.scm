@@ -16,5 +16,6 @@
             (add-after 'configure 'enable-content-scan
               (lambda _
                 (substitute* "Local/Makefile"
+                  (("# (TRANSPORT_LMTP=yes)" all var) var)
                   (("# (WITH_CONTENT_SCAN=yes)" all var) var)
                   (("# (HAVE_IPV6=yes)" all var) var))))))))))

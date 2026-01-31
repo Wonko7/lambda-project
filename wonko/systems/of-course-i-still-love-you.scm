@@ -399,12 +399,14 @@ interface eth0                    # identifies the interface we are advertising 
                    (mail-location "maildir:~/.mail")
                    ;; for pigeonhole example /code/guix/gnu/tests/mail.scm
                    ;; (extensions (list dovecot-pigeonhole))
-                   ;; (protocols
-                   ;;  (list (protocol-configuration
-                   ;;          (name "imap")
-                   ;;          (mail-plugins '("$mail_plugins" "imap_sieve"))
-                   ;;          (imap-metadata? #t))))
-                   ))
+                   (protocols
+                    (list (protocol-configuration
+                            (name "lmtp"))
+                          (protocol-configuration
+                            (name "imap")
+                            ;; (mail-plugins '("$mail_plugins" "imap_sieve"))
+                            ;; (imap-metadata? #t)
+                            )))))
         (service exim-service-type
                  (exim-configuration
                    (package exim-content-scan)
