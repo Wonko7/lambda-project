@@ -63,6 +63,7 @@
     "é"     #'sp-backward-up-sexp
     "&"     #'sp-next-sexp
     "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
+    ;; review, not using
     "M-r"   #'paredit-raise-sexp
     "M-t"   #'sp-transpose-sexp
     "M-T"   (lambda() (interactive) (sp-transpose-sexp -1))
@@ -75,7 +76,7 @@
 
   (general-evil-define-key '(normal) evil-cleverparens-mode-map
     :prefix "RET"
-    "r"   #'paredit-raise-sexp
+    "r"   #'sp-raise-sexp
     "R"   #'evil-cp-raise-form
     ">"   #'sp-transpose-sexp
     "<"   (lambda() (interactive) (sp-transpose-sexp -1))
@@ -85,12 +86,11 @@
     "@"  #'sp-splice-sexp
     "u"  #'sp-unwrap-sexp
     "j"  #'sp-join-sexp
-    "p"  #'evil-cp-wrap-next-round
-    "P"  #'evil-cp-wrap-previous-round
-    "c"  #'evil-cp-wrap-next-curly
-    "C"  #'evil-cp-wrap-previous-curly
-    "s"  #'evil-cp-wrap-next-square
-    "S"  #'evil-cp-wrap-previous-square)
+    "s"  #'sp-split-sexp
+    "p"  #'sp-wrap-round
+    "w"  #'sp-wrap-round
+    "C"  #'sp-wrap-curly
+    "S"  #'sp-wrap-square)
 
   (my/nuke-all-gz-for-origami))
 
