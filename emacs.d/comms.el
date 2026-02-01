@@ -230,18 +230,13 @@
         ;; gnus-article-skip-boring t
         gnus-asynchronous t)
 
-  (setq gnus-select-method
-        '(nnimap "gmail"
-                 ;; it could also be imap.googlemail.com if that's your server.
-                 (nnimap-address "imap.gmail.com")
-                 (nnimap-server-port "imaps")
-                 (nnimap-stream ssl)))
+  (setq gnus-select-method  '(nnnil ""))
+  (setq gnus-secondary-select-methods
+        my/gnus-secondary-select-methods)
 
-  (setq smtpmail-smtp-server "smtp.gmail.com"
+  (setq smtpmail-smtp-server "of-course-i-still-love-you.star-fleet.local"
         smtpmail-smtp-service 587
         gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-
-  (add-to-list 'gnus-secondary-select-methods '(nntp "news.gwene.org"))
 
   (setq my/gnus-topic-topology (cons
                                 '("Gnus" visible)
@@ -254,8 +249,8 @@
                                                `((,x visible)))))
                                          my/gnus-topic-alist))))
 
-  (setq gnus-topic-alist my/gnus-topic-alist)
-  (setq gnus-topic-topology my/gnus-topic-topology)
+  ;; (setq gnus-topic-alist my/gnus-topic-alist)
+  ;; (setq gnus-topic-topology my/gnus-topic-topology)
 
   (defun my/old-gnus-subscribe-to-my-stuff ()
     "might be useful"
