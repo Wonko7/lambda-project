@@ -256,7 +256,7 @@ interface eth0                    # identifies the interface we are advertising 
     prefix 2a01:e0a:b5a:de71::/64 # netmask length must be '/64' (see RFC 2462, sect 5.5.3, page 18)
     {
         ###AdvOnLink on;             # Says to a host: 'Everyone sharing this prefix is on the same,' 'local link as you.'
-        AdvAutonomous on;         # Says to a host: 'Use this prefix to autoconfigure your address.'
+        AdvAutonomous off;         # Says to a host: 'Use this prefix to autoconfigure your address.'
     };
 };"))
 
