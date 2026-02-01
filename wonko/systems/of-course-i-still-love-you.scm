@@ -391,9 +391,9 @@ interface eth0                    # identifies the interface we are advertising 
         (service maxipassat-container-ci-service-type mp-prod-config)
 
         ;; email
-        (service mail-aliases-service-type '(("william" "wonko")
-                                             ("webmaster" "wonko")
-                                             ("dance-commander" "wonko")))
+        (service mail-aliases-service-type '(("william" "wonko@maxipass.at")
+                                             ("webmaster" "wonko@maxipass.at")
+                                             ("dance-commander" "wonko@maxipass.at")))
         (service dovecot-service-type
                  (dovecot-configuration
                    (mail-location "maildir:~/.mail")
