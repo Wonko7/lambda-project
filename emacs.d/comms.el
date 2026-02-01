@@ -7,18 +7,7 @@
   (if (file-readable-p comms)
       (load-file comms)
     (setq my/ement-ws-init '("i" "hate" "sand"))
-    (setq my/gnus-topic-alist '(("tech" ;; the key of topic
-                                 "nntp+news.gwene.org:gwene.com.schneier"
-                                 "nntp+news.gwene.org:gwene.org.slashdot"
-                                 "nntp+news.gwene.org:gwene.cat.sizeof")
-                                ("dev"
-                                 "nntp+news.gwene.org:gwene.org.ocsigen.news")
-                                ("work"
-                                 "nntp+news.gwene.org:gwene.fr.linuxjobs")
-                                ("comics"
-                                 "nntp+news.gwene.org:gwene.com.smbc-comics"
-                                 "nntp+news.gwene.org:gwene.com.xkcd")
-                                ("Feeds")))))
+    ))
 
 (use-package ement
   :commands (my/ement-init)
@@ -219,9 +208,11 @@
         nndraft-directory (concat gnus-directory "/mail/draft")
         nnfolder-directory (concat gnus-directory "/mail/archive"))
 
-  (setq gnus-cloud-synced-files
-        '("~/.authinfo.gpg" "~/gnus/.newsrc" "~/gnus/.newsrc.eld"
-          (:directory "~/gnus/news" :match ".*.SCORE\\'")))
+  ;; cloud never downloads 🤷 I'm just syncing gnus folder in a git.
+  ;; (setq gnus-cloud-synced-files
+  ;;       '("~/.authinfo.gpg" "~/gnus/.newsrc" "~/gnus/.newsrc.eld"
+  ;;         (:directory "~/gnus/news" :match ".*.SCORE\\'")))
+  ;; (setq gnus-cloud-group-name "nnimap+maxipass.at:Emacs-Cloud")
 
   (setq gnus-use-cache t
         gnus-save-newsrc-file nil
@@ -237,59 +228,6 @@
   (setq smtpmail-smtp-server "of-course-i-still-love-you.star-fleet.local"
         smtpmail-smtp-service 587
         gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-
-  (setq my/gnus-topic-topology (cons
-                                '("Gnus" visible)
-                                (-filter
-                                 #'identity
-                                 (mapcar (lambda (topic)
-                                           (let ((x (cl-first topic)))
-                                             (if (string= x "Gnus")
-                                                 nil
-                                               `((,x visible)))))
-                                         my/gnus-topic-alist))))
-
-  ;; (setq gnus-topic-alist my/gnus-topic-alist)
-  ;; (setq gnus-topic-topology my/gnus-topic-topology)
-
-  (defun my/old-gnus-subscribe-to-my-stuff ()
-    "might be useful"
-    (interactive)
-    (setq gnus-topic-alist my/gnus-topic-alist)
-    (setq gnus-topic-topology my/gnus-topic-topology)
-    (mapcar (lambda (topic)
-              (message "topic: %s\n" (car topic))
-              (mapcar
-               (lambda (s)
-                 (message "subscribing to: %s\n" s)
-                 (gnus-subscribe-group s))
-               (cdr topic)))
-            gnus-topic-alist))
-
-  (defun my/gnus-subscribe-to-my-stuff ()
-    "reset gnus subscriptions, folders, topics. rm ~/.news* might help"
-    ;; *sigh*: exec this, copy gnus-newsrc-alist, exit gnus, edit .newsrc.eld
-    ;; and set gnus-newsrc-alist manually 🤷
-    (interactive)
-    (setq gnus-topic-alist my/gnus-topic-alist)
-    (setq gnus-topic-topology my/gnus-topic-topology)
-    (setq gnus-newsrc-alist
-          (append
-           (mapcar (lambda (news)
-                     (list news 3 nil nil "nntp:news.gwene.org" nil))
-                   (seq-filter (lambda (s)
-                                 (and (> (length s) 19)
-                                      (string= (substring s 0 19) "nntp+news.gwene.org")))
-                               (flatten-list my/gnus-topic-alist)))
-           ;; example: '(("nnvirtual:comics" 3 nil nil (nnvirtual "smbc\\|xkcd"))...)
-           my/gnus-virtual-folders))
-    (mapcar (lambda (topic)
-              (message "topic: %s\n" (car topic))
-              (mapcar (lambda (s)
-                        (message "subscribing to: %s\n" s)
-                        (gnus-subscribe-group s))
-                      (cdr topic)))
-            gnus-topic-alist))
 
   (setq gnus-thread-sort-functions '((not gnus-thread-sort-by-date)))
 
