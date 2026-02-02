@@ -202,9 +202,25 @@
 This module implements some of those operations as single round trip tramp operations. The bulk of the operation is implemented as a server side bash script, rather than an elisp function. In practice this makes a lot of day to day editing on remote hosts much more responsive.")
       (license (@ (guix licenses) gpl3+)))))
 
-
-
-
+(define-public emacs-consult-ripfd
+  (package
+    (name "emacs-consult-ripfd")
+    (version "0.0.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri
+        (git-reference
+          (url "https://github.com/jdtsmith/consult-ripfd")
+          (commit "c0987e280e09fcb989171a6ebed6d23f5911696e")))
+       (sha256
+        (base32 "09ap8rb0dafik10ym7r34nff36i23jal5yck2rsdms7wadc6f4zj"))))
+    (inputs (list emacs-consult))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/jdtsmith/consult-ripfd")
+    (synopsis "a ripgrep + fd mashup in Emacs")
+    (description "a ripgrep + fd mashup in Emacs")
+    (license (@ (guix licenses) gpl3+))))
 
 (define-public emacs-exwm-firefox-evil
   (package

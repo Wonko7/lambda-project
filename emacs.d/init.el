@@ -184,7 +184,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; projectile
 
-
 (use-package projectile
   :demand t
   :custom
@@ -523,24 +522,6 @@
   :config
   (general-evil-define-key '(normal) Info-mode-map ;; this is not working anymore :(
     "s"   #'consult-info))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; search
-
-(use-package isearch
-  :custom
-  (isearch-allow-scroll t)
-  (isearch-lazy-count t)
-  :bind ( :map isearch-mode-map
-          ("C-e" . #'isearch-edit-string)))
-
-(use-package rg)
-
-(use-package wgrep
-  :hook
-  (rg-mode-hook . wgrep-rg-setup)
-  :config
-  (autoload 'wgrep-rg-setup "wgrep-rg"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; firefox

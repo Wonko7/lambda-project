@@ -163,7 +163,7 @@
     "pK"  #'projectile-kill-buffers
     "pS"  #'projectile-save-project-buffers
     ;; "ps"  #'projectile-run-shell
-    "ps"  #'ws/proj-shell
+    ;; "ps"  #'ws/proj-shell
     "pb"  #'projectile-ibuffer
     "pd"  #'projectile-dired
     "pm"  #'persp-merge
@@ -211,11 +211,11 @@
     "f"  '("files" . (keymap))
     "fr" #'consult-recent-file ;; :desc "file recent"
     "ff" #'find-file
-    "fd" #'consult-dir
+    "fd" #'consult-ripfd
+    "fD" #'consult-dir
 
     ;; use this for something else here
     "ss" #'consult-outline ;; :desc "filter line"
-    ;; "so" #'consult-omni
     "sl" #'consult-line
     "sf" #'consult-focus-lines
 
@@ -266,8 +266,8 @@
    "-"    #'mode-line-other-buffer
    "/"    #'consult-line
    "C-/"  #'evil-search-forward
-   "*"    #'consult-line-word-at-point
-   "C-*"  #'consult-line-symbol-at-point
+   "*"    #'consult-line-symbol-at-point
+   "C-*"  #'consult-line-word-at-point
    "#"    #'evil-search-word-forward
    "C-#"  #'evil-search-word-backward
    ;; "`"    #' FIXME do something with this

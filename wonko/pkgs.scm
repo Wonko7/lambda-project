@@ -202,6 +202,7 @@
         ripgrep
         emacs-rg
         emacs-wgrep
+        emacs-consult-ripfd
 
         ;; word smith
         emacs-olivetti
