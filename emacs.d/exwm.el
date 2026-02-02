@@ -377,10 +377,18 @@ Also used in `exwm-mode-line-workspace-map'."
   ;; buffers in current perspective. You can hide default buffer source
   ;; and add `persp-consult-source` to `consult-buffer-sources` for consult
   ;; to only list buffers in current perspective
-  (consult-customize consult--source-buffer :hidden t :default nil)
-  (add-to-list 'consult-buffer-sources persp-consult-source)
-  (persp-mode))
 
+  (consult-customize consult-source-buffer :hidden t :default nil)
+  ;; (consult-customize consult--source-buffer :hidden t :default nil)
+  (defvar consult--source-perspective
+    (list :name     "Perspective"
+          :narrow   ?s
+          :category 'buffer
+          :state    #'consult--buffer-state
+          :default  t
+          :items    #'persp-get-buffer-names))
+  (push consult--source-perspective consult-buffer-sources)
+  (persp-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lemon
