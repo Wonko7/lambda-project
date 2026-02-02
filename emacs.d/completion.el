@@ -84,20 +84,15 @@
 
 (use-package vertico
   :demand t
+  :bind ( :map vertico-map
+          ("C-j" . #'vertico-next)
+          ("C-k" . #'vertico-previous)
+          ("<down>" . #'vertico-next)
+          ("<up>" . #'vertico-previous))
   :config
-  (keymap-set vertico-map "RET" #'vertico-directory-enter)
-  (keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
-  (keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word)
-  (keymap-set vertico-map "C-DEL" #'vertico-directory-up)
-
   (vertico-mode)
   (vertico-mouse-mode)
-
-  (defvar-keymap vertico-map
-    "C-j" #'vertico-next
-    "C-k" #'vertico-previous
-    "<up>" #'vertico-previous
-    "<down>" #'vertico-next)
+  ;; (keymap-set vertico-map "C-k" #'vertico-previous)
 
   ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
 
