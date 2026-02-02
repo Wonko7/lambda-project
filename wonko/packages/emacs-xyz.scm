@@ -202,85 +202,9 @@
 This module implements some of those operations as single round trip tramp operations. The bulk of the operation is implemented as a server side bash script, rather than an elisp function. In practice this makes a lot of day to day editing on remote hosts much more responsive.")
       (license (@ (guix licenses) gpl3+)))))
 
-(define-public emacs-browser-hist
-  (package
-    (name "emacs-browser-hist")
-    (version "v0.1")
-    (source (origin
-              (method git-fetch)
-              (uri
-               (git-reference
-                (url "https://github.com/agzam/browser-hist.el")
-                (commit "0372c6d984ca194d9454b14eba6eadec480ec3ff")))
-              (sha256
-               (base32
-                "0s19gglc9jwapy7a9mf4i97a7r5q9lpm2ivvn0zjhqxcmzj3295j"))))
-    (inputs (list emacs-embark))
-    (build-system emacs-build-system)
-    (home-page "https://github.com/agzam/browser-hist.el")
-    (synopsis "Search through the Browser history, in Emacs")
-    (description "Browsers usually keep their history in a sqlite database, and it’s trivial to extract it. This package allows you to search through your browser history by URL and the Page Title.")
-    (license (@ (guix licenses) gpl3+))))
 
-(define-public emacs-consult-omni
-  (package
-    (name "emacs-consult-omni")
-    (version "v0.2")
-    (source (origin
-              (method git-fetch)
-              (uri
-               (git-reference
-                 (url "https://github.com/armindarvish/consult-omni")
-                 (commit "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda")))
-              (sha256
-               (base32
-                "12jz9hwb1m3ix7zai5qkbyycbaff55yf67pc8q3ijcg5xlks8ckp"))))
-    (inputs (list emacs-browser-hist
-                  emacs-gptel
-                  emacs-embark))
-    (build-system emacs-build-system)
-    (arguments
-     (list
-      #:include #~(cons "sources/.*\\.el$" %default-include)
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-after 'unpack 'move-sources
-            (lambda _
-              (for-each (lambda (f)
-                          (let ((b (basename f)))
-                            (if (or (string= b "consult-omni-browser-history.el")
-                                    (string= b "consult-omni-buffer.el")
-                                    (string= b "consult-omni-calc.el")
-                                    (string= b "consult-omni-dict.el")
-                                    (string= b "consult-omni-duckduckgo.el")
-                                    (string= b "consult-omni-fd.el")
-                                    (string= b "consult-omni-find.el")
-                                    (string= b "consult-omni-gptel.el")
-                                    (string= b "consult-omni-git-grep.el")
-                                    (string= b "consult-omni-grep.el")
-                                    (string= b "consult-omni-line-multi.el")
-                                    (string= b "consult-omni-invidious.el")
-                                    (string= b "consult-omni-man.el")
-                                    (string= b "consult-omni-org-agenda.el")
-                                    ;; projects
-                                    ;; removed github because of go cli dependency
-                                    (string= b "consult-omni-ripgrep-all.el")
-                                    (string= b "consult-omni-ripgrep.el")
-                                    (string= b "consult-omni-sources.el")
-                                    (string= b "consult-omni-stackoverflow.el")
-                                    (string= b "consult-omni-wikipedia.el")
-                                    (string= b "consult-omni-youtube.el"))
-                                (rename-file f b)
-                                (delete-file f))))
-                        (find-files "./sources" ".*\\.el$")))))))
-    (home-page "https://github.com/armindarvish/consult-omni")
-    (synopsis "consult-omni - a powerful versatile omni search inside Emacs")
-    (description "consult-omni is a package for getting search results from one or several custom sources (web search engines, AI assistants, elfeed database, org notes, local files, desktop applications, mail servers, …) directly in Emacs minibuffer. It is a successor of consult-web, with expanded features and functionalities.
 
-consult-omni provides wrappers and macros around consult, to make it easier for users to get results from different sources and combine local and web sources in an omni-style search. In other words, consult-omni enables getting consult-style multi-source or dynamically completed results in minibuffer for a wide range of sources including Emacs functions/packages (e.g. Emacs buffers, org files, elfeed,…), command-line programs (grep, find, gh, …), or web search engines (Google, Brave, Bing, …).
 
-consult-omni can be an open-source free alternative to other omni-search tools such as Alfred or MacOS spotlight. It provides a range of default sources as examples, but the main idea here is to remain agnostic of the source and provide the toolset for the users to define their own sources/workflows (a.k.a plugins).")
-    (license (@ (guix licenses) gpl3+))))
 
 (define-public emacs-exwm-firefox-evil
   (package

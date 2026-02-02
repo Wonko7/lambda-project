@@ -215,7 +215,7 @@
 
     ;; use this for something else here
     "ss" #'consult-outline ;; :desc "filter line"
-    "so" #'consult-omni
+    ;; "so" #'consult-omni
     "sl" #'consult-line
     "sf" #'consult-focus-lines
 
