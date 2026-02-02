@@ -93,7 +93,7 @@
   (vertico-mode)
   (vertico-mouse-mode)
 
-  (general-evil-define-key '(normal insert) vertico-map
+  (defvar-keymap vertico-map
     "C-j" #'vertico-next
     "C-k" #'vertico-previous
     "<up>" #'vertico-previous
@@ -247,46 +247,166 @@
 
 (use-package embark
   :commands (embark-insert-relative-path)
-  :bind ( :map embark-general-map
-          ("$" . #'shell)
-          ;; ("i l" . #'my/insert-line)
-          ("/" . #'consult-ripgrep)
-          :map embark-library-map
-          ("$" . #'shell)
-          :map embark-buffer-map
-          ("$" . #'shell)
-          :map embark-bookmark-map
-          ("$" . #'shell)
-          :map embark-file-map
-          ("g" . #'magit-file-dispatch)
-          ("F" . #'my/remote-fleet-find-file)
-          ("$" . #'shell)
-          :map embark-become-file+buffer-map
-          ("g" . #'magit-file-dispatch)
-          ("F" . #'my/remote-fleet-find-file)
-          ("b" . #'consult-buffer)
-          ("l" . #'consult-line)
-          ;; ("i l" . #'my/insert-line)
-          ("/" . #'consult-ripgrep)
-          ("$" . #'shell)
-          :map embark-become-shell-command-map
-          ("r" . #'consult-history)
-          ("i" . #'my/insert-shell-line)
-          :map embark-become-match-map
-          ("g" . #'magit-file-dispatch)
-          ("f" . #'find-file)
-          ("F" . #'my/remote-fleet-find-file)
-          ("b" . #'consult-buffer)
-          ("l" . #'consult-line)
-          ;; ("i l" . #'my/insert-line)
-          ("/" . #'consult-ripgrep)
-          ("u" . #'flush-lines))
   :after consult
+  :demand t
   :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
   :config
+
+  (defvar-keymap my/embark-vc-file-map
+    :doc "Keymap for Embark VC file actions."
+    "d" #'magit-file-delete
+    "r" #'magit-file-rename)
+
+  (defvar-keymap my/file-find
+    :doc "file find"
+    :parent embark-general-map
+    "f" #'find-file
+    "F" #'my/remote-fleet-find-file
+    "r" #'my/remote-fleet-find-file
+    "l" #'find-file-literally
+    "o" #'find-file-other-window)
+
+  (defvar-keymap my/insert
+    :doc "file stuff"
+    :parent embark-general-map
+    "l" #'my/insert-line
+    "L" #'my/insert-line-other
+    "s" #'my/insert-shell-line)
+
+  (defvar-keymap my/file-operations
+    :doc "file operations"
+    :parent embark-general-map
+    "d" #'delete-file
+    "D" #'delete-directory
+    "r" #'rename-file
+    "c" #'copy-file
+    "s" #'make-symbolic-link
+    "m" #'chmod
+    "+" #'make-directory)
+
+  (defvar-keymap my/path-operations
+    :doc "path operations"
+    :parent embark-general-map
+    "i" #'embark-insert-relative-path
+    "y" #'embark-save-relative-path)
+
+  (defvar-keymap my/embark-file-map
+    :doc "Keymap for Embark file actions."
+    :parent embark-general-map
+    "RET" #'find-file
+    "f" 'my/file-stuff
+    "i" 'my/insert
+    "o" 'my/file-operations
+    "p" 'my/path-operations
+    "d" #'embark-dired-jump
+    "$" #'shell
+    "<" #'insert-file
+    "l" #'load-file
+    "v" 'my/embark-vc-file-map)
+
+  (defvar-keymap my/buffer-actions
+    :doc "buffer actions"
+    :parent embark-general-map
+    "k" #'kill-buffer
+    "b" #'switch-to-buffer
+    "o" #'switch-to-buffer-other-window
+    "r" #'embark-rename-buffer
+    "=" #'ediff-buffers
+    "|" #'embark-shell-command-on-buffer
+    "<" #'insert-buffer
+    "$" #'shell)
+
+  (defvar-keymap my/embark-become-file+buffer-map
+    :doc "Embark become keymap for files and buffers."
+    :parent embark-meta-map
+    "f" 'my/file-stuff
+    "i" 'my/insert
+    "o" 'my/file-operations
+    "p" 'my/path-operations
+    "b" 'my/buffer-switch
+    "d" #'embark-dired-jump
+    "$" #'shell
+    "." #'find-file-at-point
+    "l" #'locate
+    "L" #'find-library
+    "v" #'magit-status)
+
+  (defvar-keymap my/embark-symbol-map
+    :doc "Keymap for Embark symbol actions."
+    :parent embark-identifier-map
+    "RET" #'embark-find-definition
+    "h" #'describe-symbol
+    "I" #'embark-info-lookup-symbol
+    "d" #'embark-find-definition
+    ;; "e" #'pp-eval-expression
+    "a" #'apropos
+    ;; "\\" #'embark-history-remove
+    "*" #'consult-line-symbol-at-point
+    "#" #'embark-isearch-forward)
+
+  (defvar-keymap my/embark-become-match-map2 ;;  why do I need 2?
+    :doc "Embark become keymap for search."
+    :parent embark-meta-map
+    "d" #'consult-ripfd
+    "r" #'consult-ripgrep
+    "/" #'projectile-ripgrep
+    "'" #'projectile-find-file
+    "p" #'projectile-switch-project
+    "g" #'consult-git-grep
+    "s" #'consult-outline
+    "l" #'consult-line
+    "f" #'consult-focus-lines
+    "K" #'keep-lines
+    "F" #'flush-lines
+    "P" #'projectile-find-file)
+
+  (defvar-keymap my/embark-become-shell-command-map
+    :doc "Embark become keymap for shell commands."
+    :parent embark-meta-map
+    "!" #'shell-command
+    "$" #'shell
+    "&" #'async-shell-command)
+
+  (setq embark-become-keymaps
+        '(embark-become-help-map
+          embark-become-file+buffer-map
+          my/embark-become-shell-command-map
+          my/embark-become-match-map2))
+
+  (setq embark-keymap-alist
+        '((file my/embark-file-map)
+          (library embark-library-map)
+          (environment-variables embark-file-map) ; they come up in file completion
+          (url embark-url-map)
+          (email embark-email-map)
+          (buffer my/embark-buffer-map)
+          (tab embark-tab-map)
+          (expression embark-expression-map)
+          (identifier embark-identifier-map)
+          (defun embark-defun-map)
+          (symbol my/embark-symbol-map)
+          (face embark-face-map)
+          (command embark-command-map)
+          (variable embark-variable-map)
+          (function embark-function-map)
+          (minor-mode embark-command-map)
+          (unicode-name embark-unicode-name-map)
+          (package embark-package-map)
+          (bookmark embark-bookmark-map)
+          (region embark-region-map)
+          (sentence embark-sentence-map)
+          (paragraph embark-paragraph-map)
+          (kill-ring embark-kill-ring-map)
+          (heading embark-heading-map)
+          (flymake embark-flymake-map)
+          (smerge smerge-basic-map embark-general-map)
+          (t embark-general-map)))
+
   (general-evil-define-key '(normal insert visual) minibuffer-mode-map
     "C-b"        #'embark-become)
-  (setq embark-prompter 'embark-completing-read-prompter)
+
+  (setq embark-prompter #'embark-keymap-prompter)
+
   (defun my/embark-toggle-prompter ()
     (interactive)
     (setq embark-prompter
@@ -323,11 +443,28 @@
   :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; dir:
+;; search
+
+(use-package isearch
+  :custom
+  (isearch-allow-scroll t)
+  (isearch-lazy-count t)
+  :bind ( :map isearch-mode-map
+          ("C-e" . #'isearch-edit-string)))
+
+(use-package rg)
+
+(use-package wgrep
+  :hook
+  (rg-mode-hook . wgrep-rg-setup)
+  :config
+  (autoload 'wgrep-rg-setup "wgrep-rg"))
+
+(use-package consult-ripfd
+  :commands (consult-ripfd))
 
 (use-package consult-dir
   :demand t)
-
 
 
 (provide 'conf/completion)
