@@ -73,7 +73,8 @@
   ;;     (apply fn args)))
   ;;
   ;; (advice-add 'company-capf--candidates :around #'just-one-face)
-  )
+
+  (setq completion-at-point-functions (list #'cape-dabbrev)))
 
 ;; (add-to-list completion-at-point-functions #'cape-symbol)
 ;; (setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
