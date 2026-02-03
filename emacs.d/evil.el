@@ -16,6 +16,7 @@
   (setq evil-want-minibuffer t)
   (setq evil-want-keybinding nil) ;; evil tells you to
   (setq evil-want-C-i-jump t)
+  (setq evil-disable-insert-state-bindings t)
 
   :config
   (evil-mode 1)
