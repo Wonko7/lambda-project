@@ -10,10 +10,11 @@
 (use-package orderless
   :demand t
   :config
-  (setq completion-styles '(orderless basic) ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
+  ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
+  (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides nil)
-  (setq completion-ignore-case t)
+        completion-category-overrides nil
+        completion-ignore-case t)
 
   ;; orderless-style-dispatchers
   ;; FIXME rewrite with orderless-affix-dispatch-alist on next release.
@@ -42,7 +43,6 @@
       '(orderless-literal . ""))
      ((string-prefix-p "!" pattern)
       `(orderless-without-literal . ,(substring pattern 1)))))
-
 
   (setq orderless-matching-styles '(orderless-literal
                                     char-fold-to-regexp
@@ -74,14 +74,14 @@
   ;;
   ;; (advice-add 'company-capf--candidates :around #'just-one-face)
 
-  (setq completion-at-point-functions (list #'cape-dabbrev)))
+  ;; (add-to-list completion-at-point-functions #'cape-symbol)
+  ;; (setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
+  ;;                                                            #'cape-keyword
+  ;;                                                            #'cape-dabbrev
+  ;;                                                            #'cape-elisp-block
+  ;;                                                            #'cape-file)))
 
-;; (add-to-list completion-at-point-functions #'cape-symbol)
-;; (setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
-;;                                                            #'cape-keyword
-;;                                                            #'cape-dabbrev
-;;                                                            #'cape-elisp-block
-;;                                                            #'cape-file)))
+  (setq completion-at-point-functions (list #'cape-dabbrev)))
 
 (use-package vertico
   :demand t
@@ -93,8 +93,6 @@
   :config
   (vertico-mode)
   (vertico-mouse-mode)
-  ;; (keymap-set vertico-map "C-k" #'vertico-previous)
-
   ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
 
   ;; (setq vertico-scroll-margin 2) ;; Different scroll margin
@@ -102,6 +100,7 @@
   (setq vertico-resize t) ;; Grow and shrink the Vertico minibuffer
   (setq vertico-cycle t)
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; fancy:
   (set-face-attribute 'vertico-group-title nil :inherit 'font-lock-keyword-face)
   (set-face-attribute 'vertico-current nil :background "black")
@@ -162,7 +161,7 @@
   (setq minibuffer-prompt-properties ;; FIXME: testing
         '(read-only t cursor-intangible t face minibuffer-prompt))
 
-  ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; tramp:
 
   ;; Workaround for problem with `tramp' hostname completions. This overrides
@@ -252,8 +251,9 @@
     :doc "Keymap for Embark VC file actions."
     "d" #'magit-file-delete
     "r" #'magit-file-rename)
+  (fset 'my/embark-vc-file-map my/embark-vc-file-map)
 
-  (defvar-keymap my/file-find
+  (defvar-keymap my/embark-file-find
     :doc "file find"
     :parent embark-general-map
     "f" #'find-file
@@ -261,15 +261,17 @@
     "r" #'my/remote-fleet-find-file
     "l" #'find-file-literally
     "o" #'find-file-other-window)
+  (fset 'my/embark-file-find my/embark-file-find)
 
-  (defvar-keymap my/insert
+  (defvar-keymap my/embark-insert
     :doc "file stuff"
     :parent embark-general-map
     "l" #'my/insert-line
     "L" #'my/insert-line-other
     "s" #'my/insert-shell-line)
+  (fset 'my/embark-insert my/embark-insert)
 
-  (defvar-keymap my/file-operations
+  (defvar-keymap my/embark-file-operations
     :doc "file operations"
     :parent embark-general-map
     "d" #'delete-file
@@ -279,28 +281,30 @@
     "s" #'make-symbolic-link
     "m" #'chmod
     "+" #'make-directory)
+  (fset 'my/embark-file-operations my/embark-file-operations)
 
-  (defvar-keymap my/path-operations
+  (defvar-keymap my/embark-path-operations
     :doc "path operations"
     :parent embark-general-map
     "i" #'embark-insert-relative-path
     "y" #'embark-save-relative-path)
+  (fset 'my/embark-path-operations my/embark-path-operations)
 
-  (defvar-keymap my/embark-file-map
+  (defvar-keymap my/embark-file-map3
     :doc "Keymap for Embark file actions."
     :parent embark-general-map
     "RET" #'find-file
     "f" 'my/file-stuff
-    "i" 'my/insert
-    "o" 'my/file-operations
-    "p" 'my/path-operations
+    "i" 'my/embark-insert
+    "o" 'my/embark-file-operations
+    "p" 'my/embark-path-operations
     "d" #'embark-dired-jump
     "$" #'shell
     "<" #'insert-file
     "l" #'load-file
     "v" 'my/embark-vc-file-map)
 
-  (defvar-keymap my/buffer-actions
+  (defvar-keymap my/embark-buffer-actions
     :doc "buffer actions"
     :parent embark-general-map
     "k" #'kill-buffer
@@ -311,15 +315,16 @@
     "|" #'embark-shell-command-on-buffer
     "<" #'insert-buffer
     "$" #'shell)
+  (fset 'my/embark-buffer-actions my/embark-buffer-actions)
 
   (defvar-keymap my/embark-become-file+buffer-map
     :doc "Embark become keymap for files and buffers."
     :parent embark-meta-map
-    "f" 'my/file-stuff
-    "i" 'my/insert
-    "o" 'my/file-operations
-    "p" 'my/path-operations
-    "b" 'my/buffer-switch
+    "f" 'my/embark-file-stuff
+    "i" 'my/embark-insert
+    "o" 'my/embark-file-operations
+    "p" 'my/embark-path-operations
+    "b" 'my/embark-buffer-actions
     "d" #'embark-dired-jump
     "$" #'shell
     "." #'find-file-at-point
@@ -340,9 +345,11 @@
     "*" #'consult-line-symbol-at-point
     "#" #'embark-isearch-forward)
 
-  (defvar-keymap my/embark-become-match-map2 ;;  why do I need 2?
+  (defvar-keymap my/embark-become-match-map3
     :doc "Embark become keymap for search."
     :parent embark-meta-map
+    "*" #'consult-line-symbol-at-point
+    "C-*" #'consult-line-word-at-point
     "d" #'consult-ripfd
     "r" #'consult-ripgrep
     "/" #'projectile-ripgrep
@@ -367,12 +374,12 @@
         '(embark-become-help-map
           embark-become-file+buffer-map
           my/embark-become-shell-command-map
-          my/embark-become-match-map2))
+          my/embark-become-match-map3))
 
   (setq embark-keymap-alist
-        '((file my/embark-file-map)
+        '((file my/embark-file-map3)
           (library embark-library-map)
-          (environment-variables embark-file-map) ; they come up in file completion
+          (environment-variables my/embark-file-map3) ; they come up in file completion
           (url embark-url-map)
           (email embark-email-map)
           (buffer my/embark-buffer-map)
@@ -400,7 +407,6 @@
 
   (general-evil-define-key '(normal insert visual) minibuffer-mode-map
     "C-b"        #'embark-become)
-
   (setq embark-prompter #'embark-keymap-prompter)
 
   (defun my/embark-toggle-prompter ()
