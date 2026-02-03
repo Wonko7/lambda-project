@@ -435,14 +435,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shell / bash
 
-(use-package pcmpl-args-autoloads
-  :demand t)
-(use-package pcmpl-unix
-  :demand t)
-(use-package pcmpl-gnu
-  :demand t)
-(use-package pcmpl-cvs
-  :demand t)
+;; (use-package pcmpl-args-autoloads
+;;   :demand t)
+;; (use-package pcmpl-unix
+;;   :demand t
+;;   :config
+;;   (defalias 'pcomplete/copy #'pcomplete/scp))
+;; (use-package pcmpl-gnu
+;;   :demand t)
+;; (use-package pcmpl-cvs
+;;   :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search

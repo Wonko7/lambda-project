@@ -22,6 +22,7 @@
   #:use-module (gnu services shepherd)
   #:use-module (wonko packages emacs-xyz)
   #:use-module (wonko packages matrix)
+  #:use-module (wonko packages bash)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko fleet)
@@ -195,7 +196,10 @@
        "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
        " \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
        "set -o vi\n"
-       "bind '\"jj\":vi-movement-mode'\n")))))
+       "bind '\"jj\":vi-movement-mode'\n")
+      (mixed-text-file ;; REVIEW: bash-completion shouldn't need this
+       "bash-completion"
+       "source " (file-append bash-complete-alias "/share/bash/complete_alias"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shepherd
@@ -831,28 +835,28 @@
 
 (define-public %emacs-debug-home
   (home-environment
-   (packages (map rewrite-emacs-input
-                  (append
-                   %emacs-debug-world
-                   %xorg-world
-                   %fonts-world)))
-   (services (cons*
-              (simple-service
-               'xsession
-               home-files-service-type
-               `((".xsession"
-                  ,(program-file
-                    "xsession"
-                    #~(begin
-                        (system
-                         (string-append
-                          "source ~/.bash_profile;"
-                          #$xhost "/bin/xhost +SI:localuser:$USER;"
-                          #$xset "/bin/xset r rate 400 30;"
-                          #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
-                          #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
-                          #$xrdb "/bin/xrdb -load ~/.Xresources;"
-                          "~/.x-config;"
-                          #$xset "/bin/xset dpms 600 1200 0;"
-                          "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
-              %common-wonko-services))))
+    (packages (map rewrite-emacs-input
+                   (append
+                    %emacs-debug-world
+                    %xorg-world
+                    %fonts-world)))
+    (services (cons*
+               (simple-service
+                'xsession
+                home-files-service-type
+                `((".xsession"
+                   ,(program-file
+                     "xsession"
+                     #~(begin
+                         (system
+                          (string-append
+                           "source ~/.bash_profile;"
+                           #$xhost "/bin/xhost +SI:localuser:$USER;"
+                           #$xset "/bin/xset r rate 400 30;"
+                           #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
+                           #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
+                           #$xrdb "/bin/xrdb -load ~/.Xresources;"
+                           "~/.x-config;"
+                           #$xset "/bin/xset dpms 600 1200 0;"
+                           "exec " #$(rewrite-emacs-input emacs-exwm-custom-emacs) "/bin/exwm")))))))
+               %common-wonko-services))))
