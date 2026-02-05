@@ -342,6 +342,8 @@
   :custom
   (bash-completion-use-separate-processes t) ;; Fixes erratic completion / broken prompt
   :config
+  ;; https://github.com/szermatt/emacs-bash-completion/issues/75 on broken alias completion.
+  ;; REVIEW: check if complete_alias in homes.scm bash config is still needed.
   (bash-completion-setup))
 
 (use-package detached
