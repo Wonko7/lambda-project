@@ -661,7 +661,7 @@
                   (string-append git " remote add hub git@github.com:wonko7/" name)))
                (when (assoc-ref args 'berg)
                  (system
-                  (string-append git " remote add berg git@codeberg.com:wonko/" name)))
+                  (string-append git " remote add berg git@codeberg.com/wonko/" name)))
                (when (assoc-ref args 'push-remote)
                  (let* ((pipe (open-input-pipe
                                (string-append git " branch --show-current")))
