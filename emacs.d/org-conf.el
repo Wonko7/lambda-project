@@ -706,7 +706,7 @@ current time."
 
           ("w" "🦁 witness the fitness")
           ("wb" "🐒 bouldering" entry
-           ,(string-join '("* 🐒 [[roam:bouldering]] %? :wtf:cb:\n"
+           ,(string-join '("* 🐒 [[roam:bouldering]] / %? :wtf:cb:\n"
                            "%U\n"
                            "** ❤ with :is:\n"
                            "** 👷 projects\n"
@@ -714,7 +714,7 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("ws" "🐒 sport climbing" entry
-           ,(string-join '("* 🐒 [[roam:sport climbing]] %? :wtf:cb:\n"
+           ,(string-join '("* 🐒 [[roam:sport climbing]] / %? :wtf:cb:\n"
                            "%U\n"
                            "** ❤ with :is:\n"
                            "** 🔥 topped\n"
