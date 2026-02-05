@@ -163,8 +163,6 @@
     "C-S-l"   #'org-demote-subtree
     "C-l"     #'org-demote-subtree)
 
-  ;; leaving this here, sometimes I just force this:
-  ;; (setq  sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
   ;; babel
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -182,6 +180,11 @@
      (sql . t)
      (ocaml . t)
      (org . t))))
+
+;; leaving this here, sometimes I just force this:
+;; (setq  sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
+;; sly:
+;; (setq  sql-postgres-program "/gnu/store/yrmwmpv33xg4vf2g5ym2ckcmcphw0nc0-profile/bin/psql")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
