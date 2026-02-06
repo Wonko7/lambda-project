@@ -262,17 +262,18 @@
 
   (general-define-key
    :states 'normal
-   "C-e"  #'embark-act
-   "-"    #'mode-line-other-buffer
-   "/"    #'consult-line
-   "C-/"  #'evil-search-forward
-   "*"    #'consult-line-symbol-at-point
-   "C-*"  #'consult-line-word-at-point
-   "#"    #'evil-search-word-forward
-   "C-#"  #'evil-search-word-backward
-   ;; "`"    #' FIXME do something with this
-   "'"    #'evil-owl-goto-mark
-   "Y"    (li (execute-kbd-macro (kbd "y$"))))
+   "<TAB>" #'evil-toggle-fold
+   "C-e"   #'embark-act
+   "-"     #'mode-line-other-buffer
+   "/"     #'consult-line
+   "C-/"   #'evil-search-forward
+   "*"     #'consult-line-symbol-at-point
+   "C-*"   #'consult-line-word-at-point
+   "#"     #'evil-search-word-forward
+   "C-#"   #'evil-search-word-backward
+   ;; "`"     #' FIXME do something with this
+   "'"     #'evil-owl-goto-mark
+   "Y"     (li (execute-kbd-macro (kbd "y$"))))
   ;; TODO: sentence & paragraph motions.
 
   (general-define-key
