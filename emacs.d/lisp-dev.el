@@ -28,13 +28,9 @@
 
 (use-package guix-devel
   :hook
-  (scheme-mode-hook . guix-devel-mode)
-  :config
-  (my/nuke-all-gz-for-origami))
+  (scheme-mode-hook . guix-devel-mode))
 
-(use-package geiser-mode
-  :config
-  (my/nuke-all-gz-for-origami))
+(use-package geiser-mode)
 
 (use-package geiser-guile-mode
   :config
@@ -90,15 +86,13 @@
     "p"  #'sp-wrap-round
     "w"  #'sp-wrap-round
     "C"  #'sp-wrap-curly
-    "S"  #'sp-wrap-square)
-
-  (my/nuke-all-gz-for-origami))
+    "S"  #'sp-wrap-square))
 
 ;; c-q to insert literal character without paredit balancing
 ;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 
 (use-package origami
-  :demand t
+  :disabled t
   :custom
   (origami-fold-replacement "…")
 
@@ -111,27 +105,36 @@
     (setq origami-parser-alist (append origami-parser-alist
                                        `((emacs-lisp-mode       . origami-indent-parser)
                                          (lisp-interaction-mode . origami-indent-parser)))))
-  ;; clear up gz for origami:
-  (defun my/nuke-all-gz-for-origami ()
-    (mapc
-     (lambda (m)
-       (evil-collection-define-key 'normal m
-         "gz" nil))
-     '(emacs-lisp-mode-map
-       guix-devel-mode-map
-       guix-devel-keys-map
-       guix-ui-map
-       geiser-mode-map
-       scheme-mode-map
-       evil-cleverparens-mode-map)))
-  (my/nuke-all-gz-for-origami)
-  ;; temp?
   (general-define-key
    :states 'normal
-   "<TAB>" #'origami-toggle-node
-   "gzc" #'origami-close-node
-   "gzo" #'origami-open-node-recursively
-   "gzC" #'origami-close-all-nodes
-   "gzO" #'origami-open-all-nodes))
+   "<TAB>" #'evil-toggle-fold))
+
+(use-package origami
+  :custom
+  (origami-fold-replacement "…")
+
+  :config
+  (global-origami-mode)
+  ;; change emacs lisp parser:
+  (let* ((op origami-parser-alist)
+         (op (assoc-delete-all 'emacs-lisp-mode op))
+         (op (assoc-delete-all 'lisp-interaction-mode op)))
+    (setq origami-parser-alist (append origami-parser-alist
+                                       `((emacs-lisp-mode       . origami-indent-parser)
+                                         (lisp-interaction-mode . origami-indent-parser)))))
+  (general-define-key
+   :states 'normal
+   "<TAB>" #'evil-toggle-fold))
+
+(use-package outline-indent
+  :commands outline-indent-minor-mode
+  :custom
+  (outline-indent-ellipsis " ▼")
+  ;; (origami-fold-replacement "…")
+
+  :config
+  (general-define-key
+   :states 'normal
+   "<TAB>" #'evil-toggle-fold))
 
 (provide 'conf/lisp)

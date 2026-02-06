@@ -146,6 +146,7 @@
 
         ;; code: ()
         emacs-origami
+        emacs-outline-indent
         emacs-rainbow-mode
         emacs-rainbow-blocks
         emacs-rainbow-delimiters
