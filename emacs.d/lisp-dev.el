@@ -56,9 +56,9 @@
     ")"     #'evil-cp-next-opening
     "C-k"   #'sp-backward-sexp
     "C-j"   #'sp-next-sexp
-    "é"     #'sp-backward-up-sexp
+    "é"     #'backward-up-list
     "&"     #'sp-next-sexp
-    "ï"     #'sp-backward-up-sexp         ; FIXME put this in global map?
+    "à"     #'beginning-of-defun
     ;; review, not using
     "M-r"   #'paredit-raise-sexp
     "M-t"   #'sp-transpose-sexp
