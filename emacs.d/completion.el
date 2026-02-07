@@ -11,7 +11,7 @@
   :demand t
   :config
   ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
-  (setq completion-styles '(substring orderless)
+  (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides nil
         completion-ignore-case t)
@@ -21,6 +21,9 @@
   (defun regex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
       `(orderless-regex . ,(substring pattern 0 -1))))
+
+  (defun first-prefix (pattern index _total)
+    (if (= index 0) 'orderless-literal-prefix))
 
   (defun literal-if-equal (pattern _index _total)
     (when (string-suffix-p "=" pattern)
@@ -48,6 +51,7 @@
                                     char-fold-to-regexp
                                     orderless-regexp)
         orderless-style-dispatchers '(;; regex-if-twiddle
+                                      first-prefix
                                       metadata-if-at
                                       flex-if-quote
                                       literal-if-equal
@@ -86,7 +90,7 @@
 (use-package vertico
   :demand t
   :bind ( :map vertico-map
-          ("TAB" . #'vertico-exit)
+          ("TAB" . #'minibuffer-complete-word)
           ("C-j" . #'vertico-next)
           ("C-k" . #'vertico-previous)
           ("<down>" . #'vertico-next)
