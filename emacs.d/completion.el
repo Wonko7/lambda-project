@@ -91,7 +91,7 @@
   ;;                                                            #'cape-elisp-block
   ;;                                                            #'cape-file)))
 
-  (setq completion-at-point-functions (list #'cape-dabbrev)))
+  (setq completion-at-point-functions (list #'cape-dabbrev #'tags-completion-at-point-function)))
 
 (use-package vertico
   :demand t
