@@ -11,7 +11,7 @@
   :demand t
   :config
   ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
-  (setq completion-styles '(orderless)
+  (setq completion-styles '(substring orderless)
         completion-category-defaults nil
         completion-category-overrides nil
         completion-ignore-case t)
@@ -22,8 +22,13 @@
     (when (string-suffix-p "~" pattern)
       `(orderless-regex . ,(substring pattern 0 -1))))
 
+  ;; can't see how to do this only for files, annoying everywhere else.
   (defun first-prefix (pattern index _total)
     (if (= index 0) 'orderless-literal-prefix))
+
+  (defun prefix-if-bq (pattern index _total)
+    (when (string-prefix-p "`" pattern)
+      `(orderless-literal-prefix . ,(substring pattern 1))))
 
   (defun literal-if-equal (pattern _index _total)
     (when (string-suffix-p "=" pattern)
@@ -51,7 +56,8 @@
                                     char-fold-to-regexp
                                     orderless-regexp)
         orderless-style-dispatchers '(;; regex-if-twiddle
-                                      first-prefix
+                                      ;; first-prefix
+                                      ;; prefix-if-bq
                                       metadata-if-at
                                       flex-if-quote
                                       literal-if-equal
