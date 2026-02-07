@@ -11,7 +11,7 @@
   :demand t
   :config
   ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
-  (setq completion-styles '(orderless basic)
+  (setq completion-styles '(substring orderless)
         completion-category-defaults nil
         completion-category-overrides nil
         completion-ignore-case t)
