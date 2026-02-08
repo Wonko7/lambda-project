@@ -2,22 +2,32 @@
 
 (use-package marginalia
   :demand t
+  :custom
+  (marginalia-align 'right)
+  (marginalia-max-relative-age 0)
   :config
-  (marginalia-mode 1)
-  (setq marginalia-align 'right)
-  (setq marginalia-max-relative-age 0))
+  (marginalia-mode 1))
 
 (use-package orderless
   :demand t
-  :config
+  :custom
   ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
-  (setq completion-styles '(substring orderless)
-        completion-category-defaults nil
-        completion-category-overrides nil
-        completion-ignore-case t)
+  (completion-styles '(substring orderless))
+  (completion-category-defaults nil)
+  (completion-category-overrides nil)
+  (completion-ignore-case t)
+  (char-fold-symmetric nil)
+  (completion-ignore-case t)
+  ;; cap-super-capf might interest future you.
+  (completion-at-point-functions (list #'cape-dabbrev
+                                       #'tags-completion-at-point-function))
+  (orderless-smart-case t)
+  :config
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; orderless-style-dispatchers
-  ;; FIXME rewrite with orderless-affix-dispatch-alist on next release.
+  ;; TODO: maybe rewrite with orderless-affix-dispatch-alist
+
   (defun regex-if-twiddle (pattern _index _total)
     (when (string-suffix-p "~" pattern)
       `(orderless-regex . ,(substring pattern 0 -1))))
@@ -61,37 +71,7 @@
                                       metadata-if-at
                                       flex-if-quote
                                       literal-if-equal
-                                      without-if-bang)
-        orderless-smart-case t)
-
-  (setq char-fold-symmetric nil)
-  (setq completion-ignore-case t)
-  ;; will come in handy:
-
-  ;; (orderless-define-completion-style orderless+initialism
-  ;;   (orderless-matching-styles '(orderless-initialism
-  ;;                                orderless-literal
-  ;;                                orderless-regexp)))
-  ;; (setq completion-category-overrides
-  ;;       '((command (styles orderless+initialism))
-  ;;         (symbol (styles orderless+initialism))
-  ;;         (variable (styles orderless+initialism))))
-
-  ;; (setq orderless-component-separator "[ _-]")
-  ;; (defun just-one-face (fn &rest args)
-  ;;   (let ((orderless-match-faces [completions-common-part]))
-  ;;     (apply fn args)))
-  ;;
-  ;; (advice-add 'company-capf--candidates :around #'just-one-face)
-
-  ;; (add-to-list completion-at-point-functions #'cape-symbol)
-  ;; (setq completion-at-point-functions (list (cape-super-capf #'cape-symbol
-  ;;                                                            #'cape-keyword
-  ;;                                                            #'cape-dabbrev
-  ;;                                                            #'cape-elisp-block
-  ;;                                                            #'cape-file)))
-
-  (setq completion-at-point-functions (list #'cape-dabbrev #'tags-completion-at-point-function)))
+                                      without-if-bang)))
 
 (use-package vertico
   :demand t
@@ -101,21 +81,23 @@
           ("C-k" . #'vertico-previous)
           ("<down>" . #'vertico-next)
           ("<up>" . #'vertico-previous))
+  :custom
+  ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
+  (vertico-count 20) ;; Show more candidates
+  (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t)
   :config
+
   (vertico-mode)
   (vertico-mouse-mode)
-  ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
-
-  ;; (setq vertico-scroll-margin 2) ;; Different scroll margin
-  (setq vertico-count 20) ;; Show more candidates
-  (setq vertico-resize t) ;; Grow and shrink the Vertico minibuffer
-  (setq vertico-cycle t)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; fancy:
+
   (set-face-attribute 'vertico-group-title nil :inherit 'font-lock-keyword-face)
   (set-face-attribute 'vertico-current nil :background "black")
-  ;; Prefix the current candidate with “» ”. From
+
+  ;; Prefix the current candidate with “» ”. From:
   ;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
   (advice-add #'vertico--format-candidate :around
               (lambda (orig cand prefix suffix index _start)
@@ -143,10 +125,6 @@
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
 
   ;; Enable recursive minibuffers
   ;; inspired from prot's conf: https://github.com/protesilaos/dotfiles
@@ -154,16 +132,16 @@
   (setq enable-recursive-minibuffers t)
   (setq read-minibuffer-restore-windows nil)
   (setq minibuffer-default-prompt-format " [%s]")
-
   (add-hook 'after-init-hook #'minibuffer-depth-indicate-mode)
+
   (require 'minibuf-eldef)
   (setq read-buffer-completion-ignore-case t)
+  (minibuffer-electric-default-mode)
 
   (setq completion-ignore-case t)
   (setq-default case-fold-search t)
   (setq read-file-name-completion-ignore-case t)
 
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   (setq resize-mini-windows t) ;; FIXME: testing
 
   (setq read-answer-short t)
