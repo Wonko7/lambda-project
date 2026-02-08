@@ -435,27 +435,15 @@
 
 (use-package yasnippet
   :defer t
+  :custom
+  (yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-wrap-around-region t)
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
 
 (use-package consult-yasnippet
   :after yasnippet
   :defer t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; shell / bash
-
-;; (use-package pcmpl-args-autoloads
-;;   :demand t)
-;; (use-package pcmpl-unix
-;;   :demand t
-;;   :config
-;;   (defalias 'pcomplete/copy #'pcomplete/scp))
-;; (use-package pcmpl-gnu
-;;   :demand t)
-;; (use-package pcmpl-cvs
-;;   :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; search
