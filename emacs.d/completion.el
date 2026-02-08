@@ -11,8 +11,8 @@
 (use-package orderless
   :demand t
   :custom
-  ;; Andrew Topin once mentioned that tramp needs basic for completion to work.
-  (completion-styles '(substring orderless))
+  ;; basic is needed for tramp, substring is for filepaths
+  (completion-styles '(substring orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides nil)
   (completion-ignore-case t)
@@ -148,24 +148,7 @@
   (setq use-short-answers t)
   (setq echo-keystrokes 0.25)
   (setq minibuffer-prompt-properties ;; FIXME: testing
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; tramp:
-
-  ;; Workaround for problem with `tramp' hostname completions. This overrides
-  ;; the completion style specifically for remote files! See
-  ;; https://github.com/minad/vertico#tramp-hostname-completion
-
-  (defun kb/basic-remote-try-completion (string table pred point)
-    (and (vertico--remote-p string)
-         (completion-basic-try-completion string table pred point)))
-  (defun kb/basic-remote-all-completions (string table pred point)
-    (and (vertico--remote-p string)
-         (completion-basic-all-completions string table pred point)))
-  (add-to-list 'completion-styles-alist
-               '(basic-remote           ; Name of `completion-style
-                 kb/basic-remote-try-completion kb/basic-remote-all-completions nil)))
+        '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 (use-package vertico-repeat
   :demand t
