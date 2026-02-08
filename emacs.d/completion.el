@@ -75,12 +75,13 @@
 
 (use-package vertico
   :demand t
-  :bind ( :map vertico-map
-          ("TAB" . #'minibuffer-complete-and-exit)
-          ("C-j" . #'vertico-next)
-          ("C-k" . #'vertico-previous)
-          ("<down>" . #'vertico-next)
-          ("<up>" . #'vertico-previous))
+  :bind (:map vertico-map
+              ("TAB" . #'minibuffer-complete-and-exit)
+              ("DEL" . vertico-directory-delete-char)
+              ("C-j" . #'vertico-next)
+              ("C-k" . #'vertico-previous)
+              ("<down>" . #'vertico-next)
+              ("<up>" . #'vertico-previous))
   :custom
   ;; FIXME `vertico-repeat-history' to `savehist-additional-variables'.
   (vertico-count 20) ;; Show more candidates
