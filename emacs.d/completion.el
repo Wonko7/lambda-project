@@ -11,8 +11,8 @@
 (use-package orderless
   :demand t
   :custom
-  ;; basic is needed for tramp, substring is for filepaths
-  (completion-styles '(substring orderless basic))
+  ;; basic is needed for tramp
+  (completion-styles '(orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides nil)
   (completion-ignore-case t)
