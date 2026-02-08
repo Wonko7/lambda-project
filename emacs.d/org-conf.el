@@ -193,11 +193,53 @@
   :after org
   :commands (org-roam-node-open)
   :custom
-  (org-roam-file-exclude-regexp nil) ; default is data/, lol what a fuckface! that's exactly where my org data is!
-  (org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  ;; default is data/, lol what a fuckface! that's exactly where my org data is!
+  (org-roam-file-exclude-regexp nil)
+  (org-roam-node-display-template (concat "${title:*} "
+                                          (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-completion-everywhere t)
   :config
-  (org-roam-db-autosync-mode))
+  (org-roam-db-autosync-mode)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; use roam tag lists to add headline tags:
+
+  (defun my/org-tag-add (tags)
+    "Add TAGS to the header at point. based on org-roam-tag-add."
+    (interactive
+     (list (let ((crm-separator "[ 	]*:[ 	]*"))
+             (completing-read-multiple "Tag: " (org-roam-tag-completions)))))
+    (save-excursion
+      (goto-char (org-back-to-heading-or-point-min)) ;; <- this is the diff
+      (if (= (org-outline-level) 0)
+          (let ((current-tags (split-string
+                               (or (cadr (assoc "FILETAGS"
+                                                (org-collect-keywords '("filetags"))))
+                                   "")
+                               ":" 'omit-nulls)))
+            (org-roam-set-keyword "filetags" (org-make-tag-string (seq-uniq (append tags current-tags)))))
+        (org-set-tags (seq-uniq (append tags (org-get-tags)))))
+      tags))
+
+  (defun my/org-tag-remove (&optional tags)
+    "Remove TAGS from the headline at point. based on org-roam-tag-remove"
+    (interactive)
+    (save-excursion
+      (goto-char (org-back-to-heading-or-point-min)) ;; <- this is the diff
+      (if (= (org-outline-level) 0)
+          (let* ((current-tags (split-string (or (cadr (assoc "FILETAGS"
+                                                              (org-collect-keywords '("filetags"))))
+                                                 (user-error "No tag to remove"))
+                                             ":" 'omit-nulls))
+                 (tags (or tags (completing-read-multiple "Tag: " current-tags))))
+            (org-roam-set-keyword "filetags"
+                                  (org-make-tag-string (seq-difference current-tags tags #'string-equal))))
+        (let* ((current-tags (or (org-get-tags)
+                                 (user-error "No tag to remove")))
+               (tags (or tags (completing-read-multiple "Tag: " current-tags))))
+          (org-set-tags (seq-difference current-tags tags #'string-equal))))
+      tags)))
+
 
 (use-package org-roam-dailies
   :commands (org-roam-dailies-latest)
