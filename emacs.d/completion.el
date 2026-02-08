@@ -96,7 +96,7 @@
 (use-package vertico
   :demand t
   :bind ( :map vertico-map
-          ("TAB" . #'minibuffer-complete-word)
+          ("TAB" . #'minibuffer-complete-and-exit)
           ("C-j" . #'vertico-next)
           ("C-k" . #'vertico-previous)
           ("<down>" . #'vertico-next)
