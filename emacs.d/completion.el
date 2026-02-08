@@ -80,6 +80,7 @@
               ("DEL" . vertico-directory-delete-char)
               ("C-j" . #'vertico-next)
               ("C-k" . #'vertico-previous)
+              ("C-." . #'vertico-insert)
               ("<down>" . #'vertico-next)
               ("<up>" . #'vertico-previous))
   :custom
