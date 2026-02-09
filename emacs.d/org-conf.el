@@ -310,7 +310,7 @@ EXTRA-FILES can be used to append extra files to the list."
                                  ((agenda "")
                                   (alltodo "" )))
                                 ("z" "Super zaen view"
-                                 ((agenda "" )
+                                 ((agenda "")
                                   (alltodo
                                    "="
                                    ((org-agenda-overriding-header "")

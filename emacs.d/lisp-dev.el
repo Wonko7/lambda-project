@@ -123,6 +123,7 @@
   (origami-fold-replacement " ▼")
   :hook
   (tuareg-mode-hook . origami-mode)
+  (org-agenda-mode-hook . origami-mode)
   :config
   (let* ((op origami-parser-alist))
     (setq origami-parser-alist (append origami-parser-alist

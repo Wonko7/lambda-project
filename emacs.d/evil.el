@@ -175,7 +175,13 @@
   :demand t
   :after evil
   :config
-  (evil-org-agenda-set-keys))
+  (evil-org-agenda-set-keys)
+  (general-evil-define-key '(motion) org-agenda-mode-map
+    (kbd "<tab>") #'evil-toggle-fold
+    "zo"  #'evil-open-fold
+    "zO"  #'evil-open-folds
+    "zm"  #'evil-close-folds
+    "zC"  #'evil-close-folds))
 
 (use-package evil-snipe
   :demand t
