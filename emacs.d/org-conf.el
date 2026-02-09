@@ -149,14 +149,17 @@
     "k"     #'org-roam-dailies-goto-previous-note)
 
   (general-evil-define-key '(normal) org-mode-map
+    "à"       #'org-up-element
     "zD"      #'org-decrypt-entries
     "zq"      (li (org-show-branches-buffer))
     "zR"      #'my/org-fold-show-all
     "("       #'org-previous-visible-heading
     ")"       #'org-next-visible-heading
     "J"       nil
-    "C-k"     #'org-move-subtree-up
-    "C-j"     #'org-move-subtree-down
+    "C-k"     #'org-backward-element
+    "C-j"     #'org-forward-element
+    "C-S-k"   #'org-move-subtree-up
+    "C-S-j"   #'org-move-subtree-down
     "C-<"     #'org-promote-subtree
     "C->"     #'org-demote-subtree
     "C-S-h"   #'org-promote-subtree
