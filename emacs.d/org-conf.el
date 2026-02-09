@@ -1136,4 +1136,28 @@ current time."
   (org-appear-autolinks t)
   (org-appear-autokeywords t))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; misc: not really org, but I use it when planning org stuff
+
+(use-package time-zones
+  :demand t
+  :custom
+  (time-zones-show-details t)
+  (time-zones-show-help nil)
+  :config
+  (general-evil-define-key '(normal) time-zones-mode-map
+    "+" #'time-zones-add-city
+    "a" #'time-zones-add-city
+    "d" #'time-zones-delete-city-at-point
+    "h" #'time-zones-mark-home-at-point
+    "r" #'time-zones-refresh
+    "f" #'time-zones-time-forward
+    "b" #'time-zones-time-forward
+    "F" #'time-zones-time-forward-hour
+    "B" #'time-zones-time-forward-hour
+    "g" #'time-zones-jump-to-date
+    "i" #'time-zones-toggle-showing-details
+    "L" #'time-zones-toggle-showing-help
+    "q" #'kill-current-buffer))
+
 (provide 'conf/org)

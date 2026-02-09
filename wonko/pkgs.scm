@@ -126,7 +126,7 @@
         emacs-dired-hacks
         emacs-dired-toggle-sudo
         emacs-dired-preview
-        emacs-world-time-mode ;; FIXME https://xenodium.com/emacs-time-zones-mode
+        emacs-time-zones
         emacs-casual
         ;; 🗺
         emacs-osm

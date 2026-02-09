@@ -180,6 +180,26 @@
       (description "This library offers an alternative to calendar. It’s very similar and offer only a few options, like the possibility to color day according to the number of item in the org-agenda")
       (license (@ (guix licenses) gpl3+)))))
 
+(define-public emacs-time-zones
+  (let ((commit "5513f14d857a67cfac56a86674dbf8d29f81fee5"))
+    (package
+      (name "emacs-time-zones")
+      (version "v0.5.2.x")
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/xenodium/time-zones")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "1y8xc4xhjgby1mjblvi580hw6nqlwpsgr8s3ycfcifbbfxmv6945"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/xenodium/time-zones")
+      (synopsis "A lovely major mode to view city times across the world.")
+      (description "A lovely major mode to view city times across the world.")
+      (license (@ (guix licenses) gpl3+)))))
+
 (define-public emacs-tramp-hlo
   (let ((commit "b726b4042e96ac5cead396c8d12c01e6bad2bd78"))
     (package
