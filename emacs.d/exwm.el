@@ -31,7 +31,6 @@
 (use-package exwm
   :demand t
   :after desktop-environment
-
   :custom
   (exwm-manage-force-tiling t)
   (exwm-input-prefix-keys `(?\s-i
@@ -255,6 +254,16 @@
   ;; WTF: both this & the exwm mapping are needed for this to work.
   (general-evil-define-key '(normal insert visual global emacs) exwm-mode-map
     (kbd "C-SPC") #'my/force-main-menu)
+
+  ;; restart some x services on exwm start:
+  (add-hook 'exwm-init-hook
+            (lambda ()
+              (message "hello there")
+              (run-with-idle-timer 5 nil (lambda ()
+                                           (message "general kenobi")
+                                           (async-shell-command "herd start kill-dunst")
+                                           (async-shell-command "herd restart oneko")))))
+
 
   ;; lift off
   (exwm-wm-mode))
