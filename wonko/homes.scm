@@ -20,6 +20,8 @@
   #:use-module (gnu home services gnupg)
   #:use-module (gnu home services xdg)
   #:use-module (gnu services shepherd)
+  #:use-module (gnu home services dict)
+  #:use-module (gnu services dict)
   #:use-module (wonko packages emacs-xyz)
   #:use-module (wonko packages matrix)
   #:use-module (wonko packages bash)
@@ -676,6 +678,16 @@
     'home-run-folder home-run-on-first-login-service-type
     #~(let ((mkdir #$(file-append coreutils "/bin/mkdir")))
         (system (string-append mkdir " -p ~/.run/emacs/ ~/.run/log/"))))
+
+   (service home-dicod-service-type
+            (for-home
+             (dicod-configuration
+               (interfaces '("localhost"))
+               (databases (cons*
+                           %dicod-database:gcide
+                           (map
+                            dicod-freedict-database
+                            '("fra-eng" "eng-fra")))))))
 
    %base-home-services))
 
