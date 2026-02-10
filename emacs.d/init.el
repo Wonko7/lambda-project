@@ -28,7 +28,7 @@
 (savehist-mode)
 
 (save-place-mode)
-(setq history-length 100000)
+(setq history-length 10000)
 
 (require 'recentf)
 (recentf-mode)
