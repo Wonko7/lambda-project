@@ -86,6 +86,8 @@
     "bm" #'bookmark-set
     "bg" #'bookmark-jump
     "bR" #'bookmark-rename
+    ;; blink
+    "C-b" #'beacon-blink
 
     ;; org
     "o"    '("org" . (keymap))

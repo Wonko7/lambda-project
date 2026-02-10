@@ -31,9 +31,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; cursor
 
-;; (require 'beacon)
-;; (beacon-mode 1)
-;; (setq beacon-blink-when-point-moves-horizontally 2)
+(use-package beacon)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; nyan
