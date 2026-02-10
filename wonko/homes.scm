@@ -25,6 +25,7 @@
   #:use-module (wonko packages emacs-xyz)
   #:use-module (wonko packages matrix)
   #:use-module (wonko packages bash)
+  #:use-module (wonko packages toys) ;; REVIEW: oneko
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko fleet)
@@ -283,11 +284,7 @@
          (inherit x11-respawn-config-shepherd-service)
          (provision '(oneko))
          (start #~(make-forkexec-constructor
-                   ;; (list #$(file-append oneko "/bin/oneko") "-dog")
-                   (list
-                    (string-append (getenv "HOME")
-                                   "/.guix-extra-profiles/borked/bin/oneko")
-                    "-dog")
+                   (list #$(file-append oneko-warn "/bin/oneko") "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
          (documentation "neko"))
