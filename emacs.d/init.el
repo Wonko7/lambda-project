@@ -334,7 +334,9 @@
   (explicit-shell-file-name "bash")
   :config
   (general-evil-define-key '(insert normal) shell-mode-map
-    "C-S-<return>" #'detached-shell-send-input))
+    "C-S-<return>" #'detached-shell-send-input)
+  (general-evil-define-key '(normal) shell-mode-map
+    "à" #'my/cd-up))
 
 (use-package bash-completion
   :after shell
@@ -468,7 +470,7 @@
   (wdired-allow-to-change-permissions t)
   :config
   (general-evil-define-key '(normal) dired-mode-map
-    "ï"    #'dired-up-directory))
+    "à" #'dired-up-directory))
 
 (use-package diredfl
   :hook (dired-mode-hook . diredfl-mode))

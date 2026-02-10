@@ -153,6 +153,8 @@
     "zD"      #'org-decrypt-entries
     "zq"      (li (org-show-branches-buffer))
     "zR"      #'my/org-fold-show-all
+    "é"       #'org-up-element
+    "&"       #'org-next-visible-heading
     "("       #'org-previous-visible-heading
     ")"       #'org-next-visible-heading
     "J"       nil
