@@ -49,6 +49,7 @@
 ;; folding
 
 (use-package outline-indent
+  :demand t
   :commands (outline-indent--update-ellipsis outline-indent-minor-mode)
   :hook
   (makefile-mode-hook . outline-indent-minor-mode)
@@ -65,6 +66,7 @@
         (outline-show-entry)))))
 
 (use-package hideshow
+  :demand t
   :after outline-indent
   :hook
   (emacs-lisp-mode-hook . hs-minor-mode)
@@ -74,6 +76,7 @@
 
 (use-package seq) ;; TODO: dash/seq/cl-lib => use cl everywhere?
 (use-package origami
+  :demand t
   :after (evil seq outline-indent)
   :custom
   (origami-fold-replacement " ▼")
