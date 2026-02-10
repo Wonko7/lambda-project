@@ -1,5 +1,5 @@
 ﻿###
-###  vlc 3.0.18
+###  vlc 3.0.23
 ###
 
 ###
@@ -172,14 +172,6 @@
 # Video output modules (string)
 #clone-vout-list=
 
-[xcb_xv] # XVideo output (XCB)
-
-# XVideo adaptor number (integer)
-#xvideo-adaptor=-1
-
-# XVideo format id (integer)
-#xvideo-format-id=0
-
 [yuv] # YUV video output
 
 # device, fifo or filename (string)
@@ -190,6 +182,14 @@
 
 # Add a YUV4MPEG2 header (boolean)
 #yuv-yuv4mpeg2=0
+
+[xcb_xv] # XVideo output (XCB)
+
+# XVideo adaptor number (integer)
+#xvideo-adaptor=-1
+
+# XVideo format id (integer)
+#xvideo-format-id=0
 
 [xcb_x11] # X11 video output (XCB)
 
@@ -411,6 +411,11 @@
 # Frame rate (string)
 #fps-fps=
 
+[extract] # Extract RGB component video filter
+
+# RGB component to extract (integer)
+#extract-component=16711680
+
 [erase] # Erase video filter
 
 # Image mask (string)
@@ -421,11 +426,6 @@
 
 # Y coordinate (integer)
 #erase-y=0
-
-[extract] # Extract RGB component video filter
-
-# RGB component to extract (integer)
-#extract-component=16711680
 
 [deinterlace] # Deinterlacing video filter
 
@@ -464,6 +464,17 @@
 # Pixels to padd to right (integer)
 #croppadd-paddright=0
 
+[colorthres] # Color threshold filter
+
+# Color (integer)
+#colorthres-color=16711680
+
+# Saturation threshold (integer)
+#colorthres-saturationthres=20
+
+# Similarity threshold (integer)
+#colorthres-similaritythres=15
+
 [canvas] # Canvas video filter
 
 # Output width (integer)
@@ -477,17 +488,6 @@
 
 # Pad video (boolean)
 #canvas-padd=1
-
-[colorthres] # Color threshold filter
-
-# Color (integer)
-#colorthres-color=16711680
-
-# Saturation threshold (integer)
-#colorthres-saturationthres=20
-
-# Similarity threshold (integer)
-#colorthres-similaritythres=15
 
 [bluescreen] # Bluescreen video filter
 
@@ -1237,9 +1237,6 @@
 
 [upnp] # Universal Plug'n'Play
 
-# SAT>IP channel list (string)
-#satip-channelist=auto
-
 # Custom SAT>IP channel list URL (string)
 #satip-channellist-url=
 
@@ -1386,7 +1383,7 @@
 #sout-avi-subject=
 
 # Encoder (string)
-#sout-avi-encoder=VLC Media Player - 3.0.18 Vetinari
+#sout-avi-encoder=VLC Media Player - 3.0.23 Vetinari
 
 # Keywords (string)
 #sout-avi-keywords=
@@ -1576,8 +1573,11 @@
 # List of words separated by | to filter (string)
 #qt-recentplay-filter=
 
-# Continue playback? (integer) always = 2
+# Continue playback? (integer)
 qt-continue=2
+
+# Enable Dark Mode (boolean)
+qt-dark-palette=1
 
 # Embed the file browser in open dialog (boolean)
 #qt-embedded-open=0
@@ -1864,7 +1864,7 @@ qt-privacy-ask=0
 #sout-avformat-options=
 
 # Reset timestamps (boolean)
-#sout-avformat-reset-ts=0
+#sout-avformat-reset-ts=1
 
 [adaptive] # Unified adaptive streaming for DASH/HLS
 
@@ -2538,15 +2538,13 @@ qt-privacy-ask=0
 # Save raw codec data (boolean)
 #dummy-save-es=0
 
-[dca] # DTS Coherent Acoustics audio decoder
-
-# DTS dynamic range compression (boolean)
-#dts-dynrng=1
-
 [dav1d] # Dav1d video decoder
 
 # Frames Threads (integer)
 #dav1d-thread-frames=0
+
+# All Layers (boolean)
+#dav1d-all-layers=0
 
 [cc] # Closed Captions decoder
 
@@ -2677,11 +2675,6 @@ qt-privacy-ask=0
 
 # Advanced options (string)
 #sout-avcodec-options=
-
-[a52] # ATSC A/52 (AC-3) audio decoder
-
-# A/52 dynamic range compression (boolean)
-#a52-dynrng=1
 
 [amem] # Audio memory output
 
@@ -2907,26 +2900,6 @@ qt-privacy-ask=0
 # Global gain (float)
 #equalizer-preamp=12.000000
 
-[chorus_flanger] # Sound Delay
-
-# Delay time (float)
-#delay-time=20.000000
-
-# Sweep Depth (float)
-#sweep-depth=6.000000
-
-# Sweep Rate (float)
-#sweep-rate=6.000000
-
-# Feedback gain (float)
-#feedback-gain=0.500000
-
-# Wet mix (float)
-#wet-mix=0.400000
-
-# Dry Mix (float)
-#dry-mix=0.400000
-
 [compressor] # Dynamic range compressor
 
 # RMS/peak (float)
@@ -2949,6 +2922,26 @@ qt-privacy-ask=0
 
 # Makeup gain (float)
 #compressor-makeup-gain=7.000000
+
+[chorus_flanger] # Sound Delay
+
+# Delay time (float)
+#delay-time=20.000000
+
+# Sweep Depth (float)
+#sweep-depth=6.000000
+
+# Sweep Rate (float)
+#sweep-rate=6.000000
+
+# Feedback gain (float)
+#feedback-gain=0.500000
+
+# Wet mix (float)
+#wet-mix=0.400000
+
+# Dry Mix (float)
+#dry-mix=0.400000
 
 [audiobargraph_a] # Audio part of the BarGraph function
 
@@ -3115,11 +3108,6 @@ qt-privacy-ask=0
 # Frame rate (float)
 #vdr-fps=25.000000
 
-[udp] # UDP input
-
-# UDP Source timeout (sec) (integer)
-#udp-timeout=-1
-
 [v4l2] # Video4Linux input
 
 # Video capture device (string)
@@ -3254,6 +3242,11 @@ qt-privacy-ask=0
 # v4l2 driver controls (string)
 #v4l2-set-ctrls=
 
+[udp] # UDP input
+
+# UDP Source timeout (sec) (integer)
+#udp-timeout=-1
+
 [timecode] # Time code subpicture elementary stream generator
 
 # Frame rate (string)
@@ -3270,17 +3263,6 @@ qt-privacy-ask=0
 # SMB domain (string)
 #smb-domain=
 
-[sftp] # SFTP input
-
-# SFTP port (integer)
-#sftp-port=22
-
-# Username (string)
-#sftp-user=
-
-# Password (string)
-#sftp-pwd=
-
 [shm] # Shared memory framebuffer
 
 # Frame rate (float)
@@ -3295,6 +3277,17 @@ qt-privacy-ask=0
 # Frame buffer height (integer)
 #shm-height=480
 
+[sftp] # SFTP input
+
+# SFTP port (integer)
+#sftp-port=22
+
+# Username (string)
+#sftp-user=
+
+# Password (string)
+#sftp-pwd=
+
 [satip] # SAT>IP Receiver Plugin
 
 # Receive buffer (integer)
@@ -3305,6 +3298,32 @@ qt-privacy-ask=0
 
 # Host (string)
 #satip-host=
+
+[rtp] # Real-Time Protocol (RTP) input
+
+# RTCP (local) port (integer)
+#rtcp-port=0
+
+# SRTP key (hexadecimal) (string)
+#srtp-key=
+
+# SRTP salt (hexadecimal) (string)
+#srtp-salt=
+
+# Maximum RTP sources (integer)
+#rtp-max-src=1
+
+# RTP source timeout (sec) (integer)
+#rtp-timeout=5
+
+# Maximum RTP sequence number dropout (integer)
+#rtp-max-dropout=3000
+
+# Maximum RTP sequence number misordering (integer)
+#rtp-max-misorder=100
+
+# RTP payload format assumed for dynamic payloads (string)
+#rtp-dynamic-pt=
 
 [rist] # RIST input
 
@@ -3334,32 +3353,6 @@ qt-privacy-ask=0
 
 # Do not check for a valid rtcp message from the encoder (boolean)
 #mcast-blind-nacks=0
-
-[rtp] # Real-Time Protocol (RTP) input
-
-# RTCP (local) port (integer)
-#rtcp-port=0
-
-# SRTP key (hexadecimal) (string)
-#srtp-key=
-
-# SRTP salt (hexadecimal) (string)
-#srtp-salt=
-
-# Maximum RTP sources (integer)
-#rtp-max-src=1
-
-# RTP source timeout (sec) (integer)
-#rtp-timeout=5
-
-# Maximum RTP sequence number dropout (integer)
-#rtp-max-dropout=3000
-
-# Maximum RTP sequence number misordering (integer)
-#rtp-max-misorder=100
-
-# RTP payload format assumed for dynamic payloads (string)
-#rtp-dynamic-pt=
 
 [live555] # RTP/RTSP/SDP demuxer (using Live555)
 
@@ -4168,7 +4161,7 @@ sub-language=eng
 #random=0
 
 # Repeat all (boolean)
-loop=0
+#loop=0
 
 # Repeat current item (boolean)
 #repeat=0
@@ -4257,10 +4250,10 @@ metadata-network-access=1
 # Control interfaces (string)
 #control=
 
-# Mouse wheel vertical axis control (integer) # -1 = disable
+# Mouse wheel vertical axis control (integer)
 hotkeys-y-wheel-mode=-1
 
-# Mouse wheel horizontal axis control (integer) # -1 = disable
+# Mouse wheel horizontal axis control (integer)
 hotkeys-x-wheel-mode=-1
 
 # Fullscreen (string)
@@ -4549,7 +4542,7 @@ key-audiodelay-down=Shift+a
 #global-key-audio-track=
 
 # Cycle audio track (string)
-key-audio-track=b
+#key-audio-track=b
 
 # Cycle through audio devices (string)
 #global-key-audiodevice-cycle=
@@ -4597,7 +4590,7 @@ key-aspect-ratio=r
 #global-key-crop=
 
 # Cycle video crop (string)
-key-crop=c
+#key-crop=c
 
 # Toggle autoscaling (string)
 #global-key-toggle-autoscale=
@@ -4970,3 +4963,4 @@ key-random=Shift+r
 
 # Playlist bookmark 10 (string)
 #bookmark10=
+
