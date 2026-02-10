@@ -79,7 +79,7 @@
   ;; org styling, hide markup etc.
   (org-hide-emphasis-markers t)
   (org-pretty-entities t)
-  (org-ellipsis "…")
+  (org-ellipsis " ▼")
 
   ;; refile
   (org-refile-targets '((nil . (:maxlevel . 9))))

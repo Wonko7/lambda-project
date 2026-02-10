@@ -94,7 +94,6 @@
 (use-package outline-indent
   :commands (outline-indent--update-ellipsis outline-indent-minor-mode)
   :hook
-  (org-mode-hook . outline-indent--update-ellipsis)
   (makefile-mode-hook . outline-indent-minor-mode)
   :custom
   (outline-indent-ellipsis " ▼")
