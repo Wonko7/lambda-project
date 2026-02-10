@@ -27,7 +27,7 @@
   (org-plantuml-jar-path (shell-command-to-string "cat `which plantuml` 2>/dev/null  | 2>/dev/null sed -nre 's/.* ([^ ]+\.jar).*/\\1/p' | tr -d '\n'"))
   (org-startup-folded 'content)
   (org-todo-keywords '((sequence
-                        "NEXT(n/!)" ;; A task that recuring
+                        "NEXT(n/!)" ;; A task that is recurring
                         "TODO(t)"   ;; A task that needs doing & is ready to do
                         "PROJ(p)"   ;; A project, which usually contains other tasks
                         "GOGO(g/!)" ;; A task that is in progress
@@ -286,7 +286,6 @@ EXTRA-FILES can be used to append extra files to the list."
   :after org
   :custom
   (org-agenda-window-setup 'current-window)
-  (org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
   (org-agenda-prefix-format (quote
                              ((agenda . "  %-21c%?-12t% s")
                               (timeline . "% s")
@@ -360,7 +359,7 @@ EXTRA-FILES can be used to append extra files to the list."
      (holiday-fixed 11 1 "👼 Toussaint")
      (holiday-fixed 11 2 "💀 Commémoration des fidèles défunts")
      (holiday-fixed 12 25 "🎄 Noël")
-     ;; fetes a date variable
+     ;; fetes à date variable
      (holiday-easter-etc 0 "🧟 Pâques")
      (holiday-easter-etc 1 "🧟 Lundi de Pâques")
      (holiday-easter-etc 39 "👼 Ascension")
@@ -599,7 +598,6 @@ current time."
     (message "[org->appt] when idle: %s" (format-time-string "[%F %a %H:%M]"))
     (run-with-idle-timer 10 nil #'org-agenda-to-appt))
   (run-at-time nil 3600 #'my/idle-org-agenda-to-appt))
-
 
 (use-package notifications
   :commands (my/appt-notify)
