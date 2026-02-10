@@ -41,7 +41,7 @@
 (use-package nyan-mode
   :demand t
   :custom
-  (nyan-animate-nyancat nil) ;; FIXME doesn't like to animate with emacs 29.1
+  (nyan-animate-nyancat t)
   :config
   (nyan-mode 1))
 
