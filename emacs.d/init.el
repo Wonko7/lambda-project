@@ -689,7 +689,7 @@
   (register-input-method "minimal-im"
                          "english"
                          'robin-use-package
-                         "λ"
+                         "🖊️"
                          "minimal doc str")
 
   (setq default-input-method "minimal-im")

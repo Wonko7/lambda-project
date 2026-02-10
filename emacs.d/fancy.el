@@ -115,6 +115,16 @@ mouse-3: Toggle minor modes")))
        help-echo mode-line-modified-help-echo)))
 (put 'my/mode-line-modified 'risky-local-variable t)
 
+(defvar-local my/mode-line-mule-info
+    `((:propertize ("" current-input-method-title)
+                   help-echo (concat
+                              ,(purecopy "Current input method: ")
+                              current-input-method
+                              ,(purecopy "\n\
+mouse-2: Disable input method\n\
+mouse-3: Describe current input method")))))
+(put 'my/mode-line-mule-info 'risky-local-variable t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; modeline with margin:
 
@@ -123,7 +133,10 @@ mouse-3: Toggle minor modes")))
          (let* ((ml (format-mode-line
                      '("%e"
                        mode-line-front-space
-                       mode-line-mule-info mode-line-client
+                       ;; mode-line-mule-info ;; mode-line-client
+                       my/mode-line-mule-info
+                       (local-map ,mode-line-input-method-map
+		                  mouse-face mode-line-highlight)
                        my/mode-line-modified
                        my/mode-line-remote
                        mode-line-frame-identification
