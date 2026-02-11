@@ -319,7 +319,7 @@ EXTRA-FILES can be used to append extra files to the list."
                                      '((:name "🤸 [wtf] focus"
                                               :and (:tag "wtf" :tag "focus")
                                               :order 80)
-                                       (:name "❤️ fam"
+                                       (:name "💕️ fam"
                                               :and (:tag "ssdd" :tag "fam")
                                               :order 90)
                                        (:name "🌄 ssdd"
@@ -722,7 +722,7 @@ current time."
           ("ii" "🧘 innerspace" entry "* 🧘 %?\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("if" "❤ fam" entry "* ❤ %? :is:fam:\n%U"
+          ("if" "💕 fam" entry "* 💕 %? :is:fam:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ir" "🚀 rocket go brrr" entry
@@ -756,7 +756,7 @@ current time."
           ("wb" "🐒 bouldering" entry
            ,(string-join '("* 🐒 [[roam:bouldering]] / %? :wtf:cb:\n"
                            "%U\n"
-                           "** ❤ with :is:\n"
+                           "** 💕 with :is:\n"
                            "** 👷 projects\n"
                            "** 🔥 topped\n"))
            :jump-to-captured t
@@ -764,7 +764,7 @@ current time."
           ("ws" "🐒 sport climbing" entry
            ,(string-join '("* 🐒 [[roam:sport climbing]] / %? :wtf:cb:\n"
                            "%U\n"
-                           "** ❤ with :is:\n"
+                           "** 💕 with :is:\n"
                            "** 🔥 topped\n"
                            "** 👷 projects\n"))
            :jump-to-captured t
