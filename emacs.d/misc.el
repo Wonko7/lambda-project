@@ -128,28 +128,6 @@
                    (time-subtract (org-time-string-to-seconds time1)
                                   (org-time-string-to-seconds time2)))))
 
-(defun my/star-date ()
-  (interactive)
-  (let* ((start-date   (org-read-date nil nil "1986-07-23"))
-         (a-start-date (org-read-date nil nil "2019-04-11"))
-         (b-start-date (org-read-date nil nil "2024-12-23"))
-         (c-start-date (org-read-date nil nil "2025-10-18"))
-         (end-date     (org-read-date nil nil "+0"))
-         (days         (- (org-time-string-to-absolute end-date)
-                          (org-time-string-to-absolute start-date)))
-         (a-days       (- (org-time-string-to-absolute end-date)
-                          (org-time-string-to-absolute a-start-date)))
-         (b-days       (- (org-time-string-to-absolute end-date)
-                          (org-time-string-to-absolute b-start-date)))
-         (c-days       (- (org-time-string-to-absolute end-date)
-                          (org-time-string-to-absolute c-start-date))))
-    (insert (format "days: %i %i %i\n- %s\n- %s\n- %s\n- %s"
-                    days a-days b-days
-                    (my/format-time-delta end-date start-date)
-                    (my/format-time-delta end-date a-start-date)
-                    (my/format-time-delta end-date b-start-date)
-                    (my/format-time-delta end-date c-start-date)))))
-
 (defun my/insert-shell-line ()
   (interactive)
   (let* ((fs '("/data/org/here-be-dragons/tech/20230412204446-shell.org"
