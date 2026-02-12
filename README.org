@@ -4,3 +4,6 @@ I have achieved peak computing.
 #+begin_src shell
   sudo -E guix deploy wonko/systems/fleet.scm
 #+end_src
+* mirrors
+This repository is mirrored on [[https://gitlab.com/wonko7/lambda-project][gitlab]], [[https://github.com/Wonko7/lambda-project][github]] & [[https://codeberg.org/wonko/lambda-project][codeberg]] because I find redundancy satisfying.
+I will push on codeberg first.
