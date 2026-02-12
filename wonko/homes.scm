@@ -682,6 +682,15 @@
                (interfaces '("localhost"))
                (databases (cons*
                            %dicod-database:gcide
+                           ;; can't get dico to load monolingual wiktionary :(
+                           (dicod-database
+                            (name "w-en")
+                            (handler "dictorg")
+                            (options '("database=/data/docs/books/dicos/en/w-en")))
+                           (dicod-database
+                            (name "w-fr")
+                            (handler "dictorg")
+                            (options '("database=/data/docs/books/dicos/fr/w-fr")))
                            (map
                             dicod-freedict-database
                             '("fra-eng" "eng-fra")))))))
