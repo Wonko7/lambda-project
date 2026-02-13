@@ -245,7 +245,6 @@
           (org-set-tags (seq-difference current-tags tags #'string-equal))))
       tags)))
 
-
 (use-package org-roam-dailies
   :commands (org-roam-dailies-latest)
   :after org

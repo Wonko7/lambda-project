@@ -234,6 +234,7 @@
    (range 1 12)))
 
 ;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
+;; doc: x modifiers: lalt -> meta (emacs), lmet -> hyper (WM).
 (define kmonad-dance-commander-layer
   '(deflayer dance-commander
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
@@ -241,7 +242,7 @@
      tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @C:  \     del  end  pgdn
      @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
-     @Tsy @Tsy @mDB           spc            @mDB ralt @Tsy  @Tsy            left down rght))
+     lalt @Tsy @mDB           spc            @mDB ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-dance-commander-layer
   (kmonad/merge-layers
@@ -252,7 +253,7 @@
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   XX   @xoS XX   XX   XX   XX   XX   XX   @xnS XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
-      @Tsx @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx           XX   XX   XX)))
+      lalt @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx           XX   XX   XX)))
 
 (define kmonad-dvorak-no-bullshit-layer
   '(deflayer dvorak-no-bullshit
@@ -261,7 +262,7 @@
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     @Tsy @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
+     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-dvorak-some-bullshit-layer
   '(deflayer dvorak-some-bullshit
@@ -270,7 +271,7 @@
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     @Tsy @Tsy @mDD           spc            @mDD ralt @Tsy @Tsy            left down rght))
+     lalt @Tsy @mDD           spc            @mDD ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-dvorak-some-bullshit-layer
   (kmonad/merge-layers
@@ -281,7 +282,7 @@
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                   XX
-      @Tsx @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX)))
+      lalt @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX)))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
@@ -299,7 +300,7 @@
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
      @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
      lsft +    \_   XX   û    @ccb XX   @osb @csb XX   XX   rsft                 up
-     @Tsy @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
+     lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
   (kmonad/merge-layers
@@ -310,7 +311,7 @@
       XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
       XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
       XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
-      @Tsx @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX)))
+      lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX)))
 
 (define kmonad-system-layer
   '(deflayer system
@@ -319,7 +320,7 @@
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
-     @Tsy @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
 (define kmonad-meta-layer
   '(deflayer meta
