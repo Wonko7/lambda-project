@@ -174,4 +174,19 @@
                                     (server :default "localhost")
                                     (port :default 3000))))
 
+(use-package tex
+  :demand t
+  :config
+  (add-to-list 'TeX-view-program-selection '(output-pdf "zathura"))
+  (add-to-list 'TeX-view-program-list
+               '("zathura" ("zathura %o") "zathura"))
+  ;; simple live preview:
+  (setq my/--auto-compile nil)
+  (defun my/toggle-auto-compile-on-write ()
+    (interactive)
+    (if my/--auto-compile
+        (add-hook 'after-save-hook #'my/recompile nil t)
+      (remove-hook 'after-save-hook #'my/recompile t))
+    (setq-local my/--auto-compile (not my/--auto-compile))))
+
 (provide 'conf/dev)
