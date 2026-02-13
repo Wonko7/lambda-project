@@ -172,6 +172,8 @@
     "pd"  #'projectile-dired
     "pm"  #'persp-merge
     "pu"  #'persp-unmerge
+    "pC"  #'projectile-compile-project
+    "pc"  #'my/recompile
 
     ;; password-store
     "P"  #'password-store-copy

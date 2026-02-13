@@ -192,7 +192,12 @@
                                     ("/code/maxipassat" . 1)))
   (projectile-sort-order 'recently-active)
   (projectile-enable-caching t)
+  (projectile-per-project-compilation-buffer t)
   :config
+  (defun my/recompile ()
+    (interactive)
+    (let ((compilation-read-command nil))
+      (projectile-compile-project nil)))
   (projectile-global-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
