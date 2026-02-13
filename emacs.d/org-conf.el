@@ -724,6 +724,14 @@ current time."
           ("if" "💕 fam" entry "* 💕 %? :is:fam:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
+          ("in" "🦩 nature / bleau" entry
+           "* 🦩 [[roam:nature]] / [[roam:Fontainebleau]] :is:nat:\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
+          ("iN" "🦩 nature" entry
+           "* 🦩 [[roam:nature]] / [[roam:Fontainebleau]] :is:nat:\n%U\n%?"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ir" "🚀 rocket go brrr" entry
            "* 🚀 [[roam:rocket go brrr]] :is:fam:\n%U\n%?"
            :jump-to-captured t
