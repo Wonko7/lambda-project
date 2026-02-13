@@ -225,8 +225,9 @@
     "C-j"    #'diff-hunk-next)
 
   (general-evil-define-key '(normal) magit-mode-map
-    "("      #'magit-section-backward-sibling
-    ")"      #'magit-section-forward-sibling
+    "("      #'magit-section-backward
+    ")"      #'magit-section-forward
+    "à"      #'magit-section-up
     "C-k"    #'magit-section-backward-sibling
     "C-j"    #'magit-section-forward-sibling)
 
@@ -263,7 +264,7 @@
           (string= root "/data/")
           (string= root "/junkyard/")
           (string= root "/work/guix/guix")
-          (string= root "/code/guix/guix")))))
+          (string= root "/code/guix")))))
 
 (use-package git-timemachine
   :hook
