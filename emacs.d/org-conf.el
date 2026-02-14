@@ -86,6 +86,9 @@
   (org-refile-use-outline-path t)
   (org-outline-path-complete-in-steps nil)
 
+  ;; latex export:
+  ;; also an option: (setq org-latex-compiler "xelatex")
+  (org-latex-compiler "lualatex")
   ;; html export
   (org-html-postamble nil)
   (org-footnote-section nil)
