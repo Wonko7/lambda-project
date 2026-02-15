@@ -208,7 +208,7 @@
 
   (defvar my/exwm-workspace-previous-index exwm-workspace-current-index "The previous active workspace index.")
 
-  (defun my/exwm-workspace--current-to-previous-index (_x)
+  (defun my/exwm-workspace--current-to-previous-index (&rest _x)
     (setq my/exwm-workspace-previous-index exwm-workspace-current-index))
 
   (defun my/init-exwm ()
