@@ -187,7 +187,33 @@
      (shell . t)
      (sql . t)
      (ocaml . t)
-     (org . t))))
+     (org . t)))
+
+  ;; latex export
+  (defun my/latex-quote-utf8 (text)
+    (replace-regexp-in-string
+     "\\([[:multibyte:]]+\\)"
+     (lambda (m)
+       (if (string-match "^\\([^[:alpha:]]+\\)$" m) ;; bail if there's àôéœç in here
+           (concat "{\\\\emojifont " m "}")
+         m))
+     text))
+
+  (advice-add #'org-latex-plain-text
+              :filter-return
+              #'my/latex-quote-utf8)
+
+  (defun my/latex-add-extra-header (info)
+    (let* ((info (car info))
+           (h (plist-get info :latex-header))
+           (h (if (stringp h) (concat "\n" h) "")))
+      (list (plist-put info
+                       :latex-header
+                       (concat "\\usepackage{fontspec}\n\\newfontfamily\\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]" h)))))
+
+  (advice-add #'org-latex-make-preamble
+              :filter-args
+              #'my/latex-add-extra-header))
 
 ;; leaving this here, sometimes I just force this:
 ;; (setq  sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
