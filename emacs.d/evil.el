@@ -188,7 +188,7 @@
   :after evil
   :hook (magit-mode-hook . turn-off-evil-snipe-override-mode)
   :config
-  (setq evil-snipe-scope 'whole-visible)
+  (setq evil-snipe-scope 'whole-buffer)
   (setq evil-snipe-char-fold t)
   (setq evil-snipe-smart-case t)
   (setq evil-snipe-override-mode t)
