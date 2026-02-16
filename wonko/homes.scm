@@ -131,25 +131,31 @@
     ("v"     . "vim")
     ("kys"   . "exit")))
 
+(define guile-load-path
+  (string-append %lambda-project
+                 ":/code/guix"
+                 ":/code/nonguix"
+                 ":/code/maxipassat/maxipassat"
+                 ":$HOME/.config/guix/current/share/guile/site/3.0/"
+                 ":$GUILE_LOAD_PATH"))
+
+(define guile-load-compiled-path
+  (string-append "$HOME/.config/guix/current/lib/guile/3.0/site-ccache/"
+                 ":$GUILE_LOAD_COMPILED_PATH"))
+
 (define-public %wonko-env
-  `(("HISTFILESIZE"        . "1000")
-    ("HISTSIZE"            . "1000")
-    ("HISTFILE"            . "$XDG_CACHE_HOME/.bash_history")
-    ("HISTCONTROL"         . "ignorespace")
-    ("PAGER"               . "")
-    ("DICTIONARY"          . "en_GB-ise") ;; hunspell
-    ("DISPLAY"             . ":9")
-    ("BLOCK_SIZE"          . "human-readable")
-    ("PATH"                . "$HOME/local/bin:$PATH")
-    ("GUIX_EXTRA_PROFILES" . ,%guix-extra-profiles-dir)
-    ("GUILE_LOAD_PATH" .
-     ,(string-append %lambda-project
-                     ":$HOME/.config/guix/current/share/guile/site/3.0/"
-                     ":$GUILE_LOAD_PATH"))
-    ("GUILE_LOAD_COMPILED_PATH" .
-     ,(string-append "$HOME/.config/guix/current/lib/guile/3.0/site-ccache/"
-                     ":$HOME/.config/guix/current/share/guile/site/3.0/"
-                     ":$GUILE_LOAD_COMPILED_PATH"))
+  `(("HISTFILESIZE"                    . "1000")
+    ("HISTSIZE"                        . "1000")
+    ("HISTFILE"                        . "$XDG_CACHE_HOME/.bash_history")
+    ("HISTCONTROL"                     . "ignorespace")
+    ("PAGER"                           . "")
+    ("DICTIONARY"                      . "en_GB-ise") ;; hunspell
+    ("DISPLAY"                         . ":9")
+    ("BLOCK_SIZE"                      . "human-readable")
+    ("PATH"                            . "$HOME/local/bin:$PATH")
+    ("GUIX_EXTRA_PROFILES"             . ,%guix-extra-profiles-dir)
+    ("GUILE_LOAD_PATH"                 . ,guile-load-path)
+    ("GUILE_LOAD_COMPILED_PATH"        . ,guile-load-compiled-path)
     ("GUIX_LOCPATH"                    . "$HOME/.guix-home/profile/lib/locale")
     ("LANG"                            . "en_GB.utf8")
     ("PASSWORD_STORE_DIR"              . "/data/pass")
@@ -157,10 +163,10 @@
     ;; ("PS1"                          . "in bashrc because I want it after /etc/bashrc")
     ("RIPGREP_CONFIG_PATH"             . "$HOME/.config/ripgrep/ripgreprc")
     ;; GREP: this concerns multi/compose key/accents/exwm-xim/input methods
-    ("XMODIFIER"           . "@im=exwm-xim")
-    ("GTK_IM_MODULE"       . "xim")
-    ("QT_IM_MODULE"        . "xim")
-    ("CLUTTER_IM_MODULE"   . "xim")
+    ("XMODIFIER"                       . "@im=exwm-xim")
+    ("GTK_IM_MODULE"                   . "xim")
+    ("QT_IM_MODULE"                    . "xim")
+    ("CLUTTER_IM_MODULE"               . "xim")
     ;; xorg appearance:
     ("GTK_THEME"                       . "Breeze-Dark")
     ;; QT: in conjunction with .config/kdeglobals further down:
@@ -254,12 +260,14 @@
    (shepherd-service
      (provision '(guix-repl))
      (start #~(make-forkexec-constructor
-               (list ;; a case could be made for /run/current-system/profile/bin/guix
+               (list
                 (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
-                ;; "/home/wonko/.config/guix/current/bin/guix"
                 "repl" "--listen=tcp:37146")
-               #:environment-variables (cons "INSIDE_EMACS=1"
-                                             (default-environment-variables))
+               #:environment-variables
+               (cons* "INSIDE_EMACS=1"
+                      (string-append "GUILE_LOAD_PATH=" #$guile-load-path)
+                      (string-append "GUILE_LOAD_COMPILED_PATH=" #$guile-load-compiled-path)
+                      (default-environment-variables))
                #:log-file #$(home-log-path "guix-repl")))
      (stop #~(make-kill-destructor))
      (documentation "REPL to me, like lovers do"))))

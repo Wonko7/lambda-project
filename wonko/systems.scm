@@ -360,7 +360,6 @@
 
     (packages
      (append
-      ;; (map second (package-propagated-inputs guix)) ;; system wide guix dev deps.
       %git-world
       %utils-world
       %os-disk-world
