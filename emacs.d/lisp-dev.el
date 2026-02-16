@@ -15,6 +15,21 @@
 
 (use-package eval-in-repl-geiser)
 
+(use-package guix-devel
+  :hook
+  (scheme-mode-hook . guix-devel-mode))
+
+(use-package geiser-mode)
+
+(use-package geiser-guile
+  :config
+  (setq geiser-guile-load-path
+        '("~/.guix-profile/share/"
+          "/code/lambda-project"
+          "/code/maxipassat/maxipassat"
+          "/code/guix"
+          "/code/nonguix")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; paredit
 
@@ -25,16 +40,6 @@
   :hook
   ((emacs-lisp-mode-hook . aggressive-indent-mode)
    (scheme-mode-hook . aggressive-indent-mode)))
-
-(use-package guix-devel
-  :hook
-  (scheme-mode-hook . guix-devel-mode))
-
-(use-package geiser-mode)
-
-(use-package geiser-guile-mode
-  :config
-  (add-to-list 'geiser-guile-load-path "/code/guix"))
 
 (use-package evil-cleverparens
   :hook ((emacs-lisp-mode-hook . evil-cleverparens-mode)
