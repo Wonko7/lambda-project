@@ -114,8 +114,8 @@
     "C-=" 'text-scale-increase
     "C-0" 'text-scale-adjust
     "C--" 'text-scale-decrease
-    "0" nil ;; free this for normal state's general binding
-    "-" nil ;; free this for normal state's general binding
+    "0"   nil ;; free this for normal state's general binding
+    "-"   nil ;;
 
     ;; refresh
     (kbd "gr") 'revert-buffer))

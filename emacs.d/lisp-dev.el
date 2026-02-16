@@ -39,11 +39,11 @@
 (use-package aggressive-indent
   :hook
   ((emacs-lisp-mode-hook . aggressive-indent-mode)
-   (scheme-mode-hook . aggressive-indent-mode)))
+   (scheme-mode-hook     . aggressive-indent-mode)))
 
 (use-package evil-cleverparens
   :hook ((emacs-lisp-mode-hook . evil-cleverparens-mode)
-         (scheme-mode-hook . evil-cleverparens-mode))
+         (scheme-mode-hook     . evil-cleverparens-mode))
 
   :custom
   (evil-cleverparens-complete-parens-in-yanked-region t)
@@ -84,14 +84,14 @@
     "t"   #'sp-transpose-sexp
     "T"   (lambda() (interactive) (sp-transpose-sexp -1))
     "M-T" (lambda() (interactive) (sp-transpose-sexp -1))
-    "@"  #'sp-splice-sexp
-    "u"  #'sp-unwrap-sexp
-    "j"  #'sp-join-sexp
-    "s"  #'sp-split-sexp
-    "p"  #'sp-wrap-round
-    "w"  #'sp-wrap-round
-    "C"  #'sp-wrap-curly
-    "S"  #'sp-wrap-square))
+    "@"   #'sp-splice-sexp
+    "u"   #'sp-unwrap-sexp
+    "j"   #'sp-join-sexp
+    "s"   #'sp-split-sexp
+    "p"   #'sp-wrap-round
+    "w"   #'sp-wrap-round
+    "C"   #'sp-wrap-curly
+    "S"   #'sp-wrap-square))
 
 ;; c-q to insert literal character without paredit balancing
 ;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
