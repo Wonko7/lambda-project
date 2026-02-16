@@ -21,9 +21,9 @@
 (use-package-modules
  fonts fontutils unicode
  ;; emacs
- emacs emacs-build emacs-xyz aspell hunspell libreoffice ocaml java clojure uml haskell-xyz
+ emacs emacs-build emacs-xyz aspell hunspell ocaml guile guile-xyz java clojure uml haskell-xyz
  ;; desktop stuff
- pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks kde-graphics lxqt qt terminals ebook video imagemagick photo gimp pdf graphviz image-viewers
+ pulseaudio synergy xorg toys linux xdisorg suckless music lxde xfce gnome kde-plasma kde-frameworks kde-graphics lxqt qt terminals ebook video imagemagick photo gimp pdf graphviz image-viewers libreoffice
  ;; web
  chromium tor matrix irc bittorrent
  gnuzilla
@@ -168,6 +168,9 @@
         emacs-geiser
         emacs-geiser-guile
         emacs-guix
+        guile-3.0-latest
+        guile-readline
+        guile-colorized
         ;; rest
         emacs-plz
         ;; guix / dev env:
