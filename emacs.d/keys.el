@@ -250,7 +250,7 @@
     "lh" #'ws/toggle-hide-your-kids
 
     ;; xorg stuff
-    "z"  '("Xorg desktop things" . (keymap))
+    "z"   '("Xorg desktop things" . (keymap))
     "zz"  (li (my/local-async-shell-command my/lock-cmd))
     "zl"  #'scroll-lock-mode
     "z'"  '("Notifications" . (keymap))
@@ -297,29 +297,15 @@
    :states '(normal emacs visual global motion)
    "C-e"  #'embark-act)
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; readonly / view mode: in evil-collection
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; async shell command
 
   (general-evil-define-key '(normal insert visual) minibuffer-local-shell-command-map
-    "C-r"        #'consult-history
-    "C-k"        #'minibuffer-previous-prompt
-    "C-j"        #'minibuffer-next-prompt))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; FIXME lisps
-
-(general-evil-define-key '(normal) emacs-lisp-mode-map
-  :prefix "RET"
-  "RET" #'eval-defun)
-
-(general-evil-define-key '(normal) scheme-mode-map
-  :prefix "RET"
-  "RET" #'geiser-eval-definition
-  "b"   #'geiser-eval-buffer)
+    "C-r" #'consult-history
+    "C-k" #'minibuffer-previous-prompt
+    "C-j" #'minibuffer-next-prompt))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elfeed

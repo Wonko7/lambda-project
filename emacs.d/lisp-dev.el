@@ -91,4 +91,18 @@
 ;; c-q to insert literal character without paredit balancing
 ;; (add-hook 'lisp-mode-hook 'enable-paredit-mode)
 
+(use-package elisp-mode
+  :config
+  (general-evil-define-key '(normal) emacs-lisp-mode-map
+    :prefix "RET"
+    "RET" #'eval-defun
+    "b"   #'eval-buffer))
+
+(use-package scheme
+  :config
+  (general-evil-define-key '(normal) scheme-mode-map
+    :prefix "RET"
+    "RET" #'geiser-eval-definition
+    "b"   #'geiser-eval-buffer))
+
 (provide 'conf/lisp)
