@@ -108,6 +108,7 @@
   (general-evil-define-key '(normal) scheme-mode-map
     :prefix "RET"
     "RET" #'geiser-eval-definition
-    "b"   #'geiser-eval-buffer))
+    "b"   #'geiser-eval-buffer
+    "c"   #'geiser-connect))
 
 (provide 'conf/lisp)
