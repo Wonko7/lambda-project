@@ -446,6 +446,7 @@
 
 (define-public %dev-world
   (list sloccount
+        cloc
         adb
         teensy-loader-cli))
 
