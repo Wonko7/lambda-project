@@ -110,8 +110,9 @@
                    "  ")
                  cand))))
 
-(use-package emacs ;; regroup minibuffer things:
-  :init
+(use-package minibuffer
+  :demand t
+  :config
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
                   (replace-regexp-in-string
@@ -150,7 +151,99 @@
   (setq use-short-answers t)
   (setq echo-keystrokes 0.25)
   (setq minibuffer-prompt-properties ;; FIXME: testing
-        '(read-only t cursor-intangible t face minibuffer-prompt)))
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; make minibuffer-complete-and-exit behave:
+  ;; complete before rather than exiting even if match is not required.
+  ;; if this becomes annoying to maintain, minibuffer-complete-word was *close* to
+  ;; the behaviour I was looking for.
+
+  (defun completion--complete-and-exit (beg end
+                                            exit-function completion-function)
+    "Exit from `require-match' minibuffer.
+COMPLETION-FUNCTION is called if the current buffer's content does not
+appear to be a match."
+    (cond
+     ;; Allow user to specify null string
+     ((= beg end) (funcall exit-function))
+     ;; The CONFIRM argument is a predicate.
+     ((functionp minibuffer-completion-confirm)
+      (if (funcall minibuffer-completion-confirm
+                   (buffer-substring beg end))
+          (funcall exit-function)
+        (unless completion-fail-discreetly
+	  (ding)
+	  (completion--message "No match"))))
+     ;; See if we have a completion from the table.
+     ((test-completion (buffer-substring beg end)
+                       minibuffer-completion-table
+                       minibuffer-completion-predicate)
+
+      ;; FIXME: completion-ignore-case has various slightly
+      ;; incompatible meanings.  E.g. it can reflect whether the user
+      ;; wants completion to pay attention to case, or whether the
+      ;; string will be used in a context where case is significant.
+      ;; E.g. usually try-completion should obey the first, whereas
+      ;; test-completion should obey the second.
+      (when completion-ignore-case
+        ;; Fixup case of the field, if necessary.
+        (let* ((string (buffer-substring beg end))
+               (compl (try-completion
+                       string
+                       minibuffer-completion-table
+                       minibuffer-completion-predicate)))
+          (when (and (stringp compl) (not (equal string compl))
+                     ;; If it weren't for this piece of paranoia, I'd replace
+                     ;; the whole thing with a call to do-completion.
+                     ;; This is important, e.g. when the current minibuffer's
+                     ;; content is a directory which only contains a single
+                     ;; file, so `try-completion' actually completes to
+                     ;; that file.
+                     (= (length string) (length compl)))
+            (completion--replace beg end compl))))
+      (funcall exit-function))
+     ;; The user is permitted to exit with an input that's rejected
+     ;; by test-completion, after confirming her choice.
+     ((memq minibuffer-completion-confirm '(confirm confirm-after-completion))
+      (if (or (eq last-command this-command)
+              ;; For `confirm-after-completion' we only ask for confirmation
+              ;; if trying to exit immediately after typing TAB (this
+              ;; catches most minibuffer typos).
+              (and (eq minibuffer-completion-confirm 'confirm-after-completion)
+                   (not (memq last-command minibuffer-confirm-exit-commands))))
+          ;; ⚠️ this is the diff:
+          (funcall completion-function) ;;(funcall exit-function)
+        (minibuffer-message "Confirm")
+        nil))
+
+     (t
+      ;; Call do-completion, but ignore errors.
+      (funcall completion-function))))
+
+  (defun completion-complete-and-exit (beg end exit-function)
+    (completion--complete-and-exit
+     beg end exit-function
+     (lambda ()
+       ;; 000  0 no possible completion
+       ;; 001  1 was already an exact and unique completion
+       ;; 010  2 no completion happened
+       ;; 011  3 was already an exact completion
+       ;; 100  4 ??? impossible
+       ;; 101  5 ??? impossible
+       ;; 110  6 some completion happened
+       ;; 111  7 completed to an exact completion
+       (pcase (condition-case nil
+                  (completion--do-completion beg end
+                                             nil 'expect-exact)
+                (error 1))
+         ((or #b001 #b011) (progn (pp "1") (funcall exit-function)))
+         (#b111 (if (not minibuffer-completion-confirm)
+                    (funcall exit-function)
+                  ;; ⚠️ this is the diff:
+                  nil ;; (minibuffer-message "Confirm")
+                  nil))
+         (_ nil))))))
 
 (use-package vertico-repeat
   :demand t
