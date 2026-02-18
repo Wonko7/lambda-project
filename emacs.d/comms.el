@@ -287,7 +287,25 @@
 (use-package gnus-topic
   :after gnus
   :hook
-  (gnus-group-mode-hook . gnus-topic-mode))
+  (gnus-group-mode-hook . gnus-topic-mode)
+  :config
+  (defun my/gnus-topic-toggle-topic ()
+    "Toggle display of the topic.
+   based on: https://github.com/fpiper/dotfiles/blob/master/gnus.org"
+    (interactive)
+    (when (not (gnus-group-topic-p))
+      (gnus-topic-goto-topic (gnus-current-topic)))
+    (when (gnus-group-topic-p)
+      (if (equal 'visible
+                 (nth 1 (cadr (gnus-topic-find-topology (gnus-current-topic)))))
+          (gnus-topic-hide-topic)
+        (gnus-topic-show-topic))))
+
+  (general-evil-define-key '(normal emacs motion) gnus-topic-mode-map
+    "<tab>" #'my/gnus-topic-toggle-topic
+    "C-j"   #'gnus-topic-goto-next-topic
+    "C-k"   #'gnus-topic-goto-previous-topic))
+
 
 (use-package evil-collection-gnus
   :after gnus)
