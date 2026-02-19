@@ -350,7 +350,7 @@
 (define-public %web-world
   (list firefox
         ;; icecat
-        ungoogled-chromium
+        ;; ungoogled-chromium FIXME [2026-02-19 Thu 12:00]
         speedtest-cli
         netcat-openbsd
         nmap
@@ -517,11 +517,8 @@
 (define-public %comms-world
   (list pantalaimon))
 
-(define-public %borked-2025-08
-  (list oneko))
-
-(define-public %borked-2025-10
-  (list krita))
+(define-public %borked-2026-02
+  (list ungoogled-chromium))
 
 (define-public %emacs-debug-world
   (list emacs-org
