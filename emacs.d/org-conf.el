@@ -216,9 +216,9 @@
               #'my/latex-add-extra-header))
 
 ;; leaving this here, sometimes I just force this:
-;; (setq  sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
+;; (setq sql-postgres-program "/gnu/store/247ny8fgvsblxa1fqg7q4hmhd16jwr8z-profile/bin/psql")
 ;; sly:
-;; (setq  sql-postgres-program "/gnu/store/yrmwmpv33xg4vf2g5ym2ckcmcphw0nc0-profile/bin/psql")
+;; (setq sql-postgres-program "/gnu/store/yrmwmpv33xg4vf2g5ym2ckcmcphw0nc0-profile/bin/psql")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-roam
@@ -322,8 +322,8 @@ EXTRA-FILES can be used to append extra files to the list."
                               (todo . "  %-21c")
                               (tags . "%-12c")
                               (search . "%-12c"))))
-  (org-agenda-deadline-leaders (quote ("!D!: " "D%2d: " "")))
-  (org-agenda-scheduled-leaders (quote ("" "S%3d: ")))
+  (org-agenda-deadline-leaders (quote ("💀" "💀%2d: " "")))
+  (org-agenda-scheduled-leaders (quote ("⏱" "⏱️ %2d: ")))
   (org-agenda-compact-blocks t)
   ;; agenda styling
   (org-agenda-block-separator ?─)
@@ -367,7 +367,11 @@ EXTRA-FILES can be used to append extra files to the list."
                                               :order 110)
                                        (:name "🌠 .*"
                                               :order 999
-                                              :anything t))))))))))
+                                              :anything t)))))))))
+  :config
+  (set-face-attribute 'org-imminent-deadline nil :foreground "red")
+  (set-face-attribute 'org-upcoming-deadline nil :foreground "tomato")
+  (set-face-attribute 'org-upcoming-distant-deadline nil :foreground "dark salmon"))
 
 (use-package holidays
   :after org-agenda
