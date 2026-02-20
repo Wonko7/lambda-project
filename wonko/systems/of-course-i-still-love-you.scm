@@ -515,7 +515,9 @@ interface eth0                    # identifies the interface we are advertising 
                      (type "vfat"))
                    (append
                     (make-vault-subvolumes mapped-devices)
-                    %base-file-systems)))))
+                    %base-file-systems)))
+    (swap-devices
+     (list (make-default-swap file-systems)))))
 
 %of-course-i-still-love-you-wonko-home
 %of-course-i-still-love-you-os
