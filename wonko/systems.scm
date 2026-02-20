@@ -122,6 +122,44 @@
     (dependencies (filter (file-system-mount-point-predicate "/swap")
                           file-systems))))
 
+(define btrfs-snapshot-service-type
+  (shepherd-service-type
+   'btrfs-snapshot
+   (lambda (subvol)
+     (let* ((name (substring subvol 1))
+            (snap (program-file
+                   (string-append "btrfs-snapshot-" name)
+                   (with-imported-modules '((guix build utils))
+                     #~(begin
+                         (use-modules (guix build utils))
+                         (let ((dest-dir (string-append
+                                          "/mnt/vault/_ro/" #$subvol "_"
+                                          (strftime "%F" (localtime (current-time))))))
+                           (when (not (directory-exists? dest-dir))
+                             (system*
+                              #$(file-append btrfs-progs "/bin/btrfs")
+                              "subvolume" "snapshot" "-r"
+                              (string-append "/mnt/vault/_live/" #$subvol)
+                              dest-dir))))))))
+       (shepherd-service
+         (documentation (string-append "periodically snapshot " subvol))
+         (provision
+          (list (string->symbol (string-append "btrfs-snapshot-" subvol))))
+         (requirement '(networking user-processes guix-daemon))
+         (modules '((shepherd service timer)))
+         (start
+          #~(make-timer-constructor
+             (calendar-event #:minutes '(37)
+                             #:hours '#$(range 0 23)
+                             ;; tries once per hour, only once a day will work
+                             #:days-of-month '#$(range 1 31))
+             (command
+              (list #$snap))
+             #:wait-for-termination? #t))
+         (stop #~(make-timer-destructor)))))
+   #t
+   (description "daily subvolume snapshot")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; slim services:
 
@@ -278,9 +316,15 @@
    (service (make-extra-profile-service-type "fonts")   %fonts-world)
 
    (append
+
     (map (lambda (h)
            (service fleet-keep-alive-service-type (host-canonical-name h)))
          %fleet-hosts)
+
+    (map (lambda (sv)
+           (service btrfs-snapshot-service-type sv))
+         '("@code" "@data" "@guix-home" "@guix-root" "@junkyard" "@work"))
+
     (modify-services
         %desktop-services
       (delete gdm-service-type)
