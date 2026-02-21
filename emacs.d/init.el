@@ -331,11 +331,15 @@
     (setq-local comint-scroll-to-bottom-on-output
                 (not comint-scroll-to-bottom-on-output))))
 
+
 (use-package shell
   :after coterm
   :demand t
+  :hook (shell-mode-hook
+         . (lambda ()
+             (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
   :custom
-  (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]λ \\)")
+  (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]🪄 \\)")
   ;; for tramp shell sessions:
   (explicit-shell-file-name "bash")
   :config

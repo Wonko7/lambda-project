@@ -201,10 +201,10 @@
        ;; this affects emacs' completion:
        "bind 'set completion-ignore-case on' 2> /dev/null\n"
        "[ x$TERM = xtramp ] && return\n"
-       "PS1='$(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
+       "PS1='\\[\\e[0;35m\\]╭─ $(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
        " \\A 🦄 \\u@\\h "
        "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
-       " \\w${GUIX_ENVIRONMENT:+ [env]}\nλ '\n"
+       " \\w${GUIX_ENVIRONMENT:+ [env]}\n╰─ 🪄\\[\\e[m\\] '\n"
        "set -o vi\n"
        "bind '\"jj\":vi-movement-mode'\n")
       (mixed-text-file ;; REVIEW: bash-completion shouldn't need this
