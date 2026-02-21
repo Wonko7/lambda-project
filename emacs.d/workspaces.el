@@ -415,7 +415,11 @@
 
   (defun ws/proj-shell (&optional project)
     (interactive)
-    (let* ((pr (or project (projectile-project-root default-directory) "~/")))
+    (let* ((pr (or (and project
+                        (tramp-file-local-name project))
+                   (projectile-project-root
+                    (tramp-file-local-name default-directory))
+                   "~/")))
       (projectile-with-default-dir pr
         (shell
          (projectile-generate-process-name
