@@ -77,11 +77,11 @@
 
 (define %media-station-home
   (home-environment
-    (inherit %media-station-wonko-home)
+    (inherit %media-station-home)
     (services
      (append
       machine-home-services
-      %media-station-wonko-services))))
+      %media-station-home-services))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; zfs
@@ -491,7 +491,7 @@ interface eth0                    # identifies the interface we are advertising 
                         shepherd-root-service-type
                         azirevpn-service)
 
-        (modify-services %media-station-services
+        (modify-services %media-station-os-services
           (sysctl-service-type
            config =>
            (sysctl-configuration

@@ -444,7 +444,7 @@
       (targets '("/mnt/tmp-efi/"))
       (keyboard-layout %us-kb)))))
 
-(define-public %media-station-services
+(define-public %media-station-os-services
   (modify-services %laptop-services
     (noautostart-transmission-daemon-service-type
      config =>
@@ -461,6 +461,6 @@
 (define-public %media-station-os
   (operating-system
     (inherit %laptop-os)
-    (services %media-station-services)))
+    (services %media-station-os-services)))
 
 ;; FIXME: add media station stuff.

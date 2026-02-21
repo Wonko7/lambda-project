@@ -55,11 +55,11 @@
 
 (define %media-station-home
   (home-environment
-   (inherit %media-station-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %media-station-wonko-services))))
+    (inherit %media-station-home)
+    (services
+     (append
+      machine-home-services
+      %media-station-home-services))))
 
 (define %rocinante-os
   (operating-system

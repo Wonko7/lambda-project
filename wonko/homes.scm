@@ -226,60 +226,62 @@
            ,(- (/ grace respawn-delay) 1))))) ;; change -1 to +1 for infinite respawn
     (documentation "respawn settings that allow respawning x services after xorg server restart")))
 
-(define-public %common-shepherd-wonko-services
-  (list
-   (shepherd-service
-     (inherit x11-respawn-config-shepherd-service)
-     (provision '(picom))
-     (start #~(make-forkexec-constructor
-               (list #$(file-append picom "/bin/picom")
-                     "--backend=glx"
-                     "--corner-radius=20" ;; --rounded-corners-exclude
-                     "--inactive-opacity=0.5"
-                     "--opacity-rule=10:name *= 'oneko'")
-               #:log-file #$(home-log-path "picom")))
-     (stop #~(make-kill-destructor))
-     (documentation "bling"))
-   (shepherd-service
-     (provision '(pantalaimon))
-     (start #~(make-forkexec-constructor
-               ;; (list "/run/current-system/comms-profile/bin/pantalaimon")
-               (list #$(file-append img-pantalaimon "/bin/pantalaimon"))
-               #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
-                                        "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
-                                        (default-environment-variables))
-               #:log-file #$(home-log-path "matrix")))
-     (stop #~(make-kill-destructor))
-     (documentation "Crypto back-end server for ement.el"))
-   (shepherd-service
-     (provision '(kill-dunst))
-     (one-shot? #t)
-     (start #~(lambda _
-                (system
-                 (string-append
-                  #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
-     (documentation "kill dbus started dunst from previous X session"))
-   (shepherd-service
-     (provision '(guix-repl))
-     (start #~(make-forkexec-constructor
-               (list
-                (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
-                "repl" "--listen=tcp:37146")
-               #:environment-variables
-               (cons* "INSIDE_EMACS=1"
-                      (string-append "GUILE_LOAD_PATH=" #$guile-load-path)
-                      (string-append "GUILE_LOAD_COMPILED_PATH=" #$guile-load-compiled-path)
-                      (default-environment-variables))
-               #:log-file #$(home-log-path "guix-repl")))
-     (stop #~(make-kill-destructor))
-     (documentation "REPL to me, like lovers do"))))
+(define-public %common-shepherd-service
+  (simple-service
+   'common-shepherd home-shepherd-service-type
+   (list
+    (shepherd-service
+      (provision '(kill-dunst))
+      (one-shot? #t)
+      (start #~(lambda _
+                 (system
+                  (string-append
+                   #$psmisc "/bin/killall " #$dunst "/bin/dunst"))))
+      (documentation "kill dbus started dunst from previous X session")))))
 
 (define-public %vanilla-shepherd-wonko-service
   (service
    home-shepherd-service-type
    (home-shepherd-configuration
      (services
-      (cons*
+      (list
+       (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
+         (provision '(picom))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append picom "/bin/picom")
+                         "--backend=glx"
+                         "--corner-radius=20" ;; --rounded-corners-exclude
+                         "--inactive-opacity=0.5"
+                         "--opacity-rule=10:name *= 'oneko'")
+                   #:log-file #$(home-log-path "picom")))
+         (stop #~(make-kill-destructor))
+         (documentation "bling"))
+       (shepherd-service
+         (provision '(pantalaimon))
+         (start #~(make-forkexec-constructor
+                   ;; (list "/run/current-system/comms-profile/bin/pantalaimon")
+                   (list #$(file-append img-pantalaimon "/bin/pantalaimon"))
+                   #:environment-variables (cons ;; https://lists.gnu.org/archive/html/help-guix/2025-05/msg00006.html
+                                            "GI_TYPELIB_PATH=/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0:/run/current-system/comms-profile/lib/girepository-1.0"
+                                            (default-environment-variables))
+                   #:log-file #$(home-log-path "matrix")))
+         (stop #~(make-kill-destructor))
+         (documentation "Crypto back-end server for ement.el"))
+       (shepherd-service
+         (provision '(guix-repl))
+         (start #~(make-forkexec-constructor
+                   (list
+                    (string-append (getenv "HOME") "/.config/guix/current/bin/guix")
+                    "repl" "--listen=tcp:37146")
+                   #:environment-variables
+                   (cons* "INSIDE_EMACS=1"
+                          (string-append "GUILE_LOAD_PATH=" #$guile-load-path)
+                          (string-append "GUILE_LOAD_COMPILED_PATH=" #$guile-load-compiled-path)
+                          (default-environment-variables))
+                   #:log-file #$(home-log-path "guix-repl")))
+         (stop #~(make-kill-destructor))
+         (documentation "REPL to me, like lovers do"))
        (shepherd-service
          (inherit x11-respawn-config-shepherd-service)
          (provision '(xss-lock))
@@ -297,8 +299,7 @@
                    (list #$(file-append oneko-warn "/bin/oneko") "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
-         (documentation "neko"))
-       %common-shepherd-wonko-services)))))
+         (documentation "neko")))))))
 
 (define-public %dance-commander-shepherd-service
   (simple-service
@@ -321,12 +322,23 @@
       (stop #~(make-kill-destructor))
       (documentation "ET phone home")))))
 
-(define-public %media-station-shepherd-wonko-service
+(define-public %media-station-shepherd-service
   (service
    home-shepherd-service-type
    (home-shepherd-configuration
      (services
-      (cons*
+      (list
+       (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
+         (provision '(picom))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append picom "/bin/picom")
+                         "--backend=glx"
+                         "--corner-radius=20" ;; --rounded-corners-exclude
+                         "--opacity-rule=10:name *= 'oneko'")
+                   #:log-file #$(home-log-path "picom")))
+         (stop #~(make-kill-destructor))
+         (documentation "bling"))
        (shepherd-service
          (inherit x11-respawn-config-shepherd-service)
          (provision '(xss-lock))
@@ -358,8 +370,7 @@
                          "-f" "enterprise.local")
                    #:log-file #$(home-log-path "synergy")))
          (stop #~(make-kill-destructor))
-         (documentation "can't be arsed to move IRL"))
-       %common-shepherd-wonko-services)))))
+         (documentation "can't be arsed to move IRL")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; xsession
@@ -744,6 +755,7 @@
   (cons*
    (make-emacs-values-service)
    %vanilla-shepherd-wonko-service
+   %common-shepherd-service
    (make-font-dep-configs)
    (make-xsession)
    %common-wonko-services))
@@ -776,6 +788,7 @@
   (cons*
    (make-emacs-values-service #:org-habit-preceding-days 20)
    %vanilla-shepherd-wonko-service
+   %common-shepherd-service
    (make-font-dep-configs)
    (make-xsession)
    %common-wonko-services))
@@ -792,6 +805,7 @@
     #:org-habit-preceding-days           53
     #:window-divider-default-right-width 5)
    %vanilla-shepherd-wonko-service
+   %common-shepherd-service
    (simple-service 'highdpi-bash home-bash-service-type
                    (home-bash-extension
                      (environment-variables
@@ -809,21 +823,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; media-station
 
-(define-public %media-station-wonko-services
+(define-public %media-station-home-services
   (cons*
    (make-emacs-values-service #:font-size 240
                               #:theme "doom-outrun-electric")
-   %media-station-shepherd-wonko-service
+   %media-station-shepherd-service
+   %common-shepherd-service
    (simple-service 'media-bash home-bash-service-type
                    (home-bash-extension
-                    (bashrc (list (mixed-text-file
-                                   "media-umask"
-                                   "umask 0002\n")))
-                    (environment-variables
-                     '(("DISPLAY" . ":11")
-                       ("GDK_SCALE" . "3")
-                       ("QT_SCALE_FACTOR" . "3")
-                       ("XCURSOR_SIZE" . "64")))))
+                     (bashrc (list (mixed-text-file
+                                    "media-umask"
+                                    "umask 0002\n")))
+                     (environment-variables
+                      '(("DISPLAY" . ":11")
+                        ("GDK_SCALE" . "3")
+                        ("QT_SCALE_FACTOR" . "3")
+                        ("XCURSOR_SIZE" . "64")))))
    (make-font-dep-configs #:feh-sz 30
                           #:xres-sz 20
                           #:dunst-font-sz 30
@@ -831,10 +846,10 @@
    (make-xsession #:media-station? #t)
    %common-wonko-services))
 
-(define-public %media-station-wonko-home
+(define-public %media-station-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services %media-station-wonko-services)))
+    (inherit %vanilla-wonko-home)
+    (services %media-station-home-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tina
