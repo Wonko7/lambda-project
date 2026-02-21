@@ -283,11 +283,13 @@
   ;; TODO: sentence & paragraph motions.
 
   (general-define-key
-   :states 'insert
-   "C-e"   #'emoji-search
-   "C-S-H" #'term-send-invisible
-   "C-v"   #'evil-paste-after
-   "C-S-V" (li (evil-paste-after 1 ?\*)))
+   :states     'insert
+   "<backtab>" #'dabbrev-expand
+   "M-TAB"     #'dabbrev-expand
+   "C-e"       #'emoji-search
+   "C-S-H"     #'term-send-invisible
+   "C-v"       #'evil-paste-after
+   "C-S-V"     (li (evil-paste-after 1 ?\*)))
 
   (general-define-key
    :states '(normal emacs insert visual global motion)
