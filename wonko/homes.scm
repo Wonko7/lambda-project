@@ -2,6 +2,7 @@
   #:use-module (guix gexp)
   #:use-module (guix modules)
   #:use-module (guix packages)
+  #:use-module (guix build utils)
   #:use-module (gnu)
   #:use-module (gnu home)
   #:use-module (gnu system shadow)
@@ -505,9 +506,6 @@
       (".config/dircolors/dircolors"
        ,(local-file
          (string-append %lambda-project "/misc/dircolors")))
-      (".config/kitty/kitty.conf"
-       ,(local-file
-         (string-append %lambda-project "/misc/kitty.conf")))
       (".config/vim/vimrc"
        ,(local-file
          (string-append %lambda-project "/misc/vimrc")))
@@ -711,6 +709,7 @@
 
 (define* (make-font-dep-configs #:key
                                 (feh-sz 15)
+                                (kitty-sz 12)
                                 (xres-sz 10)
                                 (dunst-font-sz 12)
                                 (dunst-width 300))
@@ -725,6 +724,13 @@
           " --fontpath " "/run/current-system/fonts-profile/share/fonts/truetype/"
           " --menu-font " %font-feh "/" fsz
           " --font " %font-feh "/" fsz "\n")))
+     (".config/kitty/kitty.conf"
+      ,(let ((ksz (number->string kitty-sz)))
+         (mixed-text-file
+          "kitty.conf"
+          "font_size " ksz "\n"
+          "background #27212E\n" ;; TODO: def this somewhere
+          "background_opacity 0.9\n")))
      (".Xresources"
       ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
      (".config/dunst/dunstrc"
@@ -744,24 +750,24 @@
 
 (define-public %vanilla-wonko-home
   (home-environment
-   (packages
-    (append
-     %emacs-world
-     %ocaml-minimal
-     %crypto-world
-     %xorg-world
-     %fonts-world
-     %vcs-world
-     %dev-world
-     (list
-      ;; services
-      kdeconnect
-      picom
-      synergy
-      dunst
-      ;; yes also man pages plz
-      man-db)))
-   (services %vanilla-wonko-services)))
+    (packages
+     (append
+      %emacs-world
+      %ocaml-minimal
+      %crypto-world
+      %xorg-world
+      %fonts-world
+      %vcs-world
+      %dev-world
+      (list
+       ;; services
+       kdeconnect
+       picom
+       synergy
+       dunst
+       ;; yes also man pages plz
+       man-db)))
+    (services %vanilla-wonko-services)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lowdpi
@@ -788,13 +794,14 @@
    %vanilla-shepherd-wonko-service
    (simple-service 'highdpi-bash home-bash-service-type
                    (home-bash-extension
-                    (environment-variables
-                     '(("GDK_SCALE" . "2")
-                       ("QT_USE_PHYSICAL_DPI" . "1")
-                       ("QT_SCALE_FACTOR" . "1")
-                       ("GDK_DPI_SCALE" . "1.5")
-                       ("XCURSOR_SIZE" . "64")))))
+                     (environment-variables
+                      '(("GDK_SCALE" . "2")
+                        ("QT_USE_PHYSICAL_DPI" . "1")
+                        ("QT_SCALE_FACTOR" . "1")
+                        ("GDK_DPI_SCALE" . "1.5")
+                        ("XCURSOR_SIZE" . "64")))))
    (make-font-dep-configs #:feh-sz 20
+                          #:kitty-sz 22
                           #:dunst-font-sz 8 #:dunst-width 175)
    (make-xsession)
    %common-wonko-services))
