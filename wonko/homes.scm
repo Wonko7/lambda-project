@@ -234,6 +234,7 @@
                (list #$(file-append picom "/bin/picom")
                      "--backend=glx"
                      "--corner-radius=20" ;; --rounded-corners-exclude
+                     "--inactive-opacity=0.5"
                      "--opacity-rule=10:name *= 'oneko'")
                #:log-file #$(home-log-path "picom")))
      (stop #~(make-kill-destructor))
