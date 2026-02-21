@@ -110,6 +110,8 @@
 
 (define %aliases
   `(("sudo"  . "sudo ") ;; makes aliases available when sudoing
+    ("cd"    . "pushd")
+    ("p"     . "popd")
     ("g"     . "git")
     ("psrg"  . "ps aux | rg -M0")
     ("df"    . "df -h")
