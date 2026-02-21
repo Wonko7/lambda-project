@@ -77,7 +77,7 @@
                              "ei" "ol" "iv"))
   ;; org-special-ctrl-a/e t
   ;; org styling, hide markup etc.
-  (org-hide-emphasis-markers t)
+  (org-hide-emphasis-markers nil)
   (org-pretty-entities t)
   (org-ellipsis " ▼")
 
