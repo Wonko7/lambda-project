@@ -50,7 +50,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; home components
 
-(define %term-cmd "urxvt")
+(define %term-cmd "kitty")
 
 (define* (make-emacs-values-service #:key
                                     (font-size                          120)
@@ -505,6 +505,9 @@
       (".config/dircolors/dircolors"
        ,(local-file
          (string-append %lambda-project "/misc/dircolors")))
+      (".config/kitty/kitty.conf"
+       ,(local-file
+         (string-append %lambda-project "/misc/kitty.conf")))
       (".config/vim/vimrc"
        ,(local-file
          (string-append %lambda-project "/misc/vimrc")))

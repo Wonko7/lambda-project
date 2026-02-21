@@ -313,6 +313,7 @@
         upower
         playerctl
         rxvt-unicode
+        kitty
         ;; tlp and have emacs set rfkill for me? fuck that noise.
 
         ;; x <3
