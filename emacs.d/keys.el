@@ -269,6 +269,8 @@
   (general-define-key
    :states 'normal
    "<TAB>" #'evil-toggle-fold
+   "C-="   #'er/expand-region
+   "C--"   #'er/contract-region
    "C-e"   #'embark-act
    "-"     #'mode-line-other-buffer
    "/"     #'consult-line

@@ -262,5 +262,8 @@
     "gmP" #'evil-mc-skip-and-goto-prev-match)
   (global-evil-mc-mode))
 
+;; not technically evil, but part of my modal UI
+(use-package expand-region)
+
 (provide 'conf/evil)
 ;;; evil.el ends here

@@ -101,6 +101,7 @@
         emacs-evil-paredit
         ;; emacs-hercules
         ;; emacs-vdiff-magit
+        emacs-expand-region
 
         ;; apps:
         ;; emacs-elfeed
