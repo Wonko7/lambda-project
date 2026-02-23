@@ -331,7 +331,6 @@
     (setq-local comint-scroll-to-bottom-on-output
                 (not comint-scroll-to-bottom-on-output))))
 
-
 (use-package shell
   :after coterm
   :demand t
@@ -342,6 +341,7 @@
   (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]🪄 \\)")
   ;; for tramp shell sessions:
   (explicit-shell-file-name "bash")
+  (shell-has-auto-cd t)
 
   :config
   (defun my/comint-kill-previous-output ()
