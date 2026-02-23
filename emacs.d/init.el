@@ -342,9 +342,37 @@
   (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]🪄 \\)")
   ;; for tramp shell sessions:
   (explicit-shell-file-name "bash")
+
   :config
+  (defun my/comint-kill-previous-output ()
+    "kill output from previous prompt to current prompt.
+    If not on prompt, copies current output."
+    (interactive)
+    (save-excursion
+      (let ((beg (progn (comint-previous-prompt 1)
+                        (forward-line 1)
+                        (point-marker)))
+            (end (progn (comint-next-prompt 1) ;; return to prompt
+                        (forward-line -2) ;; my prompt is on two lines
+                        (end-of-line)
+		        (point-marker))))
+        (copy-region-as-kill beg end)))
+    (message "killed output"))
+
+  (defun my/no-nl-comint-send-input ()
+    (interactive)
+    (comint-send-input t))
+
+  (general-evil-define-key '(normal) shell-mode-map
+    "zy"  #'my/comint-kill-previous-output)
+
   (general-evil-define-key '(insert normal) shell-mode-map
+    "C-y" #'my/comint-kill-previous-output)
+
+  (general-evil-define-key '(insert normal) shell-mode-map
+    "<return>"     #'my/no-nl-comint-send-input
     "C-S-<return>" #'detached-shell-send-input)
+
   (general-evil-define-key '(normal) shell-mode-map
     "à" #'my/cd-up))
 
