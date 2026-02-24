@@ -450,6 +450,7 @@
   (list sloccount
         cloc
         adb
+        fastboot
         teensy-loader-cli))
 
 (define-public %utils-world
