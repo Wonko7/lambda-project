@@ -35,6 +35,8 @@
 (use-package-modules base linux
                      emacs emacs-xyz shells bash
                      networking display-managers xdisorg suckless fonts
+                     ;; dev
+                     android
                      ;; guix dev deps:
                      package-management gnupg)
 
@@ -315,8 +317,9 @@
    (service (make-extra-profile-service-type "img")     %image-edition-world)
    (service (make-extra-profile-service-type "fonts")   %fonts-world)
 
-   (append
+   (udev-rules-service 'android android-udev-rules #:groups '("adbusers"))
 
+   (append
     (map (lambda (h)
            (service fleet-keep-alive-service-type (host-canonical-name h)))
          %fleet-hosts)
@@ -333,8 +336,8 @@
                                         `(,tty
                                           . ,(file-append font-terminus
                                                           "/share/consolefonts/ter-132n")))
-                                      '("tty1" "tty2" "tty3" "tty4" "tty5"
-                                        "tty6")))
+                                      '("tty1" "tty2" "tty3" "tty4" "tty5" "tty6")))
+
       (elogind-service-type
        config =>
        (elogind-configuration
@@ -351,6 +354,7 @@
          (handle-lid-switch 'suspend)
          (handle-lid-switch-docked  'suspend)
          (handle-lid-switch-external-power 'suspend)))
+
       (guix-service-type config =>
                          (guix-configuration
                            (discover? #t)

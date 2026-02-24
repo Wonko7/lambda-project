@@ -55,7 +55,7 @@
     (home-directory (string-append "/home/" (crew-name crew)))
     (shell (file-append bash "/bin/bash"))
     (supplementary-groups
-     (append '("lp" "netdev" "audio" "video")
+     (append '("lp" "netdev" "audio" "video" "adbusers")
              (if (crew-admin? crew)
                  '("wheel" "kvm")
                  '())))))
