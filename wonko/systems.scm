@@ -61,13 +61,13 @@
           (url "https://codeberg.org/wonko/maxipassat")
           (branch "master")
           (commit
-           "b55bed2368266534834abf192fd36edbe012f934"))
+           "0743062cbc0a8b39a2a67dc85a93da12a4925b6e"))
         (channel
           (name 'nonguix)
           (url "https://gitlab.com/nonguix/nonguix")
           (branch "master")
           (commit
-           "6c0ea215e0bd089bf3b2097e5c59dd726fbbe304")
+           "4811a684f4ced58cebfa945c3ccbbca6c26807fd")
           (introduction
            (make-channel-introduction
             "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -78,7 +78,7 @@
           (url "https://codeberg.org/guix/guix")
           (branch "master")
           (commit
-           "ec5fb6678f8268437b1940f7ed2f2b72d62ab4e0")
+           "1ca156a687c5259ceb567684de782edfb6d6611b")
           (introduction
            (make-channel-introduction
             "9edb3f66fd807b096b48283debdcddccfea34bad"
