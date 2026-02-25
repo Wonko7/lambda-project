@@ -378,7 +378,7 @@
                 ((run-init-p 5)
                  (projectile-switch-project))
                 ((run-init-p 4)
-                 (async-shell-command "firefox"))
+                 (my/local-async-shell-command "firefox"))
                 ((run-init-p 3)
                  (projectile-switch-project))
                 ((run-init-p 2)
