@@ -237,7 +237,7 @@
     (mlet %store-monad ((_ (current-target-system)))
       (return `((,(string-append profile-name "-profile")
                  ,(profile
-                   (content (packages->manifest packages))))))))
+                    (content (packages->manifest packages))))))))
   (service-type (name (string->symbol
                        (string-append profile-name "-extra-profile")))
                 (extensions
@@ -345,11 +345,21 @@
           `(,(program-file
               "wake-up"
               #~(let ((arg (cadr (program-arguments))))
-                  (if (string= arg "post")
-                      (let ((port (open-file #$%wake-up-notification-file "w")))
-                        (display
-                         "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
-                        (close-port port)))))))
+                  (when (string= arg "post")
+                    (let ((port (open-file #$%wake-up-notification-file "w")))
+                      (display "WAKE UP GRAB A BRUSH AND PUT A LITTLE MAKE UP\n" port)
+                      (close-port port)))))
+            ,(program-file
+              "lock-up"
+              #~(let ((arg (cadr (program-arguments))))
+                  (when (string= arg "pre")
+                    (system
+                     #$(string-concatenate
+                        (append '("(/run/privileged/bin/sudo -u wonko DISPLAY=:9 ")
+                                (map (lambda (s)
+                                       (string-append s " "))
+                                     (drop-right %lock-cmd 2))
+                                '("&)")))))))))
          (handle-power-key 'hibernate)
          (handle-lid-switch 'suspend)
          (handle-lid-switch-docked  'suspend)
