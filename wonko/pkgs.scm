@@ -474,12 +474,14 @@
    dtach
    net-tools ;; netstat
    strace
+   fastfetch-minimal
    ;; compression
    p7zip
    unzip
    unrar
    ;; android
    adb
+   fastboot
    ;; web
    gnutls
    openssl
