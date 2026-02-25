@@ -637,7 +637,6 @@
       (my/sudo "halt")))
 
 ;; system wake up hook:
-
 (setq my/wake-up-counter 0)
 (setq system/wake-up-hook (list
                            (lambda ()
