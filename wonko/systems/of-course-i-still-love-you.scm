@@ -304,201 +304,186 @@ interface eth0                    # identifies the interface we are advertising 
                (operating-system-packages %laptop-os)))
 
     (services
-     (let ((xorg-cfg (xorg-configuration
-                       (keyboard-layout %us-kb)
-                       (modules (filter
-                                 (lambda (p)
-                                   ;; remove amdgpu and non supported by current-system
-                                   (and (not (equal? p xf86-video-amdgpu))
-                                        (member (%current-system)
-                                                (package-supported-systems p))))
-                                 %default-xorg-modules))
-                       (extra-config '("Section \"Device\"\n"
-                                       "  Identifier \"Card1\"\n"
-                                       "  Option \"SWcursor\"\n"
-                                       "  Option \"AsyncFlipSecondaries\" \"false\"\n"
-                                       "EndSection\n")))))
-       (cons*
-        ;; zfs
-        (simple-service 'zfs-loader kernel-module-loader-service-type '("zfs"))
-        (simple-service 'zfs-shepherd-services
-                        shepherd-root-service-type
-                        zfs-shepherd-services)
-        (simple-service 'zfs-sheperd-services-user-processes
-                        user-processes-service-type
-                        '(zfs-automount))
+     (cons*
+      ;; zfs
+      (simple-service 'zfs-loader kernel-module-loader-service-type '("zfs"))
+      (simple-service 'zfs-shepherd-services
+                      shepherd-root-service-type
+                      zfs-shepherd-services)
+      (simple-service 'zfs-sheperd-services-user-processes
+                      user-processes-service-type
+                      '(zfs-automount))
 
-        ;; my users & desktop usage:
-        (service slim-service-type (slim-configuration
-                                     (inherit wonko-slim-config)
-                                     (xorg-configuration xorg-cfg)))
-        (service slim-service-type (slim-configuration
-                                     (inherit media-station-slim-config)
-                                     (xorg-configuration xorg-cfg)
-                                     (auto-login? #t)))
-        (service guix-home-service-type
-                 `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
-                   (,(crew-name %media) ,%media-station-home)))
-        (service kmonad-service-type kmonad-ergodox-config)
-        (service kmonad-service-type kmonad-bullshit-config)
-        (simple-service 'skynet-llm-service
-                        shepherd-root-service-type
-                        skynet-llm-service)
+      ;; my users & desktop usage:
+      (service slim-service-type (slim-configuration
+                                   (inherit wonko-slim-config)
+                                   (xorg-configuration amdgpu-xorg-config)))
+      (service slim-service-type (slim-configuration
+                                   (inherit media-station-slim-config)
+                                   (xorg-configuration amdgpu-xorg-config)))
+      (service guix-home-service-type
+               `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      (simple-service 'skynet-llm-service
+                      shepherd-root-service-type
+                      skynet-llm-service)
 
-        ;; <!-- public net stuff:
-        (service certbot-service-type
-                 (certbot-configuration
-                   (certificates
-                    (list
-                     (certificate-configuration
-                      (domains '("mail.maxipass.at"))
-                      (deploy-hook exim-deploy-hook))
-                     (certificate-configuration
-                      (domains '("maxipass.at" "www.maxipass.at")))))))
+      ;; <!-- public net stuff:
+      (service certbot-service-type
+               (certbot-configuration
+                 (certificates
+                  (list
+                   (certificate-configuration
+                    (domains '("mail.maxipass.at"))
+                    (deploy-hook exim-deploy-hook))
+                   (certificate-configuration
+                    (domains '("maxipass.at" "www.maxipass.at")))))))
 
-        (service
-         nginx-service-type
-         (nginx-configuration
-           (server-blocks
-            (list (nginx-server-configuration
-                    (server-name '("www.maxipass.at"))
-                    (listen '("443 ssl" "[::]:443 ssl"))
-                    (root (string-append
-                           (maxipassat-ci-base-path mp-prod-config)
-                           "/static"))
-                    (ssl-certificate "/etc/letsencrypt/live/maxipass.at/fullchain.pem")
-                    (ssl-certificate-key "/etc/letsencrypt/live/maxipass.at/privkey.pem")
-                    (locations
-                     (list
-                      (nginx-location-configuration
-                        (uri "/www/")
-                        (body `(,(string-append
-                                  "root "
-                                  (maxipassat-ci-base-path mp-prod-config) "/static;"))))
-                      (nginx-location-configuration
-                        (uri "/")
-                        (body `(,(string-append "proxy_pass http://127.0.0.1:"
-                                                (number->string
-                                                 (maxipassat-ci-port mp-prod-config))
-                                                ";")
-                                "proxy_set_header Host $host;"
-                                "proxy_set_header X-Real-IP $remote_addr;"
-                                "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
-                                "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
+      (service
+       nginx-service-type
+       (nginx-configuration
+         (server-blocks
+          (list (nginx-server-configuration
+                  (server-name '("www.maxipass.at"))
+                  (listen '("443 ssl" "[::]:443 ssl"))
+                  (root (string-append
+                         (maxipassat-ci-base-path mp-prod-config)
+                         "/static"))
+                  (ssl-certificate "/etc/letsencrypt/live/maxipass.at/fullchain.pem")
+                  (ssl-certificate-key "/etc/letsencrypt/live/maxipass.at/privkey.pem")
+                  (locations
+                   (list
+                    (nginx-location-configuration
+                      (uri "/www/")
+                      (body `(,(string-append
+                                "root "
+                                (maxipassat-ci-base-path mp-prod-config) "/static;"))))
+                    (nginx-location-configuration
+                      (uri "/")
+                      (body `(,(string-append "proxy_pass http://127.0.0.1:"
+                                              (number->string
+                                               (maxipassat-ci-port mp-prod-config))
+                                              ";")
+                              "proxy_set_header Host $host;"
+                              "proxy_set_header X-Real-IP $remote_addr;"
+                              "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;"
+                              "proxy_set_header X-Forwarded-Proto $scheme;"))))))))))
 
-        (service maxipassat-container-ci-service-type mp-staging-config)
-        (service maxipassat-container-ci-service-type mp-preprod-config)
-        (service maxipassat-container-ci-service-type mp-prod-config)
+      (service maxipassat-container-ci-service-type mp-staging-config)
+      (service maxipassat-container-ci-service-type mp-preprod-config)
+      (service maxipassat-container-ci-service-type mp-prod-config)
 
-        ;; email
-        (service mail-aliases-service-type '(("william" "wonko@maxipass.at")
-                                             ("webmaster" "wonko@maxipass.at")
-                                             ("dance-commander" "wonko@maxipass.at")))
-        (service dovecot-service-type
-                 (dovecot-configuration
-                   (mail-location "maildir:~/.mail")
-                   ;; for pigeonhole example /code/guix/gnu/tests/mail.scm
-                   ;; (extensions (list dovecot-pigeonhole))
-                   (services
-                    (list
-                     (service-configuration
-                       (kind "imap-login")
-                       (client-limit 0)
-                       (process-limit 0)
-                       (listeners
-                        (list
-                         (inet-listener-configuration (protocol "imaps")
-                                                      (port 993)
-                                                      (ssl? #t)))))
-                     (service-configuration
-                       (kind "lmtp")
-                       (client-limit 1)
-                       (process-limit 0)
-                       (listeners
-                        (list
-                         (inet-listener-configuration (protocol "lmtp")
-                                                      (port 2525)
-                                                      (ssl? #f)))))
-                     (service-configuration
-                       (kind "auth")
-                       (service-count 0)
-                       (client-limit 0)
-                       (process-limit 1)
-                       (listeners
-                        (list (unix-listener-configuration (path "auth-userdb")))))
-                     (service-configuration
-                       (kind "auth-worker")
-                       (client-limit 1)
-                       (process-limit 0))
-                     (service-configuration
-                       (kind "dict")
-                       (client-limit 1)
-                       (process-limit 0)
-                       (listeners (list (unix-listener-configuration (path "dict")))))))
-                   ;; (mail-debug? #t)
-                   (auth-username-format "%n")
-                   (protocols
-                    (list (protocol-configuration
-                            (name "lmtp"))
-                          (protocol-configuration
-                            (name "imap")
-                            ;; (mail-plugins '("$mail_plugins" "imap_sieve"))
-                            ;; (imap-metadata? #t)
-                            )))))
-        (service exim-service-type
-                 (exim-configuration
-                   (package exim-content-scan)
-                   (config-file
-                    (local-file
-                     (string-append %lambda-project "/misc/exim.conf")))))
-        (service rspamd-service-type)
+      ;; email
+      (service mail-aliases-service-type '(("william" "wonko@maxipass.at")
+                                           ("webmaster" "wonko@maxipass.at")
+                                           ("dance-commander" "wonko@maxipass.at")))
+      (service dovecot-service-type
+               (dovecot-configuration
+                 (mail-location "maildir:~/.mail")
+                 ;; for pigeonhole example /code/guix/gnu/tests/mail.scm
+                 ;; (extensions (list dovecot-pigeonhole))
+                 (services
+                  (list
+                   (service-configuration
+                     (kind "imap-login")
+                     (client-limit 0)
+                     (process-limit 0)
+                     (listeners
+                      (list
+                       (inet-listener-configuration (protocol "imaps")
+                                                    (port 993)
+                                                    (ssl? #t)))))
+                   (service-configuration
+                     (kind "lmtp")
+                     (client-limit 1)
+                     (process-limit 0)
+                     (listeners
+                      (list
+                       (inet-listener-configuration (protocol "lmtp")
+                                                    (port 2525)
+                                                    (ssl? #f)))))
+                   (service-configuration
+                     (kind "auth")
+                     (service-count 0)
+                     (client-limit 0)
+                     (process-limit 1)
+                     (listeners
+                      (list (unix-listener-configuration (path "auth-userdb")))))
+                   (service-configuration
+                     (kind "auth-worker")
+                     (client-limit 1)
+                     (process-limit 0))
+                   (service-configuration
+                     (kind "dict")
+                     (client-limit 1)
+                     (process-limit 0)
+                     (listeners (list (unix-listener-configuration (path "dict")))))))
+                 ;; (mail-debug? #t)
+                 (auth-username-format "%n")
+                 (protocols
+                  (list (protocol-configuration
+                          (name "lmtp"))
+                        (protocol-configuration
+                          (name "imap")
+                          ;; (mail-plugins '("$mail_plugins" "imap_sieve"))
+                          ;; (imap-metadata? #t)
+                          )))))
+      (service exim-service-type
+               (exim-configuration
+                 (package exim-content-scan)
+                 (config-file
+                  (local-file
+                   (string-append %lambda-project "/misc/exim.conf")))))
+      (service rspamd-service-type)
 
-        ;; local net
-        (service nftables-service-type (nftables-configuration
-                                         (ruleset %nftables-ruleset)))
-        (service radvd-service-type (radvd-configuration
-                                     (config-file %radvd-config)))
-        (service dhcpcd-service-type (dhcpcd-configuration
-                                       (interfaces '("eth0"))))
-        (service static-networking-service-type
-                 (list
-                  (static-networking
-                    (provision '(static-net-conf))
-                    (addresses
-                     (list (network-address
-                             (device "eth0")
-                             (value "2a01:e0a:b5a:de71::1/64"))))
-                    (routes
-                     (list (network-route
-                             (destination "2000::/3")
-                             (gateway "2a01:e0a:b5a:de70::1")))))))
+      ;; local net
+      (service nftables-service-type (nftables-configuration
+                                       (ruleset %nftables-ruleset)))
+      (service radvd-service-type (radvd-configuration
+                                   (config-file %radvd-config)))
+      (service dhcpcd-service-type (dhcpcd-configuration
+                                     (interfaces '("eth0"))))
+      (service static-networking-service-type
+               (list
+                (static-networking
+                  (provision '(static-net-conf))
+                  (addresses
+                   (list (network-address
+                           (device "eth0")
+                           (value "2a01:e0a:b5a:de71::1/64"))))
+                  (routes
+                   (list (network-route
+                           (destination "2000::/3")
+                           (gateway "2a01:e0a:b5a:de70::1")))))))
 
-        (service wireguard-service-type
-                 (wireguard-configuration
-                   (interface "star-fleet")
-                   (addresses (net-peer-addr-to/24 %of-course-i-still-love-you-net-peer))
-                   (peers
-                    (map net-to-wg-peer
-                         (filter (lambda (h)
-                                   (not (equal? h %of-course-i-still-love-you-net-peer)))
-                                 %star-fleet-hosts)))))
+      (service wireguard-service-type
+               (wireguard-configuration
+                 (interface "star-fleet")
+                 (addresses (net-peer-addr-to/24 %of-course-i-still-love-you-net-peer))
+                 (peers
+                  (map net-to-wg-peer
+                       (filter (lambda (h)
+                                 (not (equal? h %of-course-i-still-love-you-net-peer)))
+                               %star-fleet-hosts)))))
 
-        (simple-service 'wait-for-wan-service
-                        shepherd-root-service-type
-                        wait-for-wan-service)
+      (simple-service 'wait-for-wan-service
+                      shepherd-root-service-type
+                      wait-for-wan-service)
 
-        (simple-service 'azirevpn-service
-                        shepherd-root-service-type
-                        azirevpn-service)
+      (simple-service 'azirevpn-service
+                      shepherd-root-service-type
+                      azirevpn-service)
 
-        (modify-services %media-station-os-services
-          (sysctl-service-type
-           config =>
-           (sysctl-configuration
-             (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
-                                 ("net.ipv4.ip_forward" . "1"))
-                               %default-sysctl-settings))))
-          (delete network-manager-service-type)))))
+      (modify-services %media-station-os-services
+        (sysctl-service-type
+         config =>
+         (sysctl-configuration
+           (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
+                               ("net.ipv4.ip_forward" . "1"))
+                             %default-sysctl-settings))))
+        (delete network-manager-service-type))))
     ;; public net stuff -->
 
     (mapped-devices

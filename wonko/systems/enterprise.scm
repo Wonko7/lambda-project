@@ -76,8 +76,12 @@
 
     (services
      (cons*
-      (service slim-service-type wonko-slim-config)
-      (service noautostart-slim-service-type media-station-slim-config)
+      (service slim-service-type (slim-configuration
+                                   (inherit wonko-slim-config)
+                                   (xorg-configuration amdgpu-xorg-config)))
+      (service noautostart-slim-service-type (slim-configuration
+                                               (inherit media-station-slim-config)
+                                               (xorg-configuration amdgpu-xorg-config)))
       (service guix-home-service-type
                `((,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))

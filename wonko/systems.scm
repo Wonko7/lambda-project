@@ -35,6 +35,7 @@
 (use-package-modules base linux
                      emacs emacs-xyz shells bash
                      networking display-managers xdisorg suckless fonts
+                     xorg
                      ;; dev
                      android
                      ;; guix dev deps:
@@ -173,30 +174,32 @@
     (default-user (crew-name %wonko))
     ;; FIXME: this should break nothing, xsession does setxkbmap.
     (xorg-configuration (xorg-configuration
-                          (keyboard-layout %us-kb)))
-    ))
+                          (keyboard-layout %us-kb)))))
 
 (define-public media-station-slim-config
   (slim-configuration
-   (display ":11")
-   (vt "vt11")
-   (auto-login? #t)
-   (default-user (crew-name %media))
-   (xorg-configuration (xorg-configuration
-                        (keyboard-layout %us-kb)))
-   ))
+    (display ":11")
+    (vt "vt11")
+    (auto-login? #t)
+    (default-user (crew-name %media))
+    (xorg-configuration (xorg-configuration
+                          (keyboard-layout %us-kb)))))
 
-;; (service noautostart-slim-service-type wonko-slim-config)
-;; (service slim-service-type wonko-slim-config)
-;; (service
-;;     slim-service-type
-;;     (slim-configuration
-;;      (display ":10")
-;;      (vt "vt10")
-;;      (auto-login? #t)
-;;      (default-user (crew-name %tina))
-;;      (xorg-configuration (xorg-configuration
-;;                           (keyboard-layout (crew-kb %tina))))))
+(define-public amdgpu-xorg-config
+  (xorg-configuration
+    (keyboard-layout %us-kb)
+    (modules (filter
+              (lambda (p)
+                ;; remove amdgpu and non supported by current-system
+                (and (not (equal? p xf86-video-amdgpu))
+                     (member (%current-system)
+                             (package-supported-systems p))))
+              %default-xorg-modules))
+    (extra-config '("Section \"Device\"\n"
+                    "  Identifier \"Card1\"\n"
+                    "  Option \"SWcursor\"\n"
+                    "  Option \"AsyncFlipSecondaries\" \"false\"\n"
+                    "EndSection\n"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fleet keep-alive service
