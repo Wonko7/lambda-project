@@ -130,8 +130,8 @@
 
 (defun my/insert-shell-line ()
   (interactive)
-  (let* ((fs '("/data/org/here-be-dragons/tech/20230412204446-shell.org"
-               "/data/org/here-be-dragons/wip/20230815232907-maxipass_at.org"))
+  (let* ((fs '("/data/org/here-be-dragons/wip/20230815232907-maxipass_at.org"
+               "/data/org/here-be-dragons/tech/20230412204446-shell.org"))
          (buf-content (split-string
                        (with-temp-buffer
                          (mapc (lambda (f)
