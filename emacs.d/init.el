@@ -329,7 +329,17 @@
   (defun my/toggle-scroll-to-bottom-on-output ()
     (interactive)
     (setq-local comint-scroll-to-bottom-on-output
-                (not comint-scroll-to-bottom-on-output))))
+                (not comint-scroll-to-bottom-on-output)))
+
+  ;; [2026-02-27 Fri 17:33]
+  ;; unidentified bug, shell exits prematurely
+  (defun dumb-shell-down ()
+    (interactive)
+    (coterm-mode 0)
+    (setq shell-has-auto-cd nil)
+    (defun my/no-nl-comint-send-input ()
+      (interactive)
+      (comint-send-input))))
 
 (use-package shell
   :after coterm
