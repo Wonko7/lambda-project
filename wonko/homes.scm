@@ -449,7 +449,9 @@
                       `(,(string-append ".emacs.d/snippets/" file)
                         ,(local-file
                           (string-append %lambda-project "/emacs.d/snippets/" file))))
+                    ;; FIXME: list dir and copy all..
                     '("fundamental-mode/danger_triangle"
+                      "org-mode/eternally-for-today"
                       "org-mode/begin_src"
                       "org-mode/begin_quote")))
 
