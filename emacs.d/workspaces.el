@@ -434,7 +434,10 @@
                      (tramp-file-local-name default-directory))
                     "~/"))
            (rm  (or remote (my/choose-remote-from-fleet)))
-           (rpr (concat "/ssh:" rm ":" pr)))
+           (rpr (concat "/ssh:" rm ":" pr))
+           (process-environment (if my/force-term-env ;; FIXME dumb shell fallback
+                                    (cons my/force-term-env process-environment)
+                                  process-environment)))
       (projectile-with-default-dir rpr
         (shell
          (projectile-generate-process-name

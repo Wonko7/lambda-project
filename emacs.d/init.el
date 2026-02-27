@@ -333,13 +333,17 @@
 
   ;; [2026-02-27 Fri 17:33]
   ;; unidentified bug, shell exits prematurely
+  ;; https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-shell-setup.html
+  (setq my/force-term-env nil)
   (defun dumb-shell-down ()
     (interactive)
     (coterm-mode 0)
-    (setq shell-has-auto-cd nil)
+    ;; (setq shell-has-auto-cd nil)
+    (setq my/force-term-env "TERM=xterm-256color")
     (defun my/no-nl-comint-send-input ()
+      ;; lol.
       (interactive)
-      (comint-send-input))))
+      (comint-send-input (file-remote-p default-directory)))))
 
 (use-package shell
   :after coterm
