@@ -147,7 +147,7 @@
    (gptel-make-openai "skynet"
      :stream t
      :protocol "http"
-     :host "of-course-i-still-love-you.local:6060"
+     :host "of-course-i-still-love-you.star-fleet.local:6060"
      :models '(lol)))
   (gptel-org-convert-response t)
   (gptel-default-mode #'org-mode)
