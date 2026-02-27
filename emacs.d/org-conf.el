@@ -127,6 +127,14 @@
   (set-face-attribute 'org-tag nil :foreground "#EB64B9")
   (set-face-attribute 'org-tag nil :box t)
 
+  (defun my/eternally-for-today ()
+    ;; date & entry are reserved as diary arguments
+    (let* ((d8 (decode-time (current-time)))
+           (d (nth 3 d8))
+           (m (nth 4 d8))
+           (y (nth 5 d8)))
+      (diary-date m d y)))
+
   (general-evil-define-key '(insert) org-mode-map
     "TAB"   #'completion-at-point
     "C-l"   #'org-demote-subtree
