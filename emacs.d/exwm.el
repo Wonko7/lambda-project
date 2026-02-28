@@ -218,7 +218,8 @@
     (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
     ;; raise new windows:
     (add-hook 'exwm-manage-finish-hook #'my/raise-new)
-    (advice-add 'exwm-workspace-switch :before #'my/exwm-workspace--current-to-previous-index))
+    (advice-add #'exwm-workspace-switch :before
+                #'my/exwm-workspace--current-to-previous-index))
 
   (add-hook 'exwm-init-hook #'my/init-exwm)
 
