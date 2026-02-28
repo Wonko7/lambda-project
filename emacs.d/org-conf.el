@@ -128,32 +128,6 @@
   (set-face-attribute 'org-tag nil :box t)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; sexp dates: my/eternally-for-today + cache reset:
-
-  (defun my/eternally-for-today ()
-    ;; date & entry are reserved as diary arguments
-    (let* ((d8 (decode-time (current-time)))
-           (d (nth 3 d8))
-           (m (nth 4 d8))
-           (y (nth 5 d8)))
-      (diary-date m d y)))
-
-  (setq my/last-diary-sexp-entry-cache-reset nil)
-
-  (defun my/reset-diary-sexp-entry-cache-once-per-day (&rest _r)
-    (let* ((d8 (decode-time (current-time)))
-           (d (nth 3 d8))
-           (m (nth 4 d8))
-           (y (nth 5 d8))
-           (now (list y m d)))
-      (when (not (equal my/last-diary-sexp-entry-cache-reset now))
-        (setq org--diary-sexp-entry-cache (make-hash-table :test #'equal))
-        (setq my/last-diary-sexp-entry-cache-reset now))))
-
-  (advice-add #'org-agenda :before
-              #'my/reset-diary-sexp-entry-cache-once-per-day)
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; keys:
 
   (general-evil-define-key '(insert) org-mode-map
@@ -405,6 +379,36 @@ EXTRA-FILES can be used to append extra files to the list."
   (set-face-attribute 'org-imminent-deadline nil :foreground "red")
   (set-face-attribute 'org-upcoming-deadline nil :foreground "tomato")
   (set-face-attribute 'org-upcoming-distant-deadline nil :foreground "dark salmon"))
+
+(use-package diary-lib
+  :after org-agenda
+  :demand t
+  :config
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; sexp dates: my/eternally-for-today + cache reset:
+
+  (defun my/eternally-for-today ()
+    ;; date & entry are reserved as diary arguments
+    (let* ((d8 (decode-time (current-time)))
+           (d (nth 3 d8))
+           (m (nth 4 d8))
+           (y (nth 5 d8)))
+      (diary-date m d y)))
+
+  (setq my/last-diary-sexp-entry-cache-reset nil)
+
+  (defun my/reset-diary-sexp-entry-cache-once-per-day (&rest _r)
+    (let* ((d8 (decode-time (current-time)))
+           (d (nth 3 d8))
+           (m (nth 4 d8))
+           (y (nth 5 d8))
+           (now (list y m d)))
+      (when (not (equal my/last-diary-sexp-entry-cache-reset now))
+        (setq org--diary-sexp-entry-cache (make-hash-table :test #'equal))
+        (setq my/last-diary-sexp-entry-cache-reset now))))
+
+  (advice-add #'org-agenda :before
+              #'my/reset-diary-sexp-entry-cache-once-per-day))
 
 (use-package holidays
   :after org-agenda
