@@ -15,6 +15,12 @@
 
   (defvar ws/current-layout (-repeat my/exwm-workspace-number nil))
 
+  (defun my/org-roam-open-node-return-buffer (node)
+    (let ((n (org-roam-node-from-title-or-alias node)))
+      (org-roam-node-open n)
+      (marker-buffer
+       (org-roam-node-marker n))))
+
   (setq ws/layouts
         `(( :layout code2
             :recipe (| (:left-size-ratio 0.5)
@@ -116,16 +122,21 @@
                          '((:name right :buffer-f (ws/proj-shell "~/"))
                            (:name left  :buffer-f "*Bluetooth*" :hide-your-kids t))))
 
-          ( :layout media2
+          ( :layout media3
             :recipe (| (:left-size-ratio 0.5)
                        left
-                       right)
+                       (- (:upper-size-ratio 0.5)
+                          tina-show
+                          my-show))
             :buffers (( :name left
                         :hide-your-kids t
                         :buffer-f (ws/proj-shell "/data/org"))
-                      ( :name right
-                        :buffer-f (org-roam-node-open
-                                   (org-roam-node-from-title-or-alias my/current-media)))))
+                      ( :name tina-show
+                        :buffer-f
+                        (my/org-roam-open-node-return-buffer tina/current-media))
+                      ( :name my-show
+                        :buffer-f
+                        (my/org-roam-open-node-return-buffer my/current-media))))
           ( :layout media2-remote
             :recipe (| (:left-size-ratio 0.5)
                        left
@@ -136,8 +147,8 @@
                                    "of-course-i-still-love-you.local"
                                    "/mnt/trantor/media/inbox"))
                       ( :name right
-                        :buffer-f (org-roam-node-open
-                                   (org-roam-node-from-title-or-alias my/current-media)))))
+                        :buffer-f
+                        (my/org-roam-open-node-return-buffer my/current-media))))
 
           ( :layout org2-latest-agenda
             :recipe (| (:left-size-ratio 0.5)
@@ -382,7 +393,7 @@
                 ((run-init-p 3)
                  (projectile-switch-project))
                 ((run-init-p 2)
-                 (ws/set-layout 'media2))
+                 (ws/set-layout 'media3))
                 ((run-init-p 1)
                  (ws/set-layout 'init2))
                 ;; external monitor
