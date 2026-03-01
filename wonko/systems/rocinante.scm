@@ -35,15 +35,14 @@
     `((".x-config"
        ,(program-file
          "x-config"
-         #~(begin
-             (system
-              (string-append
-               #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"
-               #$xrandr "/bin/xrandr --dpi 96;"
-               #$xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
-               #$xinput "/bin/xinput"
-               " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.7")))))))))
+         #~(system
+            (string-append
+             #$setxkbmap "/bin/setxkbmap -option compose:ralt us;"
+             #$xrandr "/bin/xrandr --dpi 96;"
+             #$xinput "/bin/xinput"
+             " set-prop 'ETPS/2 Elantech Touchpad' 'Synaptics Two-Finger Scrolling' 1 1;"
+             #$xinput "/bin/xinput"
+             " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.8"))))))))
 
 (define %wonko-home
   (home-environment
