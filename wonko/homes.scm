@@ -525,6 +525,18 @@
        ,(local-file
          (string-append %lambda-project "/misc/vimrc")))
       ;; my X stuff:
+      (".config/picom/picom.conf"
+       ,(mixed-text-file
+         "picom.conf"
+         "wintypes: {\n"
+         ;; tooltip = { fade = true; shadow = true;
+         ;;             opacity = 0.9; focus = true; full-shadow = false; };
+         ;; dock = { shadow = false; clip-shadow-above = true; }
+         "  utility = { opacity = 0.9 ;};\n"
+         "  menu = { opacity = 0.9 ;};\n"
+         "  popup_menu = { opacity = 0.9; };\n"
+         "  dropdown_menu = { opacity = 0.9; };\n"
+         "};"))
       (".config/kdeglobals"
        ,(file-append breeze "/share/color-schemes/BreezeDark.colors"))
       (".XCompose"
