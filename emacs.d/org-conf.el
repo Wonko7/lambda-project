@@ -663,7 +663,7 @@ current time."
   :config
   (appt-activate)
   (defun my/idle-org-agenda-to-appt-2m ()
-    (run-at-time "2m" 0 #'my/idle-org-agenda-to-appt))
+    (run-at-time 120 0 #'my/idle-org-agenda-to-appt))
   (defun my/idle-org-agenda-to-appt ()
     (run-with-idle-timer 10 nil #'org-agenda-to-appt))
   (run-at-time nil 3600 #'my/idle-org-agenda-to-appt))
