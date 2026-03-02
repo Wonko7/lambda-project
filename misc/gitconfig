@@ -18,12 +18,12 @@
 
 [color]
   ui = auto
-
-# test
 [column]
   ui = auto
 [branch]
   sort = -committerdate
+  autosetupmerge = always
+  autosetuprebase = always
 
 [core]
   attributesfile = ~/.config/git/attributes
@@ -86,34 +86,32 @@
 [mergetool "vimdiff"]
   cmd    = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
-# submodule stuff:
 [status]
   submodulesummary = 1
 [pager]
   submodule = false
   branch    = false
+
 [push]
   recurseSubmodules = on-demand
   followTags        = true
-
+[pull]
+  rebase = true
+[rebase]
+  autoStash = true
 [fetch]
   recurseSubmodules = on-demand
 
-# misc:
 [rerere]
   enabled = 1
 [diff]
   renamelimit = 5000
 [grep]
   patternType = perl
-[pull] # merge:
-  rebase = false
 
 [diff "common-lisp"]
   xfuncname="^\\((def\\S+\\s+\\S+)"
-
 [diff "elisp"]
   xfuncname="^\\((((def\\S+)|use-package)\\s+\\S+)"
-
 [diff "org"]
   xfuncname="^\\*+[\t ]+(.*)$"
