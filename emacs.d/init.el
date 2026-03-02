@@ -592,7 +592,7 @@
 
 (use-package transmission
   :custom
-  (transmission-host "of-course-i-still-love-you.local")
+  (transmission-host "of-course-i-still-love-you.star-fleet.local")
   (transmission-refresh-modes '(transmission-mode
                                 transmission-files-mode
                                 transmission-info-mode
