@@ -321,6 +321,7 @@ EXTRA-FILES can be used to append extra files to the list."
 
 (use-package org-agenda
   :after org
+  :demand t
   :custom
   (org-agenda-window-setup 'current-window)
   (org-agenda-prefix-format (quote
@@ -332,7 +333,6 @@ EXTRA-FILES can be used to append extra files to the list."
   (org-agenda-deadline-leaders (quote ("💀" "💀%2d: " "")))
   (org-agenda-scheduled-leaders (quote ("⏱" "⏱️ %2d: ")))
   (org-agenda-compact-blocks t)
-  ;; agenda styling
   (org-agenda-block-separator ?─)
   (org-agenda-span 15)
   (org-agenda-start-with-log-mode t)
@@ -342,6 +342,9 @@ EXTRA-FILES can be used to append extra files to the list."
   (org-agenda-tags-column my/org-agenda-tags-column)
   (org-agenda-remove-tags t)
   (org-super-agenda-header-prefix "")
+  (org-agenda-time-grid '((daily today require-timed remove-match)
+                          (800 1000 1200 1400 1600 1800 2000)
+                          " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
   (org-agenda-custom-commands '(("c" "Simple agenda view"
                                  ((agenda "")
                                   (alltodo "" )))
