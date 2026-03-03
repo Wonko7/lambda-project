@@ -8,6 +8,12 @@
      (interactive)
      ,@body))
 
+(defmacro li-local (&rest body) ;; FIXME use in exwm too.
+  `(lambda ()
+     (interactive)
+     (let ((default-directory (tramp-file-local-name default-directory)))
+       ,@body)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; up up & away
 

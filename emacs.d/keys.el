@@ -16,8 +16,8 @@
 
   (evil-leader/set-key
     ":"       #'execute-extended-command ;;  "exec stuff"
-    "<SPC>"   #'consult-buffer           ;;  "buffers"
-    "C-<SPC>" #'consult-buffer           ;;  "buffers"
+    "<SPC>"   (li-local (consult-buffer))
+    "C-<SPC>" (li-local (consult-buffer))
     "/"       #'consult-ripgrep          ;;  "grep"
     "'"       #'project-find-file        ;;  "proj buffers"
     ;; "'" #'counsel-projectile-find-file
