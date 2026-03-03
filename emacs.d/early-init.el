@@ -1,6 +1,8 @@
 ;;; early-init.el  -*- lexical-binding: t; -*-
 
-(setq default-frame-alist '((background-color . "#27212E")
+(require 'conf/generated-values "~/.emacs.d/generated-values.el")
+
+(setq default-frame-alist `((background-color . ,my/background-colour)
                             (ns-appearance . dark)
                             (fullscreen . maximized)
                             (alpha . (100 . 70))

@@ -35,3 +35,5 @@
   #~(string-append (getenv "HOME") "/" #$%home-log-root #$fn ".log"))
 
 (define-public %wake-up-notification-file "/run/systemd/wakeup")
+
+(define-public %background-colour "#27212E")

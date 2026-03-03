@@ -76,6 +76,7 @@
             my/org-habit-preceding-days             #$org-habit-preceding-days
             my/window-divider-default-right-width   #$window-divider-default-right-width
             my/wake-up-notification-file            #$%wake-up-notification-file
+            my/background-colour                    #$%background-colour
             my/font           #$%font
             my/lambda-project #$%lambda-project
             my/term-cmd       #$%term-cmd
@@ -756,7 +757,7 @@
          (mixed-text-file
           "kitty.conf"
           "font_size " ksz "\n"
-          "background #27212E\n" ;; TODO: def this somewhere
+          "background " %background-colour "\n" ;; TODO: def this somewhere
           "background_opacity 0.9\n")))
      (".Xresources"
       ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
