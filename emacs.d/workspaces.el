@@ -467,9 +467,12 @@
   (defvar ws/default-remote
     (-repeat my/exwm-workspace-number "of-course-i-still-love-you.local"))
 
-  (defun ws/choose-default-remote ()
+  (defun ws/choose-default-remote (&optional all)
     (interactive)
-    (let ((rm (my/choose-remote-from-fleet)))
-      (setf (nth exwm-workspace-current-index ws/default-remote) rm))))
+    (let* ((default-directory "~/")
+           (rm (my/choose-remote-from-fleet)))
+      (if all
+          (setq ws/default-remote (-repeat my/exwm-workspace-number rm))
+        (setf (nth exwm-workspace-current-index ws/default-remote) rm)))))
 
 (provide 'conf/workspaces)
