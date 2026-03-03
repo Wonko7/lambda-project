@@ -573,15 +573,11 @@
          (with-imported-modules
              '((wonko spock)
                (srfi srfi-1)
-               (guix build utils)
-               (ice-9 match)
-               (ice-9 regex))
+               (guix build utils))
            #~(begin
                (use-modules (wonko spock)
                             (srfi srfi-1)
-                            (guix build utils)
-                            (ice-9 match)
-                            (ice-9 regex))
+                            (guix build utils))
                (let ((guix "~/.config/guix/current/bin/guix"))
                  (map (lambda (profile)
                         (display (spock-say
