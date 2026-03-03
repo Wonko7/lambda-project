@@ -143,6 +143,7 @@
     (defalias ç #(\ \ c c))
     (defalias λ #(\ \ l a m b d a))
 
+    (defalias qu  #( ? ))
     (defalias til #( ~ ))))
 
 (define kmonad-common-modifier-aliases
@@ -301,7 +302,7 @@
      grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
      @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
-     lsft +    \_   XX   û    @ccb @til @osb @csb XX   XX   rsft                 up
+     lsft +    \_   XX   û    @ccb @til @osb @csb @qu  @qu  rsft                 up
      lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
