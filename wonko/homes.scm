@@ -418,43 +418,18 @@
 
    (simple-service 'emacsd-config-files
                    home-files-service-type
-                   (map
-                    (lambda (file)
-                      `(,(string-append ".emacs.d/" file)
-                        ,(local-file
-                          (string-append %lambda-project "/emacs.d/" file))))
-                    '("completion.el"
-                      "comms.el"
-                      "dev.el"
-                      "opam-user-setup.el"
-                      "doom.el"
-                      "elfeed.el"
-                      "evil.el"
-                      "fancy.el"
-                      "fancy-but-later.el"
-                      "early-init.el"
-                      "init.el"
-                      "lisp-dev.el"
-                      "keys.el"
-                      "misc.el"
-                      "org-conf.el"
-                      "values.el"
-                      "workspaces.el"
-                      "transient/levels.el"
-                      "transient/values.el")))
-
-   (simple-service 'emacsd-snippets-config-files
-                   home-files-service-type
-                   (map
-                    (lambda (file)
-                      `(,(string-append ".emacs.d/snippets/" file)
-                        ,(local-file
-                          (string-append %lambda-project "/emacs.d/snippets/" file))))
-                    ;; FIXME: list dir and copy all..
-                    '("fundamental-mode/danger_triangle"
-                      "org-mode/eternally-for-today"
-                      "org-mode/begin_src"
-                      "org-mode/begin_quote")))
+                   ;; end of project path prefix:
+                   (let ((end (+ 1 (string-length %lambda-project))))
+                     (map
+                      (lambda (local-path)
+                        ;; proj emacs.d -> home .emacs.d:
+                        (let ((dest (string-append "." (substring local-path end))))
+                          `(,dest
+                            ,(local-file local-path))))
+                      (append
+                       (find-files (string-append %lambda-project "/emacs.d") "\\.el$")
+                       (find-files (string-append %lambda-project
+                                                  "/emacs.d/snippets"))))))
 
    (service home-gpg-agent-service-type
             (home-gpg-agent-configuration
