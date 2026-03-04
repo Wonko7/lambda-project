@@ -465,7 +465,7 @@
   ;; default remote
 
   (defvar ws/default-remote
-    (-repeat my/exwm-workspace-number "of-course-i-still-love-you.local"))
+    (-repeat my/exwm-workspace-number "of-course-i-still-love-you.star-fleet.local"))
 
   (defun ws/choose-default-remote (&optional all)
     (interactive)
