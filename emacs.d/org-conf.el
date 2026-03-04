@@ -344,7 +344,8 @@ EXTRA-FILES can be used to append extra files to the list."
   (org-super-agenda-header-prefix "")
   (org-agenda-time-grid '((daily today require-timed remove-match)
                           (800 1000 1200 1400 1600 1800 2000)
-                          " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+                          " ───── " "─────────────────────────────────────────────────"))
+  (org-agenda-current-time-string "🐇 I'm late! I'm late! for a very important date!")
   (org-agenda-custom-commands '(("c" "Simple agenda view"
                                  ((agenda "")
                                   (alltodo "" )))
