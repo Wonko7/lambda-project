@@ -124,7 +124,7 @@
     '((t (:inherit default :foreground "brown")))
     "active todo")
 
-  (set-face-attribute 'org-tag nil :foreground "#EB64B9")
+  (set-face-attribute 'org-tag nil :foreground my/foreground-hl-colour)
   (set-face-attribute 'org-tag nil :box t)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -545,8 +545,8 @@ EXTRA-FILES can be used to append extra files to the list."
   (set-face-attribute 'org-habit-clear-face nil :background 'unspecified)
 
   ;; pink boys: #EB64B9 pink  cyan: #74DFC4
-  (set-face-attribute 'org-habit-ready-future-face nil :foreground "#EB64B9") ;; forestgreen
-  (set-face-attribute 'org-habit-ready-face nil :foreground "#EB64B9")
+  (set-face-attribute 'org-habit-ready-future-face nil :foreground my/foreground-hl-colour) ;; forestgreen
+  (set-face-attribute 'org-habit-ready-face nil :foreground my/foreground-hl-colour)
   (set-face-attribute 'org-habit-ready-future-face nil :background 'unspecified)
   (set-face-attribute 'org-habit-ready-face nil :background 'unspecified)
 

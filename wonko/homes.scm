@@ -77,6 +77,7 @@
             my/window-divider-default-right-width   #$window-divider-default-right-width
             my/wake-up-notification-file            #$%wake-up-notification-file
             my/background-colour                    #$%background-colour
+            my/foreground-hl-colour                 #$%foreground-hl-colour
             my/font           #$%font
             my/lambda-project #$%lambda-project
             my/term-cmd       #$%term-cmd

@@ -37,3 +37,4 @@
 (define-public %wake-up-notification-file "/run/systemd/wakeup")
 
 (define-public %background-colour "#27212E")
+(define-public %foreground-hl-colour "#EB64B9")

@@ -282,7 +282,9 @@
                                          "%3{│%}"
                                          " "
                                          "%1{%B%}"
-                                         "%s\n")))
+                                         "%s\n"))
+
+  (set-face-attribute 'gnus-summary-selected nil :foreground my/foreground-hl-colour))
 
 (use-package gnus-topic
   :after gnus

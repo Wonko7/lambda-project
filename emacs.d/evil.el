@@ -211,7 +211,7 @@
   (evil-goggles-mode)
   ;; fancy
   (set-face-attribute 'evil-goggles-default-face nil :foreground "white")
-  (set-face-attribute 'evil-goggles-default-face nil :background "#EB64B9"))
+  (set-face-attribute 'evil-goggles-default-face nil :background my/foreground-hl-colour))
 
 (use-package evil-visualstar
   :demand t
