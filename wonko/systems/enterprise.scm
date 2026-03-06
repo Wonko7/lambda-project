@@ -4,6 +4,7 @@
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services shells)
+  #:use-module (gnu system privilege)
   #:use-module (guix build utils)
   #:use-module (guix gexp)
   #:use-module (ice-9 format)
@@ -22,7 +23,7 @@
   #:use-module (wonko bootloader grub)
   #:export (%enterprise-os))
 
-(use-package-modules xorg)
+(use-package-modules xorg xdisorg)
 (use-service-modules
  desktop xorg sddm
  networking ssh vpn
@@ -89,6 +90,12 @@
       (service kmonad-service-type kmonad-laptop-config)
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
+      (service screen-locker-service-type
+               (screen-locker-configuration
+                 (name "xscreensaver")
+                 (program (file-append xscreensaver
+                                       "/libexec/xscreensaver/xscreensaver-auth"))
+                 (allow-empty-password? #f)))
 
       (service wireguard-service-type
                (wireguard-configuration
