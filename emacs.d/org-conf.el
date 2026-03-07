@@ -71,10 +71,10 @@
   (org-insert-heading-respect-content t)
   (org-indent-mode t)
   ;; also see org-crypt. btw, this works but needs roam db rebuild.
-  (org-use-tag-inheritance '("is" "priv" ;; pub?
-                             "wtf" "kl" "focus"
+  (org-use-tag-inheritance '("is" "priv"
+                             "wtf" "kl" "focus" "health"
                              "ssdd" "fam" "tt"
-                             "ei" "ol" "iv"))
+                             "ei" "ol" "iv" "λp"))
   ;; org-special-ctrl-a/e t
   ;; org styling, hide markup etc.
   (org-hide-emphasis-markers nil)
@@ -376,6 +376,12 @@ EXTRA-FILES can be used to append extra files to the list."
                                        (:name "👑 king line hit list"
                                               :tag ("kl")
                                               :order 110)
+                                       (:name "🐧️ [λp] lambda project"
+                                              :tag "λp"
+                                              :order 201)
+                                       (:name "🏥️ [health] go see a doctor"
+                                              :tag "health"
+                                              :order 302)
                                        (:name "🌠 .*"
                                               :order 999
                                               :anything t)))))))))
@@ -1059,6 +1065,7 @@ current time."
   :custom
   (org-ql-views
    (list
+    ;; climbing stuff:
     (cons "ALL >7a"
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "witness" "bouldering" "topped" "")
@@ -1089,10 +1096,18 @@ current time."
                 :query '(and (olps "witness" "bouldering" "topped" "")
                              (regexp "flash"))
                 :sort #'my/sort-by-filename-date))
+    ;; archiving helper, checking that inactive stuff really is inactive:
+    (cons "wtf todos"
+          (list :buffers-files (org-ql-search-directories-files
+                                :directories
+                                (list (concat org-roam-directory "/wtf/inactive")))
+                :query '(todo)
+                :sort #'my/sort-by-filename-date))
     (cons "active timestamps"
           (list :buffers-files #'my/recent-dailies
                 :query '(ts-active :from "2025-06-12")
                 :sort #'my/sort-by-filename-date))
+    ;; tv stuff:
     (cons "tv bookmarks"
           (list :buffers-files (lambda ()
                                  (cons
