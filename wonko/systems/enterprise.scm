@@ -20,6 +20,7 @@
   #:use-module (wonko systems)
   #:use-module (wonko services xorg)
   #:use-module (wonko services kmonad)
+  #:use-module (wonko services networking)
   #:use-module (wonko bootloader grub)
   #:export (%enterprise-os))
 
@@ -98,15 +99,19 @@
                  (allow-empty-password? #f)))
 
 
-      (service dhcpcd-service-type (dhcpcd-configuration
-                                     ;; (interfaces '())
-                                     ))
+      (service dhcpcd-service-type (dhcpcd-configuration))
       (service iwd-service-type (iwd-configuration
                                   (interfaces '("wlan0"))))
       (service wireguard-service-type
                (wireguard-configuration
-                (inherit %star-fleet-client-config)
-                (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
+                 (inherit %star-fleet-client-config)
+                 (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
+      (simple-service 'azirevpn-service
+                      shepherd-root-service-type
+                      azirevpn-fr-service)
+      (simple-service 'wait-for-wan-service
+                      shepherd-root-service-type
+                      wait-for-wan-service)
 
       (modify-services %laptop-services
         (delete wpa-supplicant-service-type)

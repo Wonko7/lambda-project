@@ -24,6 +24,7 @@
   #:use-module (wonko services kmonad)
   #:use-module (wonko services xorg)
   #:use-module (wonko services mail)
+  #:use-module (wonko services networking)
   #:use-module (wonko packages mail)
   #:use-module (maxipassat services ci)
   #:use-module (maxipassat systems ci)
@@ -151,54 +152,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; public facing services network config:
 
-(define wait-for-wan-service
-  (list
-   (shepherd-service
-     (requirement '(networking user-processes))
-     (provision '(wait-for-wan))
-     (start #~(lambda _
-                (catch #t ;; catching doesn't help respawn.
-                  (lambda ()
-                    ;; (invoke "/run/current-system/utils-profile/bin/false" "-c3" "8.8.8.8")
-                    (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8"))
-                  (const #f))))
-     (one-shot? #f)
-     (respawn? #t) ;; FIXME is not respawned :(
-     (respawn-delay 5) ;; retry every 5s
-     (respawn-limit #~'(600 . 1000)) ;; oo
-     (documentation "wait for wan"))))
-
 (define azirevpn-service
-  (list
-   (shepherd-service
-     (requirement '(networking user-processes udev)) ;;  wait-for-wan
-     (provision '(azirevpn))
-     (start #~(lambda _
-                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
-                        "up" "azirevpn-fr-par")))
-     (stop #~(lambda _
-               (invoke (string-append #$wireguard-tools "/bin/wg-quick")
-                       "down" "azirevpn-fr-par")))
-     (respawn-delay 5) ;; retry every 5s
-     (documentation "azirevpn wg"))
-   (shepherd-service
-     (requirement '(networking user-processes azirevpn)) ;;  wait-for-wan
-     (provision '(azirevpn-web-hosting-routing))
-     (start #~(lambda _
+  (append
+   azirevpn-fr-service
+   (list
+    (shepherd-service
+      (requirement '(networking user-processes azirevpn)) ;;  wait-for-wan
+      (provision '(azirevpn-web-hosting-routing))
+      (start #~(lambda _
+                 (invoke (string-append #$iproute "/sbin/ip")
+                         "-6" "rule" "add" "priority" "1010" "to"
+                         "2a01:e0a:b5a:de71::1" "lookup" "main")
+                 (invoke (string-append #$iproute "/sbin/ip")
+                         "-6" "rule" "add" "priority" "1010" "from"
+                         "2a01:e0a:b5a:de71::1" "lookup" "main")))
+      (stop #~(lambda _
                 (invoke (string-append #$iproute "/sbin/ip")
-                        "-6" "rule" "add" "priority" "1010" "to"
+                        "-6" "rule" "del" "priority" "1010" "to"
                         "2a01:e0a:b5a:de71::1" "lookup" "main")
                 (invoke (string-append #$iproute "/sbin/ip")
-                        "-6" "rule" "add" "priority" "1010" "from"
+                        "-6" "rule" "del" "priority" "1010" "from"
                         "2a01:e0a:b5a:de71::1" "lookup" "main")))
-     (stop #~(lambda _
-               (invoke (string-append #$iproute "/sbin/ip")
-                       "-6" "rule" "del" "priority" "1010" "to"
-                       "2a01:e0a:b5a:de71::1" "lookup" "main")
-               (invoke (string-append #$iproute "/sbin/ip")
-                       "-6" "rule" "del" "priority" "1010" "from"
-                       "2a01:e0a:b5a:de71::1" "lookup" "main")))
-     (documentation "azirevpn wg"))))
+      (documentation "azirevpn wg")))))
 
 (define %nftables-ruleset
   (plain-file "nftables.conf" "\
