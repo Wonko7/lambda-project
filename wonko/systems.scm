@@ -14,7 +14,7 @@
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
   #:use-module (nongnu packages firmware)
-  #:use-module (gnu system setuid)
+  #:use-module (gnu system privilege)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko misc)
@@ -432,13 +432,14 @@
 
     (services %laptop-services)
 
-    (setuid-programs
+    (privileged-programs
      (cons*
-      ;; FIXME dumpcap?
-      (setuid-program (program (file-append
-                                (@ (gnu packages linux) brightnessctl)
-                                "/bin/brightnessctl")))
-      %setuid-programs))
+      (privileged-program
+        (program (file-append
+                  (@ (gnu packages linux) brightnessctl)
+                  "/bin/brightnessctl"))
+        (setuid? #t))
+      %default-privileged-programs))
 
     (file-systems '())))
 
