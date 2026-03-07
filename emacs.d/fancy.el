@@ -49,6 +49,11 @@
 ;; ☮ 🐫 📀 📐 ⛰
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tweak major faces
+
+(set-face-attribute 'region nil :background "deeppink4")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; modeline: major mode
 
 (setq my/mode-line-major-mode
