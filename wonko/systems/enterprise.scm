@@ -97,12 +97,20 @@
                                        "/libexec/xscreensaver/xscreensaver-auth"))
                  (allow-empty-password? #f)))
 
+
+      (service dhcpcd-service-type (dhcpcd-configuration
+                                     ;; (interfaces '())
+                                     ))
+      (service iwd-service-type (iwd-configuration
+                                  (interfaces '("wlan0"))))
       (service wireguard-service-type
                (wireguard-configuration
                 (inherit %star-fleet-client-config)
                 (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
 
-      %laptop-services))
+      (modify-services %laptop-services
+        (delete wpa-supplicant-service-type)
+        (delete network-manager-service-type))))
 
     (mapped-devices
      (list (mapped-device
