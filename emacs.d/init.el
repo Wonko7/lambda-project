@@ -388,7 +388,13 @@
     "C-S-<return>" #'detached-shell-send-input)
 
   (general-evil-define-key '(normal) shell-mode-map
-    "à" #'my/cd-up))
+    "à" #'my/cd-up)
+
+  ;; black was unreadable on dark background:
+  (set-face-attribute 'ansi-color-bright-black nil :background "#919ea7")
+  (set-face-attribute 'ansi-color-bright-black nil :foreground "#919ea7")
+  (set-face-attribute 'ansi-color-black nil :background "dim grey")
+  (set-face-attribute 'ansi-color-black nil :foreground "dim grey"))
 
 (use-package bash-completion
   :after shell
