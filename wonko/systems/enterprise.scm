@@ -109,9 +109,9 @@
       (simple-service 'azirevpn-service
                       shepherd-root-service-type
                       azirevpn-fr-service)
-      (simple-service 'wait-for-wan-service
-                      shepherd-root-service-type
-                      wait-for-wan-service)
+      ;; (simple-service 'wait-for-wan-service
+      ;;                 shepherd-root-service-type
+      ;;                 wait-for-wan-service)
 
       (modify-services %laptop-services
         (delete wpa-supplicant-service-type)

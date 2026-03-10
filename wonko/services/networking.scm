@@ -16,7 +16,7 @@
 (define-public azirevpn-fr-service
   (list
    (shepherd-service
-     (requirement '(networking user-processes udev wait-for-wan)) ;;  wait-for-wan
+     (requirement '(networking user-processes udev)) ;;  wait-for-wan
      (provision '(azirevpn))
      (start #~(lambda _
                 (invoke (string-append #$wireguard-tools "/bin/wg-quick")
