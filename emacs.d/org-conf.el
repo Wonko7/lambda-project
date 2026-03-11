@@ -239,6 +239,34 @@
   (org-roam-node-display-template (concat "${title:*} "
                                           (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   (let ((slug "%<%Y%m%d%H%M%S>-${slug}.org"))
+     `(("d" "📜 default" plain "%?"
+        :target (file+head ,slug "#+title: ${title}\n")
+        :unnarrowed t)
+       ("c" "📜 category" plain "%?"
+        :target (file+head ,slug
+                           "#+title: ${title}\n#+category: ${title}\n")
+        :unnarrowed t)
+       ("b" "🪨 bleau" plain "%?"
+        :target (file+head ,(concat "topo/bleau/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+category: ${title}\n"
+                                    "#+filetags: :topo:bleau:pub:\n"
+                                    "* topped\n"
+                                    "* projects\n"))
+        :unnarrowed t)
+       ("t" "🚀 tech" plain "%?"
+        :target (file+head ,(concat "tech/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+filetags: :tech:\n"))
+        :unnarrowed t)
+       ("w" "👾 work" plain "%?"
+        :target (file+head ,(concat "work/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+filetags: :work:\n"))
+        :unnarrowed t))))
+
   :config
   (org-roam-db-autosync-mode)
 
