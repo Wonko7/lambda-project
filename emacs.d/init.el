@@ -425,6 +425,15 @@
        :length 20 :face detached-creation-face)
      ( :name "Metadata" :function detached--metadata-str
        :length 20 :face detached-metadata-face)))
+  :bind
+  (;; Replace `async-shell-command' with `detached-shell-command'
+   ([remap async-shell-command] . detached-shell-command)
+   ;; Replace `compile' with `detached-compile'
+   ([remap compile] . detached-compile)
+   ([remap recompile] . detached-compile-recompile)
+   ;; Replace built in completion of sessions with `consult'
+   ([remap detached-open-session] . detached-consult-session))
+
   :config
   (general-evil-define-key '(normal) detached-list-mode-map
     "a" #'detached-edit-session-annotation
