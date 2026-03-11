@@ -729,7 +729,7 @@
          (mixed-text-file
           "kitty.conf"
           "font_size " ksz "\n"
-          "background " %background-colour "\n" ;; TODO: def this somewhere
+          "background " %background-colour "\n"
           "background_opacity 0.9\n")))
      (".Xresources"
       ,(plain-file "Xresources" (xresources-configuration %font xres-sz)))
