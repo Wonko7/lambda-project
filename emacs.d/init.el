@@ -90,28 +90,38 @@
 
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
-;; line numbers
-
-(setq display-line-numbers-type t)
-(global-display-line-numbers-mode 1)
-(add-hook 'org-agenda-mode-hook                (lambda () (display-line-numbers-mode 0)))
-(add-hook 'shell-mode-hook                     (lambda () (display-line-numbers-mode 0)))
-(add-hook 'eshell-mode-hook                    (lambda () (display-line-numbers-mode 0)))
-(add-hook 'elfeed-show-mode-hook               (lambda () (display-line-numbers-mode 0)))
-(add-hook 'elfeed-search-update-hook           (lambda () (display-line-numbers-mode 0)))
-(add-hook 'ement-room-mode-hook                (lambda () (display-line-numbers-mode 0)))
-(add-hook 'ement-room-list-mode-hook           (lambda () (display-line-numbers-mode 0)))
-(add-hook 'ement-tabulated-room-list-mode-hook (lambda () (display-line-numbers-mode 0)))
-(add-hook 'gnus-summary-mode-hook              (lambda () (display-line-numbers-mode 0)))
-(add-hook 'gnus-group-mode-hook                (lambda () (display-line-numbers-mode 0)))
-
-(column-number-mode)
-
 (setq custom-file "~/.run/emacs/custom-cache.el")
 (if (file-readable-p custom-file)
     (load custom-file))
 
 (setq warning-suppress-types '((undo discard-info)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; line numbers
+
+;; [2026-03-12 Thu 13:15] giving relative a go
+;; (setq display-line-numbers-type t)
+
+
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode 1)
+
+(mapc (lambda (mode)
+        (add-hook mode
+                  (lambda ()
+                    (display-line-numbers-mode 0))))
+      '(org-agenda-mode-hook
+        shell-mode-hook
+        eshell-mode-hook
+        elfeed-show-mode-hook
+        elfeed-search-update-hook
+        ement-room-mode-hook
+        ement-room-list-mode-hook
+        ement-tabulated-room-list-mode-hook
+        gnus-summary-mode-hook
+        gnus-group-mode-hook))
+
+(column-number-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; async-shell-command
