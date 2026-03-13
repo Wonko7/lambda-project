@@ -443,9 +443,9 @@ interface eth0                    # identifies the interface we are advertising 
                                  (not (equal? h %of-course-i-still-love-you-net-peer)))
                                %star-fleet-hosts)))))
 
-      (simple-service 'wait-for-wan-service
-                      shepherd-root-service-type
-                      wait-for-wan-service)
+      ;; (simple-service 'wait-for-wan-service
+      ;;                 shepherd-root-service-type
+      ;;                 wait-for-wan-service)
 
       (simple-service 'azirevpn-service
                       shepherd-root-service-type

@@ -77,15 +77,17 @@
       '((display-buffer-reuse-window display-buffer-same-window)
         (reusable-frames . t)))
 
-(setq even-window-sizes nil)     ; avoid resizing
+(setq even-window-sizes nil) ;; avoid resizing
 
 (setq
- backup-by-copying t      ; don't clobber symlinks
- backup-directory-alist '(("." . "~/.saves/"))    ; don't litter my fs tree
+ auto-save-file-name-transforms '((".*" "~/.run/emacs/auto-saves/" t))
+ backup-directory-alist '((".*" . "~/.run/emacs/backups/"))
+ make-backup-files t
+ backup-by-copying t
  delete-old-versions t
  kept-new-versions 6
  kept-old-versions 2
- version-control t)       ; use versioned backups
+ version-control t)       ;; use versioned backups
 ;; (setq tramp-backup-directory-alist backup-directory-alist)
 
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
