@@ -74,7 +74,12 @@
           (documentation "can't be arsed to move IRL"))))
       (append
        machine-home-services
-       %highdpi-wonko-services)))))
+       (cons*
+        (simple-service 'guix-build-options-bash home-bash-service-type
+                        (home-bash-extension
+                          (environment-variables
+                           '(("GUIX_BUILD_OPTIONS" . "-M 8")))))
+        %highdpi-wonko-services))))))
 
 (define %media-station-home
   (home-environment
