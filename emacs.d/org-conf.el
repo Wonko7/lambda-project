@@ -232,7 +232,7 @@
 
 (use-package org-roam
   :after org
-  :commands (org-roam-node-open)
+  :commands (org-roam-node-open org-roam-node-from-title-or-alias)
   :custom
   ;; default is data/, lol what a fuckface! that's exactly where my org data is!
   (org-roam-file-exclude-regexp nil)
