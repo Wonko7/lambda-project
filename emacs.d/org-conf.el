@@ -787,9 +787,17 @@ current time."
           ;; ("mt" "tv" entry "* 📺 %?\n%U"
           ;;  :jump-to-captured t
           ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-          ("mb" "📚 book" entry "%(let* ((url (substring-no-properties (current-kill 0)))
-                                      (details (org-books-get-details url)))
-                                 (when details (apply #'org-books-format 1 details)))"
+          ("mb" "📚 book")
+          ("mbd" "📚 done (read) book" entry
+           "%(let* ((url (substring-no-properties (current-kill 0)))
+                    (details (org-books-get-details url)))
+                (when details (apply #'my/org-books-format 1 url \":book:done:\" details)))"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+          ("mbw" "📚 want to read book" entry
+           "%(let* ((url (substring-no-properties (current-kill 0)))
+                    (details (org-books-get-details url)))
+                (when details (apply #'my/org-books-format 1 url \":book:4e:\" details)))"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ("mt" "📺 tv bookmark" entry
@@ -1248,7 +1256,21 @@ current time."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; books
 
-(use-package org-books)
+(use-package org-books
+  :config
+  (defun my/org-books-format (level url tags title author &optional props)
+    "Return details as an org headline entry. "
+    (with-temp-buffer
+      (org-mode)
+      ;; diff 1
+      (insert (make-string level ?*) " 📚 " title " " tags "\n")
+      (org-set-property "AUTHOR" author)
+      (org-set-property "ADDED" (format-time-string "[%Y-%02m-%02d]"))
+      (dolist (prop props)
+        (org-set-property (car prop) (cdr prop)))
+      ;; diff 2
+      (insert "[[" url "][" title " by " author "]]\n")
+      (buffer-substring-no-properties (point-min) (point-max)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org appear
