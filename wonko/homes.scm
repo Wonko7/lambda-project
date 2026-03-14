@@ -684,7 +684,9 @@
    (simple-service
     'home-run-folder home-run-on-first-login-service-type
     #~(let ((mkdir #$(file-append coreutils "/bin/mkdir")))
-        (system (string-append mkdir " -p ~/.run/emacs/ ~/.run/log/"))))
+        (system (string-append
+                 mkdir
+                 " -p ~/.run/emacs/backups ~/.run/emacs/auto-saves ~/.run/log/"))))
 
    (service home-dicod-service-type
             (for-home
