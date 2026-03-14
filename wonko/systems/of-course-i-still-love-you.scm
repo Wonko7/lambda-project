@@ -151,7 +151,7 @@
                      "--host" "0"
                      "--port" "6060"
                      "-ngl" "256"
-                     "-m" "/code/llms/phi-4-q4.gguf")))
+                     "-m" "/code/llms/phi-4-bf16.gguf")))
      (stop #~(make-kill-destructor)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
