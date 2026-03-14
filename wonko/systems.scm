@@ -61,12 +61,12 @@
           (name 'maxipassat)
           (url "https://codeberg.org/wonko/maxipassat")
           (branch "master")
-          (commit "8c0d1478f6f315bd663bda6b9b1deca277c6f103"))
+          (commit "053853d0679528919b4e7b840804a639629f2a20"))
         (channel
           (name 'nonguix)
           (url "https://gitlab.com/nonguix/nonguix")
           (branch "master")
-          (commit "d67dd230aae78b117164fbe90e85fed262071224")
+          (commit "7d14e819fc7b2681240023b9e4c001fc3f5cba04")
           (introduction
            (make-channel-introduction
             "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
@@ -76,7 +76,7 @@
           (name 'guix)
           (url "https://codeberg.org/guix/guix")
           (branch "master")
-          (commit "ae1d77b36d17d5886b4cc24ec0291c8bce4fc7bf")
+          (commit "3ec1e8297d651bf667fe0d89dbee327c2758d6b7")
           (introduction
            (make-channel-introduction
             "9edb3f66fd807b096b48283debdcddccfea34bad"
@@ -254,6 +254,74 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; laptop services
 
+(define-public %leaner-desktop-services
+  ;; same as %desktop-services w/o network manager nor gdm/sddm
+  (cons*
+   ;; Screen lockers are a pretty useful thing and these are small.
+   (service screen-locker-service-type
+            (screen-locker-configuration
+              (name "slock")
+              (program (file-append slock "/bin/slock"))))
+   (service screen-locker-service-type
+            (screen-locker-configuration
+              (name "xlock")
+              (program (file-append xlockmore "/bin/xlock"))))
+
+   ;; Add udev rules for MTP devices so that non-root users can access
+   ;; them.
+   (simple-service 'mtp udev-service-type (list libmtp))
+   ;; Add udev rules and default backends for scanners.
+   (service sane-service-type)
+   ;; Add polkit rules, so that non-root users in the wheel group can
+   ;; perform administrative tasks (similar to "sudo").
+   polkit-wheel-service
+
+   ;; Allow desktop users to also mount NTFS and NFS file systems
+   ;; without root.
+   (simple-service 'mount-setuid-helpers privileged-program-service-type
+                   (map file-like->setuid-program
+                        (list (file-append nfs-utils "/sbin/mount.nfs")
+                              (file-append ntfs-3g "/sbin/mount.ntfs-3g"))))
+
+   ;; Add some of the artwork niceties for the desktop.
+   (simple-service 'guix-artwork
+                   profile-service-type
+                   %base-packages-artwork)
+
+   ;; Provides a nicer experience for VTE-using terminal emulators such
+   ;; as GNOME Console, Xfce Terminal, etc.
+   (service vte-integration-service-type)
+
+   ;; The global fontconfig cache directory can sometimes contain
+   ;; stale entries, possibly referencing fonts that have been GC'd,
+   ;; so mount it read-only.
+   fontconfig-file-system-service
+
+   ;; minimal net stuff
+   (service modem-manager-service-type)
+   (service usb-modeswitch-service-type)
+
+   ;; The D-Bus clique.
+   (service avahi-service-type)
+   (service udisks-service-type)
+   (service upower-service-type)
+   (service accountsservice-service-type)
+   (service cups-pk-helper-service-type)
+   (service colord-service-type)
+   (service geoclue-service-type)
+   (service polkit-service-type)
+   (service elogind-service-type)
+   (service dbus-root-service-type)
+
+   (service ntp-service-type)
+
+   (service x11-socket-directory-service-type)
+
+   (service pulseaudio-service-type)
+   (service alsa-service-type)
+
+   %base-services))
+
 (define-public %laptop-services
   (cons*
    (simple-service 'dbus-fwupd
@@ -330,8 +398,9 @@
          '("@code" "@data" "@guix-home" "@guix-root" "@junkyard" "@work"))
 
     (modify-services
-        %desktop-services
-      (delete gdm-service-type)
+        %leaner-desktop-services
+      ;; %desktop-services
+      ;; (delete gdm-service-type)
       (console-font-service-type config => ;; TODO: separate services for highdpi?
                                  (map (lambda (tty)
                                         `(,tty
