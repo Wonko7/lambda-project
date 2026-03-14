@@ -70,38 +70,47 @@
                               (operating-system-user-kernel-arguments %laptop-os)))
 
     (services
-     (cons* (service slim-service-type
-                     (slim-configuration
-                      (display ":10")
-                      (vt "vt10")
-                      (auto-login? #t)
-                      (default-user (crew-name %tina))
-                      (xorg-configuration (xorg-configuration
-                                           (keyboard-layout %fr-kb))))) ;; FIXME
-            (service xfce-desktop-service-type)
-            (service noautostart-slim-service-type wonko-slim-config)
-            (service noautostart-slim-service-type media-station-slim-config)
-            (service guix-home-service-type
-                     `((,(crew-name %tina)  ,%tina-home)
-                       (,(crew-name %wonko) ,%wonko-home)
-                       (,(crew-name %media) ,%media-station-home)))
-            (service kmonad-service-type kmonad-fr-laptop-config)
-            (service kmonad-service-type kmonad-ergodox-config)
-            (service kmonad-service-type kmonad-bullshit-config)
+     (cons*
+      ;; homes
+      (service guix-home-service-type
+               `((,(crew-name %tina)  ,%tina-home)
+                 (,(crew-name %wonko) ,%wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      ;; kbd
+      (service kmonad-service-type kmonad-fr-laptop-config)
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      ;; X
+      (service slim-service-type
+               (slim-configuration
+                 (display ":10")
+                 (vt "vt10")
+                 (auto-login? #t)
+                 (default-user (crew-name %tina))
+                 (xorg-configuration (xorg-configuration
+                                       (keyboard-layout %fr-kb))))) ;; FIXME
+      (service xfce-desktop-service-type)
+      (service noautostart-slim-service-type wonko-slim-config)
+      (service noautostart-slim-service-type media-station-slim-config)
+      ;; net : NetworkManager and its applet.
+      (service network-manager-service-type)
+      (service wpa-supplicant-service-type)
+      (simple-service 'network-manager-applet
+                      profile-service-type
+                      (list network-manager-applet))
+      (service wireguard-service-type
+               (wireguard-configuration
+                 (inherit %star-fleet-client-config)
+                 (addresses (net-peer-addr-to/24 %rocinante-net-peer))))
 
-            (service wireguard-service-type
-                     (wireguard-configuration
-                      (inherit %star-fleet-client-config)
-                      (addresses (net-peer-addr-to/24 %rocinante-net-peer))))
-
-            %laptop-services))
+      %laptop-services))
 
     (mapped-devices
      (list (mapped-device
-            (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
-            (target "vault")
-            (type luks-device-mapping)
-            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
+             (source (uuid "ec7a9b12-4611-469c-8a6f-aadf4d525d5e"))
+             (target "vault")
+             (type luks-device-mapping)
+             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")

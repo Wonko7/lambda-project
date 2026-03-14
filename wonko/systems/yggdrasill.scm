@@ -19,6 +19,7 @@
   #:use-module (wonko systems)
   #:use-module (wonko services xorg)
   #:use-module (wonko services kmonad)
+  #:use-module (wonko services networking)
   #:export (%yggdrasill-os))
 
 (use-package-modules xorg)
@@ -69,22 +70,32 @@
     (kernel-arguments (append '("resume_offset=93852928")
                               (operating-system-user-kernel-arguments %laptop-os)))
 
-    (services (cons* (service slim-service-type wonko-slim-config)
-                     (service noautostart-slim-service-type media-station-slim-config)
-                     (service guix-home-service-type
-                              `((,(crew-name %wonko) ,%wonko-home)
-                                (,(crew-name %media) ,%media-station-home)))
-                     (service kmonad-service-type kmonad-laptop-config)
-                     (service kmonad-service-type kmonad-ergodox-config)
-                     (service kmonad-service-type kmonad-bullshit-config)
+    (services
+     (cons*
+      ;; homes
+      (service guix-home-service-type
+               `((,(crew-name %wonko) ,%wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      ;; kbd
+      (service kmonad-service-type kmonad-laptop-config)
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      ;; X
+      (service slim-service-type wonko-slim-config)
+      (service noautostart-slim-service-type media-station-slim-config)
+      ;; net
+      (service dhcpcd-service-type (dhcpcd-configuration))
+      (service iwd-service-type (iwd-configuration
+                                  (interfaces '("wlan0"))))
+      (service wireguard-service-type
+               (wireguard-configuration
+                 (inherit %star-fleet-client-config)
+                 (addresses (net-peer-addr-to/24 %yggdrasill-net-peer))))
+      (simple-service 'azirevpn-service
+                      shepherd-root-service-type
+                      azirevpn-fr-service)
 
-
-                     (service wireguard-service-type
-                              (wireguard-configuration
-                                (inherit %star-fleet-client-config)
-                                (addresses (net-peer-addr-to/24 %yggdrasill-net-peer))))
-
-                     %laptop-services))
+      %laptop-services))
 
     (mapped-devices
      (list (mapped-device

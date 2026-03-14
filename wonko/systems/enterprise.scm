@@ -70,35 +70,38 @@
     (inherit %laptop-os)
     (host-name "enterprise")
     (bootloader
-     (bootloader-configuration
-      (bootloader   my-grub-efi-bootloader)
-      (targets      '("/boot"))
-      (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
+      (bootloader-configuration
+        (bootloader   my-grub-efi-bootloader)
+        (targets      '("/boot"))
+        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
     (kernel-arguments (append '("resume_offset=5841087")
                               (operating-system-user-kernel-arguments %laptop-os)))
 
     (services
      (cons*
+      ;; homes
+      (service guix-home-service-type
+               `((,(crew-name %wonko) ,%wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      ;; kbd
+      (service kmonad-service-type kmonad-laptop-config)
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
                                    (xorg-configuration amdgpu-xorg-config)))
       (service noautostart-slim-service-type (slim-configuration
                                                (inherit media-station-slim-config)
                                                (xorg-configuration amdgpu-xorg-config)))
-      (service guix-home-service-type
-               `((,(crew-name %wonko) ,%wonko-home)
-                 (,(crew-name %media) ,%media-station-home)))
-      (service kmonad-service-type kmonad-laptop-config)
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      ;; wip
       (service screen-locker-service-type
                (screen-locker-configuration
                  (name "xscreensaver")
                  (program (file-append xscreensaver
                                        "/libexec/xscreensaver/xscreensaver-auth"))
                  (allow-empty-password? #f)))
-
-
+      ;; net
       (service dhcpcd-service-type (dhcpcd-configuration))
       (service iwd-service-type (iwd-configuration
                                   (interfaces '("wlan0"))))
@@ -109,20 +112,19 @@
       (simple-service 'azirevpn-service
                       shepherd-root-service-type
                       azirevpn-fr-service)
+      ;; also wip:
       ;; (simple-service 'wait-for-wan-service
       ;;                 shepherd-root-service-type
       ;;                 wait-for-wan-service)
 
-      (modify-services %laptop-services
-        (delete wpa-supplicant-service-type)
-        (delete network-manager-service-type))))
+      %laptop-services))
 
     (mapped-devices
      (list (mapped-device
-            (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
-            (target "vault")
-            (type luks-device-mapping)
-            (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
+             (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
+             (target "vault")
+             (type luks-device-mapping)
+             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")

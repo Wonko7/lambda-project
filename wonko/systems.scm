@@ -31,15 +31,18 @@
             %laptop-fstab))
 
 (use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg
-                     file-sharing)
+                     file-sharing
+                     ;; service redef:
+                     avahi sound)
 (use-package-modules base linux
                      emacs emacs-xyz shells bash
                      networking display-managers xdisorg suckless fonts
+                     package-management
                      xorg
                      ;; dev
                      android
-                     ;; guix dev deps:
-                     package-management gnupg)
+                     ;; service redef:
+                     libusb nfs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; channels

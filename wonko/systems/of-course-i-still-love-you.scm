@@ -293,19 +293,21 @@ interface eth0                    # identifies the interface we are advertising 
       (simple-service 'zfs-sheperd-services-user-processes
                       user-processes-service-type
                       '(zfs-automount))
-
-      ;; my users & desktop usage:
+      ;; homes
+      (service guix-home-service-type
+               `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
+                 (,(crew-name %media) ,%media-station-home)))
+      ;; kbd
+      (service kmonad-service-type kmonad-ergodox-config)
+      (service kmonad-service-type kmonad-bullshit-config)
+      ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
                                    (xorg-configuration amdgpu-xorg-config)))
       (service slim-service-type (slim-configuration
                                    (inherit media-station-slim-config)
                                    (xorg-configuration amdgpu-xorg-config)))
-      (service guix-home-service-type
-               `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
-                 (,(crew-name %media) ,%media-station-home)))
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      ;; llm
       (simple-service 'skynet-llm-service
                       shepherd-root-service-type
                       skynet-llm-service)
@@ -462,8 +464,7 @@ interface eth0                    # identifies the interface we are advertising 
          (sysctl-configuration
            (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
                                ("net.ipv4.ip_forward" . "1"))
-                             %default-sysctl-settings))))
-        (delete network-manager-service-type))))
+                             %default-sysctl-settings)))))))
     ;; public net stuff -->
 
     (mapped-devices

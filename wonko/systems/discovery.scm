@@ -75,15 +75,23 @@
 
     (services
      (cons*
-      (service slim-service-type wonko-slim-config)
-      (service noautostart-slim-service-type media-station-slim-config)
+      ;; homes
       (service guix-home-service-type
                `((,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
+      ;; kbd
       (service kmonad-service-type kmonad-laptop-config)
       (service kmonad-service-type kmonad-ergodox-config)
       (service kmonad-service-type kmonad-bullshit-config)
-
+      ;; X
+      (service slim-service-type wonko-slim-config)
+      (service noautostart-slim-service-type media-station-slim-config)
+      ;; net
+      (service network-manager-service-type)
+      (service wpa-supplicant-service-type)
+      (simple-service 'network-manager-applet
+                      profile-service-type
+                      (list network-manager-applet))
       (service wireguard-service-type
                (wireguard-configuration
                  (inherit %star-fleet-client-config)
