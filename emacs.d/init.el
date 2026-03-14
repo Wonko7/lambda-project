@@ -87,7 +87,7 @@
  delete-old-versions t
  kept-new-versions 6
  kept-old-versions 2
- version-control t)       ;; use versioned backups
+ version-control t)
 ;; (setq tramp-backup-directory-alist backup-directory-alist)
 
 (setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
@@ -101,11 +101,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; line numbers
 
-;; [2026-03-12 Thu 13:15] giving relative a go
-;; (setq display-line-numbers-type t)
-
-
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type t)
 (global-display-line-numbers-mode 1)
 
 (mapc (lambda (mode)
