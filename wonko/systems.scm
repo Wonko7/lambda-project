@@ -15,6 +15,7 @@
   #:use-module (nongnu system linux-initrd)
   #:use-module (nongnu packages firmware)
   #:use-module (gnu system privilege)
+  #:use-module (gnu services)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko misc)
@@ -259,71 +260,16 @@
 
 (define-public %leaner-desktop-services
   ;; same as %desktop-services w/o network manager nor gdm/sddm
-  (cons*
-   ;; Screen lockers are a pretty useful thing and these are small.
-   (service screen-locker-service-type
-            (screen-locker-configuration
-              (name "slock")
-              (program (file-append slock "/bin/slock"))))
-   (service screen-locker-service-type
-            (screen-locker-configuration
-              (name "xlock")
-              (program (file-append xlockmore "/bin/xlock"))))
-
-   ;; Add udev rules for MTP devices so that non-root users can access
-   ;; them.
-   (simple-service 'mtp udev-service-type (list libmtp))
-   ;; Add udev rules and default backends for scanners.
-   (service sane-service-type)
-   ;; Add polkit rules, so that non-root users in the wheel group can
-   ;; perform administrative tasks (similar to "sudo").
-   polkit-wheel-service
-
-   ;; Allow desktop users to also mount NTFS and NFS file systems
-   ;; without root.
-   (simple-service 'mount-setuid-helpers privileged-program-service-type
-                   (map file-like->setuid-program
-                        (list (file-append nfs-utils "/sbin/mount.nfs")
-                              (file-append ntfs-3g "/sbin/mount.ntfs-3g"))))
-
-   ;; Add some of the artwork niceties for the desktop.
-   (simple-service 'guix-artwork
-                   profile-service-type
-                   %base-packages-artwork)
-
-   ;; Provides a nicer experience for VTE-using terminal emulators such
-   ;; as GNOME Console, Xfce Terminal, etc.
-   (service vte-integration-service-type)
-
-   ;; The global fontconfig cache directory can sometimes contain
-   ;; stale entries, possibly referencing fonts that have been GC'd,
-   ;; so mount it read-only.
-   fontconfig-file-system-service
-
-   ;; minimal net stuff
-   (service modem-manager-service-type)
-   (service usb-modeswitch-service-type)
-
-   ;; The D-Bus clique.
-   (service avahi-service-type)
-   (service udisks-service-type)
-   (service upower-service-type)
-   (service accountsservice-service-type)
-   (service cups-pk-helper-service-type)
-   (service colord-service-type)
-   (service geoclue-service-type)
-   (service polkit-service-type)
-   (service elogind-service-type)
-   (service dbus-root-service-type)
-
-   (service ntp-service-type)
-
-   (service x11-socket-directory-service-type)
-
-   (service pulseaudio-service-type)
-   (service alsa-service-type)
-
-   %base-services))
+  (remove
+   (lambda (s)
+     ;; FIXME: https://codeberg.org/guix/guix/issues/6424
+     (or (eq? (service-type-name (service-kind s)) 'gdm-file-system)
+         (eq? (service-type-name (service-kind s)) 'network-manager-applet)))
+   (modify-services
+       %desktop-services
+     (delete gdm-service-type)
+     (delete network-manager-service-type)
+     (delete wpa-supplicant-service-type))))
 
 (define-public %laptop-services
   (cons*

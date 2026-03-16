@@ -1,6 +1,7 @@
 ;;; maxipassat.el  -*- lexical-binding: t; -*-
 
 
+(require 'org-sql)
 
 (defun org-sql--disk-get-hashpathpairs ()
   "Get a list of hashpathpair for org files on disk.

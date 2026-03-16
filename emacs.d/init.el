@@ -493,6 +493,8 @@
     "<backspace>" #'detached-list-remove-narrow-criterion
     "<return>" #'detached-list-open-session))
 
+(require 'detached-org)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
 
@@ -790,5 +792,14 @@
     (term-line-mode))
   (advice-add 'ansi-term :after #'my-enable-term-line-mode)
   (advice-add 'term :after #'my-enable-term-line-mode))
+
+(defun my/reload-dir-locals ()
+  (interactive)
+  (let ((enable-local-variables :all))
+    (pp 'lol)
+    ;; dir-local-variables-alist
+    ;; (dir-locals-read-from-dir (dir-locals-find-file default-directory))
+    (hack-dir-local-variables-non-file-buffer)))
+(setq hack-local-variables t)
 
 (provide 'init)
