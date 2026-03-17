@@ -276,8 +276,8 @@
           (string= root "/data/org/")
           (string= root "/data/")
           (string= root "/junkyard/")
-          (string= root "/work/guix/guix")
-          (string= root "/code/guix")))))
+          (string= root "/code/guix/")
+          (string= root "/home/wonko/gnus/")))))
 
 (use-package git-timemachine
   :hook
