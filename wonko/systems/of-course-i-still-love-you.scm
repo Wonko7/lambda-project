@@ -343,6 +343,11 @@ interface eth0                    # identifies the interface we are advertising 
                                 "root "
                                 (maxipassat-ci-base-path mp-prod-config) "/static;"))))
                     (nginx-location-configuration
+                      (uri "/so/")
+                      (body `("root /data/www/static-org/www;"
+                              "auth_basic \"ahahah you didn't say the magic word\";"
+                              "auth_basic_user_file /data/www/static-org/.htpasswd;")))
+                    (nginx-location-configuration
                       (uri "/")
                       (body `(,(string-append "proxy_pass http://127.0.0.1:"
                                               (number->string
