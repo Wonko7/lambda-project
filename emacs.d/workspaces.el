@@ -122,6 +122,14 @@
                          '((:name right :buffer-f (ws/proj-shell "~/"))
                            (:name left  :buffer-f "*Bluetooth*" :hide-your-kids t))))
 
+          ( :layout init-no-bluetooth
+            :recipe (| (:left-size-ratio 0.5)
+                       left
+                       right)
+            :buffers-f (progn
+                         '((:name right :buffer-f (ws/proj-shell "~/"))
+                           (:name left  :buffer-f (ws/proj-shell "/data")))))
+
           ( :layout media3
             :recipe (| (:left-size-ratio 0.5)
                        left
@@ -394,6 +402,10 @@
                  (projectile-switch-project))
                 ((run-init-p 2)
                  (ws/set-layout 'media3))
+                ((and (run-init-p 1)
+                      (equal "yggdrasill" (system-name)))
+                 ;; yggdrasill is dying
+                 (ws/set-layout 'init-no-bluetooth))
                 ((run-init-p 1)
                  (ws/set-layout 'init2))
                 ;; external monitor
