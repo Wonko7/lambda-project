@@ -29,7 +29,7 @@
                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
                        "down" "azirevpn-fr-par")))
      (respawn-delay 5) ;; retry every 5s
-     (respawn-limit #~'(6000 . 1000)) ;; oo
+     (respawn-limit #~'(69 . 1)) ;; oo
      (documentation "azirevpn wg"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
