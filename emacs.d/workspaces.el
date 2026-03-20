@@ -402,12 +402,10 @@
                  (projectile-switch-project))
                 ((run-init-p 2)
                  (ws/set-layout 'media3))
-                ((and (run-init-p 1)
-                      (equal "yggdrasill" (system-name)))
-                 ;; yggdrasill is dying
-                 (ws/set-layout 'init-no-bluetooth))
                 ((run-init-p 1)
-                 (ws/set-layout 'init2))
+                 (if (equal "yggdrasill" (system-name))
+                     (ws/set-layout 'init-no-bluetooth)
+                   (ws/set-layout 'init2)))
                 ;; external monitor
                 ((run-init-p 14)
                  (async-shell-command "GDK_DPI_SCALE=2.5 firefox")))))
