@@ -8,7 +8,8 @@
   #:use-module (ice-9 format)
   #:use-module (ice-9 match)
   #:use-module (srfi srfi-1)
-  #:use-module (srfi srfi-11))
+  #:use-module (srfi srfi-11)
+  #:use-module (wonko misc))
 
 (use-package-modules admin linux vpn)
 (use-service-modules shepherd)
@@ -47,3 +48,26 @@
      ;; The limit is expressed as a pair of integers: the first integer, n, specifies a number of consecutive respawns and the second integer, t, specifies a number of seconds
      (respawn-limit #~'(6000 . 1000)) ;; oo
      (documentation "wait for wan"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; fleet keep-alive service
+
+(define-public fleet-keep-alive-service-type
+  (shepherd-service-type
+   'fleet-keep-alive
+   (lambda (host)
+     (shepherd-service
+       (documentation (string-append "periodically ping " host))
+       (provision
+        (list (string->symbol (string-append "fleet-keep-alive-" host))))
+       (requirement '(networking user-processes guix-daemon))
+       (modules '((shepherd service timer)))
+       (start #~(make-timer-constructor
+                 (calendar-event #:minutes '#$(range 0 59 #:step 3))
+                 (command
+                  (list "/run/privileged/bin/ping" "-c3" #$host))
+                 #:log-file "/var/log/fleet-keepalive.log"
+                 #:wait-for-termination? #t))
+       (stop #~(make-timer-destructor))))
+   #t
+   (description "periodically ping local hosts")))

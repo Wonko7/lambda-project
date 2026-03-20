@@ -25,6 +25,7 @@
   #:use-module (wonko pkgs)
   #:use-module (wonko services xorg)
   #:use-module (wonko services file-sharing)
+  #:use-module (wonko services networking)
   #:use-module (wonko bootloader grub)
   #:export (%laptop-os
             wonko-slim-config
@@ -201,29 +202,6 @@
                     "  Option \"SWcursor\"\n"
                     "  Option \"AsyncFlipSecondaries\" \"false\"\n"
                     "EndSection\n"))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; fleet keep-alive service
-
-(define fleet-keep-alive-service-type
-  (shepherd-service-type
-   'fleet-keep-alive
-   (lambda (host)
-     (shepherd-service
-       (documentation (string-append "periodically ping " host))
-       (provision
-        (list (string->symbol (string-append "fleet-keep-alive-" host))))
-       (requirement '(networking user-processes guix-daemon))
-       (modules '((shepherd service timer)))
-       (start #~(make-timer-constructor
-                 (calendar-event #:minutes '#$(range 0 59 #:step 3))
-                 (command
-                  (list "/run/privileged/bin/ping" "-c3" #$host))
-                 #:log-file "/var/log/fleet-keepalive.log"
-                 #:wait-for-termination? #t))
-       (stop #~(make-timer-destructor))))
-   #t
-   (description "periodically ping local hosts")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; extra-profiles-service:
