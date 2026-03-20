@@ -13,6 +13,9 @@
 (use-package-modules admin linux vpn)
 (use-service-modules shepherd)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; vpn
+
 (define-public azirevpn-fr-service
   (list
    (shepherd-service
@@ -25,6 +28,7 @@
                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
                        "down" "azirevpn-fr-par")))
      (respawn-delay 5) ;; retry every 5s
+     (respawn-limit #~'(6000 . 1000)) ;; oo
      (documentation "azirevpn wg"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
