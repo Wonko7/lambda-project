@@ -26,6 +26,7 @@
   #:use-module (wonko services mail)
   #:use-module (wonko services networking)
   #:use-module (wonko packages mail)
+  #:use-module (wonko services emacs)
   #:use-module (maxipassat services ci)
   #:use-module (maxipassat systems ci)
   #:export (%of-course-i-still-love-you-wonko-home
@@ -311,6 +312,8 @@ interface eth0                    # identifies the interface we are advertising 
       (simple-service 'skynet-llm-service
                       shepherd-root-service-type
                       skynet-llm-service)
+      ;; export agenda
+      (service export-agenda-service-type)
 
       ;; <!-- public net stuff:
       (service certbot-service-type
