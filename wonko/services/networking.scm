@@ -27,16 +27,18 @@
      (respawn-delay 5) ;; retry every 5s
      (documentation "azirevpn wg"))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; wait for internet
+
 (define-public wait-for-wan-service
   (list
    (shepherd-service
      (requirement '(networking user-processes))
      (provision '(wait-for-wan))
      (start #~(lambda _
-                (lambda ()
-                  (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8"))))
-     (one-shot? #f)
-     (respawn? #t) ;; FIXME is not respawned :(
+                (invoke "/run/privileged/bin/ping" "-c3" "8.8.8.8")))
+     (one-shot? #t)
+     (respawn? #t)
      (respawn-delay 5) ;; retry every 5s
      ;; The limit is expressed as a pair of integers: the first integer, n, specifies a number of consecutive respawns and the second integer, t, specifies a number of seconds
      (respawn-limit #~'(6000 . 1000)) ;; oo
