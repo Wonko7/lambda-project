@@ -14,15 +14,18 @@
 (use-service-modules guix shepherd)
 
 (define-public export-agenda-service-type
-  (let* ((emacs (file-append emacs-minimal "/bin/emacs"))
-         (sync-and-export
-          (program-file
-           "export-agenda"
-           #~(system
-              (string-append
-               "source /home/wonko/.guix-home/profile/etc/profile; "
-               "echo /data/www/static-org/www/so/ag.html | "
-               #$emacs " -Q --script /data/org/emacs/export-agenda.el")))))
+  (let ((sync-and-export
+         (program-file
+          "export-agenda"
+          #~(system
+             (string-append
+              ;; use the emacs packages from home profile:
+              "source /home/wonko/.guix-home/profile/etc/profile; "
+              "echo /data/www/static-org/www/so/ag.html | "
+              ;; if we're relying on home profile, might as well use its emacs.
+              ;; also, if the script fails and spews the agenda on stdout shepherd crashes.
+              ;; utf8 or quantity?
+              "emacs -Q --script /data/org/emacs/export-agenda.el 2>&1 > /dev/null")))))
     (shepherd-service-type
      'export-agenda
      (lambda _
