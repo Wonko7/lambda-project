@@ -196,7 +196,11 @@
                 (and (not (equal? p xf86-video-amdgpu))
                      (member (%current-system)
                              (package-supported-systems p))))
-              %default-xorg-modules))
+              %default-xorg-modules))))
+
+(define-public amdgpu-xorg-no-async-flip-sec-config
+  (xorg-configuration
+    (inherit amdgpu-xorg-config)
     (extra-config '("Section \"Device\"\n"
                     "  Identifier \"Card1\"\n"
                     "  Option \"SWcursor\"\n"

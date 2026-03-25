@@ -304,10 +304,10 @@ interface eth0                    # identifies the interface we are advertising 
       ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
-                                   (xorg-configuration amdgpu-xorg-config)))
+                                   (xorg-configuration amdgpu-xorg-no-async-flip-sec-config)))
       (service slim-service-type (slim-configuration
                                    (inherit media-station-slim-config)
-                                   (xorg-configuration amdgpu-xorg-config)))
+                                   (xorg-configuration amdgpu-xorg-no-async-flip-sec-config)))
       ;; llm
       (simple-service 'skynet-llm-service
                       shepherd-root-service-type
