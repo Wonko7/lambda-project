@@ -55,6 +55,7 @@
 
   ;; agenda/cal dates:
   (org-extend-today-until              3)
+  (org-use-effective-time              t)
   (org-agenda-start-on-weekday         1)
   (calendar-week-start-day             1)
   (org-log-into-drawer                 t)
