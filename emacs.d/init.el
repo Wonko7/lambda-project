@@ -98,6 +98,10 @@
 
 (setq warning-suppress-types '((undo discard-info)))
 
+(use-package autorevert
+  :config
+  (global-auto-revert-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; line numbers
 
