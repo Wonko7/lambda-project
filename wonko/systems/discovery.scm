@@ -104,7 +104,8 @@
              (source (uuid "f5b4b690-2701-4b25-b009-ae1af0d31b39"))
              (target "vault")
              (type luks-device-mapping)
-             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin")))))
+             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin"
+                          #:allow-discards? #t)))))
     ;; FIXME: make swap on discovery
     (file-systems (cons*
                    (file-system
