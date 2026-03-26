@@ -311,6 +311,8 @@
               (avoid-regexp "emacs|exwm")
               (prefer-regexp "firefox|icecat|chromium")))
 
+   (service fstrim-service-type)
+
    (service (make-extra-profile-service-type "comms")   %comms-world)
    ;; I want this to be used rather than the old utils in extra-profiles
    ;; ... which is still a useful fallback, but isn't often updated.
