@@ -789,13 +789,13 @@ current time."
           ;;  :jump-to-captured t
           ;;  :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ("mb" "📚 book")
-          ("mbd" "📚 done (read) book" entry
+          ("mbd" "📚 Done (read) book" entry
            "%(let* ((url (substring-no-properties (current-kill 0)))
                     (details (org-books-get-details url)))
                 (when details (apply #'my/org-books-format 1 url \":book:done:\" details)))"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
-          ("mbw" "📚 want to read book" entry
+          ("mbw" "📚 Want to read book" entry
            "%(let* ((url (substring-no-properties (current-kill 0)))
                     (details (org-books-get-details url)))
                 (when details (apply #'my/org-books-format 1 url \":book:4e:\" details)))"
@@ -803,11 +803,17 @@ current time."
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ("mt" "📺 tv bookmark" entry
            ,(concat "* 📺 %? :bm:tv:\n"
+                    "%U\n"
                     "#+begin_src shell :dir "
                     "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media/inbox "
                     ":results value output\n"
                     "  (vlc */*s01e01* &)\n"
                     "#+end_src\n")
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+          ("md" "📺 tv Doc bookmark" entry
+           ,(concat "* 📺 %? :doc:tv:\n"
+                    "%U\n")
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ;; ("mB" "book" entry "* 📚 %?\n%U"
