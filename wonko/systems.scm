@@ -32,8 +32,9 @@
             %laptop-services
             %laptop-fstab))
 
-(use-service-modules dbus shepherd xorg sddm desktop networking ssh xorg
-                     file-sharing
+(use-service-modules dbus xorg sddm desktop
+                     networking ssh file-sharing
+                     linux shepherd
                      ;; service redef:
                      avahi sound)
 (use-package-modules base linux
@@ -304,6 +305,11 @@
               (rpc-whitelist '("::1" "127.0.0.1" "192.168.1.*" "10.42.0.*"))
               (umask #o000)
               (download-dir "/junkyard/downloads/inbox")))
+
+   (service earlyoom-service-type
+            (earlyoom-configuration
+              (avoid-regexp "emacs|exwm")
+              (prefer-regexp "firefox|icecat|chromium")))
 
    (service (make-extra-profile-service-type "comms")   %comms-world)
    ;; I want this to be used rather than the old utils in extra-profiles
