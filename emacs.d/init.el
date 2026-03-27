@@ -360,9 +360,11 @@
 (use-package shell
   :after coterm
   :demand t
-  :hook (shell-mode-hook
-         . (lambda ()
-             (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
+  :hook ((shell-mode-hook
+          . (lambda ()
+              (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
+         (comint-preoutput-filter-functions
+          . my/comint-output-add-newline))
   :custom
   (shell-prompt-pattern "^\\([^#$%>\n]*[#$%>] *\\|.*[\n]🪄 \\)")
   ;; for tramp shell sessions:
@@ -370,18 +372,58 @@
   (shell-has-auto-cd t)
 
   :config
+  (setq my/eol-marker "{no eol}")
+  (setq my/eol-marker-length (length my/eol-marker))
+  (setq-default my/comint--filter-output-last-saw-nl t)
+
+  (defun my/comint-output-add-newline (text)
+    ;; this works for now:
+    ;; text is PART of the output. the output will end with prompt.
+    ;; this works only if initial prompt search is luckily unique.
+    (let* ((n (string-search "╭─" text))) ;; <- my prompt
+      (if n
+          ;; found prompt:
+          (let* ((output-eol (- n 8)) ;; 8 is prompt colour escape len
+                 (eol-marker (concat "\e[0;30m" my/eol-marker "\n"))
+                 (res (if (< output-eol 0)
+                          ;; current text is just prompt, refer to prev state
+                          (if (not my/comint--filter-output-last-saw-nl)
+                              (concat eol-marker text)
+                            text)
+                        (if (not (equal ?\n (aref text output-eol)))
+                            (let ((output-eol (+ output-eol 1)))
+                              (concat (substring text 0 output-eol)
+                                      eol-marker
+                                      (substring text output-eol)))
+                          text))))
+            (setq-local my/comint--filter-output-last-saw-nl t)
+            res)
+        ;; we keep track of last seen character at end of text until we see prompt.
+        (progn
+          (setq-local my/comint--filter-output-last-saw-nl
+                      (if (> (length text) 0)
+                          (equal ?\n (aref text (- (length text) 1)))
+                        ;; if called with "" keep last value:
+                        my/comint--filter-output-last-saw-nl))
+          text))))
+
   (defun my/comint-kill-previous-output ()
     "kill output from previous prompt to current prompt.
     If not on prompt, copies current output."
     (interactive)
     (save-excursion
-      (let ((beg (progn (comint-previous-prompt 1)
-                        (forward-line 1)
-                        (point-marker)))
-            (end (progn (comint-next-prompt 1) ;; return to prompt
-                        (forward-line -2) ;; my prompt is on two lines
-                        (end-of-line)
-		        (point-marker))))
+      (let* ((beg (progn (comint-previous-prompt 1)
+                         (forward-line 1)
+                         (point-marker)))
+             (end (progn (comint-next-prompt 1) ;; return to prompt
+                         (forward-line -2) ;; my prompt is on two lines
+                         (end-of-line)
+		         (point-marker)))
+             (end (if (and (> end my/eol-marker-length)
+                           (equal my/eol-marker
+                                  (buffer-substring (- end my/eol-marker-length) end)))
+                      (- end my/eol-marker-length)
+                    end)))
         (copy-region-as-kill beg end)))
     (message "killed output"))
 
