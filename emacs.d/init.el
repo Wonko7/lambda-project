@@ -416,7 +416,7 @@
                          (forward-line 1)
                          (point-marker)))
              (end (progn (comint-next-prompt 1) ;; return to prompt
-                         (forward-line -2) ;; my prompt is on two lines
+                         (forward-line -2)      ;; my prompt is on two lines
                          (end-of-line)
 		         (point-marker)))
              (end (if (and (> end my/eol-marker-length)
@@ -449,7 +449,15 @@
   (set-face-attribute 'ansi-color-bright-black nil :background "#919ea7")
   (set-face-attribute 'ansi-color-bright-black nil :foreground "#919ea7")
   (set-face-attribute 'ansi-color-black nil :background "dim grey")
-  (set-face-attribute 'ansi-color-black nil :foreground "dim grey"))
+  (set-face-attribute 'ansi-color-black nil :foreground "dim grey")
+
+  ;; after shell process exit and reusing the buffer as a shell I lose colour.
+  ;; shell-mode fails mid exec because text (prompt?) is read-only.
+  ;; this forces its way through that [2026-03-28 Sat 18:28].
+  (defun my/call-inhibit-read-only (oldfun cmd &rest args)
+    (let ((inhibit-read-only t))
+      (apply oldfun cmd args)))
+  (advice-add #'shell :around #'my/call-inhibit-read-only))
 
 (use-package bash-completion
   :after shell
