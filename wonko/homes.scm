@@ -205,6 +205,7 @@
        ;; this affects emacs' completion:
        "bind 'set completion-ignore-case on' 2> /dev/null\n"
        "[ x$TERM = xtramp ] && return\n"
+       "[ x$TERM = xeterm-color ] && bind 'set enable-bracketed-paste off' 2> /dev/null\n"
        "PS1='\\[\\e[0;35m\\]╭─ $(if [ x$? = x0 ]; then echo 🍏; else echo 🍎 [$?]; fi)"
        " \\A 🦄 \\u@\\h "
        "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"

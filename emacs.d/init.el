@@ -438,7 +438,8 @@
     "C-y" #'my/comint-kill-previous-output)
 
   (general-evil-define-key '(insert normal) shell-mode-map
-    "<return>"     #'my/no-nl-comint-send-input
+    ;; no longer needed w/ bracketed paste explicitly disabled in bash (see homes.scm):
+    ;; "<return>"     #'my/no-nl-comint-send-input
     "C-S-<return>" #'detached-shell-send-input)
 
   (general-evil-define-key '(normal) shell-mode-map
