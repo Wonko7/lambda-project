@@ -99,7 +99,7 @@ and others.")
        ;; (file-name "noto-emoji.zip")
        (sha256
         (base32
-         "05qqb405472sddxi9bfm9nf5y3fic4r70cpzp5lrds0hgrc3rvir"))))
+         "0yz2srglpvgqdw4nlv50lvl08wi1dd0dxk902v2j8d9g7p5kb9kj"))))
     (build-system font-build-system)
 
     (home-page "https://fonts.google.com/noto/specimen/Noto+Emoji")
