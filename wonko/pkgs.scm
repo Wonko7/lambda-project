@@ -129,6 +129,7 @@
         emacs-dired-preview
         emacs-time-zones
         emacs-casual
+        emacs-elpher
         ;; 🗺
         emacs-osm
         ;; multimedia apps

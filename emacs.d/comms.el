@@ -196,6 +196,15 @@
 (use-package mastodon)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; gemini
+
+(use-package elpher
+  :config
+
+  (general-evil-define-key '(normal) elpher-mode-map
+    "," #'elpher-back))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; email / rss
 
 (use-package gnus
