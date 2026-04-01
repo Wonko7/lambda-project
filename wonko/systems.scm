@@ -188,7 +188,7 @@
     (xorg-configuration (xorg-configuration
                           (keyboard-layout %us-kb)))))
 
-(define-public amdgpu-xorg-config
+(define-public noamdgpu-xorg-config
   (xorg-configuration
     (keyboard-layout %us-kb)
     (modules (filter
@@ -199,14 +199,14 @@
                              (package-supported-systems p))))
               %default-xorg-modules))))
 
-(define-public amdgpu-xorg-no-async-flip-sec-config
+(define-public noamdgpu-noflip-xorg-config
   (xorg-configuration
-    (inherit amdgpu-xorg-config)
-    (extra-config '("Section \"Device\"\n"
-                    "  Identifier \"Card1\"\n"
-                    "  Option \"SWcursor\"\n"
-                    "  Option \"AsyncFlipSecondaries\" \"false\"\n"
-                    "EndSection\n"))))
+    (inherit noamdgpu-xorg-config)
+    (extra-config '("Section \"Device\""
+                    "  Identifier \"Card1\""
+                    "  Option \"SWcursor\""
+                    "  Option \"AsyncFlipSecondaries\" \"false\""
+                    "EndSection"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; extra-profiles-service:
