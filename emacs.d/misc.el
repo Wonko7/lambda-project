@@ -127,13 +127,6 @@
   (pcase-let ((`(,y ,m ,d) (split-string (org-read-date) "-" )))
     (my/sudo (format "date %s%s1300%s" m d y))))
 
-(defun my/format-time-delta (time1 time2)
-  "Return difference between TIME1 & TIME2 as a readable string."
-  (format-seconds "%Y %D %H %M %z%S"
-                  (float-time
-                   (time-subtract (org-time-string-to-seconds time1)
-                                  (org-time-string-to-seconds time2)))))
-
 (defun my/insert-shell-line ()
   (interactive)
   (let* ((fs '("/data/org/here-be-dragons/wip/20230815232907-maxipass_at.org"
