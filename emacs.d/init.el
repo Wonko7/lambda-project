@@ -383,7 +383,7 @@
     (let* ((n (string-search "╭─" text))) ;; <- my prompt
       (if n
           ;; found prompt:
-          (let* ((output-eol (- n 8)) ;; 8 is prompt colour escape len
+          (let* ((output-eol (- n 8)) ;; 8 is prompt colour escape len before search string
                  (eol-marker (concat "\e[0;30m" my/eol-marker "\n"))
                  (res (if (< output-eol 0)
                           ;; current text is just prompt, refer to prev state
