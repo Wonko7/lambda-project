@@ -228,13 +228,24 @@
     (defalias CP  #(C-spc P))))
 
 (define kmonad-system-actions-aliases
-  (map
-   (lambda (i)
-     (let ((n (number->string i)))
-       `(defalias
-          ,(string->symbol (string-append (if (> i 9) "v" "vt") n))
-          (cmd-button ,(string-append "/run/current-system/profile/bin/chvt " n)))))
-   (range 1 12)))
+  (cons*
+   '(defalias RIP2 #((around A-ssrq h)))
+   '(defalias RIP #(h (pause 200)
+                      (around lsft h)
+                      (pause 500)
+                      (around lsft e)
+                      (pause 700)
+                      (around lsft l)
+                      (pause 1000)
+                      (around lsft p)
+                      ))
+   (map
+    (lambda (i)
+      (let ((n (number->string i)))
+        `(defalias
+           ,(string->symbol (string-append (if (> i 9) "v" "vt") n))
+           (cmd-button ,(string-append "/run/current-system/profile/bin/chvt " n)))))
+    (range 1 12))))
 
 ;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
 ;; doc: x modifiers: lalt -> meta (emacs), lmet -> hyper (WM).
@@ -320,7 +331,7 @@
   '(deflayer system
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @v12
      XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @v12 bspc  ins  home pgup
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @RIP pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
