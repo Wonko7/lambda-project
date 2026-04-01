@@ -58,11 +58,24 @@
 
 (define %media-station-home
   (home-environment
-    (inherit %media-station-home)
-    (services
-     (append
-      machine-home-services
-      %media-station-home-services))))
+   (inherit %media-station-home)
+   (services
+    (append
+     machine-home-services
+     %media-station-home-services))))
+
+(define gentoo-amdgpu-xorg-config
+  ;; from https://wiki.gentoo.org/wiki/Lenovo_Thinkpad_T495
+  (xorg-configuration
+    (keyboard-layout %us-kb)
+    (extra-config
+     '("Section \"Device\""
+       "   Identifier  \"device_default\""
+       "   Driver      \"amdgpu\""
+       "   Option      \"DRI\" \"3\""
+       "   Option      \"TearFree\" \"on\""
+       "   Option      \"monitor-eDP\" \"monitor_default\""
+       "EndSection"))))
 
 (define %enterprise-os
   (operating-system
@@ -90,10 +103,10 @@
       ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
-                                   (xorg-configuration amdgpu-xorg-config)))
+                                   (xorg-configuration gentoo-amdgpu-xorg-config)))
       (service noautostart-slim-service-type (slim-configuration
                                                (inherit media-station-slim-config)
-                                               (xorg-configuration amdgpu-xorg-config)))
+                                               (xorg-configuration gentoo-amdgpu-xorg-config)))
       ;; wip
       (service screen-locker-service-type
                (screen-locker-configuration
