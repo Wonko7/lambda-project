@@ -122,8 +122,8 @@
 
 
 (use-package evil-escape
-  :demand t
-  :after evil
+  ;; :demand t
+  ;; :after evil
   :config
   (evil-escape)
   (evil-escape-mode 1)
