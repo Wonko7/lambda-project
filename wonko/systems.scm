@@ -486,5 +486,3 @@
   (operating-system
     (inherit %laptop-os)
     (services %media-station-os-services)))
-
-;; FIXME: add media station stuff.
