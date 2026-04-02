@@ -164,6 +164,7 @@
     (defalias SXB (layer-switch xim-dvorak-some-bullshit))
     (defalias SXD (layer-switch xim-dance-commander))
     (defalias SDN (layer-switch dvorak-no-bullshit))
+    (defalias SRQ (layer-switch sysrq))
     (defalias XDB #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
     (defalias XDD #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
@@ -227,18 +228,26 @@
     (defalias C:  #(C-spc :))
     (defalias CP  #(C-spc P))))
 
+(define (char-index->sysrq-alias i)
+  (let* ((c (char-set->string
+             (char-set
+              (integer->char
+               (+ (char->integer #\a) i)))))
+         (var (string->symbol
+               (string-append "RQ" c)))
+         (key (string->symbol c)))
+    `(defalias ,var #((around A-ssrq ,key)))))
+
 (define kmonad-system-actions-aliases
-  (cons*
-   '(defalias RIP2 #((around A-ssrq h)))
-   '(defalias RIP #(h (pause 200)
-                      (around lsft h)
-                      (pause 500)
-                      (around lsft e)
-                      (pause 700)
-                      (around lsft l)
-                      (pause 1000)
-                      (around lsft p)
-                      ))
+  (append
+   ;; sysrq:
+   '((defalias RIP #((around A-ssrq s)    ;; sync
+                     (pause 1000)
+                     (around A-ssrq u)    ;; remount ro
+                     (pause 1000)
+                     (around A-ssrq b)))) ;; reboot
+   (map char-index->sysrq-alias (range 0 25))
+   ;; chvt:
    (map
     (lambda (i)
       (let ((n (number->string i)))
@@ -331,10 +340,19 @@
   '(deflayer system
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @v12
      XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @v12 bspc  ins  home pgup
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @RIP pgdn
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+
+(define kmonad-sysrq-layer
+  '(deflayer sysrq
+     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+     grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
+     tab  @qte @com @dot @RQp @RQy @RQf @RQg @RQc @RQr @RQl /    =    \     del  @RIP pgdn
+     @EC  @RQa @RQo @RQe @RQu @RQi @RQd @RQh @RQt @RQn @RQs -    @RC
+     lsft @smc @RQq @RQj @RQk @RQx @RQb @RQm @RQw @RQv @RQz rsft                 up
+     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-meta-layer
   '(deflayer meta
@@ -393,6 +411,7 @@
              kmonad-whitespace-layer
              kmonad-symbols-layer
              kmonad-system-layer
+             kmonad-sysrq-layer
              kmonad-xim-symbols-layer
              kmonad-meta-layer
              kmonad-fr-layer))))))
