@@ -2,8 +2,6 @@
   #:use-module (gnu)
   #:use-module (gnu packages)
   #:use-module (guix gexp)
-  ;; fonts
-  #:use-module (wonko packages fonts)
   ;; emacs
   #:use-module (nongnu packages clojure)
   #:use-module (wonko packages emacs-xyz)
@@ -372,10 +370,10 @@
    krita))
 
 (define-public %fonts-world
-  (list font-nerd-jetbrains
+  (list font-jetbrains-mono
         font-google-roboto-mono
         font-nerd-symbols
-        font-goog-noto-emoji
+        font-google-noto-emoji
         font-misc-misc))
 
 (define-public %ocaml-with-opam-world

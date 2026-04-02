@@ -12,8 +12,6 @@
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
   #:use-module (ice-9 regex)
-  ;; fonts
-  #:use-module (wonko packages fonts)
   ;; services
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)

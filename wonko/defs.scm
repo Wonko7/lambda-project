@@ -9,8 +9,8 @@
 
 (define-public %guix-extra-profiles-dir "$HOME/.guix-extra-profiles")
 
-(define-public %font "JetBrainsMonoNL NFP Medium")
-(define-public %font-feh "JetBrainsMonoNLNerdFontMono-Regular")
+(define-public %font "JetBrains Mono Medium")
+(define-public %font-feh "JetBrainsMono-Regular")
 
 (define-public %wallpaper "/data/docs/pics/wallpapers/nasa-poster-vision-future/1 - 8XMgqaI.png")
 (define-public %lock-cmd
