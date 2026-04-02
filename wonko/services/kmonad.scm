@@ -198,8 +198,6 @@
 
 (define kmonad-dance-commander-modifier-aliases
   '((defalias ac (tap-next-release a lctl))
-    (defalias uW (tap-next-release u (layer-toggle whitespace)))
-    (defalias hW (tap-next-release h (layer-toggle whitespace)))
     (defalias sc (tap-next-release s lctl))
     (defalias Qs (tap-next-release @qte lsft))
     (defalias ls (tap-next-release l rsft))
@@ -211,6 +209,8 @@
     (defalias xnS (tap-next-release n (layer-toggle xim-symbols)))
     (defalias em (tap-next-release e lmet))
     (defalias tm (tap-next-release t lmet))
+    (defalias uW (tap-next-release u (layer-toggle whitespace)))
+    (defalias hW (tap-next-release h (layer-toggle whitespace)))
     (defalias Smc (tap-next-release @smc (around lctl lsft)))
     (defalias Sz (tap-next-release z (around lctl lsft)))
     (defalias yW (tap-next-release y (layer-toggle whitespace)))
@@ -263,7 +263,7 @@
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    4    5    6    7    8    9    0    @Csp @CP  bspc  ins  home pgup
      tab  @Qs  @com @dot p    @yW  @fW  g    c    r    @ls  /    @C:  \     del  end  pgdn
-     @EC  @ac  @oS  @em  u    i    d    h    @tm  @nS  @sc  -    @RC
+     @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
      lalt @Tsy @mDB           spc            @mDB ralt @Tsy @Tsy            left down rght))
 
@@ -312,8 +312,8 @@
      esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
      tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
-     caps XX   XX   down up   ret  ret  left down rght XX   -    @RC
-     lsft XX   XX   pgdn pgup tab  tab  XX   XX   XX   XX   rsft                 brup
+     caps XX   XX   esc  esc  ret  ret  left down rght XX   -    @RC
+     lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left brdn rght))
 
 (define kmonad-symbols-layer
