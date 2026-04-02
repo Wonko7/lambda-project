@@ -397,7 +397,8 @@
                 ((run-init-p 5)
                  (projectile-switch-project))
                 ((run-init-p 4)
-                 (my/local-async-shell-command "firefox"))
+                 ;; [2026-03-28 Sat 22:04] firefox 149 is being annoying:
+                 (my/local-async-shell-command "firefox 2>&1 > /dev/null"))
                 ((run-init-p 3)
                  (projectile-switch-project))
                 ((run-init-p 2)
@@ -476,7 +477,7 @@
 
   (defvar ws/default-remote
     (-repeat my/exwm-workspace-number "of-course-i-still-love-you.star-fleet.local"))
-  (setf (nth 0 ws/default-remote)
+  (setf (nth 1 ws/default-remote)
         (if (equal "yggdrasill" (system-name))
             "enterprise.star-fleet.local"
           "yggdrasill.star-fleet.local"))
