@@ -476,6 +476,10 @@
 
   (defvar ws/default-remote
     (-repeat my/exwm-workspace-number "of-course-i-still-love-you.star-fleet.local"))
+  (setf (nth 0 ws/default-remote)
+        (if (equal "yggdrasill" (system-name))
+            "enterprise.star-fleet.local"
+          "yggdrasill.star-fleet.local"))
 
   (defun ws/choose-default-remote (&optional all)
     (interactive)
