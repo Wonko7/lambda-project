@@ -490,8 +490,14 @@ interface eth0                    # identifies the interface we are advertising 
          (sysctl-configuration
            (settings (append '(("net.ipv6.conf.all.forwarding" . "1")
                                ("net.ipv4.ip_forward" . "1"))
-                             %default-sysctl-settings)))))))
-    ;; public net stuff -->
+                             %default-sysctl-settings))))
+        ;; public net stuff -->
+
+        (elogind-service-type
+         config =>
+         (elogind-configuration
+           (inherit config)
+           (handle-power-key 'reboot))))))
 
     (mapped-devices
      (list (mapped-device
