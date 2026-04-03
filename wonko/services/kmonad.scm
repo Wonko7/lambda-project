@@ -261,11 +261,11 @@
 (define kmonad-dance-commander-layer
   '(deflayer dance-commander
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    4    5    6    7    8    9    0    @Csp @CP  bspc  ins  home pgup
+     grv  1    2    3    4    5    6    7    8    9    0    @SDB @CP  bspc  ins  home pgup
      tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    @C:  \     del  end  pgdn
      @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
      lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
-     lalt @Tsy @mDB           spc            @mDB ralt @Tsy @Tsy            left down rght))
+     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-dance-commander-layer
   (kmonad/merge-layers
@@ -290,7 +290,7 @@
 (define kmonad-dvorak-some-bullshit-layer
   '(deflayer dvorak-some-bullshit
      @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @Csp @CP  bspc  ins  home pgup
+     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDD @CP  bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
      @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
@@ -322,7 +322,7 @@
      grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
      @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
-     lsft +    \_   XX   û    @ccb @til @osb @csb @qu  @qu  rsft                 up
+     lsft +    \_   XX   û    @ccb grv  @osb @csb @qu  @qu  rsft                 up
      lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
