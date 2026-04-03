@@ -404,7 +404,7 @@
                 ((run-init-p 2)
                  (ws/set-layout 'media3))
                 ((run-init-p 1)
-                 (if (equal "yggdrasill" (system-name))
+                 (if (equal "lol" (system-name))
                      (ws/set-layout 'init-no-bluetooth)
                    (ws/set-layout 'init2)))
                 ;; external monitor
