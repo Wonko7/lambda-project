@@ -192,6 +192,7 @@
   (setq evil-snipe-char-fold t)
   (setq evil-snipe-smart-case t)
   (setq evil-snipe-override-mode t)
+  (setq evil-snipe-repeat-keys nil)
   (evil-snipe-mode 1))
 
 (use-package evil-leader
