@@ -86,11 +86,9 @@
       (service slim-service-type wonko-slim-config)
       (service noautostart-slim-service-type media-station-slim-config)
       ;; net
-      (service network-manager-service-type)
-      (service wpa-supplicant-service-type)
-      (simple-service 'network-manager-applet
-                      profile-service-type
-                      (list network-manager-applet))
+      (service dhcpcd-service-type (dhcpcd-configuration))
+      (service iwd-service-type (iwd-configuration
+                                  (interfaces '("wlan0"))))
       (service wireguard-service-type
                (wireguard-configuration
                  (inherit %star-fleet-client-config)
