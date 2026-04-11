@@ -447,16 +447,19 @@ the aliases definitions & the new layer."
                                        (flatten-layer-def)))))
     (mixed-text-file
      "kmonad-config"
+     ;; base config:
      kmonad-defsrc-us
      (sexps-to-string
       (list
        (kmonad-defcfg input output xkb)))
      kmonad-base-aliases
+     ;; general aliases:
      (sexps-to-string
       kmonad-common-modifier-aliases
       kmonad-system-actions-aliases
       kmonad-whitespace-aliases
       kmonad-xim-aliases)
+     ;; typing layouts. order is important, first is default:
      (if (equal? default-layer 'fr)
          (sexps-to-string
           (list kmonad-fr-layer)
@@ -466,11 +469,11 @@ the aliases definitions & the new layer."
           (flatten-layer-def kmonad-dance-commander-layer)
           (flatten-layer-def kmonad-xim-dance-commander-layer)
           (list kmonad-fr-layer)))
+     ;; misc layouts:
      (sexps-to-string
       (flatten-layer-def kmonad-symbols-layer)
       (flatten-layer-def kmonad-xim-symbols-layer)
-      (flatten-layer-def kmonad-whitespace-layer))
-     (sexps-to-string
+      (flatten-layer-def kmonad-whitespace-layer)
       (list
        kmonad-system-layer
        kmonad-sysrq-layer
