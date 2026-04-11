@@ -410,7 +410,7 @@ the aliases definitions & the new layer."
 (define kmonad-meta-layer
   '(deflayer meta
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @XFR
-     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @csb bspc  ins  home pgup
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 XX   bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
      XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   XX   XX   -    @RC
      lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   XX   XX   rsft                 up
