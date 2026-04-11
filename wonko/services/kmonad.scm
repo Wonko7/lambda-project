@@ -353,15 +353,18 @@ the aliases definitions & the new layer."
                                 kmonad/layer-tap-fn)))
 
 (define kmonad-whitespace-layer
-  '(deflayer whitespace
-     esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
-     tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
-     caps XX   XX   esc  esc  ret  ret  left down rght XX   -    @RC
-     lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
-     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            vold brdn volu))
-
-(define kmonad-symbols-layer
+  (->
+   '(deflayer whitespace
+      esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
+      XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
+      tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
+      caps XX   XX   esc  esc  ret  ret  left down rght XX   -    @RC
+      lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
+      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            vold brdn volu)
+   (init-layer 'whitespace)
+   (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                             kmonad/tap-fn)))
+(define symbols
   '(deflayer symbols
      @SYS ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  @SYS
      grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
@@ -370,8 +373,14 @@ the aliases definitions & the new layer."
      lsft +    \_   XX   û    @ccb grv  @osb @csb @qu  @qu  rsft                 up
      lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
+(define kmonad-symbols-layer
+  (-> symbols
+      (init-layer 'symbols)
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)))
+
 (define kmonad-xim-symbols-layer
-  (-> kmonad-symbols-layer
+  (-> symbols
       (init-layer 'xim-symbols)
       (kmonad/merge-layers
        '(deflayer xim-symbols
@@ -382,7 +391,8 @@ the aliases definitions & the new layer."
           XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
           lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX))
       ;; and drop empty aliases so this can be processed w/ symbols-layer:
-      (second)))
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)))
 
 (define kmonad-system-layer
   '(deflayer system
@@ -462,12 +472,13 @@ the aliases definitions & the new layer."
           (flatten-layer-def kmonad-xim-dance-commander-layer)
           (list kmonad-fr-layer)))
      (sexps-to-string
+      (flatten-layer-def kmonad-symbols-layer)
+      (flatten-layer-def kmonad-xim-symbols-layer)
+      (flatten-layer-def kmonad-whitespace-layer))
+     (sexps-to-string
       (list
-       kmonad-whitespace-layer
-       kmonad-symbols-layer
        kmonad-system-layer
        kmonad-sysrq-layer
-       kmonad-xim-symbols-layer
        kmonad-meta-layer)))))
 
 (define (kmonad-config id input default-layer)
