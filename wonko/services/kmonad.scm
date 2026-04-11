@@ -400,12 +400,12 @@ the aliases definitions & the new layer."
 
 (define kmonad-sysrq-layer
   '(deflayer sysrq
-     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-     grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
-     tab  @qte @com @dot @RQp @RQy @RQf @RQg @RQc @RQr @RQl /    =    \     del  @RIP pgdn
-     @EC  @RQa @RQo @RQe @RQu @RQi @RQd @RQh @RQt @RQn @RQs -    @RC
-     lsft @smc @RQq @RQj @RQk @RQx @RQb @RQm @RQw @RQv @RQz rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
+     @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD
+     @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD  @XDD @XDD @XDD
+     @XDD @qte @com @dot @RQp @RQy @RQf @RQg @RQc @RQr @RQl @XDD @XDD @XDD  @XDD @RIP @XDD
+     @XDD @RQa @RQo @RQe @RQu @RQi @RQd @RQh @RQt @RQn @RQs @XDD @XDD
+     @XDD @smc @RQq @RQj @RQk @RQx @RQb @RQm @RQw @RQv @RQz @XDD                 @XDD
+     @XDD @XDD @XDD           @XDD           @XDD @XDD @XDD @XDD            @XDD @XDD @XDD))
 
 (define kmonad-meta-layer
   '(deflayer meta
