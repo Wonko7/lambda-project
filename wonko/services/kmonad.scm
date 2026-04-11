@@ -131,7 +131,6 @@ the aliases definitions & the new layer."
   "to be used as arg to kmonad/merge-with-tap-fn"
   `(tap-hold-next-release
     700 ,k1
-    ;; This could be constructed on modifier initials. I only have two cases for now:
     ,(cond ((equal? k2 'ws) '(layer-toggle whitespace))
            ((equal? k2 'sym) '(layer-toggle symbols))
            ((equal? k2 'xsym) '(layer-toggle xim-symbols))
@@ -244,14 +243,11 @@ the aliases definitions & the new layer."
     (defalias til #( ~ ))))
 
 (define kmonad-common-modifier-aliases
-  `(;; <3
-    (defalias EC (tap-hold-next-release 700 esc lctl))
+  `((defalias EC (tap-hold-next-release 700 esc lctl))
     (defalias RC (tap-hold-next-release 700 ret rctl))
     (defalias SYS (layer-next system))
     (defalias Tsy (layer-toggle symbols))
     (defalias Tsx (layer-toggle xim-symbols))
-    (defalias SDD (layer-switch dance-commander))
-    (defalias SXD (layer-switch xim-dance-commander))
     (defalias SRQ (layer-switch sysrq))
     (defalias XDD #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XXD #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
@@ -390,7 +386,6 @@ the aliases definitions & the new layer."
           XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
           XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
           lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX))
-      ;; and drop empty aliases so this can be processed w/ symbols-layer:
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)))
 
