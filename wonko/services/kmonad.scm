@@ -19,6 +19,23 @@
             kmonad-ergodox-config
             kmonad-bullshit-config))
 
+;; fixme: temp, until https://github.com/joshwalters/guile-pipe/ is deployed in my conf deps:
+(define-syntax ->>
+  (syntax-rules ()
+    ((_) #f)
+    ((_ x) x)
+    ((_ x (f ...)) (f ... x))
+    ((_ x f) `(f x))
+    ((_ x (f ...) rest ...) (->> (f ... x) rest ...))
+    ((_ x f rest ...) (->> (f x) rest ...))))
+
+(define-syntax ->
+  (syntax-rules ()
+    ((_ x) x)
+    ((_ x (form more ...)) (form x more ...))
+    ((_ x form) (form x))
+    ((_ x form more ...) (-> (-> x form) more ...))))
+
 (define (kmonad-shepherd-service config)
   ;; Tells shepherd how we want it to create a (single) <shepherd-service>
   ;; for kmonad from a string
@@ -42,18 +59,95 @@
      (list (service-extension shepherd-root-service-type
                               kmonad-shepherd-service)))))
 
-(define (kmonad/merge-layers l1 l2)
-  "replace l1 keys w/ non XX keys from l2"
-  (map (lambda (k1 k2)
-         (if (equal? k2 'XX) k1 k2))
-       l1
-       l2))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; layer constructors
+
+;; to make these easily threadable, first arg is a layer-def
+;; which is just a (list aliases layer).
+;; TODO might make this a record?
+
+(define (init-layer layer name)
+  (list '() ;; empty aliases
+        (cons*
+         'deflayer
+         name
+         (drop layer 2))))
+
+(define (kmonad/merge-layers l1-layer-def l2)
+  "Replace l1 keys with non XX keys from l2"
+  (match-let (((previous-aliases l1) l1-layer-def))
+    (list
+     previous-aliases
+     (map (lambda (k1 k2)
+            (if (equal? k2 'XX) k1 k2))
+          l1
+          l2))))
+
+(define layer-counter 0)
+(define (kmonad/merge-with-tap-fn layer-def modifiers tap-fn)
+  "To facilitate home row on multiple layers:
+replace keys in layer with modifiers as held vs original key if tapped.
+To have the same number of elements in layer & modifiers, modifiers has XX XX
+as preamble instead of `deflayer dvorak-etc'. Returns a list with two elements,
+the aliases definitions & the new layer."
+  (set! layer-counter (1+ layer-counter)) ;; to avoid collisions
+  (let* ((alias-prefix (number->string
+                        layer-counter))
+         (alias-name (lambda (a b)
+                       (string-append "layer_" alias-prefix "_"
+                                      (symbol->string a)
+                                      "-"
+                                      (symbol->string b)))))
+    (match-let* (((previous-aliases layer) layer-def)
+                 ((aliases new-layer) (fold
+                                       (match-lambda*
+                                         ((k1 k2 (aliases layer))
+                                          (if (equal? k2 'XX)
+                                              (list aliases
+                                                    (cons k1 layer))
+                                              (let ((alias (alias-name k1 k2)))
+                                                (list (cons `(defalias ,(string->symbol alias)
+                                                               ,(tap-fn k1 k2))
+                                                            aliases)
+                                                      (cons (string->symbol
+                                                             (string-append "@" alias))
+                                                            layer))))))
+                                       `(,previous-aliases ())
+                                       layer
+                                       modifiers)))
+      (list aliases
+            (reverse new-layer)))))
+
+(define (kmonad/tap-fn k1 k2)
+  "to be used as arg to kmonad/merge-with-tap-fn"
+  `(tap-hold-next-release
+    700 ,k1
+    ;; This could be constructed on modifier initials. I only have two cases for now:
+    ,(cond ((equal? k2 'ALcs) '(around lctl lsft))
+           ((equal? k2 'ARcs) '(around rctl rsft))
+           (#t k2))))
+
+(define (kmonad/layer-tap-fn k1 k2)
+  "to be used as arg to kmonad/merge-with-tap-fn"
+  `(tap-hold-next-release
+    700 ,k1
+    ;; This could be constructed on modifier initials. I only have two cases for now:
+    ,(cond ((equal? k2 'ws) '(layer-toggle whitespace))
+           ((equal? k2 'sym) '(layer-toggle symbols))
+           ((equal? k2 'xsym) '(layer-toggle xim-symbols))
+           (#t k2))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; serialise
 
 (define* (sexps-to-string #:rest sexps)
   (apply string-append
          (apply append
                 (zip (circular-list "\n")
                      (map object->string (apply append sexps))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; xorg integration:
 
 (define (setxkb xkb)
   ;; FIXME: see zzull's "setxkbmap -device $(xinput list --id-only keyboard:'%s') fr bepo"
@@ -74,6 +168,9 @@
                 '(("wonko" . ":9")
                   ("media" . ":11")
                   ("tina"  . ":10"))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; kmonad base config elements:
 
 (define (kmonad-defcfg input output xkb)
   ;; laptop: "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
@@ -105,18 +202,18 @@
 (define kmonad-base-aliases
   ;; kmonad may have nilly willy symbols but guile does not:
   "
-  (defalias smc ;)
-  (defalias dot .)
-  (defalias com ,)
-  (defalias p   |)
-  (defalias csb ])
-  (defalias osb [)
-  (defalias ccb })
-  (defalias ocb {)
-  (defalias cp  \\))
-  (defalias op  \\()
-  (defalias qte ')
-  (defalias rqt `)\n")
+(defalias smc ;)
+(defalias dot .)
+(defalias com ,)
+(defalias p   |)
+(defalias csb ])
+(defalias osb [)
+(defalias ccb })
+(defalias ocb {)
+(defalias cp  \\))
+(defalias op  \\()
+(defalias qte ')
+(defalias rqt `)\n")
 
 (define kmonad-xim-aliases
   '((defalias ä #(\ \ t a))
@@ -150,78 +247,19 @@
   `(;; <3
     (defalias EC (tap-hold-next-release 700 esc lctl))
     (defalias RC (tap-hold-next-release 700 ret rctl))
-    ;; next doesn't work in this one:
-    ;; (defalias SA (tap-hold-next-release 700
-    ;;                                     (layer-next symbols)
-    ;;                                     (layer-toggle symbols)))
-    ;;(defalias SA  (layer-toggle symbols))
-    ;;(defalias xSA (layer-toggle xim-symbols))
     (defalias SYS (layer-next system))
     (defalias Tsy (layer-toggle symbols))
     (defalias Tsx (layer-toggle xim-symbols))
-    (defalias SDB (layer-switch dvorak-some-bullshit))
     (defalias SDD (layer-switch dance-commander))
-    (defalias SXB (layer-switch xim-dvorak-some-bullshit))
     (defalias SXD (layer-switch xim-dance-commander))
-    (defalias SDN (layer-switch dvorak-no-bullshit))
     (defalias SRQ (layer-switch sysrq))
-    (defalias XDB #((cmd-button ,(setxkb "us")) (layer-switch dvorak-some-bullshit)))
     (defalias XDD #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
-    (defalias XDN #((cmd-button ,(setxkb "us")) (layer-switch dvorak-no-bullshit)))
-    (defalias XXB #((cmd-button ,(setxkb "us")) (layer-switch xim-dvorak-some-bullshit)))
     (defalias XXD #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
     (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
     (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
-    (defalias LLL (layer-next meta))
-    ;; (defalias shV (tap-hold-next-release 700 @SDV lsft))
-    ;; (defalias shC (tap-hold-next-release 700 @SDC lsft))
-    (defalias mDB (tap-hold-next-release 700 @SDB lmet))
-    (defalias mDD (tap-hold-next-release 700 @SDD lmet))
-    (defalias mXB (tap-hold-next-release 700 @SXB lmet))
-    (defalias mXD (tap-hold-next-release 700 @SXD lmet))
-    ))
+    (defalias LLL (layer-next meta))))
 
-(define kmonad-numrow-modifier-aliases
-  '((defalias c1 (tap-hold-next-release 700 1 lctl))
-    (defalias c0 (tap-hold-next-release 700 0 lctl))
-    (defalias W4 (tap-hold-next-release 700 4 (layer-toggle whitespace)))
-    (defalias W5 (tap-hold-next-release 700 5 (layer-toggle whitespace)))
-    (defalias W6 (tap-hold-next-release 700 6 (layer-toggle whitespace)))
-    (defalias W7 (tap-hold-next-release 700 7 (layer-toggle whitespace)))
-    ;; (defalias S2 (tap-hold-next-release 700 2 (layer-toggle symbols)))
-    ;; (defalias xS2 (tap-hold-next-release 700 2 (layer-toggle xim-symbols)))
-    ;; (defalias S9 (tap-hold-next-release 700 9 (layer-toggle symbols)))
-    ;; (defalias xS9 (tap-hold-next-release 700 9 (layer-toggle xim-symbols)))
-    ;; (defalias m3 (tap-hold-next-release 700 3 lmet))
-    ;; (defalias m8 (tap-hold-next-release 700 8 lmet))
-    ))
-
-(define kmonad-dance-commander-modifier-aliases
-  '((defalias ac  (tap-hold-next-release 700 a lctl))
-    (defalias sc  (tap-hold-next-release 700 s lctl))
-    (defalias Qs  (tap-hold-next-release 700 @qte lsft))
-    (defalias ls  (tap-hold-next-release 700 l rsft))
-    (defalias qs  (tap-hold-next-release 700 q lsft))
-    (defalias vs  (tap-hold-next-release 700 v rsft))
-    (defalias oS  (tap-hold-next-release 700 o (layer-toggle symbols)))
-    (defalias xoS (tap-hold-next-release 700 o (layer-toggle xim-symbols)))
-    (defalias nS  (tap-hold-next-release 700 n (layer-toggle symbols)))
-    (defalias xnS (tap-hold-next-release 700 n (layer-toggle xim-symbols)))
-    (defalias em  (tap-hold-next-release 700 e lmet))
-    (defalias tm  (tap-hold-next-release 700 t lmet))
-    (defalias uW  (tap-hold-next-release 700 u (layer-toggle whitespace)))
-    (defalias hW  (tap-hold-next-release 700 h (layer-toggle whitespace)))
-    (defalias Smc (tap-hold-next-release 700 @smc (around lctl lsft)))
-    (defalias Sz  (tap-hold-next-release 700 z (around lctl lsft)))
-    (defalias yW  (tap-hold-next-release 700 y (layer-toggle whitespace)))
-    (defalias fW  (tap-hold-next-release 700 f (layer-toggle whitespace)))
-    ;; (defalias qS (tap-hold-next-release 700 q (layer-toggle symbols)))
-    ;; (defalias xqS (tap-hold-next-release 700 q (layer-toggle xim-symbols)))
-    ;; (defalias vS (tap-hold-next-release 700 v (layer-toggle symbols)))
-    ;; (defalias xvS (tap-hold-next-release 700 v (layer-toggle xim-symbols)))
-    ))
-
-(define kmonad-whitespce-aliases
+(define kmonad-whitespace-aliases
   '((defalias Cn C-n)
     (defalias Cp C-p)
     (defalias Csp C-spc)
@@ -256,65 +294,72 @@
            (cmd-button ,(string-append "/run/current-system/profile/bin/chvt " n)))))
     (range 1 12))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dance-commander dvorak
+
 ;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
 ;; doc: x modifiers: lalt -> meta (emacs), lmet -> hyper (WM).
-(define kmonad-dance-commander-layer
-  '(deflayer dance-commander
-     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    4    5    6    7    8    9    0    @SDB @CP  bspc  ins  home pgup
-     tab  @Qs  @com @dot p    y    f    g    c    r    @ls  /    @C:  \     del  end  pgdn
-     @EC  @ac  @oS  @em  @uW  i    d    @hW  @tm  @nS  @sc  -    @RC
-     lsft @Smc q    j    k    x    b    m    w    v    @Sz  rsft                 up
+(define dvorak
+  '(deflayer XX
+     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12 ;; FIXME f12?
+     grv  1    2    3    4    5    6    7    8    9    0    @CP  @LLL bspc  ins  home pgup
+     tab  @qte @com @dot p    y    f    g    c    r    l    /    @C:  \     del  end  pgdn
+     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
+     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
      lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
+
+(define kmonad-home-row-modifiers
+  '( XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   lsft XX   XX   XX   XX   XX   XX   XX   XX   rsft XX   XX   XX   XX   XX   XX
+     XX   lctl XX   lmet XX   XX   XX   XX   rmet XX   rctl XX   XX
+     XX   ALcs XX   XX   XX   XX   XX   XX   XX   XX   ARcs XX                  XX
+     XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
+
+(define kmonad-home-layers
+  '( XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   sym  XX   ws   XX   XX   ws   XX   sym  XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
+     XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
+
+(define kmonad-dance-commander-layer
+  (-> dvorak
+      (init-layer 'dance-commander)
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)
+      (kmonad/merge-with-tap-fn kmonad-home-layers
+                                kmonad/layer-tap-fn)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; xim-dance-commander dvorak with xim symbols
+
+(define (s/sym/xim-sym/ layer)
+  (map (lambda (k)
+         (cond ((equal? k 'sym) 'xsym)
+               ((equal? k '@Tsy) '@Tsx)
+               (#t k)))
+       layer))
 
 (define kmonad-xim-dance-commander-layer
-  (kmonad/merge-layers
-   kmonad-dance-commander-layer
-   '(deflayer xim-dance-commander
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   @xoS XX   XX   XX   XX   XX   XX   @xnS XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
-      lalt @Tsx @mXB           XX             @mXB XX   @Tsx @Tsx           XX   XX   XX)))
-
-(define kmonad-dvorak-no-bullshit-layer
-  '(deflayer dvorak-no-bullshit
-     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-     grv  1    2    3    4    5    6    7    8    9    0    @osb @csb bspc  ins  home pgup
-     tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
-     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
-
-(define kmonad-dvorak-some-bullshit-layer
-  '(deflayer dvorak-some-bullshit
-     @SDD f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
-     grv  1    2    3    @W4  @W5  @W6  @W7  8    9    0    @SDD @CP  bspc  ins  home pgup
-     tab  @qte @com @dot p    y    f    g    c    r    l    /    =    \     del  end  pgdn
-     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
-     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     lalt @Tsy @mDD           spc            @mDD ralt @Tsy @Tsy            left down rght))
-
-(define kmonad-xim-dvorak-some-bullshit-layer
-  (kmonad/merge-layers
-   kmonad-dvorak-some-bullshit-layer
-   '(deflayer xim-dvorak-some-bullshit
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                   XX
-      lalt @Tsx @mXD           XX             @mXD XX   @Tsx @Tsx            XX   XX   XX)))
+  (-> (s/sym/xim-sym/ dvorak)
+      (init-layer 'xim-dance-commander)
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)
+      (kmonad/merge-with-tap-fn (s/sym/xim-sym/ kmonad-home-layers)
+                                kmonad/layer-tap-fn)))
 
 (define kmonad-whitespace-layer
   '(deflayer whitespace
      esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
-     tab  tab  XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
+     tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
      caps XX   XX   esc  esc  ret  ret  left down rght XX   -    @RC
      lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
-     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left brdn rght))
+     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            vold brdn volu))
 
 (define kmonad-symbols-layer
   '(deflayer symbols
@@ -326,20 +371,23 @@
      lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
 (define kmonad-xim-symbols-layer
-  (kmonad/merge-layers
-   kmonad-symbols-layer
-   '(deflayer xim-symbols
-      XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
-      XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
-      XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
-      XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
-      lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX)))
+  (-> kmonad-symbols-layer
+      (init-layer 'xim-symbols)
+      (kmonad/merge-layers
+       '(deflayer xim-symbols
+          XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
+          XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+          XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
+          XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
+          XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
+          lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX))
+      ;; and drop empty aliases so this can be processed w/ symbols-layer:
+      (second)))
 
 (define kmonad-system-layer
   '(deflayer system
-     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @v12
-     XX   XX   @vt2 @vt3 XX   XX   XX   XX   XX   @vt9 @v10 @v11 @v12 bspc  ins  home pgup
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12 bspc  ins  home pgup
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
@@ -356,11 +404,11 @@
 
 (define kmonad-meta-layer
   '(deflayer meta
-     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt6 @vt8 @vt9 @v10 @v11 @XFR
-     XX   @XDD @XDB @XDN XX   XX   XX   XX   XX   @vt9 @v10 @v11 @csb bspc  ins  home pgup
-     XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  end  pgdn
-     XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   @XDN XX   -    @RC
-     lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   @XDB XX   rsft                 up
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @XFR
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @csb bspc  ins  home pgup
+     XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
+     XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   XX   XX   -    @RC
+     lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   XX   XX   rsft                 up
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
 (define kmonad-fr-layer
@@ -373,19 +421,21 @@
      lsft z    x    c    v    b    n    m    @com @dot /    rsft                 up
      lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght))
 
-(define kmonad-empty-layer
-  '(deflayer empty
+(define f12->FR
+  '( XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @XFR
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  end  pgdn
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
-     lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
+     XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
 
 (define (kmonad-make-config-file input output default-layer)
-  (let ((xkb (if (equal? default-layer kmonad-fr-layer)
+  (let ((xkb (if (equal? default-layer 'fr)
                  "fr"
-                 "us")))
+                 "us"))
+        (flatten-layer-def (match-lambda ((aliases layer)
+                                          (append aliases (list layer))))))
     (mixed-text-file
      "kmonad-config"
      kmonad-defsrc-us
@@ -395,26 +445,30 @@
      kmonad-base-aliases
      (sexps-to-string
       kmonad-common-modifier-aliases
-      kmonad-numrow-modifier-aliases
-      kmonad-dance-commander-modifier-aliases
       kmonad-system-actions-aliases
-      kmonad-whitespce-aliases
+      kmonad-whitespace-aliases
       kmonad-xim-aliases)
+     (if (equal? default-layer 'fr)
+         (sexps-to-string
+          (list kmonad-fr-layer)
+          (-> kmonad-dance-commander-layer
+              (kmonad/merge-layers f12->FR)
+              (flatten-layer-def))
+          (-> kmonad-xim-dance-commander-layer
+              (kmonad/merge-layers f12->FR)
+              (flatten-layer-def)))
+         (sexps-to-string
+          (flatten-layer-def kmonad-dance-commander-layer)
+          (flatten-layer-def kmonad-xim-dance-commander-layer)
+          (list kmonad-fr-layer)))
      (sexps-to-string
-      (delete-duplicates
-       (list default-layer
-             kmonad-dance-commander-layer
-             kmonad-xim-dance-commander-layer
-             kmonad-dvorak-no-bullshit-layer
-             kmonad-dvorak-some-bullshit-layer
-             kmonad-xim-dvorak-some-bullshit-layer
-             kmonad-whitespace-layer
-             kmonad-symbols-layer
-             kmonad-system-layer
-             kmonad-sysrq-layer
-             kmonad-xim-symbols-layer
-             kmonad-meta-layer
-             kmonad-fr-layer))))))
+      (list
+       kmonad-whitespace-layer
+       kmonad-symbols-layer
+       kmonad-system-layer
+       kmonad-sysrq-layer
+       kmonad-xim-symbols-layer
+       kmonad-meta-layer)))))
 
 (define (kmonad-config id input default-layer)
   `(,id
@@ -426,19 +480,19 @@
 (define kmonad-laptop-config
   (kmonad-config "laptop"
                  "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-                 kmonad-dance-commander-layer))
+                 'dance-commander))
 
 (define kmonad-fr-laptop-config
   (kmonad-config "laptop"
                  "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
-                 kmonad-fr-layer))
+                 'fr))
 
 (define kmonad-ergodox-config
   (kmonad-config "ergodox"
                  "/dev/input/by-id/usb-ZSA_Technology_Labs_Ergodox_EZ_9p4oo_6aXwEB-event-kbd"
-                 kmonad-dance-commander-layer))
+                 'dance-commander))
 
 (define kmonad-bullshit-config
   (kmonad-config "cheap-bullshit"
                  "/dev/input/by-id/usb-MOSART_Semi._2.4G_INPUT_DEVICE-event-kbd"
-                 kmonad-fr-layer))
+                 'dance-commander))
