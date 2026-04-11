@@ -257,13 +257,17 @@
                                     "* topped\n"
                                     "* projects\n"))
         :unnarrowed t)
+       ("w" "🦁 witness the fitness" plain "%?"
+        :target (file+head ,(concat "wtf/inactive/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+filetags: :wtf:\n")))
        ("t" "🚀 tech" plain "%?"
         :target (file+head ,(concat "tech/" slug)
                            ,(concat "#+title: ${title}\n"
                                     "#+filetags: :tech:\n"))
         :unnarrowed t)
        ("w" "👾 work" plain "%?"
-        :target (file+head ,(concat "work/" slug)
+        :target (file+head ,(concat "work/inactive" slug)
                            ,(concat "#+title: ${title}\n"
                                     "#+filetags: :work:\n"))
         :unnarrowed t))))
