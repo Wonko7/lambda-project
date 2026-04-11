@@ -431,11 +431,15 @@ the aliases definitions & the new layer."
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
 
 (define (kmonad-make-config-file input output default-layer)
-  (let ((xkb (if (equal? default-layer 'fr)
-                 "fr"
-                 "us"))
-        (flatten-layer-def (match-lambda ((aliases layer)
-                                          (append aliases (list layer))))))
+  (let* ((xkb (if (equal? default-layer 'fr)
+                  "fr"
+                  "us"))
+         (flatten-layer-def (match-lambda ((aliases layer)
+                                           (append aliases (list layer)))))
+         (flatten+EZFR-layer-def (lambda (layer)
+                                   (-> layer
+                                       (kmonad/merge-layers f12->FR)
+                                       (flatten-layer-def)))))
     (mixed-text-file
      "kmonad-config"
      kmonad-defsrc-us
@@ -451,12 +455,8 @@ the aliases definitions & the new layer."
      (if (equal? default-layer 'fr)
          (sexps-to-string
           (list kmonad-fr-layer)
-          (-> kmonad-dance-commander-layer
-              (kmonad/merge-layers f12->FR)
-              (flatten-layer-def))
-          (-> kmonad-xim-dance-commander-layer
-              (kmonad/merge-layers f12->FR)
-              (flatten-layer-def)))
+          (flatten+EZFR-layer-def kmonad-dance-commander-layer)
+          (flatten+EZFR-layer-def kmonad-xim-dance-commander-layer))
          (sexps-to-string
           (flatten-layer-def kmonad-dance-commander-layer)
           (flatten-layer-def kmonad-xim-dance-commander-layer)
