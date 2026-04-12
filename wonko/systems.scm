@@ -434,6 +434,7 @@
       %os-misc-world
       %os-nonfree
       %xorg-world
+      %guile-world
       %base-packages))
 
     (services %laptop-services)

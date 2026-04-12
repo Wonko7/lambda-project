@@ -171,6 +171,7 @@
         guile-3.0-latest
         guile-readline
         guile-colorized
+        guile-pipe
         ;; rest
         emacs-plz
         ;; guix / dev env:
@@ -435,11 +436,16 @@
 ;;         opam
 ;; 	dune))
 
+(define-public %guile-world
+  (list guile-readline
+        guile-colorized
+        guile-pipe))
+
 (define-public %vcs-world
   (list ;; mercurial
-        darcs
-        git
-        git-annex))
+   darcs
+   git
+   git-annex))
 
 (define-public %git-world
   (list git
