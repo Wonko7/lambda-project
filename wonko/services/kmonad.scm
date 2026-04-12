@@ -7,6 +7,7 @@
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
+  #:use-module (pipe)
   ;; my stuff
   #:use-module (wonko misc)
   #:export (kmonad-dance-commander-layer
@@ -18,23 +19,6 @@
             kmonad-fr-laptop-config
             kmonad-ergodox-config
             kmonad-bullshit-config))
-
-;; fixme: temp, until https://github.com/joshwalters/guile-pipe/ is deployed in my conf deps:
-(define-syntax ->>
-  (syntax-rules ()
-    ((_) #f)
-    ((_ x) x)
-    ((_ x (f ...)) (f ... x))
-    ((_ x f) `(f x))
-    ((_ x (f ...) rest ...) (->> (f ... x) rest ...))
-    ((_ x f rest ...) (->> (f x) rest ...))))
-
-(define-syntax ->
-  (syntax-rules ()
-    ((_ x) x)
-    ((_ x (form more ...)) (form x more ...))
-    ((_ x form) (form x))
-    ((_ x form more ...) (-> (-> x form) more ...))))
 
 (define (kmonad-shepherd-service config)
   ;; Tells shepherd how we want it to create a (single) <shepherd-service>
