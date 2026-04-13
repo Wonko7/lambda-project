@@ -10,9 +10,7 @@
   #:use-module (pipe)
   ;; my stuff
   #:use-module (wonko misc)
-  #:export (kmonad-dance-commander-layer
-            kmonad-fr-layer
-            kmonad-service-type
+  #:export (kmonad-service-type
             kmonad-config
             kmonad-make-config
             kmonad-laptop-config
@@ -129,6 +127,12 @@ the aliases definitions & the new layer."
                 (zip (circular-list "\n")
                      (map object->string (apply append sexps))))))
 
+(define* (layer-defs-to-string #:rest sexps)
+  (apply sexps-to-string
+         (map (match-lambda ((aliases layer)
+                             (append aliases (list layer))))
+              sexps)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; xorg integration:
 
@@ -233,8 +237,8 @@ the aliases definitions & the new layer."
     (defalias SRQ (layer-switch sysrq))
     (defalias XDD #((cmd-button ,(setxkb "us")) (layer-switch dance-commander)))
     (defalias XXD #((cmd-button ,(setxkb "us")) (layer-switch xim-dance-commander)))
-    (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch fr)))
-    (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch fr)))
+    (defalias XFR #((cmd-button ,(setxkb "fr")) (layer-switch us)))
+    (defalias XUS #((cmd-button ,(setxkb "us")) (layer-switch us)))
     (defalias LLL (layer-next meta))))
 
 (define kmonad-whitespace-aliases
@@ -273,18 +277,35 @@ the aliases definitions & the new layer."
     (range 1 12))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; keyboard base
+
+;; doc: x modifiers: lalt -> meta (emacs), lmet -> hyper (WM).
+(define base
+  '( XX   XX
+     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   bspc  ins  home pgup
+     tab  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    del  end  pgdn
+     esc  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   ret
+     lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
+     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
+
+(define empty-base
+  (cons 'deflayer
+        (take (circular-list 'XX)
+              85)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dance-commander dvorak
 
 ;; food for thought: not doing anything of ctrls or under @CP, or left of @CP
-;; doc: x modifiers: lalt -> meta (emacs), lmet -> hyper (WM).
 (define dvorak
   '(deflayer XX
-     esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12 ;; FIXME f12?
-     grv  1    2    3    4    5    6    7    8    9    0    @CP  @LLL bspc  ins  home pgup
-     tab  @qte @com @dot p    y    f    g    c    r    l    /    @C:  \     del  end  pgdn
-     esc  a    o    e    u    i    d    h    t    n    s    -    ret
-     lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     grv  1    2    3    4    5    6    7    8    9    0    @CP  @LLL bspc  XX   XX   XX
+     XX   @qte @com @dot p    y    f    g    c    r    l    /    @C:  \     XX   XX   XX
+     XX   a    o    e    u    i    d    h    t    n    s    -    ret
+     XX   @smc q    j    k    x    b    m    w    v    z    XX                   XX
+     XX   XX   XX             XX             XX   XX   XX   XX              XX   XX   XX))
 
 (define kmonad-home-row-modifiers
   '( XX   XX
@@ -305,8 +326,9 @@ the aliases definitions & the new layer."
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
 
 (define kmonad-dance-commander-layer
-  (-> dvorak
+  (-> base
       (init-layer 'dance-commander)
+      (kmonad/merge-layers dvorak)
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)
       (kmonad/merge-with-tap-fn kmonad-home-layers
@@ -323,90 +345,134 @@ the aliases definitions & the new layer."
        layer))
 
 (define kmonad-xim-dance-commander-layer
-  (-> (s/sym/xim-sym/ dvorak)
+  (-> base
       (init-layer 'xim-dance-commander)
+      (kmonad/merge-layers (s/sym/xim-sym/ dvorak))
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)
       (kmonad/merge-with-tap-fn (s/sym/xim-sym/ kmonad-home-layers)
                                 kmonad/layer-tap-fn)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; whitespace layer
+
+(define whitespace
+  '(deflayer whitespace
+     esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   XX   bspc  ret  brup pgup
+     tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   XX   XX   XX    del  brdn pgdn
+     caps XX   XX   esc  esc  ret  ret  left down rght XX   XX   XX
+     XX   XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   XX                   brup
+     XX   XX   XX             spc            XX   XX   XX   XX              vold brdn volu))
+
 (define kmonad-whitespace-layer
-  (->
-   '(deflayer whitespace
-      esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
-      XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
-      tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
-      caps XX   XX   esc  esc  ret  ret  left down rght XX   -    ret
-      lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
-      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            vold brdn volu)
-   (init-layer 'whitespace)
-   (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
-                             kmonad/tap-fn)))
+  (-> base
+      (init-layer 'whitespace)
+      (kmonad/merge-layers whitespace)
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; symbol layer
+
 (define symbols
   '(deflayer symbols
-     @SYS ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  @SYS
-     grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
-     tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
-     esc  à    ô    é    &    @p   \    @op  @cp  \    XX   -    ret
-     lsft +    \_   XX   û    @ccb grv  @osb @csb @qu  @qu  rsft                 up
-     lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
+     @SYS ä    ö    ë    ü    ï    ÿ    XX   XX   XX   XX   XX   XX
+     grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb XX    XX   XX   XX
+     XX   ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     XX   XX   XX
+     XX   à    ô    é    &    @p   \    @op  @cp  \    XX   -    XX
+     XX   +    \_   XX   û    @ccb grv  @osb @csb @qu  @qu  XX                   XX
+     XX   XX   XX             spc            XX   XX   XX   XX              XX   XX   XX))
+
+(define xim-symbols
+  '(deflayer xim-symbols
+     XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
+     XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
+     XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX    XX   XX   XX
+     XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                 XX
+     XX   @Tsx XX             spc            XX   @Tsx @Tsx @Tsx            XX   XX   XX))
 
 (define kmonad-symbols-layer
-  (-> symbols
+  (-> base
       (init-layer 'symbols)
+      (kmonad/merge-layers symbols)
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)))
 
 (define kmonad-xim-symbols-layer
-  (-> symbols
+  (-> base
       (init-layer 'xim-symbols)
-      (kmonad/merge-layers
-       '(deflayer xim-symbols
-          XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
-          XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-          XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
-          XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   XX
-          XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
-          lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX))
+      (kmonad/merge-layers xim-symbols)
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)))
 
-(define kmonad-system-layer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; meta & system layers
+
+(define XDD-base
+  (cons 'deflayer
+        (take (circular-list '@XDD)
+              85)))
+
+(define system
   '(deflayer system
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12
-     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12 bspc  ins  home pgup
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12 XX    XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   @SRQ XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    XX
-     lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                   XX
+     XX   XX   XX             XX             XX   XX   XX   XX              XX   XX   XX))
+
+(define kmonad-system-layer
+  (-> base
+      (init-layer 'system)
+      (kmonad/merge-layers system)))
+
+(define sysrq
+  '(deflayer sysrq
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
+     XX   @qte @com @dot @RQp @RQy @RQf @RQg @RQc @RQr @RQl XX   XX   XX    XX   @RIP XX
+     XX   @RQa @RQo @RQe @RQu @RQi @RQd @RQh @RQt @RQn @RQs XX   XX
+     XX   @smc @RQq @RQj @RQk @RQx @RQb @RQm @RQw @RQv @RQz XX                   XX
+     XX   XX   XX             XX             XX   XX   XX   XX              XX   XX   XX))
 
 (define kmonad-sysrq-layer
-  '(deflayer sysrq
-     @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD
-     @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD @XDD  @XDD @XDD @XDD
-     @XDD @qte @com @dot @RQp @RQy @RQf @RQg @RQc @RQr @RQl @XDD @XDD @XDD  @XDD @RIP @XDD
-     @XDD @RQa @RQo @RQe @RQu @RQi @RQd @RQh @RQt @RQn @RQs @XDD @XDD
-     @XDD @smc @RQq @RQj @RQk @RQx @RQb @RQm @RQw @RQv @RQz @XDD                 @XDD
-     @XDD @XDD @XDD           @XDD           @XDD @XDD @XDD @XDD            @XDD @XDD @XDD))
+  (-> XDD-base
+      (init-layer 'sysrq)
+      (kmonad/merge-layers sysrq)))
 
-(define kmonad-meta-layer
+(define meta
   '(deflayer meta
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @XFR
-     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 XX   bspc  ins  home pgup
-     XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
+     XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 XX   XX    XX   XX   XX
+     XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   XX   XX   XX    XX   @SRQ XX
      XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   XX   XX   -    XX
-     lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   XX   XX   rsft                 up
-     lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
+     XX   XX   @XUS XX   XX   @XXD @XXD XX   XX   XX   XX   rsft                 XX
+     XX   XX   XX             XX             XX   XX   XX   XX              XX   XX   XX  ))
 
-(define kmonad-fr-layer
-  ;; kmonad sets it as us, then we let xorg take care of it.
-  '(deflayer fr
+(define kmonad-meta-layer
+  (-> base
+      (init-layer 'meta)
+      (kmonad/merge-layers meta)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; standard us / fr
+
+(define us
+  ;; kmonad sets it as us, then we let xorg take care of fr vs us.
+  '(deflayer us
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  @LLL
      grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc  ins  home pgup
      tab  q    w    e    r    t    y    u    i    o    p    @osb @csb \     del  end  pgdn
      caps a    s    d    f    g    h    j    k    l    @smc @qte ret
      lsft z    x    c    v    b    n    m    @com @dot /    rsft                 up
      lctl lmet lalt           spc            ralt rmet cmp  rctl            left down rght))
+
+(define kmonad-us-layer
+  (-> us
+      (init-layer 'us)))
 
 (define f12->FR
   '( XX   XX
@@ -417,16 +483,13 @@ the aliases definitions & the new layer."
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; kmonad config
+
 (define (kmonad-make-config-file input output default-layer)
   (let* ((xkb (if (equal? default-layer 'fr)
                   "fr"
-                  "us"))
-         (flatten-layer-def (match-lambda ((aliases layer)
-                                           (append aliases (list layer)))))
-         (flatten+EZFR-layer-def (lambda (layer)
-                                   (-> layer
-                                       (kmonad/merge-layers f12->FR)
-                                       (flatten-layer-def)))))
+                  "us")))
     (mixed-text-file
      "kmonad-config"
      ;; base config:
@@ -443,23 +506,22 @@ the aliases definitions & the new layer."
       kmonad-xim-aliases)
      ;; typing layouts. order is important, first is default:
      (if (equal? default-layer 'fr)
-         (sexps-to-string
-          (list kmonad-fr-layer)
-          (flatten+EZFR-layer-def kmonad-dance-commander-layer)
-          (flatten+EZFR-layer-def kmonad-xim-dance-commander-layer))
-         (sexps-to-string
-          (flatten-layer-def kmonad-dance-commander-layer)
-          (flatten-layer-def kmonad-xim-dance-commander-layer)
-          (list kmonad-fr-layer)))
+         (layer-defs-to-string
+          kmonad-us-layer
+          (kmonad/merge-layers kmonad-dance-commander-layer f12->FR)
+          (kmonad/merge-layers kmonad-xim-dance-commander-layer f12->FR))
+         (layer-defs-to-string
+          kmonad-dance-commander-layer
+          kmonad-xim-dance-commander-layer
+          kmonad-us-layer))
      ;; misc layouts:
-     (sexps-to-string
-      (flatten-layer-def kmonad-symbols-layer)
-      (flatten-layer-def kmonad-xim-symbols-layer)
-      (flatten-layer-def kmonad-whitespace-layer)
-      (list
-       kmonad-system-layer
-       kmonad-sysrq-layer
-       kmonad-meta-layer)))))
+     (layer-defs-to-string
+      kmonad-symbols-layer
+      kmonad-xim-symbols-layer
+      kmonad-whitespace-layer
+      kmonad-system-layer
+      kmonad-sysrq-layer
+      kmonad-meta-layer))))
 
 (define (kmonad-config id input default-layer)
   `(,id
