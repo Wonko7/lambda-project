@@ -227,9 +227,7 @@ the aliases definitions & the new layer."
     (defalias til #( ~ ))))
 
 (define kmonad-common-modifier-aliases
-  `((defalias EC (tap-hold-next-release 700 esc lctl))
-    (defalias RC (tap-hold-next-release 700 ret rctl))
-    (defalias SYS (layer-next system))
+  `((defalias SYS (layer-next system))
     (defalias Tsy (layer-toggle symbols))
     (defalias Tsx (layer-toggle xim-symbols))
     (defalias SRQ (layer-switch sysrq))
@@ -240,8 +238,8 @@ the aliases definitions & the new layer."
     (defalias LLL (layer-next meta))))
 
 (define kmonad-whitespace-aliases
-  '((defalias Cn C-n)
-    (defalias Cp C-p)
+  '((defalias Cn  C-n)
+    (defalias Cp  C-p)
     (defalias Csp C-spc)
     (defalias C:  #(C-spc :))
     (defalias CP  #(C-spc P))))
@@ -284,7 +282,7 @@ the aliases definitions & the new layer."
      esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12 ;; FIXME f12?
      grv  1    2    3    4    5    6    7    8    9    0    @CP  @LLL bspc  ins  home pgup
      tab  @qte @com @dot p    y    f    g    c    r    l    /    @C:  \     del  end  pgdn
-     @EC  a    o    e    u    i    d    h    t    n    s    -    @RC
+     esc  a    o    e    u    i    d    h    t    n    s    -    ret
      lsft @smc q    j    k    x    b    m    w    v    z    rsft                 up
      lalt @Tsy lmet           spc            rmet ralt @Tsy @Tsy            left down rght))
 
@@ -293,7 +291,7 @@ the aliases definitions & the new layer."
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   lsft XX   XX   XX   XX   XX   XX   XX   XX   rsft XX   XX   XX   XX   XX   XX
-     XX   lctl XX   lmet XX   XX   XX   XX   rmet XX   rctl XX   XX
+     lctl lctl XX   lmet XX   XX   XX   XX   rmet XX   rctl XX   rctl
      XX   ALcs XX   XX   XX   XX   XX   XX   XX   XX   ARcs XX                  XX
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
 
@@ -338,7 +336,7 @@ the aliases definitions & the new layer."
       esc  mute vold volu XX   XX   XX   XX   XX   XX   XX   XX   XX
       XX   home XX   XX   end  del  del  XX   XX   XX   XX   XX   @CP  bspc  ret  brup pgup
       tab  home XX   tab  XX   bspc bspc pgup up   pgdn XX   /    XX   \     del  brdn pgdn
-      caps XX   XX   esc  esc  ret  ret  left down rght XX   -    @RC
+      caps XX   XX   esc  esc  ret  ret  left down rght XX   -    ret
       lsft XX   XX   esc  esc  tab  tab  esc  esc  XX   XX   rsft                 brup
       lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            vold brdn volu)
    (init-layer 'whitespace)
@@ -349,7 +347,7 @@ the aliases definitions & the new layer."
      @SYS ä    ö    ë    ü    ï    ÿ    f7   f8   f9   f10  f11  @SYS
      grv  â    œ    ê    ù    î    XX   XX   XX   XX   XX   @osb @csb bspc  ins  home pgup
      tab  ^    -    è    =    @ocb /    XX   ç    /    @λ   /    =    \     del  end  pgdn
-     @EC  à    ô    é    &    @p   \    @op  @cp  \    XX   -    @RC
+     esc  à    ô    é    &    @p   \    @op  @cp  \    XX   -    ret
      lsft +    \_   XX   û    @ccb grv  @osb @csb @qu  @qu  rsft                 up
      lalt @Tsy lmet           spc            rmet @Tsy @Tsy @Tsy            left down rght))
 
@@ -367,7 +365,7 @@ the aliases definitions & the new layer."
           XX   @ä   @ö   @ë   @ü   @ï   @ÿ   XX   XX   XX   XX   XX   XX
           XX   @â   @œ   @ê   @ù   @î   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
           XX   XX   XX   @è   XX   XX   XX   XX   @ç   XX   @λ   XX   XX   XX   XX   XX   XX
-          XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   @RC
+          XX   @à   @ô   @é   XX   XX   XX   XX   XX   XX   XX   XX   XX
           XX   XX   XX   @œ   @û   @ccb XX   @osb @csb XX   XX   rsft                XX
           lalt @Tsx  lmet          spc            rmet @Tsx @Tsx @Tsx           XX   XX   XX))
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
@@ -378,7 +376,7 @@ the aliases definitions & the new layer."
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @v12 bspc  ins  home pgup
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    @RC
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   -    XX
      lsft XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   rsft                 up
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
@@ -396,7 +394,7 @@ the aliases definitions & the new layer."
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 @XFR
      XX   @vt1 @vt2 @vt3 @vt4 @vt5 @vt6 @vt7 @vt8 @vt9 @v10 @v11 XX   bspc  ins  home pgup
      XX   @XFR XX   XX   XX   XX   @XFR XX   XX   XX   XX   /    =    \     del  @SRQ pgdn
-     XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   XX   XX   -    @RC
+     XX   @XFR XX   XX   @XUS XX   @XDD XX   XX   XX   XX   -    XX
      lsft XX   @XUS XX   XX   @XXD @XXD XX   XX   XX   XX   rsft                 up
      lalt @Tsy lmet           spc            rmet ralt cmp  @Tsy            left down rght))
 
