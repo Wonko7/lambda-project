@@ -102,8 +102,7 @@
              (source (uuid "077c1391-b290-4921-ae90-f8e3cec68113"))
              (target "vault")
              (type luks-device-mapping)
-             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin"
-                          #:allow-discards? #t)))))
+             (arguments '(#:allow-discards? #t)))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")
