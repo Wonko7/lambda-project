@@ -85,8 +85,7 @@
     (bootloader
       (bootloader-configuration
         (bootloader   my-grub-efi-bootloader)
-        (targets      '("/boot"))
-        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")))
+        (targets      '("/boot"))))
     (kernel-arguments (append '("resume_offset=5841087")
                               (operating-system-user-kernel-arguments %laptop-os)))
 
@@ -137,8 +136,7 @@
              (source (uuid "125bf330-ff27-45d1-9cce-1dd96cb14975"))
              (target "vault")
              (type luks-device-mapping)
-             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin"
-                          #:allow-discards? #t)))))
+             (arguments '(#:allow-discards? #t)))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")
