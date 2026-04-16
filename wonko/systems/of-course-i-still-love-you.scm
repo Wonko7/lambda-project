@@ -189,14 +189,26 @@
                          "2a01:e0a:b5a:de71::1" "lookup" "main")
                  (invoke (string-append #$iproute "/sbin/ip")
                          "-6" "rule" "add" "priority" "1010" "from"
-                         "2a01:e0a:b5a:de71::1" "lookup" "main")))
+                         "2a01:e0a:b5a:de71::1" "lookup" "main")
+                 (invoke (string-append #$iproute "/sbin/ip")
+                         "rule" "add" "priority" "1010" "to"
+                         "192.168.1.101" "lookup" "main")
+                 (invoke (string-append #$iproute "/sbin/ip")
+                         "rule" "add" "priority" "1010" "from"
+                         "192.168.1.101" "lookup" "main")))
       (stop #~(lambda _
                 (invoke (string-append #$iproute "/sbin/ip")
                         "-6" "rule" "del" "priority" "1010" "to"
                         "2a01:e0a:b5a:de71::1" "lookup" "main")
                 (invoke (string-append #$iproute "/sbin/ip")
                         "-6" "rule" "del" "priority" "1010" "from"
-                        "2a01:e0a:b5a:de71::1" "lookup" "main")))
+                        "2a01:e0a:b5a:de71::1" "lookup" "main")
+                (invoke (string-append #$iproute "/sbin/ip")
+                        "rule" "del" "priority" "1010" "to"
+                        "192.168.1.101" "lookup" "main")
+                (invoke (string-append #$iproute "/sbin/ip")
+                        "rule" "del" "priority" "1010" "from"
+                        "192.168.1.101" "lookup" "main")))
       (documentation "azirevpn wg")))))
 
 (define %nftables-ruleset
@@ -206,7 +218,9 @@ table inet firewall {
 
     chain inbound_ipv4 {
         icmp type echo-request limit rate 5/second accept
-        accept # accept everything on local network
+        # accept everything on local network, 101 is public facing:
+        ip daddr != 192.168.1.101 accept
+        tcp dport { 25, 80, 443 } accept
     }
 
     chain inbound_ipv6 {
@@ -460,7 +474,10 @@ interface eth0                    # identifies the interface we are advertising 
                   (addresses
                    (list (network-address
                            (device "eth0")
-                           (value "2a01:e0a:b5a:de71::1/64"))))
+                           (value "2a01:e0a:b5a:de71::1/64"))
+                         (network-address
+                           (device "eth0")
+                           (value "192.168.1.101/24"))))
                   (routes
                    (list (network-route
                            (destination "2000::/3")
