@@ -477,7 +477,6 @@
    acpi
    tmux
    dtach
-   net-tools ;; netstat
    strace
    fastfetch-minimal
    ;; compression
@@ -488,19 +487,22 @@
    adb
    fastboot
    ;; web
-   gnutls
-   openssl
    curl
    jq))
 
 (define-public %os-net-world ;; complements %utils-world
   (list
-   isc-bind ;; dig
+   `(,isc-bind "utils") ;; dns: dig nslookup
    iproute
    iw
    ndisc6
+   net-tools ;; netstat
    openntpd
    tcpdump
+   ;; ssl
+   gnutls
+   openssl
+   ;; wg
    wireguard-tools))
 
 (define-public %os-disk-world
