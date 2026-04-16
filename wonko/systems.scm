@@ -381,6 +381,7 @@
                            (guix (guix-for-channels %channels))
                            (substitute-urls
                             (cons* "https://substitutes.nonguix.org"
+                                   "http://of-course-i-still-love-you.star-fleet.local:1337"
                                    %default-substitute-urls))
                            (authorized-keys
                             (append

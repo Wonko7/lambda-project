@@ -510,6 +510,13 @@ interface eth0                    # identifies the interface we are advertising 
                              %default-sysctl-settings))))
         ;; public net stuff -->
 
+        (guix-publish-service-type
+         config =>
+         (guix-publish-configuration
+           (inherit config)
+           (advertise? #f)
+           (host (net-peer-wg-address %of-course-i-still-love-you-net-peer))))
+
         (elogind-service-type
          config =>
          (elogind-configuration

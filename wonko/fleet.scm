@@ -2,10 +2,13 @@
   #:use-module (guix build utils)
   #:use-module (guix gexp)
   #:use-module (guix records)
+  #:use-module (gnu services base)
   #:use-module (gnu)
   #:use-module (wonko defs)
   #:export (%fleet-hosts
-            %fleet-names))
+            %fleet-names
+            net-peer-local-address
+            net-peer-wg-address))
 
 (use-service-modules base vpn)
 
