@@ -1268,6 +1268,9 @@ current time."
 ;; books
 
 (use-package org-books
+  :commands (org-books-get-details my/org-books-format)
+  :after org
+  :demand t
   :config
   (defun my/org-books-format (level url tags title author &optional props)
     "Return details as an org headline entry. "
