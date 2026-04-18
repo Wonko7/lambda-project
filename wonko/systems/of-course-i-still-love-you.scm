@@ -220,7 +220,7 @@ table inet firewall {
         icmp type echo-request limit rate 5/second accept
         # accept everything on local network, 101 is public facing:
         ip daddr != 192.168.1.101 accept
-        tcp dport { 25, 80, 443 } accept
+        tcp dport { 25, 80, 443, 465 } accept
     }
 
     chain inbound_ipv6 {
@@ -228,7 +228,7 @@ table inet firewall {
         icmpv6 type echo-request limit rate 5/second accept
 
         ip6 daddr != 2a01:e0a:b5a:de71::/64 accept # accept on non public
-        tcp dport { 25, 80, 443 } accept # only accept these on public facing ipv6
+        tcp dport { 25, 80, 443, 465 } accept # only accept these on public facing ipv6
         udp dport { 51820 } accept   # only accept these on public facing ipv6
     }
 
