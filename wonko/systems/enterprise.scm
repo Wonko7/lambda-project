@@ -96,9 +96,10 @@
                `((,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
-      (service kmonad-service-type kmonad-laptop-config)
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      (service kmonad-service-type (kmonad-configuration
+                                    (keymaps (list kmonad-laptop-config
+                                                   kmonad-ergodox-config
+                                                   kmonad-bullshit-config))))
       ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
@@ -128,7 +129,6 @@
       ;; (simple-service 'wait-for-wan-service
       ;;                 shepherd-root-service-type
       ;;                 wait-for-wan-service)
-
       %laptop-services))
 
     (mapped-devices

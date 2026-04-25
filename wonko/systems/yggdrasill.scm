@@ -77,9 +77,10 @@
                `((,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
-      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-laptop-config)
-      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-ergodox-config)
-      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-bullshit-config)
+      (service kmonad-service-type (kmonad-configuration
+                                    (keymaps (list kmonad-laptop-config
+                                                   kmonad-ergodox-config
+                                                   kmonad-bullshit-config))))
       ;; X
       (service slim-service-type wonko-slim-config)
       (service noautostart-slim-service-type media-station-slim-config)
@@ -94,7 +95,6 @@
       (simple-service 'azirevpn-service
                       shepherd-root-service-type
                       azirevpn-fr-service)
-
       %laptop-services))
 
     (mapped-devices

@@ -1,6 +1,5 @@
 ;; https://github.com/kmonad/kmonad/issues/483
 (define-module (wonko services kmonad)
-  #:use-module (gnu services)
   #:use-module (gnu services shepherd)
   #:use-module (gnu packages haskell-apps)
   #:use-module (guix gexp)
@@ -10,36 +9,12 @@
   #:use-module (pipe)
   ;; my stuff
   #:use-module (wonko misc)
-  #:export (kmonad-service-type
-            kmonad-config
+  #:export (kmonad-config
             kmonad-make-config
             kmonad-laptop-config
             kmonad-fr-laptop-config
             kmonad-ergodox-config
             kmonad-bullshit-config))
-
-(define (kmonad-shepherd-service config)
-  ;; Tells shepherd how we want it to create a (single) <shepherd-service>
-  ;; for kmonad from a string
-  (let ((id          (first config))
-        (config-path (second config)))
-    (list (shepherd-service
-            (documentation "Run the kmonad daemon.")
-            (provision (list (string->symbol (string-append "kmonad-" id))))
-            (requirement '(udev user-processes))
-            (start #~(make-forkexec-constructor
-                      (list #$(file-append kmonad "/bin/kmonad")
-                            #$config-path)))
-            (stop #~(make-kill-destructor))))))
-
-(define kmonad-service-type
-  ;; Extend the shepherd root into a new type of service that takes a single string
-  (service-type
-    (name 'kmonad)
-    (description "Run the kmonad daemon.")
-    (extensions
-     (list (service-extension shepherd-root-service-type
-                              kmonad-shepherd-service)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; layer constructors
@@ -524,11 +499,10 @@ the aliases definitions & the new layer."
       kmonad-meta-layer))))
 
 (define (kmonad-config id input default-layer)
-  `(,id
-    ,(kmonad-make-config-file
-      input
-      (string-append "kbd-you-touch-my-tralala-" id)
-      default-layer)))
+  (kmonad-make-config-file
+   input
+   (string-append "kbd-you-touch-my-tralala-" id)
+   default-layer))
 
 (define kmonad-laptop-config
   (kmonad-config "laptop"
