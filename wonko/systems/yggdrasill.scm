@@ -77,9 +77,9 @@
                `((,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
-      (service kmonad-service-type kmonad-laptop-config)
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-laptop-config)
+      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-ergodox-config)
+      (service (@ (wonko services kmonad) kmonad-service-type) kmonad-bullshit-config)
       ;; X
       (service slim-service-type wonko-slim-config)
       (service noautostart-slim-service-type media-station-slim-config)
