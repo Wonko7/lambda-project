@@ -1106,8 +1106,67 @@ current time."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org-ql
 
+(use-package org-ql-find)
 (use-package org-ql
+  :config
+  (org-ql-defpred no-prop-entry-regexp (&rest regexps)
+    "based on regexp, matching \\` & \\' was broken because of text properties."
+    :coalesce t
+    :normalizers ((`(,predicate-names . ,args)
+                   `(no-prop-entry-regexp ,@args)))
+    :preambles ((`(,predicate-names ,regexp)
+                 (list :case-fold t :regexp regexp :query t))
+                (`(,predicate-names . ,regexps)
+                 ;; Search for first regexp, then confirm with predicate.
+                 (list :case-fold t :regexp (car regexps) :query query)))
+    :body
+    (let ((end (or (save-excursion
+                     (outline-next-heading))
+                   (point-max))))
+      (save-excursion
+        (goto-char (line-beginning-position))
+        (cl-loop for regexp in regexps
+                 always (save-excursion
+                          (s-match-strings-all
+                           regexp
+                           (buffer-substring-no-properties (point) end)))))))
+
+  (when nil
+    ;; I will be looking for this in the future.
+    ;; you can do cool stuff like this:
+    (setq org-auto-align-tags nil)
+    (org-ql-query :select #'delete-line
+                  :from #'my/all-dailies ;; (current-buffer)
+                  :where '(and (heading "campusing")
+                               (not (children))
+                               (no-prop-entry-regexp "\\`.*[ \t\r\n]*\\'")))))
+
+(use-package org-ql-search
+  :commands (my/all-dailies my/recent-dailies my/sort-by-filename-date)
   :after org
+  :demand t
+  :config
+  (defun my/sort-by-filename-date (a b)
+    (cl-flet* ((get-fn (e)
+                 (buffer-name (marker-buffer (org-element-property :org-marker e))))
+               (to-ts (e)
+                 (file-name-sans-extension (get-fn e))))
+      (string> (to-ts a) (to-ts b))))
+
+  (defun my/all-dailies ()
+    (org-ql-search-directories-files
+     :directories (mapcar (lambda (d)
+                            (concat org-roam-directory d))
+                          (list "_the-road-so-far"
+                                "_the-road-so-far/-archive/"))))
+
+  (defun my/recent-dailies ()
+    (org-ql-search-directories-files
+     :directories (list (concat org-roam-directory "_the-road-so-far")))))
+
+(use-package org-ql-view
+  :after (org org-ql-search)
+  :demand t
   :custom
   (org-ql-views
    (list
@@ -1201,63 +1260,7 @@ current time."
           (list :buffers-files #'my/all-dailies
                 :query '(and (olps "media" "📺")
                              (not (tags "tv")))
-                :sort #'my/sort-by-filename-date))))
-
-  :config
-  (org-ql-defpred no-prop-entry-regexp (&rest regexps)
-    "based on regexp, matching \\` & \\' was broken because of text properties."
-    :coalesce t
-    :normalizers ((`(,predicate-names . ,args)
-                   `(no-prop-entry-regexp ,@args)))
-    :preambles ((`(,predicate-names ,regexp)
-                 (list :case-fold t :regexp regexp :query t))
-                (`(,predicate-names . ,regexps)
-                 ;; Search for first regexp, then confirm with predicate.
-                 (list :case-fold t :regexp (car regexps) :query query)))
-    :body
-    (let ((end (or (save-excursion
-                     (outline-next-heading))
-                   (point-max))))
-      (save-excursion
-        (goto-char (line-beginning-position))
-        (cl-loop for regexp in regexps
-                 always (save-excursion
-                          (s-match-strings-all
-                           regexp
-                           (buffer-substring-no-properties (point) end)))))))
-
-  (when nil
-    ;; I will be looking for this in the future.
-    ;; you can do cool stuff like this:
-    (setq org-auto-align-tags nil)
-    (org-ql-query :select #'delete-line
-                  :from #'my/all-dailies ;; (current-buffer)
-                  :where '(and (heading "campusing")
-                               (not (children))
-                               (no-prop-entry-regexp "\\`.*[ \t\r\n]*\\'")))))
-
-(use-package org-ql-search
-  :after org-ql
-  :commands (my/all-dailies my/recent-dailies my/sort-by-filename-date)
-
-  :config
-  (defun my/sort-by-filename-date (a b)
-    (cl-flet* ((get-fn (e)
-                 (buffer-name (marker-buffer (org-element-property :org-marker e))))
-               (to-ts (e)
-                 (file-name-sans-extension (get-fn e))))
-      (string> (to-ts a) (to-ts b))))
-
-  (defun my/all-dailies ()
-    (org-ql-search-directories-files
-     :directories (mapcar (lambda (d)
-                            (concat org-roam-directory d))
-                          (list "_the-road-so-far"
-                                "_the-road-so-far/-archive/"))))
-
-  (defun my/recent-dailies ()
-    (org-ql-search-directories-files
-     :directories (list (concat org-roam-directory "_the-road-so-far")))))
+                :sort #'my/sort-by-filename-date)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; board
