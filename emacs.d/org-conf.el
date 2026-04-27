@@ -236,7 +236,7 @@
   :commands (org-roam-node-open org-roam-node-from-title-or-alias)
   :custom
   ;; default is data/, lol what a fuckface! that's exactly where my org data is!
-  (org-roam-file-exclude-regexp nil)
+  (org-roam-file-exclude-regexp '("hide/"))
   (org-roam-node-display-template (concat "${title:*} "
                                           (propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-completion-everywhere t)
