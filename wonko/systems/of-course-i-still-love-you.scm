@@ -331,8 +331,9 @@ interface eth0                    # identifies the interface we are advertising 
                `((,(crew-name %wonko) ,%of-course-i-still-love-you-wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      (service kmonad-service-type (kmonad-configuration
+                                    (keymaps (list kmonad-ergodox-config
+                                                   kmonad-bullshit-config))))
       ;; X
       (service slim-service-type (slim-configuration
                                    (inherit wonko-slim-config)
