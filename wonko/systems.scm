@@ -421,7 +421,6 @@
         ;; (targets '("/mnt/tmp-efi/"))
         (bootloader grub-efi-bootloader)
         (targets    '("/boot"))
-        (extra-initrd "/_live/@guix-root/root/keys-to-the-kingdom.cpio")
         (keyboard-layout keyboard-layout)))
 
     (host-name "discovery")
