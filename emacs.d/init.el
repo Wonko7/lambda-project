@@ -700,6 +700,73 @@
                               torrent)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; books / calibre
+
+(use-package calibredb
+  ;; you want calibredb-consult-read
+  ;; and calibredb-library-list
+  :demand t
+  :config
+  (setq calibredb-root-dir "/data/docs/books/calibre")
+  ;; for folder driver metadata: it should be .metadata.calibre
+  (setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir))
+  (setq calibredb-library-alist `((,calibredb-root-dir (name . "Calibre"))))
+  (setq calibredb-search-page-max-rows 50000)
+  (general-evil-define-key '(normal) calibredb-search-mode-map
+    "?" #'calibredb-dispatch
+    "a" #'calibredb-add
+    "A" #'calibredb-add-dir
+    "c" #'calibredb-clone
+    "d" #'calibredb-remove
+    "D" #'calibredb-remove-marked-items
+    "j" #'calibredb-next-entry
+    "k" #'calibredb-previous-entry
+    ;; "l" #'calibredb-virtual-library-list
+    ;; "L" #'calibredb-library-list
+    ;; "n" #'calibredb-virtual-library-next
+    ;; "N" #'calibredb-library-next
+    ;; "p" #'calibredb-virtual-library-previous
+    ;; "P" #'calibredb-library-previous
+    "M" #'calibredb-set-metadata-dispatch
+    ;; "S" #'calibredb-switch-library
+    ;; "g" #'calibredb-filter-dispatch
+    "/" #'calibredb-filter-dispatch
+    "s" #'calibredb-sort-dispatch
+    ;; "o" #'calibredb-sort-dispatch
+    ;; "O" #'calibredb-find-file-other-frame
+    "v" #'calibredb-view
+    "V" #'calibredb-open-file-with-default-tool
+    "<return>" #'calibredb-open-file-with-default-tool
+    "." #'calibredb-dired-open
+    "y" #'calibredb-yank-dispatch
+    "b" #'calibredb-catalog-bib-dispatch
+    "E" #'calibredb-export-dispatch
+    "r" #'calibredb-search-refresh-and-clear-filter
+    "R" #'calibredb-search-clear-filter
+    "q" #'calibredb-search-quit
+    "m" #'calibredb-mark-and-forward
+    "f" #'calibredb-toggle-favorite-at-point
+    "x" #'calibredb-toggle-archive-at-point
+    "h" #'calibredb-toggle-highlight-at-point
+    "u" #'calibredb-unmark-and-forward
+    "i" #'calibredb-edit-annotation
+    "<DEL>" #'calibredb-unmark-and-backward
+    "<backtab>" #'calibredb-toggle-view
+    "<tab>" #'calibredb-toggle-view-at-point
+    "M-n" #'calibredb-show-next-entry
+    "M-p" #'calibredb-show-previous-entry
+    "/" #'calibredb-search-live-filter
+    "M-t" #'calibredb-set-metadata--tags
+    "M-a" #'calibredb-set-metadata--author_sort
+    "M-A" #'calibredb-set-metadata--authors
+    "M-T" #'calibredb-set-metadata--title
+    "M-c" #'calibredb-set-metadata--comments))
+
+(use-package novel
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
 
 (use-package bluetooth
