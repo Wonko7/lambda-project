@@ -403,7 +403,10 @@
     (keyboard-layout %us-kb)
 
     (kernel linux)
-    (kernel-arguments '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault"))
+    (kernel-arguments '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault"
+                        "initcall_blacklist=algif_aead_init" ;; [2026-05-02 Sat 13:18] CVE-2026-31431
+                        ))
+
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
     (bootloader
