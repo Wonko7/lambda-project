@@ -128,6 +128,8 @@
         emacs-time-zones
         emacs-casual
         emacs-elpher
+        emacs-calibre
+        emacs-calibredb
         ;; 🗺
         emacs-osm
         ;; multimedia apps
