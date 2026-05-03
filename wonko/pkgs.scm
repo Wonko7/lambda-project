@@ -61,7 +61,7 @@
         ;; emacs-orgit (link to magit)
 
         ;; desktop stuff? FIXME: set these up:
-        emacs-nov-el
+        emacs-nov
         emacs-auctex
         pandoc
         emacs-verbiste
@@ -262,6 +262,8 @@
         emacs-ement
         emacs-mastodon
         emacs-slack
+        ;; emacs-erc-hl-nicks
+        emacs-erc-image
         ;; pantalaimon
 
         ;; ☠
