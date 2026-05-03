@@ -197,69 +197,16 @@
                         :buffer-f (progn (nano-calendar)
                                          "*nano-calendar*"))))
 
-          ( :layout ement-notifs-4
-            :recipe (| (:left-max-size 38)
-                       list
-                       (| (:left-size-ratio 0.33)
-                          notif
-                          (| (:left-size-ratio 0.5)
-                             a
-                             b)))
-            :buffers-f
-            (progn
-              ;; FIXME: eek. doesn't eval if I put this in a (use-package ement-lib :config)
-              (require 'ement-lib)
-              (defun my/ement-get-buf-for-named-room (name)
-                "get buffer for named room"
-                (let ((session (alist-get "@wonko7:matrix.org" ement-sessions
-                                          nil nil #'equal)))
-                  (when-let (room (cl-find-if
-                                   (lambda (room)
-                                     (let ((members (ement-room-members room)))
-                                       (or (and (= 2 (hash-table-count members))
-                                                (gethash name members))
-                                           (string= name (ement-room-display-name room)))))
-                                   (ement-session-rooms session)))
-                    (pcase-let* (((cl-struct ement-room (local (map buffer))) room))
-                      (progn (unless (buffer-live-p buffer)
-                               (setf buffer (ement-room--buffer session room
-                                                                (ement-room--buffer-name room))
-                                     (alist-get 'buffer (ement-room-local room))  buffer))
-                             buffer)))))
-              `(( :name list
-                  :hide-your-kids t
-                  :buffer-f ,(progn (ement-tabulated-room-list)
-                                    "*Ement Rooms*"))
-                ( :name notif
-                  :hide-your-kids t
-                  :buffer-f ,(progn (ement-notify-switch-to-notifications-buffer)
-                                    "*Ement Notifications*"))
-                ( :name a
-                  :buffer-f ,(my/ement-get-buf-for-named-room (cl-first my/ement-ws-init)))
-
-                ( :name b
-                  :buffer-f ,(my/ement-get-buf-for-named-room (cl-second my/ement-ws-init))))))
-
-          ( :layout ement3
-            :recipe (| (:left-max-size 38)
-                       list
-                       (| (:left-size-ratio 0.33)
-                          a
-                          (| (:left-size-ratio 0.5)
-                             b
-                             c)))
-            :buffers-f
-            `(( :name list
-                :hide-your-kids t
-                :buffer-f ,(progn (ement-tabulated-room-list)
-                                  "*Ement Rooms*"))
-              ( :name a
-                :buffer-f ,(my/ement-get-buf-for-named-room (cl-first my/ement-ws-init)))
-
-              ( :name b
-                :buffer-f ,(my/ement-get-buf-for-named-room (cl-second my/ement-ws-init)))
-              ( :name c
-                :buffer-f ,(my/ement-get-buf-for-named-room (cl-third my/ement-ws-init)))))))
+          ( :layout comms
+            :recipe (| (:left-max-size 0.5)
+                       irc
+                       mtx)
+            :buffers (( :name irc
+                        :buffer-f (progn (my/irc-init)
+                                         "#guix"))
+                      ( :name mtx
+                        :buffer-f (progn (my/ement-init)
+                                         "*Ement Room List*"))))))
 
   (defun ws/init-layout-buffers (layout)
     (mapcar
@@ -387,7 +334,8 @@
                          (ws/check-and-mark-auto-start-state i))))
           (cond ((run-init-p 9)
                  (push my/init-ement-room-list display-buffer-alist)
-                 (my/ement-init))
+                 (ws/set-layout 'comms)
+                 )
                 ((run-init-p 8)
                  (projectile-switch-project-by-name my/lambda-project))
                 ((run-init-p 7)

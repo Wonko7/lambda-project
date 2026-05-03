@@ -183,7 +183,11 @@
   :custom
   (erc-dcc-verbose t)
   (erc-kill-buffer-on-part t)
-  (erc-auto-query 'bury))
+  (erc-auto-query 'bury)
+  :config
+  (general-evil-define-key '(normal) erc-mode-map
+    :prefix "RET"
+    "r" #'erc-switch-to-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mastodon
