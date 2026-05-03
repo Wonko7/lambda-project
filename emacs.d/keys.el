@@ -87,6 +87,12 @@
     "bm" #'bookmark-set
     "bg" #'bookmark-jump
     "bR" #'bookmark-rename
+
+    ;; books
+    "B"  '("books" . (keymap))
+    "Bo" #'calibredb-consult-read
+    "Bl" #'calibredb-search-refresh-or-resume
+
     ;; blink
     "C-b" #'beacon-blink
 
