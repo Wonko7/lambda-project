@@ -185,6 +185,8 @@
   (erc-kill-buffer-on-part t)
   (erc-auto-query 'bury)
   :config
+  (add-to-list 'erc-modules 'nicks)
+  (add-to-list 'erc-modules 'notifications)
   (general-evil-define-key '(normal) erc-mode-map
     :prefix "RET"
     "r" #'erc-switch-to-buffer))
