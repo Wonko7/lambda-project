@@ -198,7 +198,7 @@
                                          "*nano-calendar*"))))
 
           ( :layout comms
-            :recipe (| (:left-max-size 0.5)
+            :recipe (| (:left-size-ratio 0.5)
                        irc
                        mtx)
             :buffers (( :name irc
@@ -334,8 +334,7 @@
                          (ws/check-and-mark-auto-start-state i))))
           (cond ((run-init-p 9)
                  (push my/init-ement-room-list display-buffer-alist)
-                 (ws/set-layout 'comms)
-                 )
+                 (ws/set-layout 'comms))
                 ((run-init-p 8)
                  (projectile-switch-project-by-name my/lambda-project))
                 ((run-init-p 7)
