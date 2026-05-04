@@ -860,10 +860,10 @@ current time."
            "* 🚀 [[roam:rocket go brrr]] :is:fam:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("iH" "🏥 Health" entry "* 🏥 [[roam:health]] %? :is:health:\n%U"
+          ("iH" "🩺 Health" entry "* 🩺 [[roam:health]] %? :is:health:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
-          ("iw" "⚖ weight" entry "* ⚖ [[roam:weight]] :is:health:\n%U%?"
+          ("iw" "⚖ weight" entry "* ⚖ [[roam:weight]] :is:health:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
 
@@ -961,12 +961,11 @@ current time."
           ("wB" "💪 brutus" entry "* 💪 %? :wtf:brutus:\n%U"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
-          ("wP" "🍃 breath work (Pneuma)" entry
-           "* 🍃 [[roam:breath work]] :wtf:\n%U\n%?\n"
+          ("wS" "🦑 stretching" entry "* 🦑 [[roam:stretching / flexibility]] :wtf:flex:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
-          ("wi" "🏥 injuries" entry
-           "* 🏥 [[roam:injuries]] :wtf:health:inj:\n%U\n%?\n"
+          ("wi" "🩺 injuries" entry
+           "* 🩺 [[roam:injuries]] :wtf:health:inj:\n%U\n%?\n"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
 
