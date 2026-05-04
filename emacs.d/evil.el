@@ -7,7 +7,6 @@
 
 ;; 😈
 (use-package evil
-  :defer nil
   :demand t
   :after undo-fu
 
@@ -29,6 +28,8 @@
   (evil-put-property 'evil-state-properties 'replace :input-method t)
   (evil-put-property 'evil-state-properties 'operator :input-method t)
   (evil-put-property 'evil-state-properties 'visual :input-method t)
+
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 
   (setq evil-undo-system 'undo-fu)
   (evil-set-undo-system evil-undo-system) ;; FIXME: this shouldn't be needed)
@@ -85,17 +86,17 @@
   (define-key evil-motion-state-map "n" #'my/search-next)
   (define-key evil-motion-state-map "N" #'my/search-prev))
 
-
 (use-package evil-collection
-  :defer nil
   :demand t
   :after evil
+
   :init
   (setq evil-want-keybinding nil)
   (setq evil-collection-calendar-want-org-bindings t)
   (setq evil-collection-setup-minibuffer t)
   (setq evil-collection-outline-bind-tab-p t)
   (setq evil-collection-key-blacklist '("SPC" "C-SPC" "-"))
+
   :config
   (evil-collection-init)
   (setq evil-want-keybinding t)
@@ -120,18 +121,15 @@
     ;; refresh
     (kbd "gr") 'revert-buffer))
 
-
 (use-package evil-escape
-  ;; :demand t
-  ;; :after evil
+  :disabled t
+  :after evil
   :config
   (evil-escape)
   (evil-escape-mode 1)
   (setq evil-escape-delay 0.3
         evil-escape-key-sequence "jj"
-        evil-escape-excluded-states '(normal visual multiedit emacs motion)
-        ;; evil-cross-lines t
-        ))
+        evil-escape-excluded-states '(normal visual multiedit emacs motion)))
 
 (use-package evil-matchit
   :demand t
@@ -227,12 +225,14 @@
 
 ;; <zoo
 (use-package evil-lion
-  :demand t
+  ;; align
+  :disabled t
   :after evil
   :config
   (evil-lion-mode))
 
 (use-package evil-owl
+  ;; preview registers
   :demand t
   :after evil
   :config
