@@ -403,9 +403,18 @@
     (keyboard-layout %us-kb)
 
     (kernel linux)
-    (kernel-arguments '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault"
-                        "initcall_blacklist=algif_aead_init" ;; [2026-05-02 Sat 13:18] CVE-2026-31431
-                        ))
+    (kernel-arguments
+     (append
+      '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault")
+      ;; [2026-05-09 Sat 12:33] CVE-2026-31431 + dirty frag cve-fuckyou
+      (let ((bad (string-join (cons*
+                               "algif_aead" "esp4" "esp6" "rxrpc"
+                               (@@ (gnu system) %default-modprobe-blacklist))
+                              ",")))
+        (list
+         (string-append "module_blacklist=" bad)
+         (string-append "modprobe.blacklist=" bad)
+         "quiet"))))
 
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
