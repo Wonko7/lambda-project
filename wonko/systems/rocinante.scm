@@ -77,9 +77,10 @@
                  (,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
-      (service kmonad-service-type kmonad-fr-laptop-config)
-      (service kmonad-service-type kmonad-ergodox-config)
-      (service kmonad-service-type kmonad-bullshit-config)
+      (service kmonad-service-type (kmonad-configuration
+                                    (keymaps (list kmonad-fr-laptop-config
+                                                   kmonad-ergodox-config
+                                                   kmonad-bullshit-config))))
       ;; X
       (service slim-service-type
                (slim-configuration
