@@ -839,7 +839,7 @@ current time."
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ie" "👁 third eye" entry
-           "* 👁 [[roam:prying open my third eye]] :is:neop:3e:\n%U\n%?"
+           "* 👁 [[roam:prying open my third eye]] :is:3e:\n%U\n%?"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🧘 innerspace")))
           ("ii" "🧘 innerspace" entry "* 🧘 %?\n%U"
