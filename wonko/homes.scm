@@ -386,20 +386,19 @@
    `((".xsession"
       ,(program-file
         "xsession"
-        #~(begin
-            (system
-             (string-append
-              "source ~/.bash_profile;"
-              #$xhost "/bin/xhost +SI:localuser:$USER;"
-              #$xset "/bin/xset r rate 400 30;"
-              #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
-              #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
-              #$xrdb "/bin/xrdb -load ~/.Xresources;"
-              "~/.x-config;"
-              #$(if media-station?
-                    #~(string-append #$xset "/bin/xset s off -dpms;")
-                    #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
-              "exec " #$emacs-exwm-custom-emacs "/bin/exwm"))))))))
+        #~(system
+           (string-append
+            "source ~/.bash_profile;"
+            #$xhost "/bin/xhost +SI:localuser:$USER;"
+            #$xset "/bin/xset r rate 400 30;"
+            #$xsetroot "/bin/xsetroot -cursor_name left_ptr;"
+            #$feh "/bin/feh --bg-scale '" #$%wallpaper "';"
+            #$xrdb "/bin/xrdb -load ~/.Xresources;"
+            "~/.x-config;"
+            #$(if media-station?
+                  #~(string-append #$xset "/bin/xset s off -dpms;")
+                  #~(string-append #$xset "/bin/xset dpms 600 1200 0;"))
+            "exec " #$emacs-exwm-custom-emacs "/bin/exwm")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dotfiles
@@ -846,28 +845,31 @@
 
 (define-public %tina-home
   (home-environment
-   (services
-    (list
-     (simple-service 'x-config-files
-                     home-files-service-type
-                     `((".xsession"
-                        ,(program-file
-                          "xsession"
-                          #~(system #$(file-append xfce4-session "/bin/startxfce4"))))))))
-   (packages
-    (append
-     %fonts-world
-     %xfce-world
-     %web-world
+    (services
      (list
-      libreoffice
-      hunspell
-      hunspell-dict-fr-toutes-variantes
-      hunspell-dict-en-us
-      hunspell-dict-en-gb
-      blueman
-      pavucontrol
-      man-db)))))
+      (simple-service 'x-config-files
+                      home-files-service-type
+                      `((".xsession"
+                         ,(program-file
+                           "xsession"
+                           #~(system
+                              (string-append
+                               #$xfce4-session "/bin/startxfce4;"
+                               "~/.x-config"))))))))
+    (packages
+     (append
+      %fonts-world
+      %xfce-world
+      %web-world
+      (list
+       libreoffice
+       hunspell
+       hunspell-dict-fr-toutes-variantes
+       hunspell-dict-en-us
+       hunspell-dict-en-gb
+       blueman
+       pavucontrol
+       man-db)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; minimal emacs debug

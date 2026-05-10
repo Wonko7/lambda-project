@@ -44,13 +44,33 @@
              #$xinput "/bin/xinput"
              " set-prop 'ETPS/2 Elantech Touchpad' 'libinput Accel Speed' 0.8"))))))))
 
+(define tina-home-services
+  (list
+   (simple-service
+    'config-files
+    home-files-service-type
+    `((".x-config"
+       ,(program-file
+         "x-config"
+         #~(system
+            (string-append
+             #$setxkbmap "/bin/setxkbmap -option lv3:ralt_switch fr latin9"))))))))
+
+(define %rocinante-tina-home
+  (home-environment
+    (inherit %tina-home)
+    (services
+     (append
+      tina-home-services
+      (home-environment-user-services %tina-home)))))
+
 (define %wonko-home
   (home-environment
-   (inherit %vanilla-wonko-home)
-   (services
-    (append
-     machine-home-services
-     %vanilla-wonko-services))))
+    (inherit %vanilla-wonko-home)
+    (services
+     (append
+      machine-home-services
+      %vanilla-wonko-services))))
 
 (define %media-station-home
   (home-environment
@@ -73,7 +93,7 @@
      (cons*
       ;; homes
       (service guix-home-service-type
-               `((,(crew-name %tina)  ,%tina-home)
+               `((,(crew-name %tina)  ,%rocinante-tina-home)
                  (,(crew-name %wonko) ,%wonko-home)
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
