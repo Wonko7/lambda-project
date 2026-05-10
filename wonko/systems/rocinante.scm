@@ -21,7 +21,7 @@
   #:use-module (wonko services kmonad)
   #:export (%rocinante-os))
 
-(use-package-modules xorg)
+(use-package-modules xorg gnome)
 (use-service-modules
  desktop xorg sddm
  networking ssh vpn
