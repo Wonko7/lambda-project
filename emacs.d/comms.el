@@ -189,6 +189,8 @@
   (add-to-list 'erc-modules 'notifications)
   (general-evil-define-key '(normal) erc-mode-map
     :prefix "RET"
+    "R" (li (erc-cmd-RECONNECT))
+    "i" #'my/irc-identify
     "r" #'erc-switch-to-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -201,7 +203,6 @@
 
 (use-package elpher
   :config
-
   (general-evil-define-key '(normal) elpher-mode-map
     "," #'elpher-back))
 
