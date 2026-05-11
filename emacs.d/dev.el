@@ -143,16 +143,19 @@
 
 (use-package gptel
   :custom
-  (gptel-backend
-   (gptel-make-openai "skynet"
-     :stream t
-     :protocol "http"
-     :host "of-course-i-still-love-you.star-fleet.local:6060"
-     :models '(lol)))
   (gptel-org-convert-response t)
   (gptel-default-mode #'org-mode)
   (gptel-model 'lol)
+
   :config
+  ;; [2026-05-11 Mon 12:15] recursive require if in :custom
+  ;; https://github.com/karthink/gptel/issues/556
+  (setq gptel-backend
+        (gptel-make-openai "skynet"
+                           :stream t
+                           :protocol "http"
+                           :host "of-course-i-still-love-you.star-fleet.local:6060"
+                           :models '(lol)))
   (general-evil-define-key '(normal insert) gptel-mode-map
     "C-c C-c" #'gptel-send)
   (general-evil-define-key '(normal) gptel-mode-map
