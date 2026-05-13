@@ -525,6 +525,13 @@ appear to be a match."
 (use-package consult-dir
   :demand t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hyperbole
+
+(use-package hyperbole
+  :demand t
+  :config
+  (hyperbole-mode))
 
 (provide 'conf/completion)
 ;;; completion.el ends here

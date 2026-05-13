@@ -50,6 +50,7 @@
         emacs-enlive
         emacs-calfw
         emacs-nano-calendar
+        emacs-hyperbole
         ;; emacs-org-download (images)
         ;;"emacs-org-ref"
         ;;"emacs-org-static-blog"
