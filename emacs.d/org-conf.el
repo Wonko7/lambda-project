@@ -261,6 +261,11 @@
         :target (file+head ,(concat "wtf/inactive/" slug)
                            ,(concat "#+title: ${title}\n"
                                     "#+filetags: :wtf:\n")))
+       ("m" "🎶 media" plain "%?"
+        :target (file+head ,(concat "media/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+filetags: :media:\n"))
+        :unnarrowed t)
        ("t" "🚀 tech" plain "%?"
         :target (file+head ,(concat "tech/" slug)
                            ,(concat "#+title: ${title}\n"
