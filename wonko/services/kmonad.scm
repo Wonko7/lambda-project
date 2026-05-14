@@ -52,7 +52,7 @@ the aliases definitions & the new layer."
                         layer-counter))
          (alias-name (lambda (a b)
                        (string-append "layer_" alias-prefix "_"
-                                      (symbol->string a)
+                                      (object->string a)
                                       "-"
                                       (symbol->string b)))))
     (match-let* (((previous-aliases layer) layer-def)
@@ -91,6 +91,7 @@ the aliases definitions & the new layer."
     ,(cond ((equal? k2 'ws) '(layer-toggle whitespace))
            ((equal? k2 'sym) '(layer-toggle symbols))
            ((equal? k2 'xsym) '(layer-toggle xim-symbols))
+           ((equal? k2 'num) '(layer-toggle numbers))
            (#t k2))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -295,7 +296,7 @@ the aliases definitions & the new layer."
   '( XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   num  XX   XX   XX   XX   num  XX   XX   XX   XX   XX   XX   XX   XX
      XX   XX   sym  XX   ws   XX   XX   ws   XX   sym  XX   XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                  XX
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
@@ -382,6 +383,24 @@ the aliases definitions & the new layer."
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
                                 kmonad/tap-fn)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; numbers layer
+
+(define numbers
+  '(deflayer numbers
+     esc  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+     XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX
+     tab  /    7    8    9    +    +    7    8    9    /    XX   XX   XX    XX   XX   XX
+     caps 0    4    5    6    -    -    4    5    6    0    XX   XX
+     XX   0    1    2    3    *    *    1    2    3    0    XX                   XX
+     XX   XX   XX             spc            XX   XX   XX   XX              XX   XX   XX))
+
+(define kmonad-numbers-layer
+  (-> base
+      (init-layer 'numbers)
+      (kmonad/merge-layers numbers)
+      (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
+                                kmonad/tap-fn)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; meta & system layers
 
@@ -494,6 +513,7 @@ the aliases definitions & the new layer."
       kmonad-symbols-layer
       kmonad-xim-symbols-layer
       kmonad-whitespace-layer
+      kmonad-numbers-layer
       kmonad-system-layer
       kmonad-sysrq-layer
       kmonad-meta-layer))))
