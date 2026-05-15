@@ -82,7 +82,7 @@
           (name 'guix)
           (url "https://codeberg.org/guix/guix")
           (branch "master")
-          (commit "9f8d0595a2c044a9bc1c97893b338c485ee83c18")
+          (commit "06ccb7d98083ddbef47b190881d619316bfdb582")
           (introduction
            (make-channel-introduction
             "9edb3f66fd807b096b48283debdcddccfea34bad"
