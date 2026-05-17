@@ -357,13 +357,13 @@
 (define-public %web-world
   (list firefox
         ;; icecat
-        ;; ungoogled-chromium FIXME [2026-02-19 Thu 12:00]
+        ungoogled-chromium
         speedtest-cli
         netcat-openbsd
         nmap
         yt-dlp
         ;; ☠
-        ;; onionshare
+        onionshare
         `(,transmission "gui")))
 
 (define-public %hack-the-world
