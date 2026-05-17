@@ -17,20 +17,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vpn
 
-(define-public azirevpn-fr-service
+(define-public wan-vpn-service
   (list
    (shepherd-service
      (requirement '(networking user-processes udev)) ;;  wait-for-wan
-     (provision '(azirevpn))
+     (provision '(wan-vpn))
      (start #~(lambda _
                 (invoke (string-append #$wireguard-tools "/bin/wg-quick")
-                        "up" "azirevpn-fr-par")))
+                        "up" "wg-wan-vpn")))
      (stop #~(lambda _
                (invoke (string-append #$wireguard-tools "/bin/wg-quick")
-                       "down" "azirevpn-fr-par")))
+                       "down" "wg-wan-vpn")))
      (respawn-delay 5) ;; retry every 5s
      (respawn-limit #~'(69 . 1)) ;; oo
-     (documentation "azirevpn wg"))))
+     (documentation "wan wg"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; wait for internet

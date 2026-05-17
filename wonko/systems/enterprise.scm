@@ -123,9 +123,9 @@
                (wireguard-configuration
                  (inherit %star-fleet-client-config)
                  (addresses (net-peer-addr-to/24 %enterprise-net-peer))))
-      (simple-service 'azirevpn-service
+      (simple-service 'wan-vpn-service
                       shepherd-root-service-type
-                      azirevpn-fr-service)
+                      wan-vpn-service)
       ;; also wip:
       ;; (simple-service 'wait-for-wan-service
       ;;                 shepherd-root-service-type
