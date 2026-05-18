@@ -93,9 +93,9 @@
                (wireguard-configuration
                  (inherit %star-fleet-client-config)
                  (addresses (net-peer-addr-to/24 %yggdrasill-net-peer))))
-      (simple-service 'azirevpn-service
+      (simple-service 'wan-vpn-service
                       shepherd-root-service-type
-                      azirevpn-fr-service)
+                      wan-vpn-service)
       %laptop-services))
 
     (mapped-devices
