@@ -176,13 +176,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; public facing services network config:
 
-(define azirevpn-service
+(define wan-vpn-service
   (append
-   azirevpn-fr-service
+   wan-vpn-service
    (list
     (shepherd-service
-      (requirement '(networking user-processes azirevpn)) ;;  wait-for-wan
-      (provision '(azirevpn-web-hosting-routing))
+      (requirement '(networking user-processes wan-vpn)) ;;  wait-for-wan
+      (provision '(wan-vpn-web-hosting-routing))
       (start #~(lambda _
                  (invoke (string-append #$iproute "/sbin/ip")
                          "-6" "rule" "add" "priority" "1010" "to"
@@ -209,7 +209,7 @@
                 (invoke (string-append #$iproute "/sbin/ip")
                         "rule" "del" "priority" "1010" "from"
                         "192.168.1.101" "lookup" "main")))
-      (documentation "azirevpn wg")))))
+      (documentation "wan-vpn wg")))))
 
 (define %nftables-ruleset
   (plain-file "nftables.conf" "\
@@ -498,9 +498,9 @@ interface eth0                    # identifies the interface we are advertising 
       ;;                 shepherd-root-service-type
       ;;                 wait-for-wan-service)
 
-      (simple-service 'azirevpn-service
+      (simple-service 'wan-vpn-service
                       shepherd-root-service-type
-                      azirevpn-service)
+                      wan-vpn-service)
 
       (modify-services %media-station-os-services
         (sysctl-service-type
