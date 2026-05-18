@@ -632,6 +632,7 @@
       ("shell"    (or (mode . shell-mode) (derived-mode . comint-mode)))
       ("org"      (derived-mode . org-mode))
       ("ement"    (derived-mode . ement-room-mode))
+      ("erc"      (derived-mode . erc-mode))
       ("special"  (and (name . "^\*") (not (name . "^\\*scratch\\*$"))))
       ("scratch"  (name . "^\\*scratch\\*$"))))))
 
