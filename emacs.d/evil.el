@@ -29,7 +29,12 @@
   (evil-put-property 'evil-state-properties 'operator :input-method t)
   (evil-put-property 'evil-state-properties 'visual :input-method t)
 
+  ;; C-g exits replace & insert mode:
+  (define-key evil-replace-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  ;; except in minibuffer:
+  (general-evil-define-key '(insert) minibuffer-mode-map
+    "C-g"        #'abort-minibuffers)
 
   (setq evil-undo-system 'undo-fu)
   (evil-set-undo-system evil-undo-system) ;; FIXME: this shouldn't be needed)
@@ -40,9 +45,6 @@
   ;; (setq evil-want-keybinding t)
   ;; (setq evil-want-minibuffer t)
   (setq evil-search-wrap nil)
-
-  ;; C-g exits replace mode:
-  (define-key evil-replace-state-map (kbd "C-g") 'evil-normal-state)
 
   ;; fix G -> goto last line
   (evil-define-motion evil-goto-line (count)
