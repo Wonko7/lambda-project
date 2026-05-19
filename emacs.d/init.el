@@ -498,6 +498,8 @@
    ([remap detached-open-session] . detached-consult-session))
 
   :config
+  (general-evil-define-key '(normal insert) shell-command-mode-map
+    "C-c C-d" #'detached-detach-session)
   (general-evil-define-key '(normal) detached-list-mode-map
     "a" #'detached-edit-session-annotation
     "d" #'detached-list-delete-session
