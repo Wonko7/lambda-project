@@ -46,18 +46,16 @@
           l1
           l2))))
 
-(define layer-counter 0)
+(define alias-counter 0)
 (define (kmonad/merge-with-tap-fn layer-def modifiers tap-fn)
   "To facilitate home row on multiple layers:
 replace keys in layer with modifiers as held vs original key if tapped.
 To have the same number of elements in layer & modifiers, modifiers has XX XX
 as preamble instead of `deflayer dvorak-etc'. Returns a list with two elements,
 the aliases definitions & the new layer."
-  (set! layer-counter (1+ layer-counter)) ;; to avoid collisions
-  (let* ((alias-prefix (number->string
-                        layer-counter))
-         (alias-name (lambda (a b)
-                       (string-append "layer_" alias-prefix "_"
+  (let* ((alias-name (lambda (a b)
+                       (set! alias-counter (1+ alias-counter)) ;; to avoid collisions
+                       (string-append "layer_" (number->string alias-counter) "_"
                                       (object->string a)
                                       "-"
                                       (symbol->string b)))))
