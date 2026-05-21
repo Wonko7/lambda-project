@@ -293,7 +293,7 @@ the aliases definitions & the new layer."
   '( XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-     XX   lsft lalt XX   XX   XX   XX   XX   XX   ralt rsft XX   XX   XX   XX   XX   XX
+     XX   lsft lalt XX   XX   XX   XX   XX   XX   lalt rsft XX   XX   XX   XX   XX   XX
      lctl lctl XX   lmet XX   XX   XX   XX   rmet XX   rctl XX   rctl
      XX   ALcs XX   XX   XX   XX   XX   XX   XX   XX   ARcs XX                  XX
      XX   XX   XX             XX             XX   XX   XX   XX             XX   XX   XX))
