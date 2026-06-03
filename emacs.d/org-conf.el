@@ -257,6 +257,10 @@
                                     "* topped\n"
                                     "* projects\n"))
         :unnarrowed t)
+       ("i" "🧘 innerspace" plain "%?"
+        :target (file+head ,(concat "innerspace/" slug)
+                           ,(concat "#+title: ${title}\n"
+                                    "#+filetags: :is:\n")))
        ("w" "🦁 witness the fitness" plain "%?"
         :target (file+head ,(concat "wtf/inactive/" slug)
                            ,(concat "#+title: ${title}\n"
@@ -272,9 +276,13 @@
                                     "#+filetags: :tech:\n"))
         :unnarrowed t)
        ("w" "👾 work" plain "%?"
-        :target (file+head ,(concat "work/inactive" slug)
+        :target (file+head ,(concat "work/inactive/" slug)
                            ,(concat "#+title: ${title}\n"
                                     "#+filetags: :work:\n"))
+        :unnarrowed t)
+       ("W" "🌍 world" plain "%?"
+        :target (file+head ,(concat "world/" slug)
+                           ,(concat "#+title: ${title}\n"))
         :unnarrowed t))))
 
   :config
