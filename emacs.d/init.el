@@ -505,7 +505,7 @@
     "d" #'detached-list-delete-session
     "e" #'detached-edit-and-run-session
     "f" #'detached-list-select-filter
-    "g" #'detached-list-revert
+    "R" #'detached-list-revert
     "I" #'detached-list-initialize-session-directory
     ;; "i" #'imenu
     "K" #'detached-list-kill-session
@@ -550,7 +550,9 @@
     "<backspace>" #'detached-list-remove-narrow-criterion
     "<return>" #'detached-list-open-session))
 
-(require 'detached-org)
+(use-package detached-org
+  :after detached
+  :demand t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; tramp
