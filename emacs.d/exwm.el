@@ -488,5 +488,21 @@ estimated time to depletion, returns `lemon-battery-low-face'."
 
   (lemon-mode 1))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; misc
+
+(use-package dimmer
+  ;; this is pretty neat but I notice the added latency when switching buffers.
+  ;; what I'd really want is a different alpha-background per buffer.
+  :disabled t
+  :custom
+  (dimmer-adjustment-mode :foreground)
+  (dimmer-fraction 0.3)
+  :config
+  (dimmer-mode))
+
+(setq dimmer-adjustment-mode :background)
+(setq dimmer-fraction -0.08)
+
 ;;; exwm.el ends here
 (provide 'conf/exwm)

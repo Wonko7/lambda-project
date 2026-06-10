@@ -241,6 +241,7 @@
         emacs-perspective
         emacs-persp-mode
         emacs-lemon
+        emacs-dimmer
         emacs-window-layout
         emacs-ace-window
         emacs-ace-link      ;; FIXME
