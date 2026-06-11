@@ -260,7 +260,14 @@
     "("   #'smerge-prev
     ")"   #'smerge-next
     "Ku"  #'smerge-keep-upper
-    "Kl"  #'smerge-keep-lower))
+    "Kl"  #'smerge-keep-lower)
+
+  (advice-add #'magit-commit-diff
+              :before-until #'check-if-diff-blacklisted)
+  (defun check-if-diff-blacklisted ()
+    (let ((root (magit-with-toplevel default-directory)))
+      ;; skip diff in gnus (slow on long lines)
+      (string= root "/home/wonko/gnus/"))))
 
 (use-package magit-todos
   :after magit
