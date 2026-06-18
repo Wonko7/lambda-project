@@ -311,7 +311,6 @@ appear to be a match."
   :commands (embark-insert-relative-path)
   :after consult
   :demand t
-  :hook (embark-collect-mode-hook . consult-preview-at-point-mode)
   :config
 
   (defvar-keymap my/embark-vc-file-map
