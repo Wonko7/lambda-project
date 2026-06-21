@@ -209,10 +209,7 @@
        "$(if [ -z \"$SSH_CLIENT\" ]; then echo 🌈; else echo 📡; fi)"
        " \\w${GUIX_ENVIRONMENT:+ [env]}\n╰─ 🪄\\[\\e[m\\] '\n"
        "set -o vi\n"
-       "bind '\"jj\":vi-movement-mode'\n")
-      (mixed-text-file ;; REVIEW: bash-completion shouldn't need this
-       "bash-completion"
-       "source " (file-append bash-complete-alias "/share/bash/complete_alias"))))))
+       "bind '\"jj\":vi-movement-mode'\n")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; shepherd
