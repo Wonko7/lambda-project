@@ -304,6 +304,15 @@ appear to be a match."
                                               (buffer-name (cdr b)))
                                             exwm--id-buffer-alist))))))
 
+(use-package completion-preview
+  :demand t
+  ;; :custom
+  ;; completion-preview-exact-match-only
+  :config
+  (define-key completion-preview-active-mode-map (kbd "C-i") nil)
+  (define-key completion-preview-active-mode-map (kbd "C-<tab>") #'completion-preview-insert)
+  (global-completion-preview-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; embark
 
@@ -494,6 +503,7 @@ appear to be a match."
   (yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-wrap-around-region t)
   :config
+  (define-key yas-minor-mode-map (kbd "C-i") nil)
   (yas-global-mode 1))
 
 (use-package consult-yasnippet
