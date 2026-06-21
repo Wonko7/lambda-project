@@ -116,7 +116,13 @@
                                        "/libexec/xscreensaver/xscreensaver-auth"))
                  (allow-empty-password? #f)))
       ;; net
-      (service dhcpcd-service-type (dhcpcd-configuration))
+      (service static-networking-service-type
+               (list (static-networking
+                       (provision '(lol))
+                       (addresses '())
+                       (name-servers '("9.9.9.9")))))
+      (service dhcpcd-service-type (dhcpcd-configuration
+                                     (no-hook '("resolv.conf"))))
       (service iwd-service-type (iwd-configuration
                                   (interfaces '("wlan0"))))
       (service wireguard-service-type
