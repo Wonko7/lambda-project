@@ -462,11 +462,15 @@ interface eth0                    # identifies the interface we are advertising 
       (service rspamd-service-type)
 
       ;; local net
+      (simple-service 'resolv-service
+                      shepherd-root-service-type
+                      resolv-service)
       (service nftables-service-type (nftables-configuration
                                        (ruleset %nftables-ruleset)))
       (service radvd-service-type (radvd-configuration
                                    (config-file %radvd-config)))
       (service dhcpcd-service-type (dhcpcd-configuration
+                                     (no-hook '("resolv.conf"))
                                      (interfaces '("eth0"))))
       (service static-networking-service-type
                (list
