@@ -386,7 +386,7 @@
 (define-public %ocaml-with-opam-world
   (list opam
         ;; mercurial
-        darcs
+        ;; darcs ; borked [2026-06-21 Sun 11:11]
         unzip
         ;; gcc
         gcc-toolchain
@@ -449,7 +449,7 @@
 
 (define-public %vcs-world
   (list ;; mercurial
-   darcs
+   ;; darcs ; borked [2026-06-21 Sun 11:11]
    git
    git-annex))
 
