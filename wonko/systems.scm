@@ -407,14 +407,16 @@
      (append
       '("net.ifnames=0" "biosdevname=0" "resume=/dev/mapper/vault")
       ;; [2026-05-09 Sat 12:33] CVE-2026-31431 + dirty frag cve-fuckyou
-      (let ((bad (string-join (cons*
-                               "algif_aead" "esp4" "esp6" "rxrpc"
-                               (@@ (gnu system) %default-modprobe-blacklist))
-                              ",")))
-        (list
-         (string-append "module_blacklist=" bad)
-         (string-append "modprobe.blacklist=" bad)
-         "quiet"))))
+      ;; (let ((bad (string-join (cons*
+      ;;                          "algif_aead" "esp4" "esp6" "rxrpc"
+      ;;                          (@@ (gnu system) %default-modprobe-blacklist))
+      ;;                         ",")))
+      ;;   (list
+      ;;    (string-append "module_blacklist=" bad)
+      ;;    (string-append "modprobe.blacklist=" bad)
+      ;;    "quiet"))
+      '("quiet")
+      ))
 
     (initrd microcode-initrd)
     (firmware (list linux-firmware))
