@@ -86,7 +86,11 @@
       (service slim-service-type wonko-slim-config)
       (service noautostart-slim-service-type media-station-slim-config)
       ;; net
-      (service dhcpcd-service-type (dhcpcd-configuration))
+      (simple-service 'resolv-service
+                      shepherd-root-service-type
+                      resolv-service)
+      (service dhcpcd-service-type (dhcpcd-configuration
+                                     (no-hook '("resolv.conf"))))
       (service iwd-service-type (iwd-configuration
                                   (interfaces '("wlan0"))))
       (service wireguard-service-type
