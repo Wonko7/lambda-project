@@ -2,6 +2,11 @@
   #:use-module (gnu)
   #:use-module (gnu packages)
   #:use-module (guix gexp)
+  ;; bork [2026-06-21 Sun 12:38]
+  #:use-module (guix packages)
+  #:use-module (guix git-download)
+  #:use-module (guix build-system emacs)
+  #:use-module ((guix licenses) #:prefix license:)
   ;; emacs
   #:use-module (nongnu packages clojure)
   #:use-module (wonko packages emacs-xyz)
@@ -29,6 +34,81 @@
  admin databases version-control file lsof tmux ssh vim bittorrent rust-apps gnupg password-utils moreutils bash disk cpio rsync cryptsetup curl web networking vpn dns hardware certs ntp tls screen
  ;; dev
  android flashing-tools haskell-apps compression commencement pkg-config base gdb m4 maths ocaml libevent tls code node multiprecision sqlite image-viewers matrix wm man)
+
+;; FIXME: [2026-06-21 Sun 12:44] tmp borked hash/vbump in guix upstream <--
+(define-public emacs-evil-numbers
+  ;; XXX: Upstream did not tag latest release.  Use commit matching exact
+  ;; version bump.
+  (let ((commit "61dde4e3715fd1255df8f87a37d9c8022e909bf4"))
+    (package
+      (name "emacs-evil-numbers")
+      (version "0.7")
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+                (url "https://github.com/juliapath/evil-numbers")
+                (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32
+           "006s8azhypp5n7jnvqkb4rmzqmnsdwj87c3r97zhjzgi2jq953gx"))))
+      (build-system emacs-build-system)
+      (arguments
+       (list
+        #:test-command #~(list "emacs" "--batch"
+                               "-l" "evil-numbers.el"
+                               "-l" "tests/evil-numbers-tests.el"
+                               "-f" "ert-run-tests-batch-and-exit")
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'skip-failing-tests
+              (lambda _
+                (substitute* "tests/evil-numbers-tests.el"
+                  (("\\(ert-deftest simple-negative .*" all)
+                   (string-append all " (skip-unless nil)"))))))))
+      (native-inputs (list emacs-ert-runner))
+      (propagated-inputs (list emacs-evil))
+      (home-page "https://github.com/juliapath/evil-numbers")
+      (synopsis "Increment and decrement numeric literals")
+      (description
+       "This package provides functionality to search for a number up to the
+end of a line and increment or decrement it.")
+      (license license:gpl3+))))
+
+(define-public emacs-evil-mc
+  (let ((commit "7e363dd6b0a39751e13eb76f2e9b7b13c7054a43")
+        (revision "0"))
+    (package
+      (name "emacs-evil-mc")
+      (version (git-version "0.0.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+                (url "https://github.com/gabesoft/evil-mc")
+                (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0gzy2mqcdxhkg0hmxqzbjy5ihfal1s21wxd04mrikqri54sck4z5"))))
+      (build-system emacs-build-system)
+      (arguments
+       (list #:test-command
+             #~(list "emacs" "--no-init-file" "--batch"
+                     "--eval=(require 'ecukes)" "--eval=(ecukes)")))
+      (propagated-inputs
+       (list emacs-evil))
+      (native-inputs
+       (list emacs-ecukes
+             emacs-espuds
+             emacs-evil-numbers
+             emacs-evil-surround))
+      (home-page "https://github.com/gabesoft/evil-mc")
+      (synopsis "Interactive search compatible with @code{multiple-cursors}")
+      (description "This package can be used with @code{multiple-cursors} to
+provide an incremental search that moves all fake cursors in sync.")
+      (license license:expat))))
+;; FIXME: [2026-06-21 Sun 12:44] tmp borked hash/vbump in guix upstream -->
 
 (define-public %emacs-world
   (list custom-emacs ;; see emacs-xyz.scm's custom-emacs for why FIXME
