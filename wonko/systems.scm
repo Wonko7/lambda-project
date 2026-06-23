@@ -1,5 +1,8 @@
 (define-module (wonko systems)
   #:use-module (gnu)
+  #:use-module (gnu system)
+  #:use-module (gnu system privilege)
+  #:use-module (gnu services)
   #:use-module (guix gexp)
   #:use-module (guix build utils)
   #:use-module (guix channels)
@@ -14,8 +17,6 @@
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
   #:use-module (nongnu packages firmware)
-  #:use-module (gnu system privilege)
-  #:use-module (gnu services)
   ;; my stuff
   #:use-module (wonko defs)
   #:use-module (wonko misc)
@@ -461,6 +462,12 @@
                   "/bin/brightnessctl"))
         (setuid? #t))
       %default-privileged-programs))
+
+    (sudoers-file
+     (mixed-text-file "sudoers"
+                      (plain-file-content %sudoers-specification) "\n"
+                      "kmonad ALL=(ALL) NOPASSWD: " %sys-profile-path "setxkbmap"
+                      ", " %sys-profile-path "chvt" "\n"))
 
     (file-systems '())))
 

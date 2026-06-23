@@ -256,7 +256,8 @@ the aliases definitions & the new layer."
       (let ((n (number->string i)))
         `(defalias
            ,(string->symbol (string-append (if (> i 9) "v" "vt") n))
-           (cmd-button ,(string-append %sys-profile-path "chvt " n)))))
+           (cmd-button
+            ,(string-append "/run/privileged/bin/sudo " %sys-profile-path "chvt " n)))))
     (range 1 12))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
