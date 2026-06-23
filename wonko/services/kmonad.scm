@@ -14,6 +14,7 @@
   #:use-module (ice-9 match)
   #:use-module (pipe)
   ;; my stuff
+  #:use-module (wonko defs)
   #:use-module (wonko misc)
   #:export (kmonad-config
             kmonad-make-config
@@ -123,15 +124,17 @@ the aliases definitions & the new layer."
                   " -option compose:menu,compose:ralt,shift:breaks_caps,shift:both_capslock"
                   " -variant altgr-intl us")
                  " -option lv3:ralt_switch fr latin9"))
-        (setxkb " /run/current-system/profile/bin/setxkbmap ")
+        (setxkb "setxkbmap ")
         (sudo "/run/privileged/bin/sudo -u ")
         (display  " DISPLAY="))
     (apply string-append
            (map (match-lambda
                   ((user . disp)
                    (string-append
-                    sudo user display disp setxkb " us -option" ";\n" ;; reset options
-                    sudo user display disp setxkb xkb ";\n")))
+                    ;; reset options
+                    sudo user display disp " " %sys-profile-path setxkb " us -option" ";\n"
+                    ;; set kbd
+                    sudo user display disp " " %sys-profile-path setxkb xkb ";\n")))
                 '(("wonko" . ":9")
                   ("media" . ":11")
                   ("tina"  . ":10"))))))
@@ -142,8 +145,8 @@ the aliases definitions & the new layer."
 (define (kmonad-defcfg input output xkb)
   ;; laptop: "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
   (let ((init-cmd (string-append
-                   "echo this keyboard fucks &&
-                   /run/current-system/profile/bin/sleep 1 ;"
+                   "echo this keyboard fucks;"
+                   %sys-profile-path "sleep 1;"
                    (setxkb xkb))))
     `(defcfg
        input (device-file ,input)
@@ -253,7 +256,7 @@ the aliases definitions & the new layer."
       (let ((n (number->string i)))
         `(defalias
            ,(string->symbol (string-append (if (> i 9) "v" "vt") n))
-           (cmd-button ,(string-append "/run/current-system/profile/bin/chvt " n)))))
+           (cmd-button ,(string-append %sys-profile-path "chvt " n)))))
     (range 1 12))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
