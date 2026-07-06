@@ -1,3 +1,6 @@
+! emacs:
+emacs*useXIM: false
+
 URxvt.font: xft:=FONT=:size==SIZE=
 ! URxvt.boldFont: xft:=FONT=:size==SIZE=:Bold
 ! URxvt.italicFont: xft:=FONT=:size==SIZE=:Italic
