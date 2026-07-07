@@ -824,7 +824,7 @@ current time."
                     "#+begin_src shell :dir "
                     "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media/inbox "
                     ":results value output\n"
-                    "  (vlc */*s01e01* &)\n"
+                    "  (vlc */*S01E01* &)\n"
                     "#+end_src\n")
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
