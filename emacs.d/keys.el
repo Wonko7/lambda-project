@@ -183,7 +183,8 @@
     "pc"  #'my/recompile
 
     ;; password-store
-    "P"  #'password-store-copy
+    "P" (li (let ((default-directory "~/"))
+              (call-interactively #'password-store-copy)))
 
     ;; magit
     "g"  '("git" . (keymap))
