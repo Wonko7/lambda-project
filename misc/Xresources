@@ -1,5 +1,5 @@
 ! emacs:
-emacs*useXIM: false
+emacs*useXIM: true
 
 URxvt.font: xft:=FONT=:size==SIZE=
 ! URxvt.boldFont: xft:=FONT=:size==SIZE=:Bold

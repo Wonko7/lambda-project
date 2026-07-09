@@ -275,12 +275,12 @@
 ;; more exwm
 
 (use-package exwm-xim
-  :demand t
+  :disabled t
+  ;; :demand t
   :config
   (define-advice evil-disabled-buffer-p (:before-until () no-exwm)
     (eq major-mode 'exwm-mode))
   (evil-set-initial-state 'exwm-mode 'emacs)
-  (setq my/xim t)
   (exwm-xim-mode 1))
 
 (use-package exwm-randr
