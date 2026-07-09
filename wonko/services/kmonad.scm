@@ -385,7 +385,7 @@ the aliases definitions & the new layer."
                                 kmonad/tap-fn)))
 
 (define kmonad-xim-symbols-layer
-  (-> base
+  (-> symbols
       (init-layer 'xim-symbols)
       (kmonad/merge-layers xim-symbols)
       (kmonad/merge-with-tap-fn kmonad-home-row-modifiers
