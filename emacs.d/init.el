@@ -210,7 +210,7 @@
     (interactive)
     (let ((compilation-read-command nil))
       (projectile-compile-project nil)))
-  (projectile-global-mode))
+  (projectile-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
