@@ -116,6 +116,14 @@
                                        "/libexec/xscreensaver/xscreensaver-auth"))
                  (allow-empty-password? #f)))
       ;; net
+      (service static-networking-service-type
+               (list
+                (static-networking
+                  (provision '(static-net-conf))
+                  (addresses
+                   (list (network-address
+                           (device "wlan0")
+                           (value (net-peer-ip6-local-address %enterprise-net-peer))))))))
       (simple-service 'resolv-service
                       shepherd-root-service-type
                       resolv-service)

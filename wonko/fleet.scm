@@ -5,8 +5,10 @@
   #:use-module (gnu services base)
   #:use-module (gnu)
   #:use-module (wonko defs)
+  #:use-module (ice-9 optargs)
   #:export (%fleet-hosts
             %fleet-names
+            net-peer-ip6-local-address
             net-peer-local-address
             net-peer-wg-address))
 
@@ -19,14 +21,22 @@
   (name net-peer-name (sanitize (check string?)))
   (wg-address net-peer-wg-address (sanitize (check string?)))
   (local-address net-peer-local-address (sanitize (check string?)))
+  (ip6-local-address net-peer-ip6-local-address (sanitize (check string?)))
   (public-key net-peer-public-key (sanitize (check string?))))
 
-(define-public %of-course-i-still-love-you-net-peer
+(define*-public (net-peer-subnet-init #:key name public-key host-id)
   (net-peer
-   (name "of-course-i-still-love-you")
-   (public-key "U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY=")
-   (local-address "192.168.1.7") ;; remember to update router's MAC -> ip attribution
-   (wg-address "10.42.0.7")))
+   (name name)
+   (public-key public-key)
+   (wg-address (format #f "10.42.0.~d" host-id))
+   (local-address (format #f "192.168.1.~d" host-id))
+   (ip6-local-address (format #f "fd00::42:~d/64" host-id))))
+
+(define-public %of-course-i-still-love-you-net-peer
+  (net-peer-subnet-init
+   #:name "of-course-i-still-love-you"
+   #:public-key "U7UZuuT33d22P8lRCcvF8RbS1/PKhBQUeYhyOhmVoGY="
+   #:host-id 7))
 
 (define-public (net-to-wg-peer peer)
   (wireguard-peer
@@ -50,40 +60,36 @@
         (keep-alive 60))))))
 
 (define-public %enterprise-net-peer
-  (net-peer
-   (name "enterprise")
-   (public-key "mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ=")
-   (local-address "192.168.1.6")
-   (wg-address "10.42.0.6")))
+  (net-peer-subnet-init
+   #:name "enterprise"
+   #:public-key "mvSVvhTp95KdeSGqnvQlO6GAYJoB0f9uqhbv7UrZTFQ="
+   #:host-id 6))
 
 (define-public %yggdrasill-net-peer
-  (net-peer
-   (name "yggdrasill")
-   (public-key "bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0=")
-   (local-address "192.168.1.3")
-   (wg-address "10.42.0.3")))
+  (net-peer-subnet-init
+   #:name "yggdrasill"
+   #:public-key "bhy+DDTGIcndgFWk1TLTttZAi0COnugg+YpTBB96Wm0="
+   #:host-id 3))
 
 (define-public %rocinante-net-peer
-  (net-peer
-   (name "rocinante")
-   (public-key "Hpugstb4CA8kryRhzE37vl76mrfYPqWHBkFXjiydfl0=")
-   (local-address "192.168.1.4")
-   (wg-address "10.42.0.4")))
+  (net-peer-subnet-init
+   #:name "rocinante"
+   #:public-key "Hpugstb4CA8kryRhzE37vl76mrfYPqWHBkFXjiydfl0="
+   #:host-id 4))
 
 (define-public %discovery-net-peer
   (net-peer
    (name "discovery")
    (public-key "nIAdvx5JR1uwLyyzKgOU/x3DHi6KKKKcL9nexPAP50Q=")
-   (local-address "")
+   (local-address "") ;; handled by dhcp, needs to be empty for correct hosts generation
+   (ip6-local-address "fd00::42:5/64")
    (wg-address "10.42.0.5")))
 
 (define-public %nispe-net-peer
-  (net-peer
-   (name "nispe")
-   (public-key "Tg9H0FfzLndUEcRYQ6EsqQzPIsozrCtUASQ4WVItWgQ=")
-   (local-address "192.168.1.9")
-   (wg-address "10.42.0.9")))
-
+  (net-peer-subnet-init
+   #:name "nispe"
+   #:public-key "Tg9H0FfzLndUEcRYQ6EsqQzPIsozrCtUASQ4WVItWgQ="
+   #:host-id 9))
 
 (define-public %star-fleet-hosts
   (list %yggdrasill-net-peer
