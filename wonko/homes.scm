@@ -43,7 +43,7 @@
  bittorrent tor
  haskell-apps compression commencement pkg-config base gdb m4 maths man
  ;; services
- freedesktop matrix wm compton
+ freedesktop matrix window-management compton
  kde-internet synergy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
