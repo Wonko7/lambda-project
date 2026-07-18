@@ -92,12 +92,15 @@
    #:host-id 9))
 
 (define-public %star-fleet-hosts
-  (list %yggdrasill-net-peer
-        %enterprise-net-peer
-        %rocinante-net-peer
-        %discovery-net-peer
-        %nispe-net-peer
-        %of-course-i-still-love-you-net-peer))
+  (list
+   ;; fleet:
+   %enterprise-net-peer
+   %of-course-i-still-love-you-net-peer
+   %rocinante-net-peer
+   %yggdrasill-net-peer
+   ;; friends of the fleet:
+   %discovery-net-peer
+   %nispe-net-peer))
 
 (define-public %fleet-hosts
   (append
@@ -111,11 +114,7 @@
    (map (lambda (h)
           (host (net-peer-wg-address h)
                 (string-append (net-peer-name h) ".star-fleet.local")))
-        %star-fleet-hosts)
-   ;; (list
-   ;;  ;; (host "192.168.1.1" "daban-urnud.local") ;; RIP you now rest in silicon heaven
-   ;;  (host "192.168.1.9" "nispe.local"))
-   ))
+        %star-fleet-hosts)))
 
 (define-public (fleet-names-from-hosts hosts)
   (map (lambda (h)
@@ -129,7 +128,7 @@
 
 (define-public %fleet-names (list ;; machines that have ssh & substitute keys:
                              ;; "daban-urnud"             ;; 1
-                             ;; "discovery"               ;; 5 (not on local net)
+                             ;; "discovery"               ;; 5 (not on ip4 local net)
                              ;; "nispe"                   ;; 9
                              "enterprise"                 ;; 6
                              "of-course-i-still-love-you" ;; 7
