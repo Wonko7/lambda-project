@@ -271,6 +271,7 @@ provide an incremental search that moves all fake cursors in sync.")
         emacs-orderless
         emacs-corfu
         emacs-corfu-doc
+        emacs-nerd-icons-corfu
         emacs-pcmpl-args
         emacs-cape
         emacs-consult
