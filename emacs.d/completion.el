@@ -110,6 +110,30 @@
                    "  ")
                  cand))))
 
+(use-package corfu
+  :custom
+  (corfu-quit-at-boundary nil)
+  :config
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+         (consult-completion-in-region beg end table pred)))))
+  (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+  (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer))
+;; use global-corfu-mode when in the mood
+
+(use-package corfu-popupinfo
+  :after corfu
+  :custom (corfu-popupinfo-delay 0.1)
+  :config (corfu-popupinfo-mode))
+
+(use-package nerd-icons-corfu
+  :after corfu
+  :hook (corfu-margin-formatters . nerd-icons-corfu-formatter))
+
 (use-package minibuffer
   :demand t
   :config
