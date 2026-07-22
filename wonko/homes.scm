@@ -15,6 +15,7 @@
   ;; services
   #:use-module (gnu home services)
   #:use-module (gnu home services shepherd)
+  #:use-module (gnu home services desktop)
   #:use-module (gnu home services shells)
   #:use-module (gnu home services gnupg)
   #:use-module (gnu home services xdg)
@@ -448,6 +449,8 @@
       (templates   "$HOME/templates")
       (videos      "$HOME/videos")))
 
+   (service home-dbus-service-type)
+
    (service
     (service-type
       (name 'home-xdg-desktop-portal)
@@ -701,6 +704,11 @@
                            (map
                             dicod-freedict-database
                             '("fra-eng" "eng-fra")))))))
+
+   (service home-x11-service-type)
+   (service home-unclutter-service-type
+            (home-unclutter-configuration
+              (idle-timeout 5)))
 
    %base-home-services))
 
