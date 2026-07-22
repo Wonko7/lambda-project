@@ -482,7 +482,7 @@ interface eth0                    # identifies the interface we are advertising 
                            (value "2a01:e0a:b5a:de71::1/64"))
                          (network-address
                            (device "eth0")
-                           (value (net-peer-ip6-local-address %of-course-i-still-love-you-os-net-peer)))
+                           (value (net-peer-ip6-local-address %of-course-i-still-love-you-net-peer)))
                          (network-address
                            (device "eth0")
                            (value "192.168.1.101/24"))))
