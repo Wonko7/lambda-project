@@ -455,6 +455,7 @@ provide an incremental search that moves all fake cursors in sync.")
   (list
    gimp
    ;; kdenlive
+   ;; frei0r
    krita))
 
 (define-public %fonts-world
