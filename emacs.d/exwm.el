@@ -2,6 +2,7 @@
 
 (require 'cl-lib)
 (require 'conf/values "~/.emacs.d/values.el")
+(require 'dash) ;; FIXME quick fix
 
 ;; (require 'exwm-firefox)
 ;; (require 'exwm-mff)
