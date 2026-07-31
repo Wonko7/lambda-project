@@ -69,7 +69,7 @@
           (start #~(make-forkexec-constructor
                     (list #$(file-append synergy "/bin/synergyc")
                           "-n" "media-station"
-                          "-f" "yggdrasill.local")
+                          "-f" "enterprise.local")
                     #:log-file #$(home-log-path "synergy")))
           (stop #~(make-kill-destructor))
           (documentation "can't be arsed to move IRL"))))
