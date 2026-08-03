@@ -824,7 +824,8 @@ current time."
                     "#+begin_src shell :dir "
                     "/ssh:media@of-course-i-still-love-you.local:/mnt/trantor/media/inbox "
                     ":results value output\n"
-                    "  (vlc */*S01E01* &)\n"
+                    "  # --audio-language English --sub-language English\n"
+                    "  (vlc */*S01E01* --sub-language English &)\n"
                     "#+end_src\n")
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
@@ -959,6 +960,11 @@ current time."
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
           ("wH" "👣 Hiking" entry
            ,(concat "* 👣 [[roam:hiking]] :wtf:\n"
+                    "%U\n%?")
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
+          ("wS" "🛼 Skating / Rollerblading" entry
+           ,(concat "* 🛼 [[roam:rollerblading]] :wtf:\n"
                     "%U\n%?")
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🦁 witness the fitness")))
