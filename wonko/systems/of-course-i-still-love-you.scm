@@ -536,8 +536,7 @@ interface eth0                    # identifies the interface we are advertising 
              (source (uuid "becf9b67-d7fc-4e3d-a334-1c684567c98c"))
              (target "vault")
              (type luks-device-mapping)
-             (arguments '(#:key-file "/root/keys-to-the-kingdom.bin"
-                          #:allow-discards? #t)))))
+             (arguments '(#:allow-discards? #t)))))
     (file-systems (cons*
                    (file-system
                      (mount-point "/boot")
