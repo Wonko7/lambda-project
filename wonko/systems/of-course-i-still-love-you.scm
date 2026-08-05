@@ -64,12 +64,25 @@
        'of-course-i-still-love-you-shepherd home-shepherd-service-type
        (list
         (shepherd-service
-          (provision '(synergyc))
+          (provision '(synergy-enterprise))
           (auto-start? #f)
           (start #~(make-forkexec-constructor
                     (list #$(file-append synergy "/bin/synergyc")
                           "-n" "media-station"
                           "-f" "enterprise.local")
+                    #:log-file #$(home-log-path "synergy")))
+          (stop #~(make-kill-destructor))
+          (documentation "can't be arsed to move IRL"))))
+      (simple-service
+       'of-course-i-still-love-you-shepherd home-shepherd-service-type
+       (list
+        (shepherd-service
+          (provision '(synergy-yggdrasill))
+          (auto-start? #f)
+          (start #~(make-forkexec-constructor
+                    (list #$(file-append synergy "/bin/synergyc")
+                          "-n" "media-station"
+                          "-f" "yggdrasill.local")
                     #:log-file #$(home-log-path "synergy")))
           (stop #~(make-kill-destructor))
           (documentation "can't be arsed to move IRL"))))
