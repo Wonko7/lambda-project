@@ -1,5 +1,18 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Emacs arbitrary code execution mitigation
+
+;; https://eshelyaron.com/posts/2026-08-06-emacs-arbitrary-code-execution-returns.html
+;; [2026-08-07 Fri 16:13] until emacs 31 or check for backports
+
+(defun suppress-shorthands (orig &rest args)
+  (let (read-symbol-shorthands) (apply orig args)))
+
+(advice-add 'vc-find-backend-function :around #'suppress-shorthands)
+
+(with-eval-after-load 'cc-fonts
+  (advice-add 'c-compose-keywords-list :around #'suppress-shorthands))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; guix home gives us stuff:
