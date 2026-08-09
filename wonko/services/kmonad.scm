@@ -551,20 +551,3 @@ the aliases definitions & the new layer."
   (kmonad-config "cheap-bullshit"
                  "/dev/input/by-id/usb-MOSART_Semi._2.4G_INPUT_DEVICE-event-kbd"
                  'dance-commander))
-
-;; fixme: temporary because I'm hitting this bug: https://github.com/kmonad/kmonad/issues/804
-(define-public bump-kmonad
-  (let ((tag "0.4.5"))
-    (package
-      (inherit kmonad)
-      (version tag)
-      (inputs (modify-inputs inputs
-                (append ghc-hinotify)))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-                (url "https://github.com/kmonad/kmonad") ;; what?
-                (commit tag)))
-         (sha256
-          (base32 "0ng07i2zb98gx7giz7cjxjx908p1v14wn913k810n550k2gfbvp9")))))))

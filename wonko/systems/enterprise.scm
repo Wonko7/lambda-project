@@ -97,7 +97,6 @@
                  (,(crew-name %media) ,%media-station-home)))
       ;; kbd
       (service kmonad-service-type (kmonad-configuration
-                                    (kmonad bump-kmonad)
                                     (keymaps (list kmonad-laptop-config
                                                    kmonad-ergodox-config
                                                    kmonad-bullshit-config))))
