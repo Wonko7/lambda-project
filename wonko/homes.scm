@@ -297,11 +297,21 @@
        (shepherd-service
          (inherit x11-respawn-config-shepherd-service)
          (provision '(oneko))
+         (auto-start? #f)
          (start #~(make-forkexec-constructor
                    (list #$(file-append oneko-warn "/bin/oneko") "-dog")
                    #:log-file #$(home-log-path "oneko")))
          (stop #~(make-kill-destructor))
-         (documentation "neko")))))))
+         (documentation "neko"))
+       (shepherd-service
+         (inherit x11-respawn-config-shepherd-service)
+         (provision '(xpenguins))
+         (start #~(make-forkexec-constructor
+                   (list #$(file-append xpenguins "/bin/xpenguins")
+                         "--defaults" "-n" "5" "-t" "Big Penguins" "--nomenu")
+                   #:log-file #$(home-log-path "xpenguins")))
+         (stop #~(make-kill-destructor))
+         (documentation "xpenguins")))))))
 
 (define-public %dance-commander-shepherd-service
   (simple-service
