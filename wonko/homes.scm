@@ -354,7 +354,7 @@
          (documentation "don't touch my stuff"))
        (shepherd-service
          (inherit x11-respawn-config-shepherd-service)
-         (provision '(synergyc))
+         (provision '(synergyc-yggdrasill))
          (start #~(make-forkexec-constructor
                    (list #$(file-append synergy "/bin/synergyc")
                          "-n" "media-station"
@@ -364,7 +364,6 @@
          (documentation "can't be arsed to move IRL"))
        (shepherd-service
          (inherit x11-respawn-config-shepherd-service)
-         (auto-start? #f)
          (provision '(synergyc-enterprise))
          (start #~(make-forkexec-constructor
                    (list #$(file-append synergy "/bin/synergyc")
