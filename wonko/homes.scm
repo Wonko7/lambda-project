@@ -17,11 +17,12 @@
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services shells)
+  #:use-module (gnu home services sound)
   #:use-module (gnu home services gnupg)
   #:use-module (gnu home services xdg)
-  #:use-module (gnu services shepherd)
   #:use-module (gnu home services dict)
   #:use-module (gnu services dict)
+  #:use-module (gnu services shepherd)
   #:use-module (wonko packages emacs-xyz)
   #:use-module (wonko packages matrix)
   #:use-module (wonko packages bash)
@@ -468,6 +469,8 @@
                                      "default=gtk")))))))
       (default-value #f)
       (description "xdg portal")))
+
+   (service home-pipewire-service-type)
 
    (simple-service
     'config-files
