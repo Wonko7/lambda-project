@@ -258,14 +258,15 @@
     (kbd "C-SPC") #'my/force-main-menu)
 
   ;; restart some x services on exwm start:
-  (add-hook 'exwm-init-hook
-            (lambda ()
-              (message "hello there")
-              (run-with-idle-timer 5 nil (lambda ()
-                                           (message "general kenobi")
-                                           (async-shell-command "herd start kill-dunst")
-                                           (async-shell-command "herd restart oneko")))))
-
+  (add-hook
+   'exwm-init-hook
+   (lambda ()
+     (message "hello there")
+     (run-with-idle-timer
+      5 nil
+      (lambda ()
+        (message "general kenobi")
+        (async-shell-command "herd start kill-dunst")))))
 
   ;; lift off
   (exwm-wm-mode))
