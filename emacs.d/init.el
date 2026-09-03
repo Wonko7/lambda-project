@@ -134,7 +134,8 @@
         ement-room-list-mode-hook
         ement-tabulated-room-list-mode-hook
         gnus-summary-mode-hook
-        gnus-group-mode-hook))
+        gnus-group-mode-hook
+        reader-mode-hook))
 
 (column-number-mode)
 
@@ -790,6 +791,8 @@
 (use-package novel
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
+(use-package reader)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff

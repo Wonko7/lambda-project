@@ -24,6 +24,11 @@
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages lesstif)
   ;; )
+  ;; (emacs-reader / divya-lambda
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages pdf)
+  ;; )
   #:use-module (wonko packages office)
   #:use-module (guix utils)
   #:use-module (srfi srfi-1)
@@ -262,6 +267,45 @@ This module implements some of those operations as single round trip tramp opera
     (home-page "https://github.com/walseb/exwm-firefox-evil")
     (synopsis "")
     (description "")
+    (license (@ (guix licenses) gpl3+))))
+
+(define-public emacs-reader
+  (package
+    (name "emacs-reader")
+    (version "0.3.2-2026-09-03")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+              (url "https://codeberg.org/divyaranjan/emacs-reader")
+              (commit "a0e3615adbf520a5743bbbfd7da6d2bb8478b30b")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "012i36l5wgzw4mbxr2knb96f7x95qfg0pqa7dfam23fmsfw57fy0"))))
+    (build-system emacs-build-system)
+    (arguments
+     (list
+      #:tests? #f ;no tests
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'expand-load-path 'build-module
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "make" "USE_PKGCONFIG=no}"))) ; We don't need pkg-config
+          (add-after 'install 'install-module
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (target-dir (string-append out
+                                                "/share/emacs/site-lisp/" #$name "-" #$version)))
+                (install-file "render-core.so" target-dir)))))))
+
+    (native-inputs (list mupdf gcc))
+    (home-page "https://codeberg.org/divyaranjan/emacs-reader")
+    (synopsis
+     "An all-in-one document reader for all formats in Emacs, backed by MuPDF.")
+    (description
+     "An all-in-one document reader for GNU Emacs, supporting all major document formats.
+This package intends to take from doc-view, nov.el, and pdf-tools and make them better.
+And as such, it is effectively a drop-in replacement for them.")
     (license (@ (guix licenses) gpl3+))))
 
 ;; https://issues.guix.gnu.org/issue/73416#4

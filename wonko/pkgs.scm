@@ -338,7 +338,8 @@ provide an incremental search that moves all fake cursors in sync.")
         ;; x stuff
         emacs-desktop-environment
         emacs-zathura-sync-theme
-        ;; https://codeberg.org/tusharhero/emacs-reader pdf reader
+        ;; (@ (divya-lambda packages emacs-xyz) emacs-reader)
+        emacs-reader
 
         ;; comms
         emacs-ement
@@ -597,6 +598,7 @@ provide an incremental search that moves all fake cursors in sync.")
    cpio
    parted
    smartmontools
+   nvme-cli
    gptfdisk
    rsync
    parted
