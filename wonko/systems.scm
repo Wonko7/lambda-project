@@ -51,7 +51,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; channels
 
-(define %channels ;; this is pinned, generated with `guix describe -f channels`
+(define-public %channels ;; this is pinned, generated with `guix describe -f channels`
   (list (channel
           (name 'divya-lambda)
           (url "https://codeberg.org/divyaranjan/divya-lambda.git")

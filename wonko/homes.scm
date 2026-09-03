@@ -3,11 +3,12 @@
   #:use-module (guix modules)
   #:use-module (guix packages)
   #:use-module (guix build utils)
+  #:use-module (guix channels)
+  #:use-module (guix profiles)
   #:use-module (gnu)
   #:use-module (gnu home)
   #:use-module (gnu system shadow)
   #:use-module (gnu services)
-  #:use-module (guix profiles)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-11)
   #:use-module (ice-9 match)
@@ -552,7 +553,23 @@
                       `(,(string-append ".config/guix/" file)
                         ,(local-file
                           (string-append %lambda-project "/misc/guix-config/" file))))
-                    '("shell-authorized-directories" "channels.scm")))
+                    '("shell-authorized-directories")))
+
+   (simple-service 'guix-config-home-channels
+                   home-files-service-type
+                   (list
+                    `(".config/guix/channels.scm"
+                      ,(scheme-file
+                        "channels.scm"
+                        (let ((channels (@ (wonko systems) %channels)))
+                          `(list
+                            ,@(map (lambda (c)
+                                     (channel->code
+                                      (channel
+                                        (inherit c)
+                                        (commit #f))))
+                                   channels)))))))
+
 
    (simple-service 'guix-manifests
                    home-files-service-type
