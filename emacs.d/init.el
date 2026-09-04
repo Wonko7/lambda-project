@@ -792,7 +792,9 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
-(use-package reader)
+;; [2026-09-03 Thu 17:08] not ready yet:
+;; https://codeberg.org/MonadicSheep/emacs-reader/issues/62
+;; (use-package reader)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; system stuff
