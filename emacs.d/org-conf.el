@@ -818,6 +818,15 @@ current time."
                 (when details (apply #'my/org-books-format 1 url \":book:4e:\" details)))"
            :jump-to-captured t
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+          ("mbm" "📚 manual")
+          ("mbmd" "📚 Done (read) book" entry
+           "** 📚 %? :book:done:\n%U\n"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
+          ("mbmw" "📚 Want to read book" entry
+           "** 📚 %? :book:4e:\n%U\n"
+           :jump-to-captured t
+           :if-new (file+head+olp ,my/daily-file ,my/daily-header ("📼 media")))
           ("mt" "📺 tv bookmark" entry
            ,(concat "* 📺 %? :bm:tv:\n"
                     "%U\n"
