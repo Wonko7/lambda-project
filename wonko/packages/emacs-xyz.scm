@@ -185,6 +185,26 @@
       (description "This library offers an alternative to calendar. It’s very similar and offer only a few options, like the possibility to color day according to the number of item in the org-agenda")
       (license (@ (guix licenses) gpl3+)))))
 
+(define-public emacs-org-timegrid
+  (let ((commit "496873dc5aaede157e9523888a6fbba552806dbd"))
+    (package
+      (name "emacs-org-timegrid")
+      (version "0.0")
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                       (url "https://github.com/Gleek/org-timegrid")
+                       (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32
+                  "192zhcbamzsvirh8r4pcj6p6b5qbmj1kpynsh7s9yv5ckqq4fycn"))))
+      (build-system emacs-build-system)
+      (home-page "https://github.com/Gleek/org-timegrid")
+      (synopsis "org-timegrid is a beautiful SVG week calendar for Org mode")
+      (description "org-timegrid is a beautiful SVG week calendar for Org mode")
+      (license (@ (guix licenses) gpl3+)))))
+
 (define-public emacs-time-zones
   (let ((commit "4ec11f912d8af920d021c6189e59ab74fd404a2d"))
     (package

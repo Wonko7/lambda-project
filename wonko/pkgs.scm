@@ -130,6 +130,7 @@ provide an incremental search that moves all fake cursors in sync.")
         emacs-valign
         emacs-calfw
         emacs-nano-calendar
+        emacs-org-timegrid
         emacs-hyperbole
         emacs-enlive
         ;; emacs-org-download (images)
