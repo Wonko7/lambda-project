@@ -194,8 +194,8 @@
                                          "*Org Agenda*"))
                       ( :name left-bot
                         :hide-your-kids t
-                        :buffer-f (progn (nano-calendar)
-                                         "*nano-calendar*"))))
+                        :buffer-f (progn (org-timegrid-week)
+                                         "*Org Time Grid*"))))
 
           ( :layout comms
             :recipe (| (:left-size-ratio 0.5)

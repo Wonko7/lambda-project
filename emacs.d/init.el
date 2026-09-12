@@ -135,7 +135,8 @@
         ement-tabulated-room-list-mode-hook
         gnus-summary-mode-hook
         gnus-group-mode-hook
-        reader-mode-hook))
+        reader-mode-hook
+        org-timegrid-mode-hook))
 
 (column-number-mode)
 

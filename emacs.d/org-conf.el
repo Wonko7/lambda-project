@@ -1052,6 +1052,14 @@ current time."
            :if-new (file+head+olp ,my/daily-file ,my/daily-header ("🛠️ work"))
            :jump-to-captured t))))
 
+(use-package org-timegrid
+  :custom
+  (org-timegrid-highlight-current-day t)
+  (org-timegrid-start-hour 8)
+  (org-timegrid-end-hour 20)
+  (org-timegrid-org-exclude-properties '(("STYLE" . "habit")))
+  :commands (org-timegrid-week))
+
 (use-package nano-calendar
   :custom
   (nano-calendar-workload-detail nil)
