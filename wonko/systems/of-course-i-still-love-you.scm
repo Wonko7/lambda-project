@@ -160,29 +160,17 @@
      (provision '(skynet))
      (requirement '(user-processes udev networking file-systems)) ;; FIXME: could wait for wan, or local net? 192 eth0 addr not ready when this is initially started.
      (documentation "start skynet llm")
-     ;; phi 4
-     ;; (start #~(make-forkexec-constructor
-     ;;           (list (string-append #$llama-cpp "/bin/llama-server")
-     ;;                 "--host" "0"
-     ;;                 "--port" "6060"
-     ;;                 "-ngl" "256"
-     ;;                 "-m" "/code/llms/phi-4-bf16.gguf")))
-     ;; gemma 3
      (start #~(make-forkexec-constructor
                (list (string-append #$llama-cpp "/bin/llama-server")
                      "--host" "0"
                      "--port" "6060"
-                     "--model" "unsloth/gemma-3-27b-it/gemma-3-27b-it-UD-Q4_K_XL.gguf"
-                     "--mmproj" "unsloth/gemma-3-27b-it/mmproj-BF16.gguf"
-                     "--ctx-size" "16384"
-                     "--n-gpu-layers" "256"
-                     "--seed" "3407"
-                     "--prio" "2"
+                     "--model"
+                     "unsloth/gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-UD-Q8_K_XL.gguf"
+                     "--mmproj" "unsloth/gemma-4-26B-A4B-it-GGUF/mmproj-BF16.gguf"
+                     "-c" "65536"
                      "--temp" "1.0"
-                     "--repeat-penalty" "1.0"
-                     "--min-p" "0.01"
-                     "--top-k" "64"
-                     "--top-p" "0.95")
+                     "--top-p" "0.95"
+                     "--top-k" "64")
                #:directory "/code/llms"))
      (stop #~(make-kill-destructor)))))
 
