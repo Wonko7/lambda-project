@@ -52,32 +52,31 @@
 ;; channels
 
 (define-public %channels ;; this is pinned, generated with `guix describe -f channels`
-  (list
-   (channel
-     (name 'maxipassat)
-     (url "https://codeberg.org/wonko/maxipassat")
-     (branch "master")
-     (commit "7deb3e11aacdf3854e2c54d3d782bce8cf7ddc00"))
-   (channel
-     (name 'nonguix)
-     (url "https://gitlab.com/nonguix/nonguix")
-     (branch "master")
-     (commit "accdba77be815bbe00868145dd66d68056eecf7a")
-     (introduction
-      (make-channel-introduction
-       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
-       (openpgp-fingerprint
-        "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
-   (channel
-     (name 'guix)
-     (url "https://codeberg.org/guix/guix")
-     (branch "master")
-     (commit "dc6596923e3197144b68bbe61893afe895fc9b24")
-     (introduction
-      (make-channel-introduction
-       "9edb3f66fd807b096b48283debdcddccfea34bad"
-       (openpgp-fingerprint
-        "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+  (list (channel
+          (name 'maxipassat)
+          (url "https://codeberg.org/wonko/maxipassat")
+          (branch "master")
+          (commit "7deb3e11aacdf3854e2c54d3d782bce8cf7ddc00"))
+        (channel
+          (name 'nonguix)
+          (url "https://gitlab.com/nonguix/nonguix")
+          (branch "master")
+          (commit "accdba77be815bbe00868145dd66d68056eecf7a")
+          (introduction
+           (make-channel-introduction
+            "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+            (openpgp-fingerprint
+             "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+        (channel
+          (name 'guix)
+          (url "https://codeberg.org/guix/guix")
+          (branch "master")
+          (commit "266a7b9707a8c98d778c07f351af1523fbbcd282")
+          (introduction
+           (make-channel-introduction
+            "9edb3f66fd807b096b48283debdcddccfea34bad"
+            (openpgp-fingerprint
+             "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
 
 ;; saved for later:
 
